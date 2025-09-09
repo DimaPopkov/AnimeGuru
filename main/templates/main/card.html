@@ -1,0 +1,369 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% load static %}
+{% block content %}
+    <!-- product - вся инфа об нашем обьекте -->
+    <div class="card_container_main"> 
+        <div class="card_container_header">
+            <div class="card_header">
+                <img src="{{ product.image }}" id="product_img" style="width: 100%;">
+
+                {% if links %}
+                    {% if link_name %}
+                        {% for link in links %}
+                            {% for element in link_name %}
+                                {% if element != "null" %}
+                                    {% if link.name == "Animego.me" %}
+                                    <a class="card_product_mp3" href="{{ link.link }}anime/{{ element }}" target="_blank"> 
+                                        <div class="card_product_mp3_button"> 
+                                            <img src="https://avatars.mds.yandex.net/i?id=55efea261a74ad69f4090cc2abce1c58fef2957e-10601011-images-thumbs&n=13" style="width:30px">
+                                            <p style="margin-bottom: 0;">{{ link.name }}</p> 
+                                        </div>
+                                    </a>
+                                    
+                                    {% elif link.name == "jit.su" %}
+                                    <a class="card_product_mp3" href="{{ link.link }}{{ element }}.jut-su.to/" target="_blank" style="background-color:white;"> 
+                                        <div class="card_product_mp3_button"> 
+                                            <img src="https://avatars.mds.yandex.net/i?id=754e11bf633d856275f5a65bcf4c7118_sr-3608855-images-thumbs&n=13" style="height:100%">
+                                        </div>
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="card_info">
+                
+                <h3 class="card_info_rating">   
+                    <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> {{ product.rating }} 
+                    <p class="card_info_rating_10"> /10 </p>
+                </h3>
+                <h1 style="padding-bottom: 10px" id="name"> {{ product.name }} </h1>
+                <div class="card_info_linegap"></div>
+
+                <list class="card_info_list">
+                    <div class="card_info_list_block">
+                        <p class="card_info_list_font" style="color: grey;"> Тип </p>
+                        <p class="card_info_list_font"> {{ product.category }}</p>
+                    </div>
+
+                    {% if product.status != None and product.status != "Онгоинг"%}
+                        {% if product.episods != "null"%}
+                            <div class="card_info_list_block">
+                                <p class="card_info_list_font" style="color: grey;"> Эпизоды </p>
+                                <p class="card_info_list_font"> {{ product.episods }}</p>
+                            </div>
+                        {% endif%}
+                        <div class="card_info_list_block">
+                            <p class="card_info_list_font" style="color: grey;"> Статус </p>
+                            <p class="card_info_list_font"> {{ product.status }}</p>
+                        </div>
+                    {% endif%}
+
+                    <div class="card_info_list_block">
+                        <p class="card_info_list_font" style="color: grey;"> Жанр </p>
+                        <p class="card_info_list_font"> {{ product_tags }}</p>
+                    </div>
+
+                    <div class="card_info_list_block">
+                        <p class="card_info_list_font" style="color: grey;"> Сезон </p>
+                        <p class="card_info_list_font"> {{ season }}</p>
+                    </div>
+
+                    <div class="card_info_list_block">
+                        <p class="card_info_list_font" style="color: grey;"> Выпуск </p>
+                        <p class="card_info_list_font"> с {{ product.season }}</p>
+                    </div>
+
+                    {% if product.product_manager != None and product.product_manager != "null" %}
+                        <div class="card_info_list_block">
+                            <p class="card_info_list_font" style="color: grey;"> Студия </p>
+                            <p class="card_info_list_font">                    
+                                {{ product.product_manager }}                     
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <div class="card_info_list_block">
+                        <p class="card_info_list_font" style="color: grey;"> Возрастной рейтинг </p>
+                        <div class="card_info_list_font card_info_list_age_rating_block"> {{ product.age_rating }}+ </div>
+                    </div>
+                </list>
+            </div>
+        </div>
+
+        <div class="card_container_body">
+            <p> {{ product.description|safe }}</p>
+        </div>
+
+        {% if pics != "none" and pics %}
+            <div class="card_container_body_frames_name">
+                <h3> Кадры </h3>
+                {% if product.trailer %}
+                    <h3 style="margin-right: 220px"> Трейлер </h3>
+                {% endif %}    
+            </div>
+            <div class="card_container_body_frames">
+                {% if product.trailer %}
+                    <list class="card_container_body_frames_list" id="card_prew_pics_list">   
+                {% else %}
+                    <list class="card_container_body_frames_list" style="width: 100%" id="card_prew_pics_list">   
+                {% endif %}      
+                    {% for element in pics %}
+                        <img class="card_prew_pics" src="{{ element }}" style="width:100%" id="{{ element.id }}">             
+                    {% endfor %}
+                </list>
+
+                {% if product.trailer %}             
+                    <div class="trailer">
+                        <iframe class="trailer_frame" src="https://www.youtube.com/embed/rJFZ_s0R4dQ" title="Bleach / Change (Nika Lenina Russian TV Art Version)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                {% endif %}      
+            </div>
+        {% endif %}
+
+
+        {% if related_products %}
+            <div>
+                <h3 style="margin-bottom:15px"> Связанное </h3>
+                <div class="card_info_linegap"></div>
+            </div>
+            <div class="card_container_body_related_products">               
+                {% for element in related_products %}
+                    <div class="related_products_card" data-product-id="{{ element.id }}">
+                        <h6> 
+                            <a class="related-product-link" style="color: black;" href="{% url 'card' element.name %}" data-product-name="{{ element.name }}" id="product_name">{{ element.name }}</a>
+                        </h6>
+                        <div class="related_products_card_img_block">
+                            <img src="{{ element.image }}" style="width:80px">
+                            <div class="related_products_card_img_block_right">
+                                <p> {{ element.category }} / {{ element.season.year }} </p>
+                                <p> {{ element.episods }} эпизодов </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}        
+            </div>
+        {% endif %}
+
+
+        {% if characters or main_characters %}
+            <div>
+                {% if main_characters %}
+                    <br>    
+                        <h3> Главные герои </h3>
+                        <div class="card_info_linegap"></div>
+                    <br>
+
+                    <div class="main_characters_container">
+                        {% for bro in main_characters %}
+                            <div class="main_characters">
+                                {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
+                                    {% if bro.image %}
+                                        <div class="main_characters_img_block">
+                                            <img src="{{ bro.image }}">       
+                                            <div class="main_characters_img_block_fade"></div>
+                                        </div>                       
+                                    {% endif %}
+                                    
+                                    <div class="main_characters_block_right">
+                                        <p class="p_character_big"> {{ bro.second_name }} {{ bro.first_name }} </p>    
+
+                                        {% if bro.description %}
+                                            {% if bro.description == "null" %}      
+                                                <p class="p_character_mini" style="font-size: 16px"> Скоро и тут будет информация, ждите обновления :З </p>
+                                            {% else %}
+                                                <p class="p_character_mini text-content"> {{ bro.description|safe }} </p>
+
+                                                <div class="read_more">
+                                                    <p> Читать далее </p>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if bro.link_to_wiki %}
+                                            <a class="wiki_button" href="{{ bro.link_to_wiki }}"> Wiki </a>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    {% if bro.image %}
+                                        <div class="main_characters_img_block">
+                                            <img src="{{ bro.image }}">    
+                                            <div class="main_characters_img_block_fade"></div>   
+                                        </div> 
+                                    {% endif %}
+                                    
+                                    <div class="main_characters_block_right">
+                                        <p class="p_character_big"> {{ bro.first_name }} </p>  
+
+                                        {% if bro.description %}        
+                                            {% if bro.description == "null" %}      
+                                                <p class="p_character_mini" style="font-size: 16px"> Скоро и тут будет информация, ждите обновления :З </p>
+                                            {% else %}
+                                                <p class="p_character_mini text-content"> {{ bro.description|safe }} </p>
+
+                                                <div class="read_more">
+                                                    <p> Читать далее </p>
+                                                </div>
+                                            {% endif %}                
+                                        {% endif %}   
+
+                                        {% if bro.link_to_wiki %}
+                                            <a class="wiki_button" href="{{ bro.link_to_wiki }}"> Wiki </a>
+                                        {% endif %}              
+                                    </div>
+                                {% endif %}     
+                            </div>                         
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if characters %}
+                    <br>
+                        <h3> Остальные герои </h3>
+                        <div class="card_info_linegap"></div>
+                    <br>
+
+                    <div class="all_characters_container">
+                        {% for bro in characters %}
+                            <div class="all_characters">
+                                {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
+                                    {% if bro.image %}
+                                        <div style="width:auto; height: 100%; overflow: hidden">
+                                            <img class="all_characters_card_img" src="{{ bro.image }}">       
+                                        </div>                      
+                                    {% endif %}
+                                    
+                                    <p class="p_character"> {{ bro.second_name }} {{ bro.first_name }} </p>          
+                                    
+                                    {% if bro.link_to_wiki %}
+                                        <a class="wiki_button other_character_wiki_button" href="{{ bro.link_to_wiki }}"> Wiki </a>
+                                    {% endif %}
+                                {% else %}
+                                    {% if bro.image %}
+                                        <div style="width:100%; height: 150px; overflow: hidden">
+                                            <img class="all_characters_card_img" src="{{ bro.image }}">      
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <p class="p_character"> {{ bro.first_name }} </p>
+
+                                    {% if bro.link_to_wiki %}
+                                        <a class="wiki_button other_character_wiki_button" href="{{ bro.link_to_wiki }}"> Wiki </a>
+                                    {% endif %}
+                                {% endif %}     
+                            </div>                     
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if product.season_info and product.season_info != "null" %}
+            <div>
+                {{ product.season_info|safe }}
+            </div>
+        {% endif %}
+    </div>  
+
+    <script>
+        let maxLength = 1000;
+        let window_screen_width = window.screen.width;
+
+        /* Реализация кнопки "Читать далее" у текста карточек главных героев */
+        document.addEventListener('DOMContentLoaded', function() {
+            const readMoreElements = document.querySelectorAll('.read_more');
+            
+            readMoreElements.forEach(readMoreBtn => {
+                const TextContent = readMoreBtn.previousElementSibling;
+                const fullText = TextContent.textContent;
+           
+                if(window_screen_width >= 750) {
+                    maxLength = 500;
+                }
+                else if (window_screen_width > 550){
+                    maxLength = 125;
+                }
+                else if (window_screen_width > 450){
+                    maxLength = 350;
+                }
+                else if (window_screen_width > 320){
+                    maxLength = 200;
+                }
+                
+                if (fullText.length > maxLength) {
+                    TextContent.textContent = fullText.substring(0, maxLength) + '...';
+                    TextContent.dataset.fullText = fullText;
+                } 
+                else {
+                    readMoreBtn.style.display = "none";
+                    TextContent.classList.add('expanded');
+                }
+
+                readMoreBtn.addEventListener('click', function() {
+                    if (TextContent.classList.contains('expanded')) {
+                        TextContent.textContent = fullText.substring(0, maxLength) + '...';
+                        TextContent.classList.remove('expanded');
+                        readMoreBtn.querySelector('p').textContent = 'Читать далее';
+                    } else {
+                        TextContent.textContent = TextContent.dataset.fullText;
+                        TextContent.classList.add('expanded');
+                        readMoreBtn.querySelector('p').textContent = 'Свернуть';
+                    }
+                });
+            });
+        });
+        /* Конец реализации */
+
+        /* Реализация осмотра превью-картинок для тайтла */
+        const card_prew_pic = document.querySelectorAll('.card_prew_pics');
+
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        document.body.appendChild(overlay); 
+
+        /* ----------   2. Функция открытия   ---------- */
+        function openLightbox(src) {
+            overlay.innerHTML = '';                          // чистим от старого
+            const img = document.createElement('img');
+            img.src = src;
+            overlay.appendChild(img);
+
+            overlay.classList.add('active');                 // активируем
+        }
+
+        /* ----------   3. Функция закрытия   ---------- */
+        function closeLightbox() {
+            overlay.classList.remove('active');              // скрываем
+            overlay.innerHTML = '';                           // убираем изображение
+        }
+
+        /* ----------   4. Действие on Клик по любой картинке  ---------- */
+        const gallery = document.getElementById('card_prew_pics_list');   // или любой родитель
+
+        gallery.addEventListener('click', ev => {
+            const targetImg = ev.target.closest('.card_prew_pics');
+            if (!targetImg) return;                          // клик не по картинке
+
+            openLightbox(targetImg.src);                     // открываем
+        });
+
+        /* ----------   5. Клик не по изображению → закрыть  ---------- */
+        overlay.addEventListener('click', ev => {
+            // Если клик пришёл не на саму картинку, закрываем
+            if (!ev.target.matches('img')) closeLightbox();
+        });
+
+        /* ----------   6. Клавиша Esc → закрыть  ---------- */
+        document.addEventListener('keydown', ev => {
+            if (ev.key === 'Escape') closeLightbox();
+        });
+        /* Конец реализации */
+    </script>
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="filter">
+            <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
+                <div class="filter_main">
+                    <h5 for="category">Фильтр:</h5><br>
+
+
+                    <!-- Поиск по названию (В разработке)
+                        <div name="titlename" id="titlename">
+                            <label for="tags"> По названию:</label>
+                            <input class="filter_category_filter" type="text" placeholder="Поиск по названию">
+                        </div>
+                        <br>
+                    -->
+
+                    <label for="tags"> Категории:</label> 
+                    <select class="filter_category_filter" name="category" id="category">
+                        <option value="" class="font16"> Все категории </option>
+                        {% for element in categories %}
+                            <option value="{{ element.id }}" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
+                        {% endfor %}                      
+                    </select><br>
+
+                    <label for="tags"> Статус:</label> 
+                    <select class="filter_category_filter" name="activeStatus" id="activeStatus">
+                        <option value="" class="font16"> Все </option>
+                        {% for element in status %}
+                            <option value="{{ element.id }}">{{ element }}</option>
+                        {% endfor %}        
+                    </select><br>
+
+                    <label for="tags"> Поиск по тегам:</label>
+                    <div class="custom-dropdown">
+                        <!-- Кнопка для открытия/закрытия списка -->
+                        <button class="dropdown-toggle" type="button">
+                            <span class="selected-tags">Выберите теги</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        <!-- Скрытый контейнер с чекбоксами -->
+                        <div class="dropdown-content" id="tags">
+                            {% for tag in tags %}
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="tags" value="{{ tag.id }}">
+                                    <h class="checkbox-item-text">{{ tag.name }} </h>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div><br>
+                </div>
+            </form>
+        </div>
+
+        <div class="catalog">
+
+
+            <div id="products_catalog" class="products_catalog">    
+                {% if products %}
+                    <div class="nice_info">
+                        <h class="nice_info_piece"> Всего: {{ products.count }} </h>
+                    </div>         
+                                
+                    {% for element in products %}                 
+                        <form action="
+                                    {% if request.user.is_authenticated %} 
+                                        {% url 'card' product_name=element.name %}
+                                    {% else %}
+                                        /login/    
+                                    {% endif %}                
+                                    " method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_name" value="{{ element }}">
+
+                            <div class="prod_element" onclick="submitform(this)">
+                                <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                <h8> {{ element.category }} / {{ element.season.year }}</h8>
+
+                                <div class="prod_element_rating">
+                                    <div class="prod_element_rating_block"> {{ element.rating }} </div>
+                                    <div class="prod_element_rating_block_dop_main">
+                                        <div class="prod_element_rating_block_dop"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>               
+                    {% endfor %}
+                {% else %}
+                    <p> Ничего не найдено </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>    
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterForm = document.getElementById('filter-form');
+            const categorySelect = document.getElementById('category');
+            const productsListContainer = document.getElementById('products_catalog'); // Получаем контейнер
+            const activeTags = document.getElementById('tags');    
+            const activeStatus = document.getElementById('activeStatus');    
+
+            console.log(activeStatus);
+
+            // Функция для отправки AJAX запроса и обновления списка товаров
+            function updateProducts() {
+                // Формируем URL для AJAX запроса, используя action формы
+                let url = null;
+
+                url = filterForm.action + '?' + new URLSearchParams(new FormData(filterForm)).toString();
+            
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.text(); // Получаем HTML ответ
+                    })
+                    .then(html => {
+                        const fullHtml = document.createElement('div');
+                        fullHtml.innerHTML = html;
+                        //console.log(fullHtml)
+
+                        const new_filter = fullHtml.querySelector('#products_catalog')
+                        
+                        if (new_filter) {
+                            // Обновляем содержимое контейнера с товарами
+                            const desiredHtmlContent = new_filter.innerHTML;
+                            //console.log(desiredHtmlContent)
+
+                            productsListContainer.innerHTML = new_filter.innerHTML;
+                        }                     
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                        // Можно добавить обработку ошибки для пользователя
+                        productsListContainer.innerHTML = '<p>Не удалось загрузить товары.</p>';
+                    });
+            }
+
+
+            // Добавляем обработчики событий на каждый элемент фильтра
+            categorySelect.addEventListener('change', updateProducts);
+            activeTags.addEventListener('change', updateProducts);
+            activeStatus.addEventListener('change', updateProducts);
+
+            console.log('Event listeners attached.'); // <-- Логирование
+        });
+
+        let ActiveTags = null;
+        let hi = null;
+
+        if(hi != ActiveTags)
+            updateProducts()
+
+            document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.dropdown-toggle').forEach(button => {
+            // Открытие/закрытие списка
+                button.addEventListener('click', function(e) {
+                    const dropdownContent = this.nextElementSibling;
+                    const isOpen = dropdownContent.style.display === 'block';
+                    dropdownContent.style.display = isOpen ? 'none' : 'block';
+                });
+            });
+
+            // Закрытие списка при клике вне области
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-dropdown')) {
+                    document.querySelectorAll('.dropdown-content').forEach(menu => {
+                        menu.style.display = 'none';
+                    });
+                }
+            });
+
+            // Обновление текста кнопки при выборе чекбоксов           
+            document.querySelectorAll('.dropdown-content input').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const dropdownContent = this.closest('.dropdown-content');
+                    if (!dropdownContent) return; // Дополнительная проверка
+
+                    const allH = document.querySelectorAll(".checkbox-item-text");
+                    const arrayAllH = Array.from(allH)
+
+                    const ArrayTags = arrayAllH.map(
+                        item => { 
+                            return item.textContent.trim(); 
+                        }
+                    );
+
+                    let selectedLabels = Array.from(
+                        dropdownContent.querySelectorAll('input:checked')
+                    ).map(input => {
+                        // Пытаемся найти родительский label
+                        const label = input.closest('label');
+                        // Возвращаем или текст из label, или содержимое следующего элемента
+                        return label ? label.textContent : input.nextElementSibling?.textContent;
+                    }).filter(Boolean);
+
+                    const button = this.closest('.custom-dropdown')?.querySelector('.dropdown-toggle');
+                    if (!button) return; // Проверка на существование кнопки
+
+                    const selectedTagsElement = button.querySelector('.selected-tags');
+                    if (selectedTagsElement) {                    
+
+                        ActiveTags = selectedLabels.map(str => 
+                            str.replace(/\s+/g, ' ').trim()
+                        );                    
+                        console.log(ActiveTags);
+
+                        selectedTagsElement.textContent = selectedLabels.join(', ') || 'Выберите теги';                       
+                    }
+                });
+            });
+
+            
+            // Применение Тегов
+
+            function updateProducts() {
+                
+            }
+        });
+
+        function submitform(element)
+        {
+            console.log(element)
+            const form = element.closest('form');
+
+            if (form)
+            {
+                form.submit()
+            }
+
+            else{  
+                console.log("Форма не найдена")
+            } 
+        }
+    </script>
+{% endblock %}

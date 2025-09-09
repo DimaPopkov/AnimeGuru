@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="add_product">
+        <br><br>
+        <h1>{{ title }}</h1>
+      
+        <form class="form" method="post">
+            {% csrf_token %}
+            <div class="form_pag">
+                <div class="form_div"><p style="text-align:center; height:100%">Название</p>{{ form.name }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Описание</p>{{ form.description }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Категория</p>{{ form.category }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Image</p>{{ form.image }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Дата выхода</p>{{ form.season }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Тэги</p>{{ form.tags }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Рейтинг</p>{{ form.rating }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Возрастной рейтинг</p>{{ form.age_rating }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Студия выпуска</p>{{ form.product_manager }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Кол-во эпизодов</p>{{ form.episods }}</div>
+                <div class="form_div"><p style="text-align:center; height:100%">Статус тайтла</p>{{ form.status }}</div>
+            </div>
+            <button class="btn btn-success" type="submit">Добавить</button>
+        </form>
+    </div>
+{% endblock %}
