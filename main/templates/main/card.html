@@ -40,12 +40,36 @@
             </div>
 
             <div class="card_info">
-                
-                <h3 class="card_info_rating">   
-                    <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> {{ product.rating }} 
-                    <p class="card_info_rating_10"> /10 </p>
-                </h3>
-                <h1 style="padding-bottom: 10px" id="name"> {{ product.name }} </h1>
+                <div>
+                    <h3 class="card_info_rating">   
+                        <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> {{ product.rating }} 
+                        <p class="card_info_rating_10"> \10 </p>
+
+                        <div class="feedbackContainer">
+                            <button class="feedbackContainer_button" id="openFeedbackBtn" style="text-align: center;">Отзыв о тайтле</button>
+
+                            <div id="feedbackContainer" class="hidden">
+                                <div style="display: flex;
+                                            flex-direction: row;
+                                            width: 100%;
+                                            justify-content: center; padding: 10px 10px 0 10px">    
+                                    <span id="ratingValueDisplay"></span>
+                                    <p class="card_info_rating_10"> \10 </p>
+                                </div>
+                                <div id="starRating">
+                                    <!-- Звезды будут добавлены сюда с помощью JavaScript -->
+                                </div>
+                                <div id="commentSection" class="hidden">
+                                    <label for="comment">Ваш комментарий:</label>
+                                    <textarea id="comment" rows="4" placeholder="Оставьте свой отзыв..."></textarea>
+                                    <button id="submitFeedbackBtn">Отправить отзыв</button>
+                                </div>
+                            </div>
+                        </div>
+                    </h3>
+                    <h1 style="padding-bottom: 10px" id="name"> {{ product.name }} </h1>
+                </div>
+
                 <div class="card_info_linegap"></div>
 
                 <list class="card_info_list">
@@ -270,6 +294,10 @@
                 {{ product.season_info|safe }}
             </div>
         {% endif %}
+
+        <div>
+            <h3> {{ product.comments }} </h3>
+        </div>
     </div>  
 
     <script>
@@ -365,5 +393,93 @@
             if (ev.key === 'Escape') closeLightbox();
         });
         /* Конец реализации */
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const openFeedbackBtn = document.getElementById('openFeedbackBtn');
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            const starRatingDiv = document.getElementById('starRating');
+            const ratingValueDisplaySpan = document.getElementById('ratingValueDisplay');
+            const commentSection = document.getElementById('commentSection');
+            const submitFeedbackBtn = document.getElementById('submitFeedbackBtn'); // Можно добавить обработчик позже
+
+            const numberOfStars = 10;
+            let selectedRating = 0;
+
+            // 1. Обработка нажатия на кнопку "Отзыв о тайтле"
+            openFeedbackBtn.addEventListener('click', () => {
+                openFeedbackBtn.classList.add('hidden'); // Скрываем кнопку
+                feedbackContainer.classList.remove('hidden'); // Показываем контейнер отзыва
+
+                // Генерируем звезды
+                starRatingDiv.innerHTML = ''; // Очищаем, если вдруг что-то было
+                for (let i = 1; i <= numberOfStars; i++) {
+                    const star = document.createElement('span');
+                    star.classList.add('star');
+                    star.textContent = '★'; // Символ звезды
+                    star.dataset.rating = i; // Сохраняем значение рейтинга в data-атрибут
+                    starRatingDiv.appendChild(star);
+                }
+
+                ratingValueDisplaySpan.textContent = 0; // Очищаем текст
+                
+            });
+
+            // 2. Обработка выбора рейтинга (клика по звездам)
+            starRatingDiv.addEventListener('click', (event) => {
+                const clickedStar = event.target;
+
+                // Проверяем, что кликнули именно по звезде
+                if (clickedStar.classList.contains('star')) {
+                    selectedRating = parseInt(clickedStar.dataset.rating); // Получаем числовое значение рейтинга
+
+                    // Обновляем внешний вид звезд: заполняем звезды до выбранной
+                    const stars = starRatingDiv.querySelectorAll('.star');
+                    stars.forEach((star, index) => {
+                        if (index < selectedRating) {
+                            star.classList.add('filled');
+                        } else {
+                            star.classList.remove('filled');
+                        }
+                    });
+
+                    commentSection.classList.remove('hidden');
+                    if (selectedRating > 0) {
+                    ratingValueDisplaySpan.textContent = selectedRating; // Записываем значение
+                    ratingValueDisplaySpan.classList.remove('hidden'); // Показываем span
+                    } else {
+                    // Если рейтинг сброшен (например, кликом по уже выбранной звезде)
+                    ratingValueDisplaySpan.textContent = '';
+                    ratingValueDisplaySpan.classList.add('hidden');
+                    }
+                }
+            });
+
+            // 3. Обработка отправки отзыва (опционально)
+            submitFeedbackBtn.addEventListener('click', () => {
+                const commentText = document.getElementById('comment').value;
+
+                if (selectedRating > 0) {
+                    console.log('Выбранный рейтинг:', selectedRating);
+                    console.log('Комментарий:', commentText);
+
+                    // Здесь может быть логика отправки на сервер
+
+                    // Сброс формы (опционально)
+                    selectedRating = 0;
+                    const stars = starRatingDiv.querySelectorAll('.star');
+                    stars.forEach(star => star.classList.remove('filled'));
+                    document.getElementById('comment').value = '';
+                    commentSection.classList.add('hidden');
+                    feedbackContainer.classList.add('hidden');
+                    openFeedbackBtn.classList.remove('hidden');
+
+                } else {
+                    alert('Пожалуйста, выберите рейтинг.');
+                }
+            });
+        });
+
     </script>
 {% endblock %}

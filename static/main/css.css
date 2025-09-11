@@ -845,9 +845,138 @@ body{
 }
 
 
+/* ------- PROFILE -------- */
+.profile_container_header{
+    display: flex;
+    flex-direction: row;
+}
+
+.profile_container_header_block{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.profile_container_header_block_info_flex{
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+}
+
+.profile_button_change_password{
+    width: 160px;
+    height: 35px;
+
+    padding-top: 2px;
+
+    font-size: 16px;
+}
+
+.profile_container_favourites{
+    display: flex;
+    flex-direction: column;
+}
+
+.profile_container_favourites_block{
+    display: flex;
+    flex-direction: row;
+}
 
 
 
+.feedbackContainer_button{
+    border: none;
+    font-size: 24px;
+
+    background: none;
+}
+
+.feedbackContainer{
+    background: rgb(230,230,230);
+    border: 1px solid gray;
+    border-radius: 5px;
+
+    margin-left: 200px;
+
+    text-align: center;
+    align-content: center;
+
+    position: absolute;
+
+    z-index: 9999;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Стили для звезд */
+#starRating {
+    display: flex;
+    margin-bottom: 6px;
+    font-size: 30px; /* Размер звезд */
+    cursor: pointer;
+}
+
+.star {
+    color: #ccc; /* Цвет пустой звезды */
+    margin: 0 2px;
+    transition: color 0.3s ease;
+}
+
+.star.filled {
+    color: #ffc107; /* Цвет заполненной звезды */
+}
+
+/* Стили для секции комментария */
+#commentSection {
+    width: 300px;
+    text-align: left;
+}
+
+#commentSection label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#commentSection textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
+    font-size: 15px;
+    resize: vertical; /* Разрешить изменение размера только по вертикали */
+}
+
+#submitFeedbackBtn {
+    width: 100%;
+    background-color: lightgray;
+}
+
+#submitFeedbackBtn:hover {
+    background-color: gray;
+}
+
+/* Анимация появления звезд */
+#feedbackContainer {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInDown 0.5s forwards;
+}
+
+@keyframes fadeInDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 
 

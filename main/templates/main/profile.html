@@ -1,0 +1,83 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="card_container_main" style=" padding: 20px 30px; "> 
+        <div class="profile_container_header">
+            <div class="profile_container_header_block">
+                <div class="profile_container_header_block_info_flex">
+                    <p> Логин : </p>
+                    <h5 style="padding-left: 10px"> {{ request.user.username }} </h5>
+                </div>
+                <div class="profile_container_header_block_info_flex">
+                    <p style="padding-top: 2px"> Пароль : </p>
+                    <button style="margin-left: 10px" class="btn btn-secondary profile_button_change_password"> Сменить пароль </button>
+                </div>
+            </div>
+
+            <div class="profile_container_header_block">
+                <div class="profile_container_header_block_info_flex">
+                    <p> Имя : </p>
+
+                    {% if request.user.first_name %}
+                        <h5 style="padding-left: 10px"> {{ request.user.first_name }} </h5>
+                    {% else %}
+                        <h5 style="padding-left: 10px"> Нет данных </h5>
+                    {% endif %}
+                </div>
+                <div class="profile_container_header_block_info_flex">
+                    <p> Фамилия : </p>
+
+                    {% if request.user.first_name %}
+                        <h5 style="padding-left: 10px"> {{ request.user.last_name }} </h5>
+                    {% else %}
+                        <h5 style="padding-left: 10px"> Нет данных </h5>
+                    {% endif %}
+                </div>
+                <div class="profile_container_header_block_info_flex">
+                    <p> Почта : </p>
+
+                    {% if request.user.email %}
+                        <h5 style="padding-left: 10px"> {{ request.user.email }} </h5>
+                    {% else %}
+                        <h5 style="padding-left: 10px"> Нет данных </h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="profile_container_favourites">
+            <h3> Избранное </h3><hr>
+            <div class="profile_container_favourites_block">
+                {% for element in products %}                 
+                    <form action="
+                                {% if request.user.is_authenticated %} 
+                                    {% url 'card' product_name=element.name %}
+                                {% else %}
+                                    /login/    
+                                {% endif %}                
+                                " method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_name" value="{{ element }}">
+
+                        <div class="prod_element" onclick="submitform(this)">
+                            <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                            <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                            <h8> {{ element.category }} / {{ element.season.year }}</h8>
+
+                            <div class="prod_element_rating">
+                                <div class="prod_element_rating_block"> {{ element.rating }} </div>
+                                <div class="prod_element_rating_block_dop_main">
+                                    <div class="prod_element_rating_block_dop"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>               
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

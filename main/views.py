@@ -256,3 +256,10 @@ def check_url(url):
             print(f"Ошибка: {response.status_code}")
     except requests.exceptions.RequestException as e:
         print(f"Ошибка подключения: {e}")
+
+def profile(request):
+    context = {
+        'title' : 'Личный кабинет',
+    }
+
+    return render(request, 'main/profile.html', context)

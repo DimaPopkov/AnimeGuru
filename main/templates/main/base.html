@@ -16,7 +16,7 @@
         
         {% if request.user.is_authenticated %}
             <div class="login_status_bar">
-                <p style="margin-bottom: 0; font-size: 20px; padding: 0 10px"> {{ request.user.username }} </p>
+                <a href="{% url 'profile' %}" style="margin-bottom: 0; font-size: 20px; padding: 0 10px; color: black; text-decoration: none"> {{ request.user.username }} </a>
 
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}

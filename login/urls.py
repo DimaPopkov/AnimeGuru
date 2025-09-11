@@ -6,5 +6,4 @@ from . import views
 urlpatterns = [
     path('', views.Login, name="Login"),
     path('create_user/', views.create_user, name="create_user"),
-    #path('user/', include('main.urls'))
 ]

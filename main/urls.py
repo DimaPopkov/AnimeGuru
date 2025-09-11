@@ -11,4 +11,5 @@ urlpatterns = [
     path('card/<str:product_name>/', views.card, name="card"),
     path('login/', include('login.urls'), name="login"),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('main')), name='logout'),
+    path('user/', views.profile, name='profile')
 ]
