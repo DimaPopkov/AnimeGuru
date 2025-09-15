@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.apps import apps
+from django.db import models
 
-from .models import Tags, Category, Product, Album_Pics, Characters
+from .models import Tags, Category, Product, Album_Pics, Characters, Comments
 from .forms import ProductForm
 import re, requests
 
@@ -118,6 +120,10 @@ def calculate_similarity(name1, name2):
 
 def card(request, product_name):
     products = get_object_or_404(Product, name=product_name)
+
+    comments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+
+
     print(products)
     selected_product = Product.objects.get(name=products)
 
@@ -241,6 +247,7 @@ def card(request, product_name):
         'link_name': product_link_name,
         'main_characters': MainCharacters,
         'characters': other_characters,
+        'comments' : comments,
     }
     print("\n\n", request, "\n Метод POST \n")
     print("Сохранено:", target_product_name, "\n")
@@ -263,3 +270,52 @@ def profile(request):
     }
 
     return render(request, 'main/profile.html', context)
+
+def add_comments(request, product_name):
+
+    product = get_object_or_404(Product, name=product_name)
+
+    #Comments.objects.all().delete() # Очистка таблицы
+
+    User_comment = request.POST.get('text')
+    User_rating = request.POST.get('rating')
+
+    new_comment = Comments(
+        name = product,
+        user_name = request.user.username,
+        user_rating = User_rating,
+        user_comment = User_comment
+    )
+
+    new_comment.save()
+
+    print("Комментарий для ", product_name, " добавлен")
+
+    url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+    return redirect(url_to_redirect_to)
+
+def update_comment_state(request, comment_id):
+    if request.method == 'POST':
+        comment = get_object_or_404(Comments, id=comment_id)
+        try:
+            action = request.POST.get('action_ty')
+            print(action)
+        except:
+            return JsonResponse({'error': 'Failed to load action'}, status=400)
+
+        if action == 'like':
+            comment.like_count += 1
+        elif action == 'dislike':
+            comment.dislike_count += 1
+        else:
+            return JsonResponse({'error': 'Invalid action'}, status=400)
+
+        comment.save()
+
+        # Возвращаем JSON с обновленными счетчиками
+        return JsonResponse({
+            'like_count': comment.like_count,
+            'dislike_count': comment.dislike_count
+        })
+    else:
+        return JsonResponse({'error': 'Only POST requests allowed'}, status=405)

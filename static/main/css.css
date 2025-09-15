@@ -888,96 +888,124 @@ body{
 
 
 
-.feedbackContainer_button{
-    border: none;
-    font-size: 24px;
 
-    background: none;
-}
 
-.feedbackContainer{
-    background: rgb(230,230,230);
-    border: 1px solid gray;
-    border-radius: 5px;
-
-    margin-left: 200px;
-
-    text-align: center;
-    align-content: center;
-
-    position: absolute;
-
-    z-index: 9999;
-}
-
-.hidden {
-    display: none;
-}
-
-/* Стили для звезд */
-#starRating {
+.you_container{
     display: flex;
-    margin-bottom: 6px;
-    font-size: 30px; /* Размер звезд */
-    cursor: pointer;
+    flex-direction: row;
+
+    margin-bottom: 15px;
+    column-gap: 10px;
 }
 
-.star {
-    color: #ccc; /* Цвет пустой звезды */
-    margin: 0 2px;
-    transition: color 0.3s ease;
-}
+.you_container_dop{
+    display: flex;
+    flex-direction: column;
+    
+    row-gap: 10px;
 
-.star.filled {
-    color: #ffc107; /* Цвет заполненной звезды */
-}
+    width: 50%;
 
-/* Стили для секции комментария */
-#commentSection {
-    width: 300px;
-    text-align: left;
-}
-
-#commentSection label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-#commentSection textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid lightgray;
     border-radius: 5px;
-    box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
-    font-size: 15px;
-    resize: vertical; /* Разрешить изменение размера только по вертикали */
+    padding: 10px 10px;
+    background-color: rgba(225, 225, 225, 25%);
 }
 
-#submitFeedbackBtn {
+.you_comment_container{
+    display: flex;
+    flex-direction: column;
+
+    width: auto;
+    height: 300px;
+
+    border: 1px solid grey;
+    border-radius: 10px;
+    background-color: rgb(230, 230, 230);
+}
+
+.you_container_text_container{
     width: 100%;
-    background-color: lightgray;
+    height: 200px;
+
+    border: 1px solid grey;
+    border-radius: 10px;
+    background-color: rgb(230, 230, 230);
+    padding: 10px 10px;
 }
 
-#submitFeedbackBtn:hover {
+.you_container_button{
+    margin: 2px auto;
+
+    width: 150px;
+    height: 50px;
+
+    background-color: rgb(120, 120, 120);
+
+    border: 2px solid rgb(80, 80, 80);
+    border-radius: 5px;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    align-content: center;
+    text-decoration: none;
+}
+
+
+
+
+
+.all_comments_container{
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 50px;
+}
+
+.comments_container{
+    display: flex;
+
     background-color: gray;
+
+    width: 100%;
+    min-width: 400px;
+    height: auto;
+
+    border: 1px solid grey;
+    border-radius: 10px;
+    background-color: white;
+
+    padding: 10px 10px;
+    margin-bottom: 10px;
 }
 
-/* Анимация появления звезд */
-#feedbackContainer {
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: fadeInDown 0.5s forwards;
+.comment_buttons{
+    display: flex;
+    height: 25px;
+    padding-left: 15px;
 }
 
-@keyframes fadeInDown {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.comment_buttons_button{
+    cursor: pointer;
+    transition: 0.25s;
 }
 
+.comment_buttons_button:hover{
+    filter: brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(0%) hue-rotate(218deg) brightness(97%) contrast(92%);
+}
+
+.comment_buttons_button_otvet{
+    padding: 0 5px;
+    margin-right: 10px;
+    background-color: rgb(200, 200, 200);
+    text-decoration: none;
+    border: 1px solid grey;
+    color: black;
+    border-radius: 5px;
+}
 
 
 /* ------ MEDIA ------ */

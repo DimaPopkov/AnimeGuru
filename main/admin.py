@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters
+from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments
 
 # Register your models here.
 admin.site.register(Product)
@@ -11,3 +11,4 @@ admin.site.register(Status)
 admin.site.register(Weblinks)
 admin.site.register(Voice_maker)
 admin.site.register(Characters)
+admin.site.register(Comments)

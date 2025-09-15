@@ -42,30 +42,9 @@
             <div class="card_info">
                 <div>
                     <h3 class="card_info_rating">   
-                        <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> {{ product.rating }} 
+                        <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> 
+                        {{ product.rating }} 
                         <p class="card_info_rating_10"> \10 </p>
-
-                        <div class="feedbackContainer">
-                            <button class="feedbackContainer_button" id="openFeedbackBtn" style="text-align: center;">Отзыв о тайтле</button>
-
-                            <div id="feedbackContainer" class="hidden">
-                                <div style="display: flex;
-                                            flex-direction: row;
-                                            width: 100%;
-                                            justify-content: center; padding: 10px 10px 0 10px">    
-                                    <span id="ratingValueDisplay"></span>
-                                    <p class="card_info_rating_10"> \10 </p>
-                                </div>
-                                <div id="starRating">
-                                    <!-- Звезды будут добавлены сюда с помощью JavaScript -->
-                                </div>
-                                <div id="commentSection" class="hidden">
-                                    <label for="comment">Ваш комментарий:</label>
-                                    <textarea id="comment" rows="4" placeholder="Оставьте свой отзыв..."></textarea>
-                                    <button id="submitFeedbackBtn">Отправить отзыв</button>
-                                </div>
-                            </div>
-                        </div>
                     </h3>
                     <h1 style="padding-bottom: 10px" id="name"> {{ product.name }} </h1>
                 </div>
@@ -296,7 +275,81 @@
         {% endif %}
 
         <div>
-            <h3> {{ product.comments }} </h3>
+            <div>
+                <h3> Комментарии </h3> 
+                <hr>
+            </div>
+            
+            <div class="you_container">
+                <div class="you_container_dop">
+                    <h4> Ваш комментарий </h4>
+
+                    <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
+                        {% csrf_token %}
+                        <div style="display: flex; align-content: center; padding: 5px 0">
+                            <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
+                            <input type="number" min="0" max="10" name="rating">
+                        </div>
+                        <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
+                        <button class="you_container_button"> Добавить </button>
+                    </form>
+                </div>
+
+                <div class="you_container_dop">
+                    <h4> Самые популярные комментарии </h4>
+                    
+                </div>
+            </div>
+
+            <div>
+                <h3> Все Комментарии </h3> 
+                <hr>
+            </div>
+            
+            <div class="all_comments_container">
+                {% if comments and comments != None %}
+                    {% for element in comments %}
+                        <div style="width: 100%; min-width: 400px;">
+                            <div style="display:flex; column-gap: 10px; column-gap: 50px">
+                                <p style="font-size: 20px"> {{ element.user_name }} </p>
+                                <div style="display:flex; text-align: center">
+                                    <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
+                                    <p style="font-size: 16px; align-content: center;"> {{ element.user_rating }} </p>
+                                    <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
+                                </div>
+                            </div>
+                            <div class="comments_container">
+                                {{ element.user_comment }}
+                            </div>
+                            <div class="comment_buttons">
+                                <button class="comment_buttons_button_otvet" value="{{ element }}"> Ответить </button>
+                                {% if element.net_likes > 0 %}
+                                    <p style="color: green; padding-right: 5px;"> {{ element.net_likes }} </p>
+                                {% elif element.net_likes < 0 %}
+                                    <p style="color: red; padding-right: 5px;"> {{ element.net_likes }} </p>
+                                {% endif %}
+
+                                <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                        value="{{ element.like_count }}" 
+                                        id="like_button_{{ element.id }}"
+                                        data-comment-id="{{ element.id }}"
+                                        data-action="like">
+
+                                    <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                        value="{{ element.dislike_count }}"
+                                        id="dislike_button_{{ element.id }}"
+                                        data-comment-id="{{ element.id }}"
+                                        data-action="dislike">
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <h4> Пока нет комментариев </h4>
+                {% endif %}
+            </div>
         </div>
     </div>  
 
@@ -395,91 +448,66 @@
         /* Конец реализации */
 
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentButtons = document.querySelectorAll('.comment_buttons_button');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const openFeedbackBtn = document.getElementById('openFeedbackBtn');
-            const feedbackContainer = document.getElementById('feedbackContainer');
-            const starRatingDiv = document.getElementById('starRating');
-            const ratingValueDisplaySpan = document.getElementById('ratingValueDisplay');
-            const commentSection = document.getElementById('commentSection');
-            const submitFeedbackBtn = document.getElementById('submitFeedbackBtn'); // Можно добавить обработчик позже
+            commentButtons.forEach(button => 
+            {
+                button.addEventListener('click', function() {
+                    const commentId = this.dataset.commentId;
+                    const action = this.dataset.action;
+                    const likeCountSpan = document.getElementById(`like_count_${commentId}`);
+                    const dislikeCountSpan = document.getElementById(`dislike_count_${commentId}`);
 
-            const numberOfStars = 10;
-            let selectedRating = 0;
+                    const filterForm = document.getElementById(`comment-${commentId}`);
 
-            // 1. Обработка нажатия на кнопку "Отзыв о тайтле"
-            openFeedbackBtn.addEventListener('click', () => {
-                openFeedbackBtn.classList.add('hidden'); // Скрываем кнопку
-                feedbackContainer.classList.remove('hidden'); // Показываем контейнер отзыва
+                    const url = filterForm.action
+                    // Отправляем AJAX-запрос
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'), // Функция для получения CSRF токена
+                        },
+                        body: JSON.stringify({
+                            action_ty: action
+                        })
+                    })
+                    .then(response => response.json()) // Ожидаем JSON-ответ от сервера
+                    .then(data => {
+                        // Обновляем счетчики на странице
+                        if (likeCountSpan) {
+                            likeCountSpan.textContent = data.like_count;
+                        }
+                        if (dislikeCountSpan) {
+                            dislikeCountSpan.textContent = data.dislike_count;
+                        }
 
-                // Генерируем звезды
-                starRatingDiv.innerHTML = ''; // Очищаем, если вдруг что-то было
-                for (let i = 1; i <= numberOfStars; i++) {
-                    const star = document.createElement('span');
-                    star.classList.add('star');
-                    star.textContent = '★'; // Символ звезды
-                    star.dataset.rating = i; // Сохраняем значение рейтинга в data-атрибут
-                    starRatingDiv.appendChild(star);
-                }
-
-                ratingValueDisplaySpan.textContent = 0; // Очищаем текст
-                
+                        // Здесь можно добавить логику для изменения вида кнопки (например, выделить, если кликнули)
+                        // ...
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Обработка ошибок (например, показать сообщение пользователю)
+                    });
+                });
             });
 
-            // 2. Обработка выбора рейтинга (клика по звездам)
-            starRatingDiv.addEventListener('click', (event) => {
-                const clickedStar = event.target;
-
-                // Проверяем, что кликнули именно по звезде
-                if (clickedStar.classList.contains('star')) {
-                    selectedRating = parseInt(clickedStar.dataset.rating); // Получаем числовое значение рейтинга
-
-                    // Обновляем внешний вид звезд: заполняем звезды до выбранной
-                    const stars = starRatingDiv.querySelectorAll('.star');
-                    stars.forEach((star, index) => {
-                        if (index < selectedRating) {
-                            star.classList.add('filled');
-                        } else {
-                            star.classList.remove('filled');
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
                         }
-                    });
-
-                    commentSection.classList.remove('hidden');
-                    if (selectedRating > 0) {
-                    ratingValueDisplaySpan.textContent = selectedRating; // Записываем значение
-                    ratingValueDisplaySpan.classList.remove('hidden'); // Показываем span
-                    } else {
-                    // Если рейтинг сброшен (например, кликом по уже выбранной звезде)
-                    ratingValueDisplaySpan.textContent = '';
-                    ratingValueDisplaySpan.classList.add('hidden');
                     }
                 }
-            });
-
-            // 3. Обработка отправки отзыва (опционально)
-            submitFeedbackBtn.addEventListener('click', () => {
-                const commentText = document.getElementById('comment').value;
-
-                if (selectedRating > 0) {
-                    console.log('Выбранный рейтинг:', selectedRating);
-                    console.log('Комментарий:', commentText);
-
-                    // Здесь может быть логика отправки на сервер
-
-                    // Сброс формы (опционально)
-                    selectedRating = 0;
-                    const stars = starRatingDiv.querySelectorAll('.star');
-                    stars.forEach(star => star.classList.remove('filled'));
-                    document.getElementById('comment').value = '';
-                    commentSection.classList.add('hidden');
-                    feedbackContainer.classList.add('hidden');
-                    openFeedbackBtn.classList.remove('hidden');
-
-                } else {
-                    alert('Пожалуйста, выберите рейтинг.');
-                }
-            });
+                return cookieValue;
+            }
         });
-
     </script>
 {% endblock %}

@@ -55,7 +55,6 @@ class Product(models.Model):
     links = models.ManyToManyField(Weblinks, related_name='links')
     main_characters = models.ManyToManyField('Characters', related_name='main_characters')
     characters = models.ManyToManyField('Characters', related_name='other_characters')
-    comments = models.ManyToManyField('Comments', related_name='comments')
 
     def __str__(self):
         return self.name
@@ -84,10 +83,13 @@ class Characters(models.Model):
         return self.first_name
     
 class Comments(models.Model):
-    product_name = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_name')
+    name = models.TextField('Имя тайтла', null=True)
     user_name = models.TextField('Логин пользователя:')
     user_rating = models.IntegerField('Оценка пользователя:')
     user_comment = models.TextField('Комментарий пользователя:', null=True)
+    like_count = models.IntegerField('Кол-во лайков под постом')
+    dislike_count = models.IntegerField('Кол-во дизлайков под постом')
+    state = models.BooleanField('True - like, False - dislike, None - not yet', null=True)
 
     def __str__(self):
-        return self.product_name
+        return self.name
