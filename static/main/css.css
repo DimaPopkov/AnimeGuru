@@ -800,6 +800,46 @@ body{
 }
 
 
+.star-rating {
+    display: flex; /* Чтобы звезды располагались в ряд */
+    align-items: center;
+
+    margin-top: -10px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 30px; /* Размер звезд */
+    color: #ccc; /* Цвет пустой звезды */
+    transition: color 0.2s ease; /* Плавный переход цвета при наведении */
+    align-content: center;
+}
+
+.star.hovered {
+    color: #ffd700; /* Цвет звезды при наведении */
+}
+
+.star.selected {
+    color: #ff9900; /* Цвет выбранной звезды */
+}
+
+
+.star-display {
+    display: flex; /* Чтобы звезды располагались в ряд */
+    margin-top: -10px;
+}
+
+.star-display .star {
+    font-size: 30px; /* Размер звезд */
+    color: #ccc; /* Цвет пустой звезды по умолчанию */
+}
+
+.star-display .star.filled {
+    color: #ff9900; /* Цвет заполненной (желтой) звезды */
+}
+
+
+
 /* - - - - Login - - - - */
 .login_container{
     width: 25%;
@@ -936,9 +976,6 @@ body{
 .cropper-container {
     margin-top: 20px; /* Отступ от элементов управления */
 }
-
-
-
 
 
 

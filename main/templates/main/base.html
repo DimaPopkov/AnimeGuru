@@ -17,8 +17,14 @@
         
         {% if request.user.is_authenticated %}
             <div class="login_status_bar">
-                <a href="{% url 'profile' %}" style="margin-bottom: 0; font-size: 20px; padding: 0 10px; color: black; text-decoration: none"> {{ request.user.username }} </a>
-
+                <div style="display: flex;">
+                    {% if request.user.profile.image != "avatars/null_avatar.png" %}
+                        <img src={{ request.user.profile.image }} style="width: 35px; height: 35px; border-radius: 100px;">
+                    {% else %}
+                        <img src={{ request.user.profile.image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
+                    {% endif %}
+                    <a href="{% url 'profile' %}" style="margin-bottom: 0; font-size: 20px; padding: 3px 10px 0 10px; color: black; text-decoration: none; text-align: center;"> {{ request.user.username }} </a>
+                </div>
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary">Выйти</button>

@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
+from django.db.models import OuterRef, Subquery, FileField
 
 from django.contrib.auth.models import User
 
@@ -161,22 +162,6 @@ def card(request, product_name):
         # добавляем описание в список
         MainCharacters_desc.append(character.description)
 
-    #   Реализованно на JavaScript в Card.html
-    #   max_len = 1500   # предел длины
-    #   for idx, txt in enumerate(MainCharacters_desc):
-    #       if len(txt) > max_len:               # только длинные строки
-    #           # ищем последнюю точку до max_len
-    #           period = txt.rfind('.', 0, max_len)
-    #           if period != -1:                 # точка найдена
-    #               MainCharacters_desc[idx] = txt[:period + 1]   # +1 – включаем точку
-    #           else:                            # точек в пределах max_len нет
-    #               MainCharacters_desc[idx] = txt[:max_len]
-    #   i = 0
-    #   for element in MainCharacters:
-    #       element.description = MainCharacters_desc[i]
-    #       i += 1
-    #       print("\n\n\n", element, "\n\n" , element.description, "\n\n\n")
-
     other_characters = products.characters.exclude(
         id__in=products.main_characters.values_list('id', flat=True)
     )
@@ -275,8 +260,19 @@ def check_url(url):
         print(f"Ошибка подключения: {e}")
 
 def profile(request):
+    username = request.user.username
+
+    product_image_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('image')[:1] # [:1] берет первое совпадение
+    )
+    
+    allComents = Comments.objects.filter(user_name=username).annotate(
+        product_image=product_image_subquery
+    )
+
     context = {
         'title' : 'Личный кабинет',
+        'your_comments': allComents,
     }
 
     return render(request, 'main/profile.html', context)
@@ -335,11 +331,6 @@ def update_comment_state(request, comment_id):
                 comments = get_object_or_404(AllComments, id=comment_id)
             else:
                 return JsonResponse({'error': 'Invalid action'}, status=400)
-
-            print(comments.net_likes)   
-            
-
-            print("\n\n", comments.id, "\n" , comment_id, "\n\n", comments.name)
         except:
             return JsonResponse({'error': 'Failed to load action'}, status=400)
 
@@ -351,11 +342,6 @@ def update_comment_state(request, comment_id):
             'status': 'success',
             'net_likes': comments.net_likes,
         })
-    
-        #({
-        #    'like_count': comment.like_count,
-        #    'dislike_count': comment.dislike_count
-        #})
     else:
         return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
     

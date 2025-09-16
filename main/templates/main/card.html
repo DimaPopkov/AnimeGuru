@@ -288,7 +288,20 @@
                         {% csrf_token %}
                         <div style="display: flex; align-content: center; padding-bottom: 2px">
                             <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
-                            <input type="number" min="1" max="10" name="rating">
+                            <div class="star-rating">
+                                <span class="star" data-value="1">&#9733;</span>
+                                <span class="star" data-value="2">&#9733;</span>
+                                <span class="star" data-value="3">&#9733;</span>
+                                <span class="star" data-value="4">&#9733;</span>
+                                <span class="star" data-value="5">&#9733;</span>
+                                <span class="star" data-value="6">&#9733;</span>
+                                <span class="star" data-value="7">&#9733;</span>
+                                <span class="star" data-value="8">&#9733;</span>
+                                <span class="star" data-value="9">&#9733;</span>
+                                <span class="star" data-value="10">&#9733;</span>
+                            </div>
+                            <!-- Скрытое поле для сохранения выбранного значения -->
+                            <input type="hidden" name="rating" id="rating-input">
                         </div>
                         <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
                         <button class="you_container_button"> Добавить </button>
@@ -298,21 +311,31 @@
                 <div class="you_container_dop">
                     <h4> Самый популярный комментарий: </h4>
                     
-                    {% if most_popular_comment != 0 %}
+                    {% if most_popular_comment != 0 and most_popular_comment.user_rating != None %}
                         <div class="you_container_dop_block">
                             <div style="display: flex; column-gap: 50px">
-                                <h5> {{ most_popular_comment.user_name }} </h5>
+                                <div style="display: flex; column-gap: 15px;">
+                                    {% if most_popular_comment.user_image != "avatars/null_avatar.png" %}
+                                        <img src={{ most_popular_comment.user_image }} style="width: 35px; height: 35px; border-radius: 100px;">
+                                    {% else %}
+                                        <img src={{ most_popular_comment.user_image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
+                                    {% endif %}
+                                    <h5 style="align-content: center; padding-bottom: 5px"> {{ most_popular_comment.user_name }} </h5>
+                                </div>
+
                                 <div style="display:flex; text-align: center">
                                     <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
-                                    <p style="font-size: 16px; align-content: center;"> {{ most_popular_comment.user_rating }} </p>
-                                    <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
+
+                                    <div class="star-display">
+                                        <!-- Здесь будут динамически генерироваться звезды -->
+                                    </div>
                                 </div>
                             </div>
                             <div class="you_container_dop_block_text">
                                 {{ most_popular_comment.user_comment }}
                             </div>
                         </div>
-                        {% else %}
+                    {% else %}
                         <div style="width:100%; height: 100%; align-content: center;">
                             <h3 style="text-align: center"> Пока-что нет популярного комментария </h3>
                         </div>
@@ -380,6 +403,9 @@
     </div>  
 
     <script>
+        const userRating = {{ most_popular_comment.user_rating }};
+
+            
         let maxLength = 1000;
         let window_screen_width = window.screen.width;
 
@@ -454,13 +480,15 @@
         /* ----------   4. Действие on Клик по любой картинке  ---------- */
         const gallery = document.getElementById('card_prew_pics_list');   // или любой родитель
 
-        gallery.addEventListener('click', ev => {
-            const targetImg = ev.target.closest('.card_prew_pics');
-            if (!targetImg) return;                          // клик не по картинке
+        if(gallery != null)
+        {
+            gallery.addEventListener('click', ev => {
+                const targetImg = ev.target.closest('.card_prew_pics');
+                if (!targetImg) return;                          // клик не по картинке
 
-            openLightbox(targetImg.src);                     // открываем
-        });
-
+                openLightbox(targetImg.src);                     // открываем
+            });
+        }
         /* ----------   5. Клик не по изображению → закрыть  ---------- */
         overlay.addEventListener('click', ev => {
             // Если клик пришёл не на саму картинку, закрываем
@@ -472,7 +500,6 @@
             if (ev.key === 'Escape') closeLightbox();
         });
         /* Конец реализации */
-
 
         document.addEventListener('DOMContentLoaded', function() {
             const commentButtons = document.querySelectorAll('.comment_buttons_button');
@@ -547,6 +574,90 @@
                     }
                 }
                 return cookieValue;
+            }
+        });
+
+        /* --------- Реализация строки выбора звезд для твоего комментария --------- */
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating-input');
+            let currentRating = 0;
+            let tempRating = 0;
+
+            stars.forEach(star => {
+                // Событие при наведении курсора на звезду
+                star.addEventListener('mouseover', function() {
+                    const ratingValue = parseInt(this.getAttribute('data-value'));
+                    tempRating = ratingValue; // Запоминаем временное значение
+
+                    // Подсвечиваем звезды до текущей
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-value')) <= ratingValue) {
+                            s.classList.add('hovered');
+                        } else {
+                            s.classList.remove('hovered');
+                        }
+                    });
+                });
+
+                // Событие при убирании курсора со звезды
+                star.addEventListener('mouseout', function() {
+                    tempRating = 0; // Сбрасываем временное значение
+                    // Сбрасываем подсветку, если ни одна звезда не выбрана
+                    if (currentRating === 0) {
+                        stars.forEach(s => s.classList.remove('hovered', 'selected'));
+                    } else {
+                        // Если звезда уже выбрана, восстанавливаем ее подсветку
+                        stars.forEach(s => {
+                            if (parseInt(s.getAttribute('data-value')) <= currentRating) {
+                                s.classList.add('selected');
+                            } else {
+                                s.classList.remove('selected');
+                            }
+                            s.classList.remove('hovered'); // Убираем временное наведение
+                        });
+                    }
+                });
+
+                // Событие при клике на звезду
+                star.addEventListener('click', function() {
+                    const ratingValue = parseInt(this.getAttribute('data-value'));
+                    currentRating = ratingValue; // Фиксируем выбранное значение
+                    ratingInput.value = currentRating; // Сохраняем значение в скрытое поле
+
+                    // Подсвечиваем выбранные звезды
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-value')) <= currentRating) {
+                            s.classList.add('selected');
+                            s.classList.remove('hovered'); // Убираем временное наведение
+                        } else {
+                            s.classList.remove('selected');
+                            s.classList.remove('hovered');
+                        }
+                    });
+                });
+            });
+        });
+
+        /* --------- Реализация строки звезд для самого популярного комментария --------- */
+        document.addEventListener('DOMContentLoaded', function() {
+            const starDisplay = document.querySelector('.star-display');
+            const maxStars = 10;
+
+            // Убедимся, что userRating является числом и находится в допустимом диапазоне
+            const rating = parseInt(userRating) || 0;
+            const validRating = Math.max(0, Math.min(rating, maxStars));
+
+            for (let i = 1; i <= maxStars; i++) {
+                const star = document.createElement('span');
+                star.classList.add('star'); // Общий класс для всех звезд
+                star.innerHTML = '&#9733;'; // Символ звезды
+
+                if (i <= validRating) {
+                    star.classList.add('filled'); // Добавляем класс "filled" для желтых звезд
+                }
+
+                starDisplay.appendChild(star);
             }
         });
     </script>

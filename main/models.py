@@ -101,12 +101,15 @@ class Comments(models.Model):
     
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='avatars/', default='avatars/null_avatar.png')
+    image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+    else:
+        instance.profile.save()
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
