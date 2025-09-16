@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
+
+from django.contrib.auth.models import User
 
 from .models import Tags, Category, Product, Album_Pics, Characters, Comments
 from .forms import ProductForm
@@ -122,7 +125,13 @@ def card(request, product_name):
     products = get_object_or_404(Product, name=product_name)
 
     comments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+    most_popular_comment = 0
 
+    for element in comments:
+        if most_popular_comment != 0 and element.net_likes > most_popular_comment.net_likes:
+            most_popular_comment = element
+        elif most_popular_comment == 0:
+            most_popular_comment = element
 
     print(products)
     selected_product = Product.objects.get(name=products)
@@ -248,6 +257,7 @@ def card(request, product_name):
         'main_characters': MainCharacters,
         'characters': other_characters,
         'comments' : comments,
+        'most_popular_comment': most_popular_comment,
     }
     print("\n\n", request, "\n Метод POST \n")
     print("Сохранено:", target_product_name, "\n")
@@ -280,11 +290,17 @@ def add_comments(request, product_name):
     User_comment = request.POST.get('text')
     User_rating = request.POST.get('rating')
 
+    user_name = request.user.username
+    user_image = request.user.profile.image
+
     new_comment = Comments(
         name = product,
-        user_name = request.user.username,
+        user_image = user_image,
+        user_name = user_name,
         user_rating = User_rating,
-        user_comment = User_comment
+        user_comment = User_comment,
+        like_count = 0,
+        dislike_count = 0,
     )
 
     new_comment.save()
@@ -295,27 +311,86 @@ def add_comments(request, product_name):
     return redirect(url_to_redirect_to)
 
 def update_comment_state(request, comment_id):
-    if request.method == 'POST':
-        comment = get_object_or_404(Comments, id=comment_id)
+    if request.method == 'POST':      
         try:
-            action = request.POST.get('action_ty')
-            print(action)
+            action = request.POST.get("action_ty")
+            product_name = request.POST.get("product_name")
+
+            AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+            comments = get_object_or_404(AllComments, id=comment_id)
+
+
+            if action == "like":
+                comments.like_count += 1
+                comments.save()
+
+                AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                comments = get_object_or_404(AllComments, id=comment_id)
+
+            elif action == "dislike":
+                comments.dislike_count += 1
+                comments.save()
+
+                AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                comments = get_object_or_404(AllComments, id=comment_id)
+            else:
+                return JsonResponse({'error': 'Invalid action'}, status=400)
+
+            print(comments.net_likes)   
+            
+
+            print("\n\n", comments.id, "\n" , comment_id, "\n\n", comments.name)
         except:
             return JsonResponse({'error': 'Failed to load action'}, status=400)
 
-        if action == 'like':
-            comment.like_count += 1
-        elif action == 'dislike':
-            comment.dislike_count += 1
-        else:
-            return JsonResponse({'error': 'Invalid action'}, status=400)
+        comments.save()
 
-        comment.save()
-
-        # Возвращаем JSON с обновленными счетчиками
+        #url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
         return JsonResponse({
-            'like_count': comment.like_count,
-            'dislike_count': comment.dislike_count
+            'comment': "",
+            'status': 'success',
+            'net_likes': comments.net_likes,
         })
+    
+        #({
+        #    'like_count': comment.like_count,
+        #    'dislike_count': comment.dislike_count
+        #})
     else:
         return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
+    
+def profile_change_avatar(request):
+    if request.method == 'POST':
+        print("ФОТКА ДОШЛА")
+
+        username = request.POST.get('user_id')
+        image_file = request.POST.get('image') # получение фотки
+        print(image_file)
+
+        if not username or not image_file:
+            return JsonResponse({'error': 'Недостаточно данных для обновления аватара.'}, status=400)
+
+        try:
+            # Получаем конкретного пользователя
+            user = User.objects.get(username=username)
+
+            # Присваиваем файл изображению в профиле
+            user.profile.image = image_file
+            print(image_file)
+            user.profile.save()
+
+            print(f"Аватар успешно обновлен для пользователя: {username}")
+
+            # Возвращаем URL изображения
+            return JsonResponse({
+                'image_url': user.profile.image.url if user.profile.image else None,
+            })
+
+        except User.DoesNotExist:
+            return JsonResponse({'error': f'Пользователь с именем "{username}" не найден.'}, status=404)
+        except Exception as e:
+            print(f"Произошла ошибка при обновлении аватара: {e}")
+            return JsonResponse({'error': 'Произошла внутренняя ошибка сервера.'}, status=500)
+
+    # Если запрос не POST, возвращаем ошибку или пустой ответ
+    return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)

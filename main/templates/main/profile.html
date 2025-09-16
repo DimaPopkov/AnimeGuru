@@ -4,10 +4,35 @@
     {{ title }}
 {% endblock %}
 
+{% load static %}
 {% block content %}
     <div class="card_container_main" style=" padding: 20px 30px; "> 
         <div class="profile_container_header">
             <div class="profile_container_header_block">
+                <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
+                    {% if request.user.profile.image %}
+                        <img src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar" style="width:150px; height: 150px; margin-bottom: 20px; border-radius:100px;">
+                    {% else %}
+                        <img src="{% static '/img/null_avatar.png' %}" id="avatar" alt="Default Avatar" style="width:150px; height: 150px; margin-bottom: 20px; border-radius:100px;">
+                    {% endif %}      
+                    <button id="changeAvatarBtn">Изменить аватар</button>   
+
+                    <div class="avatar-modal-overlay" id="avatarModalOverlay">
+                        <div class="avatar-modal">
+                            <h2>Редактирование аватара</h2>
+                            <div class="image-container">
+                                <!-- Здесь будет отображаться изображение для редактирования -->
+                                <img id="editableAvatar" src="" alt="Изображение для редактирования">
+                            </div>
+                            <div class="modal-controls">
+                                <input type="file" id="avatarFileInput" accept="image/*">
+                                <button id="cropBtn">Обрезать</button>
+                                <button id="saveAvatarBtn">Сохранить</button>
+                                <button id="cancelAvatarBtn">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="profile_container_header_block_info_flex">
                     <p> Логин : </p>
                     <h5 style="padding-left: 10px"> {{ request.user.username }} </h5>
@@ -80,4 +105,157 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script>
+        let cropper = null; // Хранит экземпляр Cropper.js
+        const avatarElement = document.getElementById('avatar');
+        const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+        const avatarModalOverlay = document.getElementById('avatarModalOverlay');
+        const avatarFileInput = document.getElementById('avatarFileInput');
+        const editableAvatar = document.getElementById('editableAvatar');
+        const cropBtn = document.getElementById('cropBtn');
+        const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+        const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+
+        // --- Функция открытия модального окна ---
+        function openAvatarModal() {
+            avatarModalOverlay.style.display = 'flex'; // Показываем модальное окно
+        }
+
+        // --- Функция закрытия модального окна ---
+        function closeAvatarModal() {
+            avatarModalOverlay.style.display = 'none'; // Скрываем модальное окно
+            // Очищаем экземпляр Cropper.js, если он был создан
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            // Сбрасываем поле выбора файла
+            avatarFileInput.value = '';
+            // Сбрасываем src изображения для редактирования
+            editableAvatar.src = '';
+        }
+
+        // --- Функция для инициализации Cropper.js ---
+        function initializeCropper(imageSrc) {
+            editableAvatar.src = imageSrc; // Устанавливаем изображение для редактирования
+
+            // Ждем, пока изображение загрузится, чтобы Cropper.js смог его инициализировать
+            editableAvatar.onload = () => {
+                cropper = new Cropper(editableAvatar, {
+                    aspectRatio: 1 / 1, // Можно настроить соотношение сторон (например, 16/9, null для свободной обрезки)
+                    viewMode: 1, // Режим просмотра: 0 (по умолчанию), 1 (ограничивает кроппер областью контейнера), 2 (ограничивает кроппер изображением), 3 (ограничивает кроппер контейнером и изображением)
+                    autoCropArea: 0.8, // Область автоматической обрезки (от 0 до 1)
+                    responsive: true, // Адаптивность
+                });
+            };
+        }
+
+        // --- Функция для сохранения отредактированного аватара ---
+        function saveAvatar() {
+            if (cropper) {
+                // Получаем изображение в формате Canvas
+                const canvas = cropper.getCroppedCanvas();
+                // Преобразуем Canvas в Data URL (base64 строку)
+                const croppedImageUrl = canvas.toDataURL('image/jpeg'); // Можно указать 'image/png'
+
+                const csrftoken = getCookie('csrftoken');
+                // Устанавливаем отредактированное изображение как src для основного аватара
+                avatarElement.src = croppedImageUrl;
+
+                const formData = new URLSearchParams();
+                formData.append('image', croppedImageUrl);
+                formData.append('user_id', '{{ request.user.username }}');
+
+                fetch('/user/change-avatar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken, // Функция для получения CSRF токена
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                   console.log('Аватар сохранен на сервере:', data);
+                })
+                .catch(error => console.error('Ошибка сохранения аватара:', error));
+
+                closeAvatarModal(); // Закрываем модальное окно после сохранения
+            } else {
+                alert('Изображение не было отредактировано.');
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // --- Основная функция add_avatar ---
+        function add_avatar() {
+            // Скрываем текущий аватар, пока выбираем новый
+            // avatarElement.style.display = 'none'; // Можно сделать так, если нужно
+
+            openAvatarModal(); // Открываем модальное окно
+        }
+
+        // --- Обработчики событий ---
+
+        // Кнопка "Изменить аватар"
+        changeAvatarBtn.addEventListener('click', add_avatar);
+
+        // Обработка выбора файла
+        avatarFileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0]; // Получаем выбранный файл
+
+            if (file) {
+                const reader = new FileReader(); // Объект для чтения файлов
+
+                reader.onload = function(e) {
+                    // Когда файл будет прочитан, инициализируем Cropper.js
+                    initializeCropper(e.target.result);
+                };
+
+                reader.readAsDataURL(file); // Читаем файл как Data URL
+            }
+        });
+
+        // Кнопка "Обрезать"
+        cropBtn.addEventListener('click', function() {
+            if (cropper) {
+                // Cropper.js сам управляет отображением обрезанного изображения
+                // Можно добавить дополнительные действия, если нужно, но обычно обрезка происходит автоматически
+                // при движении рамки. Эта кнопка может быть больше для подтверждения или запуска процесса.
+                // Для Cropper.js, сам факт взаимодействия с рамкой уже "обрезает".
+                console.log("Кнопка обрезки нажата.");
+            }
+        });
+
+        // Кнопка "Сохранить"
+        saveAvatarBtn.addEventListener('click', saveAvatar);
+
+        // Кнопка "Отмена"
+        cancelAvatarBtn.addEventListener('click', closeAvatarModal);
+
+        // Обработка закрытия модального окна по клику вне его содержимого (опционально)
+        avatarModalOverlay.addEventListener('click', function(event) {
+            // Проверяем, был ли клик непосредственно по оверлею, а не по содержимому модального окна
+            if (event.target === avatarModalOverlay) {
+                closeAvatarModal();
+            }
+        });
+    </script>
 {% endblock %}

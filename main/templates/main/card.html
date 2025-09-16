@@ -282,13 +282,13 @@
             
             <div class="you_container">
                 <div class="you_container_dop">
-                    <h4> Ваш комментарий </h4>
+                    <h4> Ваш комментарий: </h4>
 
                     <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
                         {% csrf_token %}
-                        <div style="display: flex; align-content: center; padding: 5px 0">
+                        <div style="display: flex; align-content: center; padding-bottom: 2px">
                             <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
-                            <input type="number" min="0" max="10" name="rating">
+                            <input type="number" min="1" max="10" name="rating">
                         </div>
                         <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
                         <button class="you_container_button"> Добавить </button>
@@ -296,8 +296,27 @@
                 </div>
 
                 <div class="you_container_dop">
-                    <h4> Самые популярные комментарии </h4>
+                    <h4> Самый популярный комментарий: </h4>
                     
+                    {% if most_popular_comment != 0 %}
+                        <div class="you_container_dop_block">
+                            <div style="display: flex; column-gap: 50px">
+                                <h5> {{ most_popular_comment.user_name }} </h5>
+                                <div style="display:flex; text-align: center">
+                                    <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
+                                    <p style="font-size: 16px; align-content: center;"> {{ most_popular_comment.user_rating }} </p>
+                                    <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
+                                </div>
+                            </div>
+                            <div class="you_container_dop_block_text">
+                                {{ most_popular_comment.user_comment }}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div style="width:100%; height: 100%; align-content: center;">
+                            <h3 style="text-align: center"> Пока-что нет популярного комментария </h3>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -310,10 +329,11 @@
                 {% if comments and comments != None %}
                     {% for element in comments %}
                         <div style="width: 100%; min-width: 400px;">
-                            <div style="display:flex; column-gap: 10px; column-gap: 50px">
-                                <p style="font-size: 20px"> {{ element.user_name }} </p>
+                            <div style="display:flex; column-gap: 10px; column-gap: 25px; padding:5px 5px;">
+                                <img src="{{ element.user_image }}" default="{% static "/img/null_avatar.png" %}" style="width:75px; height:75px; border-radius: 100px">
+                                <p style="font-size: 20px; margin-bottom: 0; align-content: center;"> {{ element.user_name }} </p>
                                 <div style="display:flex; text-align: center">
-                                    <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
+                                    <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
                                     <p style="font-size: 16px; align-content: center;"> {{ element.user_rating }} </p>
                                     <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
                                 </div>
@@ -322,12 +342,18 @@
                                 {{ element.user_comment }}
                             </div>
                             <div class="comment_buttons">
+                                <!-- Пока не работает -->
                                 <button class="comment_buttons_button_otvet" value="{{ element }}"> Ответить </button>
+                                
                                 {% if element.net_likes > 0 %}
-                                    <p style="color: green; padding-right: 5px;"> {{ element.net_likes }} </p>
+                                    <span style="color: green; padding-right: 5px;" id="like_count_{{ element.id }}">
                                 {% elif element.net_likes < 0 %}
-                                    <p style="color: red; padding-right: 5px;"> {{ element.net_likes }} </p>
+                                    <span style="color: red; padding-right: 5px;" id="like_count_{{ element.id }}">
+                                {% else %}
+                                    <span style="display: none" id="like_count_{{ element.id }}">
                                 {% endif %}
+                                        {{ element.net_likes }} 
+                                    </span>
 
                                 <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element.id %}" method="POST">
                                     {% csrf_token %}
@@ -456,35 +482,49 @@
                 button.addEventListener('click', function() {
                     const commentId = this.dataset.commentId;
                     const action = this.dataset.action;
+                    const product_name = "{{product.name}}";
                     const likeCountSpan = document.getElementById(`like_count_${commentId}`);
-                    const dislikeCountSpan = document.getElementById(`dislike_count_${commentId}`);
 
                     const filterForm = document.getElementById(`comment-${commentId}`);
+
+                    const csrftoken = getCookie('csrftoken');
+                   
+                    const formData = new URLSearchParams();
+                    formData.append('comment_id', commentId);
+                    formData.append('action_ty', action);
+                    formData.append('product_name', product_name);
 
                     const url = filterForm.action
                     // Отправляем AJAX-запрос
                     fetch(url, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken'), // Функция для получения CSRF токена
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrftoken, // Функция для получения CSRF токена
                         },
-                        body: JSON.stringify({
-                            action_ty: action
-                        })
+                        body: formData
                     })
-                    .then(response => response.json()) // Ожидаем JSON-ответ от сервера
+                    .then(responce => responce.json())
                     .then(data => {
-                        // Обновляем счетчики на странице
-                        if (likeCountSpan) {
-                            likeCountSpan.textContent = data.like_count;
-                        }
-                        if (dislikeCountSpan) {
-                            dislikeCountSpan.textContent = data.dislike_count;
-                        }
+                        if (data.status == "success") { // Предполагаем, что Python возвращает 'status': 'success'
+                            if (likeCountSpan) {
+                                likeCountSpan.innerText = data.net_likes;
 
-                        // Здесь можно добавить логику для изменения вида кнопки (например, выделить, если кликнули)
-                        // ...
+                                if (likeCountSpan.innerText < 0) {
+                                    likeCountSpan.style.color = "red";
+                                    likeCountSpan.style.display = "block";
+                                } else if (likeCountSpan.innerText > 0) {
+                                    likeCountSpan.style.color = "green";
+                                    likeCountSpan.style.display = "block";
+                                } else {
+                                    likeCountSpan.style.display = "none";
+                                }
+                            }
+                            // Возможно, здесь нужно обновить и внешний вид кнопок, если пользователь уже лайкнул/дизлайкнул
+                        } else {
+                            // Обработка ошибок сервера
+                            alert(data.message || 'An error occurred.');
+                        }
                     })
                     .catch(error => {
                         console.error('Error:', error);

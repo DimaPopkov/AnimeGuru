@@ -1,5 +1,9 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 # Create your models here.
 class Pics(models.Model):
     image = models.URLField('Изображение', blank=True, null=True)
@@ -84,6 +88,7 @@ class Characters(models.Model):
     
 class Comments(models.Model):
     name = models.TextField('Имя тайтла', null=True)
+    user_image = models.ImageField('Image:', null=True)
     user_name = models.TextField('Логин пользователя:')
     user_rating = models.IntegerField('Оценка пользователя:')
     user_comment = models.TextField('Комментарий пользователя:', null=True)
@@ -93,3 +98,16 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='avatars/', default='avatars/null_avatar.png')
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
