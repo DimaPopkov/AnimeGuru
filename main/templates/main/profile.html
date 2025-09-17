@@ -112,20 +112,37 @@
             <h3> Ваши комментарии </h3><hr>
             <div class="profile_container_favourites_block">
                 {% for element in your_comments %}                 
-                    <div style="display: flex; width: 100%; min-width: 400px; column-gap: 20px">
-                        <img src="{{ element.product_image }}" style="width: 150px">
+                    <div class="profile_container_favourites_block_comment">
+                        <img src="{{ element.product_image }}" style="width: 150px; border: 1px solid gray; border-radius: 5px;">
+                        <div class="prod_element_rating">
+                            <div class="prod_element_rating_block"> {{ element.product_rating }} </div>
+                            <div class="prod_element_rating_block_dop_main">
+                                <div class="prod_element_rating_block_dop"></div>
+                            </div>
+                        </div>
                         <div>
-                            <h4>{{ element.name }}</h4>
+                            <a style="font-weight: 500; line-height: 1.2; font-size:24px; text-decoration: none; color: black;" href="{% url 'card' product_name=element.name %}">{{ element.name }}</a>
+                            <p style="padding-top: 5px;">{{ element.product_category }} / {{ element.product_season.year }}</p>
                             <div style="display:flex; column-gap: 10px; column-gap: 25px; padding:5px 5px;">                 
                                 <div style="display:flex; text-align: center">
                                     <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
-                                    <p style="font-size: 16px; align-content: center;"> {{ element.user_rating }} </p>
-                                    <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
+                                    {% for current_number in star_list %}
+                                        {% if current_number <= element.user_rating %}
+                                            <span class="star-icon" style="color: #ff9900;">&#9733;</span>
+                                        {% else %}
+                                            <span class="star-icon" style="color: gray;">&#9733;</span>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="comments_container">
                                 {{ element.user_comment }}
                             </div>
+                            {% if element.net_likes > 0 %}
+                                <p style="color: green;">{{ element.net_likes }}</p>
+                            {% elif element.net_likes < 0 %}
+                                <p style="color: red;">{{ element.net_likes }}</p>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

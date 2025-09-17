@@ -815,6 +815,13 @@ body{
     align-content: center;
 }
 
+.star-icon {
+    font-size: 30px; /* Размер звезд */
+    color: #ccc; /* Цвет пустой звезды */
+    transition: color 0.2s ease; /* Плавный переход цвета при наведении */
+    align-content: center;
+}
+
 .star.hovered {
     color: #ffd700; /* Цвет звезды при наведении */
 }
@@ -829,12 +836,12 @@ body{
     margin-top: -10px;
 }
 
-.star-display .star {
+.star_display_item {
     font-size: 30px; /* Размер звезд */
     color: #ccc; /* Цвет пустой звезды по умолчанию */
 }
 
-.star-display .star.filled {
+.star-display .star_display_item.filled {
     color: #ff9900; /* Цвет заполненной (желтой) звезды */
 }
 
@@ -923,7 +930,24 @@ body{
 
 .profile_container_favourites_block{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+
+    row-gap: 10px;
+}
+
+.profile_container_favourites_block_comment{
+    display: flex;
+
+    width: 100%;
+    min-width: 400px;
+
+    column-gap: 20px;
+    padding: 10px 10px;
+
+    background-color: rgb(230, 230, 230);
+
+    border: 1px solid lightgray;
+    border-radius: 10px;
 }
 
 /* ------ AVATAR CROP -------- */

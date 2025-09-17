@@ -126,6 +126,10 @@ def card(request, product_name):
     products = get_object_or_404(Product, name=product_name)
 
     comments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+
+    star_list = list(range(1, 11))
+    print(star_list)
+
     most_popular_comment = 0
 
     for element in comments:
@@ -241,7 +245,8 @@ def card(request, product_name):
         'link_name': product_link_name,
         'main_characters': MainCharacters,
         'characters': other_characters,
-        'comments' : comments,
+        'comments': comments,
+        'star_list': star_list,
         'most_popular_comment': most_popular_comment,
     }
     print("\n\n", request, "\n Метод POST \n")
@@ -265,14 +270,33 @@ def profile(request):
     product_image_subquery = Subquery(
         Product.objects.filter(name=OuterRef('name')).values('image')[:1] # [:1] берет первое совпадение
     )
+
+    product_category_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('category__name')[:1] # [:1] берет первое совпадение
+    )
+
+    product_rating_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('rating')[:1] # [:1] берет первое совпадение
+    )
+
+    product_season_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('season')[:1] # [:1] берет первое совпадение
+    )
     
     allComents = Comments.objects.filter(user_name=username).annotate(
-        product_image=product_image_subquery
+        product_image=product_image_subquery,
+        product_category=product_category_subquery,
+        product_rating=product_rating_subquery,
+        net_likes=models.F('like_count') - models.F('dislike_count'),
+        product_season=product_season_subquery,
     )
+    
+    star_list = list(range(1, 11))
 
     context = {
         'title' : 'Личный кабинет',
         'your_comments': allComents,
+        'star_list': star_list,
     }
 
     return render(request, 'main/profile.html', context)

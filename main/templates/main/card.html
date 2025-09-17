@@ -357,8 +357,20 @@
                                 <p style="font-size: 20px; margin-bottom: 0; align-content: center;"> {{ element.user_name }} </p>
                                 <div style="display:flex; text-align: center">
                                     <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
+                                    
+                                    <div style="display: flex;">
+                                        {% for current_number in star_list %}
+                                            {% if current_number <= element.user_rating %}
+                                                <span class="star-icon" style="color: #ff9900;">&#9733;</span>
+                                            {% else %}
+                                                <span class="star-icon" style="color: gray;">&#9733;</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <!--
                                     <p style="font-size: 16px; align-content: center;"> {{ element.user_rating }} </p>
                                     <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
+                                    -->
                                 </div>
                             </div>
                             <div class="comments_container">
@@ -403,9 +415,32 @@
     </div>  
 
     <script>
-        const userRating = {{ most_popular_comment.user_rating }};
+        {% if most_popular_comment.user_rating != null %}
+            const userRating = {{ most_popular_comment.user_rating }};
 
-            
+            /* --------- Реализация строки звезд для самого популярного комментария --------- */
+            document.addEventListener('DOMContentLoaded', function() {
+                const starDisplay = document.querySelector('.star-display');
+                const maxStars = 10;
+
+                // Убедимся, что userRating является числом и находится в допустимом диапазоне
+                const rating = parseInt(userRating) || 0;
+                const validRating = Math.max(0, Math.min(rating, maxStars));
+
+                for (let i = 1; i <= maxStars; i++) {
+                    const star = document.createElement('span');
+                    star.classList.add('star_display_item'); // Общий класс для всех звезд
+                    star.innerHTML = '&#9733;'; // Символ звезды
+
+                    if (i <= validRating) {
+                        star.classList.add('filled'); // Добавляем класс "filled" для желтых звезд
+                    }
+
+                    starDisplay.appendChild(star);
+                }
+            });
+        {% endif %}
+        
         let maxLength = 1000;
         let window_screen_width = window.screen.width;
 
@@ -637,28 +672,6 @@
                     });
                 });
             });
-        });
-
-        /* --------- Реализация строки звезд для самого популярного комментария --------- */
-        document.addEventListener('DOMContentLoaded', function() {
-            const starDisplay = document.querySelector('.star-display');
-            const maxStars = 10;
-
-            // Убедимся, что userRating является числом и находится в допустимом диапазоне
-            const rating = parseInt(userRating) || 0;
-            const validRating = Math.max(0, Math.min(rating, maxStars));
-
-            for (let i = 1; i <= maxStars; i++) {
-                const star = document.createElement('span');
-                star.classList.add('star'); // Общий класс для всех звезд
-                star.innerHTML = '&#9733;'; // Символ звезды
-
-                if (i <= validRating) {
-                    star.classList.add('filled'); // Добавляем класс "filled" для желтых звезд
-                }
-
-                starDisplay.appendChild(star);
-            }
         });
     </script>
 {% endblock %}
