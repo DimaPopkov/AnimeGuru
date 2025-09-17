@@ -7,7 +7,7 @@ from django.db.models import OuterRef, Subquery, FileField
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Album_Pics, Characters, Comments
+from .models import Tags, Category, Product, Album_Pics, Characters, Comments, CommentAction 
 from .forms import ProductForm
 import re, requests
 
@@ -126,6 +126,16 @@ def card(request, product_name):
     products = get_object_or_404(Product, name=product_name)
 
     comments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+
+    CurrentUserName = request.user.username
+    print(CurrentUserName)
+
+    CurrentComment = None
+
+    for comment in comments:
+        if comment.user_name == CurrentUserName:
+            CurrentComment = comment
+            print("CurrentComment: ", CurrentComment.user_comment)
 
     star_list = list(range(1, 11))
     print(star_list)
@@ -246,6 +256,7 @@ def card(request, product_name):
         'main_characters': MainCharacters,
         'characters': other_characters,
         'comments': comments,
+        'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,
     }
@@ -330,6 +341,46 @@ def add_comments(request, product_name):
     url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
     return redirect(url_to_redirect_to)
 
+def edit_comments(request, product_name):
+
+    user_name = request.user.username
+
+    try:
+        existing_comment = Comments.objects.get(name=product_name, user_name=user_name)
+    except Comments.DoesNotExist:
+        url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+        return redirect(url_to_redirect_to)
+
+    new_rating = request.POST.get('rating')
+    new_comment_text = request.POST.get('text')
+
+    # Обновляем поля существующего комментария
+    existing_comment.user_rating = new_rating
+    existing_comment.user_comment = new_comment_text
+
+    existing_comment.save()
+
+    print("\n\n------------- Edited_Comment ----------------\n", existing_comment)
+
+    url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+    return redirect(url_to_redirect_to)
+
+def delete_comments(request, product_name):
+    
+    user_name = request.user.username
+
+    try:
+        existing_comment = Comments.objects.get(name=product_name, user_name=user_name)
+    except Comments.DoesNotExist:
+        url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+        return redirect(url_to_redirect_to)
+    
+    existing_comment.delete()
+    print("Комментарий успешно удалён!")
+    
+    url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+    return redirect(url_to_redirect_to)
+
 def update_comment_state(request, comment_id):
     if request.method == 'POST':      
         try:
@@ -338,37 +389,94 @@ def update_comment_state(request, comment_id):
 
             AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
             comments = get_object_or_404(AllComments, id=comment_id)
+            try:
+                existing_action = CommentAction.objects.get(user=request.user, comment=comments)
+            except: 
+                existing_action = CommentAction.objects.create(user=request.user, comment=comments, action_type='none')
 
+            existing_action_user = existing_action.user
+            existing_action_comment = existing_action.comment
+            existing_action_action_type = existing_action.action_type
 
             if action == "like":
-                comments.like_count += 1
-                comments.save()
+                if existing_action and existing_action.action_type == "like":
+                    existing_action.action_type = "none"
+                    existing_action.save()
 
-                AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                comments = get_object_or_404(AllComments, id=comment_id)
+                    comments.like_count -= 1
+                    comments.save()
+
+                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                    comments = get_object_or_404(AllComments, id=comment_id)      
+
+                elif existing_action and existing_action.action_type == "dislike":
+                    existing_action.action_type = "like"
+                    existing_action.save()
+
+                    comments.dislike_count -= 1
+                    comments.like_count += 1    # Увеличиваем лайк
+
+                    comments.save()
+
+                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                    comments = get_object_or_404(AllComments, id=comment_id)
+                else:
+                    existing_action.action_type = 'like'
+                    existing_action.save()
+
+                    comments.like_count += 1
+                    comments.save()
+
+                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                    comments = get_object_or_404(AllComments, id=comment_id)
 
             elif action == "dislike":
-                comments.dislike_count += 1
-                comments.save()
+                if existing_action and existing_action.action_type == "dislike":
+                    existing_action.action_type = "none"
+                    existing_action.save()
 
-                AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                comments = get_object_or_404(AllComments, id=comment_id)
+                    comments.dislike_count -= 1
+                    comments.save()
+
+                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                    comments = get_object_or_404(AllComments, id=comment_id)
+
+                elif existing_action and existing_action.action_type == "like":
+                    # Пользователь сначала лайкнул, теперь дизлайкает
+                    existing_action.action_type = "dislike"
+                    existing_action.save()
+
+                    comments.like_count -= 1
+                    comments.dislike_count += 1 # Увеличиваем дизлайк
+                    comments.save()
+
+                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                    comments = get_object_or_404(AllComments, id=comment_id)
+                
+                else:
+                    existing_action.action_type = 'dislike'
+                    existing_action.save()
+
+                    comments.dislike_count += 1
+                    comments.save()
+
+                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+                    comments = get_object_or_404(AllComments, id=comment_id)
             else:
                 return JsonResponse({'error': 'Invalid action'}, status=400)
         except:
             return JsonResponse({'error': 'Failed to load action'}, status=400)
 
-        comments.save()
-
-        #url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
         return JsonResponse({
             'comment': "",
             'status': 'success',
             'net_likes': comments.net_likes,
+            'existing_action': existing_action.action_type
         })
     else:
         return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
     
+
 def profile_change_avatar(request):
     if request.method == 'POST':
         print("ФОТКА ДОШЛА")

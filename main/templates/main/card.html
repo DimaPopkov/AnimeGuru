@@ -284,28 +284,71 @@
                 <div class="you_container_dop">
                     <h4> Ваш комментарий: </h4>
 
-                    <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
-                        {% csrf_token %}
-                        <div style="display: flex; align-content: center; padding-bottom: 2px">
-                            <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
-                            <div class="star-rating">
-                                <span class="star" data-value="1">&#9733;</span>
-                                <span class="star" data-value="2">&#9733;</span>
-                                <span class="star" data-value="3">&#9733;</span>
-                                <span class="star" data-value="4">&#9733;</span>
-                                <span class="star" data-value="5">&#9733;</span>
-                                <span class="star" data-value="6">&#9733;</span>
-                                <span class="star" data-value="7">&#9733;</span>
-                                <span class="star" data-value="8">&#9733;</span>
-                                <span class="star" data-value="9">&#9733;</span>
-                                <span class="star" data-value="10">&#9733;</span>
+                    {% if your_comment == None %}
+                        <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
+                            {% csrf_token %}
+                            <div style="display: flex; align-content: center; padding-bottom: 2px">
+                                <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
+                                <div class="star-rating">
+                                    <span class="star" data-value="1">&#9733;</span>
+                                    <span class="star" data-value="2">&#9733;</span>
+                                    <span class="star" data-value="3">&#9733;</span>
+                                    <span class="star" data-value="4">&#9733;</span>
+                                    <span class="star" data-value="5">&#9733;</span>
+                                    <span class="star" data-value="6">&#9733;</span>
+                                    <span class="star" data-value="7">&#9733;</span>
+                                    <span class="star" data-value="8">&#9733;</span>
+                                    <span class="star" data-value="9">&#9733;</span>
+                                    <span class="star" data-value="10">&#9733;</span>
+                                </div>
+                                <!-- Скрытое поле для сохранения выбранного значения -->
+                                <input type="hidden" name="rating" id="rating-input">
                             </div>
-                            <!-- Скрытое поле для сохранения выбранного значения -->
-                            <input type="hidden" name="rating" id="rating-input">
-                        </div>
-                        <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
-                        <button class="you_container_button"> Добавить </button>
-                    </form>
+                            <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
+                            <button class="you_container_button"> Добавить </button>
+                        </form>
+                    {% else %}
+                        <form id="you_container_form" method="POST" action="{% url 'edit_comments' product_name=product.name %}">
+                            {% csrf_token %}
+                            <div style="display: flex; flex-direction: column; align-content: center; padding-bottom: 2px">
+                                <div style="display: flex;">
+                                    <h5 style="margin-bottom: 0; padding-right: 10px"> Старая оценка: </h5>                
+                                    <div style="display: flex; margin-top: -12px">
+                                        {% for current_number in star_list %}
+                                            {% if current_number <= your_comment.user_rating %}
+                                                <span class="star-icon" style="color: #ff9900;">&#9733;</span>
+                                            {% else %}
+                                                <span class="star-icon" style="color: gray;">&#9733;</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>  
+                                </div>
+                                <div style="display: flex;">
+                                    <h5 style="margin-bottom: 0; padding-right: 10px"> Новая оценка: </h5>              
+                                    <div class="star-rating">
+                                        <span class="star" data-value="1">&#9733;</span>
+                                        <span class="star" data-value="2">&#9733;</span>
+                                        <span class="star" data-value="3">&#9733;</span>
+                                        <span class="star" data-value="4">&#9733;</span>
+                                        <span class="star" data-value="5">&#9733;</span>
+                                        <span class="star" data-value="6">&#9733;</span>
+                                        <span class="star" data-value="7">&#9733;</span>
+                                        <span class="star" data-value="8">&#9733;</span>
+                                        <span class="star" data-value="9">&#9733;</span>
+                                        <span class="star" data-value="10">&#9733;</span>
+                                    </div>            
+                                    <!-- Скрытое поле для сохранения выбранного значения -->
+                                    <input type="hidden" name="rating" id="rating-input">
+                                </div>
+                            </div>
+                            <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.user_comment }}</textarea>
+                            <div style="display: flex; column-gap: 10px">
+                                <a class="you_container_button_delete"  href="{% url 'delete_comments' product_name=product.name %}"> Удалить </a>
+                                <button class="you_container_button"> Изменить </button>
+                            </div>                              
+                        </form>
+                    {% endif %}
+                    
                 </div>
 
                 <div class="you_container_dop">
@@ -320,7 +363,7 @@
                                     {% else %}
                                         <img src={{ most_popular_comment.user_image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
                                     {% endif %}
-                                    <h5 style="align-content: center; padding-bottom: 5px"> {{ most_popular_comment.user_name }} </h5>
+                                    <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> {{ most_popular_comment.user_name }} </h5>
                                 </div>
 
                                 <div style="display:flex; text-align: center">
@@ -397,7 +440,9 @@
                                         id="like_button_{{ element.id }}"
                                         data-comment-id="{{ element.id }}"
                                         data-action="like">
+                                   
 
+                                   
                                     <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
                                         value="{{ element.dislike_count }}"
                                         id="dislike_button_{{ element.id }}"
@@ -547,6 +592,9 @@
                     const product_name = "{{product.name}}";
                     const likeCountSpan = document.getElementById(`like_count_${commentId}`);
 
+                    const likeButton = document.getElementById(`like_button_${commentId}`)
+                    const dislikeButton = document.getElementById(`dislike_button_${commentId}`)
+
                     const filterForm = document.getElementById(`comment-${commentId}`);
 
                     const csrftoken = getCookie('csrftoken');
@@ -580,6 +628,17 @@
                                     likeCountSpan.style.display = "block";
                                 } else {
                                     likeCountSpan.style.display = "none";
+                                }
+
+                                if (data.existing_action == "like"){
+                                    likeButton.classList.add("activebtn")
+                                    dislikeButton.classList.remove("activebtn")
+                                } else if (data.existing_action  == "dislike") {
+                                    likeButton.classList.remove("activebtn")
+                                    dislikeButton.classList.add("activebtn")
+                                } else {
+                                    likeButton.classList.remove("activebtn")
+                                    dislikeButton.classList.remove("activebtn")
                                 }
                             }
                             // Возможно, здесь нужно обновить и внешний вид кнопок, если пользователь уже лайкнул/дизлайкнул

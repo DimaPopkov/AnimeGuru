@@ -99,10 +99,22 @@ class Comments(models.Model):
     def __str__(self):
         return self.name
     
+class CommentAction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    action_type = models.CharField(max_length=10, choices=[('like', 'Like'), ('dislike', 'Dislike'), ('none', 'None')])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'comment') # Гарантирует, что у пользователя будет только одно действие на комментарий
+
+    def __str__(self):
+        return f"{self.user.username} {self.action_type}d on {self.comment.id}"
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
-
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

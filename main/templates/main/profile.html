@@ -138,11 +138,20 @@
                             <div class="comments_container">
                                 {{ element.user_comment }}
                             </div>
-                            {% if element.net_likes > 0 %}
-                                <p style="color: green;">{{ element.net_likes }}</p>
-                            {% elif element.net_likes < 0 %}
-                                <p style="color: red;">{{ element.net_likes }}</p>
-                            {% endif %}
+                            
+                            <div style="display: flex;">
+                                {% if element.net_likes > 0 %}           
+                                    <h5 style="color: green;">{{ element.net_likes }}</h5>
+                                    <img src="{% static '/img/like.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">        
+                                {% elif element.net_likes < 0 %}
+                                    <h5 style="color: red;">{{ element.net_likes }}</h5>
+                                    <img src="{% static '/img/dislike.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">        
+                                {% else %}
+                                    <h5 style="color: grey;">{{ element.net_likes }}</h5>
+                                    <img src="{% static '/img/like.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">   
+                                    <img src="{% static '/img/dislike.png' %}" style="width: 33px; height: 23px;">       
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

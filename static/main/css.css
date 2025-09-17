@@ -804,7 +804,7 @@ body{
     display: flex; /* Чтобы звезды располагались в ряд */
     align-items: center;
 
-    margin-top: -10px;
+    margin-top: -12px;
 }
 
 .star {
@@ -1062,7 +1062,7 @@ body{
 }
 
 .you_container_button{
-    margin: 2px auto;
+    margin: 2px 0;
 
     width: 150px;
     height: 50px;
@@ -1079,6 +1079,28 @@ body{
 
     align-content: center;
     text-decoration: none;
+}
+
+.you_container_button_delete{
+    margin: 2px 0;
+
+    width: 150px;
+    height: 50px;
+
+    background-color: rgb(100, 0, 0);
+
+    border: 2px solid rgb(30, 0, 0);
+    border-radius: 5px;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    align-content: center;
+    text-decoration: none;
+
+    text-align: center;
 }
 
 
@@ -1146,6 +1168,14 @@ body{
 
 .likes-zero {
     color: rgba(0, 0, 0, 0);
+}
+
+
+
+
+
+.activebtn {
+    filter: brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(0%) hue-rotate(218deg) brightness(97%) contrast(92%);
 }
 
 /* ------ MEDIA ------ */
