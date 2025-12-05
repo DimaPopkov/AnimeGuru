@@ -1,6 +1,7 @@
 from django.db import models
 
-from django.utils import timezone
+from django.conf import settings
+
 from django.contrib.auth import get_user_model
 
 from django.contrib.auth.models import User
@@ -9,23 +10,18 @@ from django.dispatch import receiver
 
 # Create your models here.
 User = get_user_model()
-class UserActivity(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='activity')
-    last_login_date = models.DateField(default=timezone.now().date())
-    login_count_today = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
-        return f"Activity for {self.user.username}"
+class UserActivityLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
-    def update_activity(self):
-        today = timezone.now().date()
-        if self.last_login_date != today:
-            self.last_login_date = today
-            self.login_count_today = 1
-        else:
-            self.login_count_today += 1
-        self.save()
-
+    class Meta:
+        unique_together = ('user', 'date')  # один логин в день = одна запись
+        indexes = [
+            models.Index(fields=['date']),
+            models.Index(fields=['user', 'date']),
+        ]
 
 class Pics(models.Model):
     image = models.URLField('Изображение', blank=True, null=True)

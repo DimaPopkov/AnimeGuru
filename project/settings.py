@@ -73,6 +73,11 @@ UNFOLD = {
                         "icon": "person",
                         "link": reverse_lazy("admin:auth_user_changelist"),
                     },
+                    {
+                        "title": _("Users Activity Logs"),
+                        "icon": "link",
+                        "link": reverse_lazy("admin:main_useractivitylog_changelist"),
+                    },
                 ],
             },
             {

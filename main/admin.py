@@ -16,7 +16,7 @@ from django.db.models.functions import TruncDay
 from datetime import timedelta
 
 from django.contrib import admin
-from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivity
+from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog
 
 # Register your models here.
 
@@ -44,28 +44,24 @@ def dashboard_callback(request, context):
     seven_days_ago = now - timezone.timedelta(days=7)
 
     # --- KPI Section ---
-    # 1. Total Active Users (Last 7 days)
-    # Используем стандартную модель User
     active_users_last_7_days = User.objects.filter(last_login__gte=seven_days_ago).count()
-
-    # 2. Additional KPI (Example: Total registered users)
     total_registered_users = User.objects.count()
 
-    # --- Chart Data Section ---
+    seven_days_ago = now - timezone.timedelta(days=6)
 
-    # DAU Chart Data (Daily Active Users)
-    # Получаем данные за последние 7 дней, группируем по дням
-    # TruncDay требует, чтобы поле было DateTimeField. last_login - это DateTimeField.
-    dau_data = User.objects.filter(last_login__gte=seven_days_ago).annotate(
-        date=TruncDay('last_login')
-    ).values('date').annotate(count=Count('id')).order_by('date')
+    dau_data = UserActivityLog.objects.filter(
+        date__gte=seven_days_ago
+    ).annotate(
+        day=TruncDay('timestamp')  # на всякий случай, хотя date уже дата
+    ).values('date').annotate(
+        count=Count('user', distinct=True)
+    ).order_by('date')
 
     # Создаем полный список дат за последние 7 дней (включая сегодня)
     full_date_range = [(now - timezone.timedelta(days=i)) for i in range(6, -1, -1)]
     final_dates = [d.strftime('%Y-%m-%d') for d in full_date_range]
     final_dau_values = [0] * len(final_dates)
 
-    # Сопоставляем полученные данные с полным диапазоном дат
     # Создаем словарь для быстрого поиска данных по дате
     dau_dict = {entry['date'].strftime('%Y-%m-%d'): entry['count'] for entry in dau_data}
 
@@ -73,12 +69,11 @@ def dashboard_callback(request, context):
         final_dau_values[i] = dau_dict.get(date_str, 0) # Получаем значение или 0, если данных нет
 
     dauChartData = json.dumps({
-        'datasets': [
-            {'data': final_dau_values,
-             'borderColor': 'rgb(200, 200, 200)',
-             'label': 'Daily Active Users'
-            }
-        ],
+        'datasets': [{
+            'data': final_dau_values,
+            'borderColor': 'rgb(200, 200, 200)',
+            'label': 'Daily Active Users'
+        }],
         'labels': final_dates
     })
 
@@ -95,12 +90,11 @@ def dashboard_callback(request, context):
         final_registration_values[i] = registration_dict.get(date_str, 0)
 
     registrationChartData = json.dumps({
-        'datasets': [
-            {'data': final_registration_values,
-             'borderColor': 'rgb(200, 200, 200)',
-             'label': 'New Registrations'
-            }
-        ],
+        'datasets': [{
+            'data': final_registration_values,
+            'borderColor': 'rgb(200, 200, 200)',
+            'label': 'New Registrations'
+        }],
         'labels': final_dates
     })
 
@@ -133,17 +127,9 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
 
-@admin.register(UserActivity)
-class UserActivityAdmin(admin.ModelAdmin):
-    list_display = ('user', 'last_login_date', 'login_count_today')
-    readonly_fields = ('user', 'last_login_date', 'login_count_today') # Сделаем поля только для чтения, так как они обновляются сигналами
-
-    def has_add_permission(self, request):
-        return False # Запретим ручное добавление записей
-
-    def has_delete_permission(self, request, obj=None):
-        return False # Запретим удаление записей
-    
+@admin.register(UserActivityLog)
+class UserActivityLogAdmin(ModelAdmin):
+    pass
 
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):

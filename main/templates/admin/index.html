@@ -71,22 +71,6 @@
             
         {% endcomponent %}
 
-        <!-- Table -->
-        {% component "unfold/components/flex.html" with class="gap-8 mb-8 flex-col lg:flex-row" %}
-            {% component "unfold/components/flex.html" with class="gap-8 mb-8 flex-col lg:flex-row w-full" %}
-                {% component "unfold/components/card.html" with class="" %}
-                    {% component "unfold/components/title.html" with class="font-medium text-2xl text-gray-900 dark:text-gray-100" %}
-                        Number of Daily Polls
-                    {% endcomponent %}
-
-                    {% component "unfold/components/text.html" with class="text-gray-500 dark:text-gray-400 mb-8" %}
-                        Last 30 days
-                    {% endcomponent %}
-                    
-                    {% component "unfold/components/chart/line.html" with data=registrationChartData %}{% endcomponent %}
-                {% endcomponent %}
-            {% endcomponent %}
-        {% endcomponent %}
     
     {% endcomponent %}
 {% endblock %}

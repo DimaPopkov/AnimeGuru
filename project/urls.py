@@ -24,11 +24,9 @@ from django.conf.urls.static import static
 
 urlpatterns = (
     [
-        path('admin/', admin.site.urls, name="admin"),
         path('', include('main.urls')),
         path("i18n/", include("django.conf.urls.i18n")),
     ] + i18n_patterns(
-        path("admin/", admin.site.urls),
     )
 )
 
