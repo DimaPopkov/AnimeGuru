@@ -352,6 +352,10 @@ def edit_comments(request, product_name):
         return redirect(url_to_redirect_to)
 
     new_rating = request.POST.get('rating')
+
+    if ((new_rating == None) or (new_rating == '')):
+        new_rating = 0
+
     new_comment_text = request.POST.get('text')
 
     # Обновляем поля существующего комментария
@@ -476,7 +480,6 @@ def update_comment_state(request, comment_id):
     else:
         return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
     
-
 def profile_change_avatar(request):
     if request.method == 'POST':
         print("ФОТКА ДОШЛА")

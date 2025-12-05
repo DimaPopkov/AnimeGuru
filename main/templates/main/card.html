@@ -269,7 +269,7 @@
         {% endif %}
 
         {% if product.season_info and product.season_info != "null" %}
-            <div>
+            <div class="season_info">
                 {{ product.season_info|safe }}
             </div>
         {% endif %}
@@ -356,7 +356,7 @@
                     
                     {% if most_popular_comment != 0 and most_popular_comment.user_rating != None %}
                         <div class="you_container_dop_block">
-                            <div style="display: flex; column-gap: 50px">
+                            <div class="you_container_dop_block_header">
                                 <div style="display: flex; column-gap: 15px;">
                                     {% if most_popular_comment.user_image != "avatars/null_avatar.png" %}
                                         <img src={{ most_popular_comment.user_image }} style="width: 35px; height: 35px; border-radius: 100px;">
@@ -394,10 +394,12 @@
             <div class="all_comments_container">
                 {% if comments and comments != None %}
                     {% for element in comments %}
-                        <div style="width: 100%; min-width: 400px;">
-                            <div style="display:flex; column-gap: 10px; column-gap: 25px; padding:5px 5px;">
-                                <img src="{{ element.user_image }}" default="{% static "/img/null_avatar.png" %}" style="width:75px; height:75px; border-radius: 100px">
-                                <p style="font-size: 20px; margin-bottom: 0; align-content: center;"> {{ element.user_name }} </p>
+                        <div class="all_comments_container_block">
+                            <div class="all_comments_container_block_header">
+                                <div class="all_comments_container_block_header_block">
+                                    <img src="{{ element.user_image }}" default="{% static "/img/null_avatar.png" %}" class="comment_user_image">
+                                    <p class="all_comments_container_block_header_username"> {{ element.user_name }} </p>
+                                </div>
                                 <div style="display:flex; text-align: center">
                                     <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
                                     
@@ -717,6 +719,7 @@
                 star.addEventListener('click', function() {
                     const ratingValue = parseInt(this.getAttribute('data-value'));
                     currentRating = ratingValue; // Фиксируем выбранное значение
+                    
                     ratingInput.value = currentRating; // Сохраняем значение в скрытое поле
 
                     // Подсвечиваем выбранные звезды

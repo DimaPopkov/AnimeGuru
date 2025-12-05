@@ -1,10 +1,32 @@
 from django.db import models
 
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 # Create your models here.
+User = get_user_model()
+class UserActivity(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='activity')
+    last_login_date = models.DateField(default=timezone.now().date())
+    login_count_today = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Activity for {self.user.username}"
+
+    def update_activity(self):
+        today = timezone.now().date()
+        if self.last_login_date != today:
+            self.last_login_date = today
+            self.login_count_today = 1
+        else:
+            self.login_count_today += 1
+        self.save()
+
+
 class Pics(models.Model):
     image = models.URLField('Изображение', blank=True, null=True)
     def __str__(self):
