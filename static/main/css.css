@@ -1211,8 +1211,6 @@ body{
     color: rgba(0, 0, 0, 0);
 }
 
-
-
 .activebtn {
     filter: brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(0%) hue-rotate(218deg) brightness(97%) contrast(92%);
 }

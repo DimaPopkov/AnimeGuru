@@ -1,3 +1,5 @@
+from django.templatetags.static import static
+
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -40,6 +42,9 @@ INSTALLED_APPS = [
 ]
 
 UNFOLD = {
+    "LOGIN": {
+        "image": lambda request: static("img/admin-login-background.jpg"),
+    },
     "SHOW_LANGUAGES": True,
     "SHOW_VIEW_ON_SITE": False,
     "DASHBOARD_CALLBACK": "main.admin.dashboard_callback",

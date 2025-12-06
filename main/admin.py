@@ -44,7 +44,7 @@ def dashboard_callback(request, context):
     seven_days_ago = now - timezone.timedelta(days=7)
 
     # --- KPI Section ---
-    active_users_last_7_days = User.objects.filter(last_login__gte=seven_days_ago).count()
+    #active_users_last_7_days = User.objects.filter(last_login__gte=seven_days_ago).count()
     total_registered_users = User.objects.count()
 
     seven_days_ago = now - timezone.timedelta(days=6)
@@ -68,9 +68,17 @@ def dashboard_callback(request, context):
     for i, date_str in enumerate(final_dates):
         final_dau_values[i] = dau_dict.get(date_str, 0) # Получаем значение или 0, если данных нет
 
+    #Сбор данных для статистики
+    active_users_last_7_days = final_dau_values
+    active_users_last_7_days_count = 0
+    
+    for element in active_users_last_7_days:
+        active_users_last_7_days_count += element
+
+
     dauChartData = json.dumps({
         'datasets': [{
-            'data': final_dau_values,
+            'data': active_users_last_7_days,
             'borderColor': 'rgb(200, 200, 200)',
             'label': 'Daily Active Users'
         }],
@@ -103,7 +111,7 @@ def dashboard_callback(request, context):
             "kpis": [
                 {
                     "title": "Total Active Users (Last 7 days)",
-                    "metric": active_users_last_7_days,
+                    "metric": active_users_last_7_days_count,
                 },
                 {
                     "title": "Total Registered Users",
