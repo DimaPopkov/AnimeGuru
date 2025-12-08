@@ -1,7 +1,8 @@
 html {
-  overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+
+  height: 100%;
 }
 
 html::-webkit-scrollbar {
@@ -36,25 +37,23 @@ p{
 /* ----- */
 
 body{
-    background: url("../img/fon.png");
+    /* background: url("../img/fon2.jpg"); */
     background-size: 100%;
-    background-color: white;
+    background: rgb(20, 20, 20);
 
     display: flex;
     flex-direction: column;
 
-    align-items: center;
-
     width: 100%;
+    min-height: 100vh;
+    height: auto;
 }
 
 .header{
-    width: 100%;
+    margin: 0.5% 0.5%;
+    width: 99%;
     /* background: url("../img/dot.png"); */
     background-size: 0.5%;
-    
-    background-color: rgb(220, 220, 220);
-    border-bottom: 4px solid rgb(120, 120, 120);
 
     height: 50px;
 
@@ -64,6 +63,15 @@ body{
     justify-content: space-around;
 
     align-items: center;
+}
+
+.main_items_background{
+    background-color: rgba(30, 30, 30);
+    
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: 10px;
+
+    color: rgb(200, 200, 200);
 }
 
 .btn-auto{
@@ -76,11 +84,11 @@ body{
     width: 200px;
 
     text-decoration: none;
-    color: rgb(0, 0, 0);
+    color: white;
     align-content: center;
     
     margin-right: 100px;
-    font-size: 200%;
+    font-size: 180%;
 }
 
 .main_container{
@@ -88,11 +96,14 @@ body{
     height: 100%;
 }
 
-.container{
+.container_d{
     display: flex;
     flex-direction: row-reverse;
 
     column-gap: 20px;
+    max-width: 1500px;
+
+    margin: 0 auto;
 }
 
 .catalog{
@@ -108,9 +119,7 @@ body{
 
     width: auto;
 
-    border-radius: 5px;
-    border: 1px solid rgb(200, 200, 200);
-    background-color: rgb(240, 240, 240);
+    color: rgb(200, 200, 200);
 }
 
 .nice_info{
@@ -125,8 +134,6 @@ body{
 }
 
 .filter{
-    position: fixed;
-
     margin-top: 25px;
 
     display: flex;
@@ -135,13 +142,14 @@ body{
     text-align: center;
 
     width: 450px;
+    height: 100%;
+
+    color: rgb(200, 200, 200);
 }
 
 .filter_form{
     padding: 10px 10px ;
 
-    background-color: whitesmoke;
-    border: 1px solid grey;
     border-radius: 5px;
 }
 
@@ -154,7 +162,7 @@ body{
 
     row-gap: 15px;
     column-gap: 15px;
-    grid-template-columns: 175px 175px 175px 175px;
+    grid-template-columns: 175px 175px 175px 175px 175px;
 
     padding: 30px 20px 20px 20px;
     row-gap: 20px;
@@ -242,7 +250,6 @@ body{
 
     padding: 3px 5px;
 
-    border: 1px solid grey;
     border-radius: 10px;
 }
 
@@ -337,8 +344,9 @@ body{
 
 
 
-.checkbox-item span {
-    user-select: none; /* Предотвращает выделение текста */
+.checkbox-item p {
+    user-select: none;
+    margin-bottom: 0;
 }
 
 .custom-dropdown {
@@ -352,8 +360,7 @@ body{
     height: 50px;
 
     padding: 10px;
-    background: #fff;
-    border: 1px solid #ccc;
+
     border-radius: 4px;
     cursor: pointer;
     text-align: left;
@@ -369,21 +376,45 @@ body{
     width: 384px;
     max-height: 500px;
     overflow-y: auto;
-    border: 1px solid #ccc;
-    background: white;
     z-index: 1000;
     margin-top: 5px;
+
+    scrollbar-width: none;
 }
 
 .checkbox-item {
-    display: block;
+    display: flex;
+    justify-content: center;
+    column-gap: 5px;
+
+    text-align: center;
+    align-items: center;
+
     padding: 8px 12px;
     cursor: pointer;
 }
 
 .checkbox-item:hover {
-    background: #f5f5f5;
+    background: rgb(35, 35, 35);
 }
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: black;
+    background-origin: border-box;
+    border: 2px solid #444;
+    border-radius: 1px;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    background: rgb(200, 200, 200);
+    border-color: rgb(30, 30, 30);
+}
+
+
 
 /* Иконка стрелки */
 .arrow {
@@ -408,13 +439,9 @@ body{
     flex-direction: column;
     row-gap: 25px;
 
-    border-radius: 3px;
-    background-color: white;
-    border: 1px solid lightgray;
-
     padding: 20px 20px;
     
-    margin: 25px 0;
+    margin: 25px auto;
 }
 
 .card_container_header{
@@ -452,7 +479,7 @@ body{
     font-size: 14px;
 
     align-content: end;
-    color: rgb(100,100,100);
+    color: rgb(150, 150, 150);
 }
 
 .card_info_linegap{
@@ -461,7 +488,7 @@ body{
 
     border-radius: 10px;
 
-    background-color: rgb(223, 223, 223);
+    background-color: rgb(60, 60, 60);
 }
 
 .card_info_list{
@@ -475,7 +502,7 @@ body{
 
 .card_info_list_font{
     width: 50%;
-    color: black;
+    color: rgb(200, 200, 200);
     font-weight: 400;
     font-size: 15px;
 
@@ -488,10 +515,10 @@ body{
 }
 
 .card_info_list_age_rating_block{
-    border: 0px solid;
+    border: 1px solid rgb(100, 100, 100);
     border-radius: 5px;
-    background-color: rgb(25, 25, 25);
-    color: white;
+    background-color: rgb(200, 200, 200);
+    color: black;
 
     margin-right: auto;
     width: 40px;
@@ -508,6 +535,7 @@ body{
     justify-content: space-between;
 }
 
+
 .card_container_body_frames_list{
     display: flex;
     
@@ -516,8 +544,31 @@ body{
 
     width: 73%;
     height: 200px;
+
     overflow-x: scroll;
 }
+
+.card_container_body_frames_list::-webkit-scrollbar {
+    height: 5px;
+}
+
+/*  Трек (дорожка) */
+.card_container_body_frames_list::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+/*  Бегунок (Thumb) */
+.card_container_body_frames_list::-webkit-scrollbar-thumb {
+    background: rgb(80, 80, 80); 
+    border-radius: 10px;
+}
+
+.card_container_body_frames_list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
 
 .card_container_body_frames_name{
     display: flex;
@@ -543,6 +594,10 @@ body{
     flex-direction: column;
 
     width: 100%;
+}
+
+.related_product_link{
+    color: rgb(200, 200, 200);
 }
 
 .related_products_card_img_block{
@@ -601,23 +656,18 @@ body{
     height: auto;
     margin: 5px 2.5px 0 2.5px;
     text-decoration: none;
-    
-    background-color: black;
-    border: 1px solid grey;
 }
 
 .card_product_mp3_button{
     width: 100%;
     height: 40px;
 
-    border-radius: 5px;
-
     align-items: center;
     justify-content: center;
+
     font-size: 16px;
     font-weight: 600;
-
-    padding-right: 10px;
+    
     color: rgb(175, 50, 50);
 
     display: flex;
@@ -667,7 +717,7 @@ body{
     position: absolute;
     margin-left: 220px;
 
-    background: linear-gradient(to right ,rgba(255, 255, 255, 0), white);
+    background: linear-gradient(to right ,rgba(255, 255, 255, 0), rgb(30, 30, 30));
 }
 
 .main_characters_block_right{
@@ -756,7 +806,7 @@ body{
     right: 0;
     width: 100%;
     height: 20px;
-    background: linear-gradient(transparent, white);
+    background: linear-gradient(transparent, rgb(30, 30, 30));
 }
 
 .text-content.expanded {
@@ -901,6 +951,18 @@ body{
     column-gap: 15px;
 }
 
+.login_status_bar_text{
+    color: white;
+
+    margin-bottom: 0; 
+    font-size: 22px; 
+    
+    padding: 2px 10px 0 10px; 
+    
+    text-decoration: none; 
+    text-align: center;
+}
+
 
 /* ------- PROFILE -------- */
 .profile_container_header{
@@ -1029,10 +1091,10 @@ body{
 
     width: 50%;
 
-    border: 1px solid lightgray;
+    border: 1px solid rgb(80, 80, 80);
     border-radius: 5px;
     padding: 10px 10px;
-    background-color: rgba(225, 225, 225, 25%);
+    background-color: rgb(50, 50, 50);
 }
 
 .you_container_dop_block{
@@ -1046,12 +1108,14 @@ body{
 }
 
 .you_container_dop_block_text{
-    border: 1px solid grey;
-    border-radius: 5px;
-
     padding: 5px 10px;
 
-    background-color: rgb(230, 230, 230);;
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
+
+    background-color: rgb(80, 80, 80);
+
+    color: rgb(200, 200, 200);
 }
 
 .you_comment_container{
@@ -1070,9 +1134,13 @@ body{
     width: 100%;
     height: 200px;
 
-    border: 1px solid grey;
+    border: 1px solid rgb(120, 120, 120);
     border-radius: 5px;
-    background-color: rgb(230, 230, 230);
+
+    background-color: rgb(80, 80, 80);
+
+    color: rgb(200, 200, 200);
+
     padding: 10px 10px;
 }
 
@@ -1164,9 +1232,12 @@ body{
     width: 100%;
     height: auto;
 
-    border: 1px solid grey;
-    border-radius: 10px;
-    background-color: white;
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
+
+    background-color: rgb(80, 80, 80);
+
+    color: rgb(200, 200, 200);
 
     padding: 10px 10px;
     margin-bottom: 10px;

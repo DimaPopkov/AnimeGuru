@@ -5,12 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="filter">
+    <div class="container_d">
+        <div class="filter main_items_background">
             <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
                 <div class="filter_main">
-                    <h5 for="category">Фильтр:</h5><br>
-
+                    <br><h4 for="category">Фильтр:</h4><br>
 
                     <!-- Поиск по названию (В разработке)
                         <div name="titlename" id="titlename">
@@ -21,35 +20,35 @@
                     -->
 
                     <label for="tags"> Категории:</label> 
-                    <select class="filter_category_filter" name="category" id="category">
-                        <option value="" class="font16"> Все категории </option>
+                    <select class="filter_category_filter main_items_background" name="category" id="category">
+                        <option value="" class="font16 main_items_background"> Все категории </option>
                         {% for element in categories %}
-                            <option value="{{ element.id }}" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
+                            <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
                         {% endfor %}                      
                     </select><br>
 
                     <label for="tags"> Статус:</label> 
-                    <select class="filter_category_filter" name="activeStatus" id="activeStatus">
-                        <option value="" class="font16"> Все </option>
+                    <select class="filter_category_filter main_items_background" name="activeStatus" id="activeStatus">
+                        <option value="" class="font16 main_items_background"> Все </option>
                         {% for element in status %}
-                            <option value="{{ element.id }}">{{ element }}</option>
+                            <option class="font16 main_items_background" value="{{ element.id }}">{{ element }}</option>
                         {% endfor %}        
                     </select><br>
 
                     <label for="tags"> Поиск по тегам:</label>
                     <div class="custom-dropdown">
                         <!-- Кнопка для открытия/закрытия списка -->
-                        <button class="dropdown-toggle" type="button">
+                        <button class="dropdown-toggle main_items_background" type="button">
                             <span class="selected-tags">Выберите теги</span>
                             <span class="arrow">▼</span>
                         </button>
 
                         <!-- Скрытый контейнер с чекбоксами -->
-                        <div class="dropdown-content" id="tags">
+                        <div class="dropdown-content main_items_background" id="tags">
                             {% for tag in tags %}
                                 <label class="checkbox-item">
-                                    <input type="checkbox" name="tags" value="{{ tag.id }}">
-                                    <h class="checkbox-item-text">{{ tag.name }} </h>
+                                    <input class="checkbox-item-checkbox" type="checkbox" name="tags" value="{{ tag.id }}">
+                                    <p class="checkbox-item-text">{{ tag.name }} </p>
                                 </label>
                             {% endfor %}
                         </div>
@@ -58,9 +57,7 @@
             </form>
         </div>
 
-        <div class="catalog">
-
-
+        <div class="main_items_background catalog">
             <div id="products_catalog" class="products_catalog">    
                 {% if products %}
                     <div class="nice_info">
@@ -218,13 +215,6 @@
                     }
                 });
             });
-
-            
-            // Применение Тегов
-
-            function updateProducts() {
-                
-            }
         });
 
         function submitform(element)

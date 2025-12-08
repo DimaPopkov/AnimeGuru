@@ -7,7 +7,7 @@
 {% load static %}
 {% block content %}
     <!-- product - вся инфа об нашем обьекте -->
-    <div class="card_container_main"> 
+    <div class="card_container_main main_items_background"> 
         <div class="card_container_header">
             <div class="card_header">
                 <img src="{{ product.image }}" id="product_img" style="width: 100%;">
@@ -19,14 +19,14 @@
                                 {% if element != "null" %}
                                     {% if link.name == "Animego.me" %}
                                     <a class="card_product_mp3" href="{{ link.link }}anime/{{ element }}" target="_blank"> 
-                                        <div class="card_product_mp3_button"> 
+                                        <div class="card_product_mp3_button" style="background-color: black; border: 1px solid rgb(100, 100, 100);"> 
                                             <img src="https://avatars.mds.yandex.net/i?id=55efea261a74ad69f4090cc2abce1c58fef2957e-10601011-images-thumbs&n=13" style="width:30px">
                                             <p style="margin-bottom: 0;">{{ link.name }}</p> 
                                         </div>
                                     </a>
                                     
                                     {% elif link.name == "jit.su" %}
-                                    <a class="card_product_mp3" href="{{ link.link }}{{ element }}.jut-su.to/" target="_blank" style="background-color:white;"> 
+                                    <a class="card_product_mp3" href="{{ link.link }}{{ element }}.jut-su.to/" target="_blank"> 
                                         <div class="card_product_mp3_button"> 
                                             <img src="https://avatars.mds.yandex.net/i?id=754e11bf633d856275f5a65bcf4c7118_sr-3608855-images-thumbs&n=13" style="height:100%">
                                         </div>
@@ -142,7 +142,7 @@
                 {% for element in related_products %}
                     <div class="related_products_card" data-product-id="{{ element.id }}">
                         <h6> 
-                            <a class="related-product-link" style="color: black;" href="{% url 'card' element.name %}" data-product-name="{{ element.name }}" id="product_name">{{ element.name }}</a>
+                            <a class="related_product_link" href="{% url 'card' element.name %}" data-product-name="{{ element.name }}" id="product_name">{{ element.name }}</a>
                         </h6>
                         <div class="related_products_card_img_block">
                             <img src="{{ element.image }}" style="width:80px">
@@ -393,7 +393,7 @@
             
             <div class="all_comments_container">
                 {% if comments and comments != None %}
-                    {% for element in comments %}
+                    {% for element, state in zipped_items %}
                         <div class="all_comments_container_block">
                             <div class="all_comments_container_block_header">
                                 <div class="all_comments_container_block_header_block">
@@ -437,19 +437,33 @@
 
                                 <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element.id %}" method="POST">
                                     {% csrf_token %}
-                                    <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
-                                        value="{{ element.like_count }}" 
-                                        id="like_button_{{ element.id }}"
-                                        data-comment-id="{{ element.id }}"
-                                        data-action="like">
-                                   
+                                    {% if state == 2 %}
+                                        <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                            value="{{ element.like_count }}" 
+                                            id="like_button_{{ element.id }}"
+                                            data-comment-id="{{ element.id }}"
+                                            data-action="like">
+                                    {% else %}
+                                        <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                            value="{{ element.like_count }}" 
+                                            id="like_button_{{ element.id }}"
+                                            data-comment-id="{{ element.id }}"
+                                            data-action="like">
+                                    {% endif %}
 
-                                   
-                                    <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
-                                        value="{{ element.dislike_count }}"
-                                        id="dislike_button_{{ element.id }}"
-                                        data-comment-id="{{ element.id }}"
-                                        data-action="dislike">
+                                    {% if state == 1 %}
+                                        <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                            value="{{ element.dislike_count }}"
+                                            id="dislike_button_{{ element.id }}"
+                                            data-comment-id="{{ element.id }}"
+                                            data-action="dislike">
+                                    {% else %}
+                                        <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                            value="{{ element.dislike_count }}"
+                                            id="dislike_button_{{ element.id }}"
+                                            data-comment-id="{{ element.id }}"
+                                            data-action="dislike">
+                                    {% endif %}
                                 </form>
                             </div>
                         </div>

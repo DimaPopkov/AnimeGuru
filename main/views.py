@@ -244,6 +244,47 @@ def card(request, product_name):
         if similarity >= similarity_threshold:
             related_products.append(product)
 
+    # Смотрим, если есть комментарии которые мы лайкали\дизлайкали, то меняем им иконки
+    allComments = Comments.objects.filter(name=products.name)
+    print("\n\n", allComments)
+    allComments_state = CommentAction.objects.filter(user=request.user)
+    print("\n\n", allComments_state)
+
+    focus_comment_state = []
+    for product_state in allComments_state:
+        if product_state.comment.name == products.name:
+            if product_state.action_type == "like":
+                focus_comment_state.append(2)
+            elif product_state.action_type == "dislike":
+                focus_comment_state.append(1)
+            else:
+                focus_comment_state.append(0)
+
+    print(focus_comment_state)
+
+    zipped_items = zip(comments, focus_comment_state)
+    print(zipped_items)
+
+    # allComments = CommentAction.objects.filter(user=request.user)
+    # print(allComments, "\n\n")
+
+    # i = 0
+    # comment_state = [0] * allComments.__len__() # 0 - нет данных, 2 - Like, 1 - Dislike
+    # print(comment_state)
+
+    # for element in allComments:
+    #     if element.comment.name == products.name:
+    #         print(element.action_type)
+    #         if element.action_type == "like":
+    #             comment_state[i] = 2
+    #         elif element.action_type == "dislike":
+    #             comment_state[i] = 1
+    #     else:
+    #         print("Комментарий не подходит: ", element.comment, " ", products)
+    #     i += 1
+
+    # print(comment_state)
+
     context = {
         'title' : selected_product.name,
         'product': selected_product,
@@ -256,6 +297,7 @@ def card(request, product_name):
         'main_characters': MainCharacters,
         'characters': other_characters,
         'comments': comments,
+        'zipped_items': zipped_items,
         'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,
