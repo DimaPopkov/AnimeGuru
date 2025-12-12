@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 
 from .models import Tags, Category, Product, Album_Pics, Characters, Comments, CommentAction 
 from .forms import ProductForm
-import re, requests
+import re, requests, Levenshtein
+
 
 # Create your views here.
 def main(request):
@@ -53,6 +54,7 @@ def create(request):
     return render(request, 'main/create.html', data)
 
 def filter(request):
+    final_products = []
     products = Product.objects.all()
     finalTags = Tags.objects.all().order_by('name')
 
@@ -61,15 +63,38 @@ def filter(request):
     if category_id:
         products = products.filter(category_id=category_id)
 
+    # Фильтр по тегам
     tags_ids = request.GET.getlist('tags')
     if tags_ids:
         for tag_id in tags_ids:
             products = products.filter(tags__id=tag_id)
         products = products.distinct()
 
+    # Фильтр по статусу
     status_id = request.GET.get('activeStatus')
     if status_id:
         products = products.filter(status_id=status_id)
+
+    # Фильтр по названию
+    titlename = request.GET.get('titlename')
+    similarity_threshold_char = 0.3
+    similarity_threshold = 0.3
+
+    if titlename:
+        for product in products:
+            array = product.name.split(" ")
+            if array.__len__() == 1:
+                similarity_threshold_final = calculate_char_similarity(product.name, titlename)
+                if similarity_threshold_final >= similarity_threshold_char:
+                    final_products.append(product)
+
+            else:
+                similarity_threshold_final = calculate_similarity(product.name, titlename)
+                if similarity_threshold_final >= similarity_threshold:
+                    final_products.append(product)
+
+    else:
+        final_products = products
 
     filter_data = [category_id, tags_ids, status_id]
 
@@ -80,7 +105,7 @@ def filter(request):
     context = {
         'title' : 'Основная страница',
         'categories' : Category.objects.all(),
-        'products': products,
+        'products': final_products,
         'tags': finalTags,
         'filter_data': filter_data,
         'selected_category': selected_category,
@@ -112,13 +137,45 @@ def calculate_similarity(name1, name2):
     if not tokens1 or not tokens2: # Если одно из названий пустое после нормализации
         return 0.0
 
+    char_similarity_score = 1
+    for word_name1 in name1:
+        for word_name2 in name2:
+            char_similarity_score += calculate_char_similarity(word_name1, word_name2)
+
     # Находим пересечение множеств токенов
     common_tokens = tokens1.intersection(tokens2)
 
+
     # Степень схожести: (кол-во общих слов) / (мин. кол-во слов в одном из названий)
-    # Можно также использовать (кол-во общих слов) / (среднее кол-во слов) или (общее кол-во уникальных слов)
-    # Использование min() помогает учитывать названия разной длины
-    similarity_score = len(common_tokens) / min(len(tokens1), len(tokens2))
+    similarity_score = (len(common_tokens) / min(len(tokens1), len(tokens2))) + len(common_tokens) / char_similarity_score
+
+    return similarity_score
+
+def calculate_char_similarity(name1, name2):
+    """
+    Рассчитывает степень схожести двух строк на основе расстояния Левенштейна.
+
+    Схожесть = 1 - (Расстояние Левенштейна / Максимальная длина строки)
+
+    Возвращает значение от 0.0 (полное несовпадение) до 1.0 (полное совпадение).
+    """
+    # Приводим строки к нижнему регистру для регистронезависимого сравнения
+    s1 = name1.lower()
+    s2 = name2.lower()
+
+    # 1. Вычисляем расстояние Левенштейна
+    distance = Levenshtein.distance(s1, s2)
+
+    # 2. Определяем максимальную возможную длину (для нормализации)
+    max_len = max(len(s1), len(s2))
+
+    # Обе строки пустые
+    if max_len == 0:
+        return 1.0
+
+    # 3. Нормализуем расстояние, чтобы получить коэффициент схожести
+    # Схожесть = 1 - (Расстояние / Максимальная длина)
+    similarity_score = 1.0 - (distance / max_len)
 
     return similarity_score
 

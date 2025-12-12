@@ -108,7 +108,7 @@ body{
 
 .catalog{
     margin: 25px 0;
-    margin-right: auto;
+    padding: 5px 0;
 
     display: flex;
     flex-direction: column;
@@ -118,6 +118,7 @@ body{
     text-align: center;
 
     width: auto;
+    height: 100%;
 
     color: rgb(200, 200, 200);
 }
@@ -257,7 +258,7 @@ body{
 }
 
 .find_by_name{
-    padding: 3px 8px;
+    padding: 3px 8px 1px 8px;
 }
 
 .find_by_name::placeholder{
@@ -363,11 +364,10 @@ body{
 .custom-dropdown {
     position: relative;
     width: 100%;
-    padding: 0 5%;
 }
 
 .dropdown-toggle {
-    width: 100%;
+    width: 400px;
     height: 50px;
 
     padding: 10px;
@@ -384,10 +384,15 @@ body{
 .dropdown-content {
     display: none;
     position: absolute;
-    width: 384px;
+
+    width: 400px;
     max-height: 500px;
+
     overflow-y: auto;
+
     z-index: 1000;
+
+    margin-left: 15px;
     margin-top: 5px;
 
     scrollbar-width: none;

@@ -60,6 +60,9 @@
     .filter_category_filter{
         width: 250px;
     }
+    .dropdown-toggle{
+        width: 250px;
+    }
     .card_info_list_age_rating_block{
         font-size: 16px;
     }

@@ -16,9 +16,9 @@
                         <label for="tags"> </label>
                         <input class="filter_category_filter" type="text" placeholder="Поиск по названию">
                     </div> -->
-                    
-                    <!-- <input class="filter_category_filter find_by_name" type="text" placeholder="Поиск по названию" name="titlename" >
-                    <br> -->
+                    <label for="tags"> Поиск по названию:</label> 
+                    <input class="filter_category_filter find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
+                    <br>
                 
 
                     <label for="tags"> Категории:</label> 
@@ -33,7 +33,7 @@
                     <select class="filter_category_filter main_items_background" name="activeStatus" id="activeStatus">
                         <option value="" class="font16 main_items_background"> Все </option>
                         {% for element in status %}
-                            <option class="font16 main_items_background" value="{{ element.id }}">{{ element }}</option>
+                            <option value="{{ element.id }}" class="font16 main_items_background">{{ element }}</option>
                         {% endfor %}        
                     </select><br>
 
@@ -63,7 +63,7 @@
             <div id="products_catalog" class="products_catalog">    
                 {% if products %}
                     <div class="nice_info">
-                        <h class="nice_info_piece"> Всего: {{ products.count }} </h>
+                        <h class="nice_info_piece"> Всего: {{ products|length }} </h>
                     </div>         
                                 
                     {% for element in products %}                 
@@ -101,8 +101,9 @@
     <script>    
         document.addEventListener('DOMContentLoaded', function() {
             const filterForm = document.getElementById('filter-form');
+            const NameSelect = document.getElementById('titlename');
             const categorySelect = document.getElementById('category');
-            const productsListContainer = document.getElementById('products_catalog'); // Получаем контейнер
+            const productsListContainer = document.getElementById('products_catalog');
             const activeTags = document.getElementById('tags');    
             const activeStatus = document.getElementById('activeStatus');    
 
@@ -146,6 +147,7 @@
 
 
             // Добавляем обработчики событий на каждый элемент фильтра
+            NameSelect.addEventListener('input', updateProducts);
             categorySelect.addEventListener('change', updateProducts);
             activeTags.addEventListener('change', updateProducts);
             activeStatus.addEventListener('change', updateProducts);
