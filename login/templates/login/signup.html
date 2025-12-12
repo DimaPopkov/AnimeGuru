@@ -7,32 +7,32 @@
 {% block content %}
 <div class="login_container">
     <form class="login_form" method="POST">
-        <h3 style="text-align: center"> Регистрация </h3>
+        <h2 style="text-align: center"> Регистрация </h2>
         
         {% csrf_token %}
         <div class="login_form_row">
             <label class = "font mid" for="username">Имя пользователя:</label>
-            <input type="text" id="username" name="username">
+            <input class="auth_form_input" type="text" id="username" name="username">
         </div>
 
         <div class="login_form_row">
             <label class = "font mid" for="password">Пароль:</label>
-            <input type="password" id="password" name="password">
+            <input class="auth_form_input" type="password" id="password" name="password">
         </div>
 
         <div class="login_form_row">
             <label class = "font mid" for="password_confirmation">Подтверждение пароля:</label>
-            <input type="password" id="password_confirmation" name="password_confirmation">
+            <input class="auth_form_input" type="password" id="password_confirmation" name="password_confirmation">
         
         </div>
 
-        <button type="submit">Зарегистрироваться</button>
+        <button class="auth_button" type="submit" style="width:auto; padding: 5px 15px">Зарегистрироваться</button>
 
         <a href="../" class = "font login_button">Войти</a>
     </form>
     
     <br><br>
-    <button class = "font black" onclick="window.location.href='../'">Назад</button> 
+    <button class = "font black auth_button" onclick="window.location.href='../'">Назад</button> 
 
     {% if messages %}
         {% for message in messages %}

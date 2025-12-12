@@ -251,6 +251,17 @@ body{
     padding: 3px 5px;
 
     border-radius: 10px;
+    border: 1px solid rgb(60, 60, 60);
+
+    color: rgb(200, 200, 200);
+}
+
+.find_by_name{
+    padding: 3px 8px;
+}
+
+.find_by_name::placeholder{
+    color: rgb(200, 200, 200);
 }
 
 .products_filter{
@@ -637,12 +648,12 @@ input[type="checkbox"]:checked {
     align-items: center;
     align-content: center;
 
-    text-align: center;
     text-decoration: none;
 
-    color: black;
+    color: rgb(200, 200, 200);
 
     height: 100%;
+
 
     display: flex;
 }
@@ -921,6 +932,10 @@ input[type="checkbox"]:checked {
     flex-direction: column;
 
     row-gap: 15px;
+
+    text-align: center;
+
+    color: rgb(200, 200, 200);
 }
 
 .login_form_row{
@@ -929,6 +944,41 @@ input[type="checkbox"]:checked {
 
     text-align: center;
 }
+
+.error{
+    color: rgb(200, 0, 0);
+}
+
+.auth_button{
+    border: 1px solid rgb(80, 80, 80);
+    border-radius: 5px;
+
+    margin: 0 auto;
+    padding: 5px 5px;
+    
+    width: 100px;
+
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(200, 200, 200);
+
+    background: rgb(60, 60, 60);
+}
+
+.auth_form_input{
+    width: 100%;
+
+    padding: 5px 10px;
+
+    border-radius: 10px;
+    border: 1px solid rgb(80, 80, 80);
+
+    color: rgb(200, 200, 200);  
+
+    background: rgb(60, 60, 60);
+}
+
+
 
 .create_user_button{
     width: 100%;
@@ -968,6 +1018,13 @@ input[type="checkbox"]:checked {
 .profile_container_header{
     display: flex;
     flex-direction: row;
+
+    background-color: rgb(30, 30, 30);
+    
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: 10px;
+
+    padding: 15px 15px;
 }
 
 .profile_container_header_block{
@@ -1016,9 +1073,9 @@ input[type="checkbox"]:checked {
     column-gap: 20px;
     padding: 10px 10px;
 
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(40, 40, 40);
 
-    border: 1px solid lightgray;
+    border: 1px solid rgb(60, 60, 60);
     border-radius: 10px;
 }
 

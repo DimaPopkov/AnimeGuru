@@ -6,18 +6,18 @@
 
 {% load static %}
 {% block content %}
-    <div class="card_container_main" style=" padding: 20px 30px; "> 
+    <div class="card_container_main" style="padding: 20px 30px; color: rgb(200, 200, 200)"> 
         <div class="profile_container_header">
             <div class="profile_container_header_block">
                 <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
-                    <div style="display: flex; flex-direction: column; background-color: rgb(240, 240, 240); border: 1px solid grey; border-radius: 5px; padding: 10px 15px; margin-bottom: 15px">
+                    <div style="display: flex; flex-direction: column; background-color: rgb(60, 60, 60); border: 1px solid rgb(100, 100, 100); border-radius: 5px; padding: 10px 15px; margin-bottom: 15px">
                         {% if request.user.profile.image != "avatars/null_avatar.png" %}
-                            <img src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px;">
+                            <img src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px; border: 2px solid rgb(30, 30, 30)">
                         {% else %}
                             <img src="{{ request.user.profile.image.url }}" id="avatar" alt="Default Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px;">
                         {% endif %}      
 
-                        <button id="changeAvatarBtn" style="width: 200px; border-radius: 3px">Изменить аватар</button>   
+                        <button id="changeAvatarBtn" style="width: 200px; border-radius: 5px; border: 1px solid rgb(30, 30, 30); background: rgb(120, 120, 120); color: rgb(10, 10, 10)">Изменить аватар</button>   
                     </div>
                     <div class="avatar-modal-overlay" id="avatarModalOverlay">
                         <div class="avatar-modal">
@@ -113,7 +113,7 @@
             <div class="profile_container_favourites_block">
                 {% for element in your_comments %}                 
                     <div class="profile_container_favourites_block_comment">
-                        <img src="{{ element.product_image }}" style="width: 150px; border: 1px solid gray; border-radius: 5px;">
+                        <img src="{{ element.product_image }}" style="width: 150px; border: 1px solid gray; border-radius: 5px; height: 100%;">
                         <div class="prod_element_rating">
                             <div class="prod_element_rating_block"> {{ element.product_rating }} </div>
                             <div class="prod_element_rating_block_dop_main">
@@ -121,7 +121,7 @@
                             </div>
                         </div>
                         <div>
-                            <a style="font-weight: 500; line-height: 1.2; font-size:24px; text-decoration: none; color: black;" href="{% url 'card' product_name=element.name %}">{{ element.name }}</a>
+                            <a style="font-weight: 500; line-height: 1.2; font-size:24px; text-decoration: none; color: rgb(200, 200, 200)" href="{% url 'card' product_name=element.name %}">{{ element.name }}</a>
                             <p style="padding-top: 5px;">{{ element.product_category }} / {{ element.product_season.year }}</p>
                             <div style="display:flex; column-gap: 10px; column-gap: 25px; padding:5px 5px;">                 
                                 <div style="display:flex; text-align: center">

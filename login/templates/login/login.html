@@ -7,26 +7,27 @@
 {% block content %}
 <div class="login_container">
     <form class="login_form" method="POST">     
-        <h3 style="text-align: center">Вход</h3>
+        <h2 style="text-align: center">Вход</h2>
 
         {% csrf_token %}
         <div class="login_form_row">
-            <label class = "font mid" for="username"> Имя пользователя:</label>
-            <input type="text" id="username" name="username">
+            <label class = "font" for="username"> Имя пользователя:</label>
+            <input class="auth_form_input" type="text" id="username" name="username">
         </div>
 
         <div class="login_form_row">
-            <label class = "font mid" for="password">Пароль:</label>
-            <input type="password" id="password" name="password">
+            <label class = "font" for="password">Пароль:</label>
+            <input class="auth_form_input" type="password" id="password" name="password">
         </div>
 
-        <button type="submit">Войти</button> 
+        <button class="auth_button" type="submit">Войти</button> 
 
-        <a class = "font login_button" href="create_user/" style="width:100%;">Зарегистрироваться</a>
+        <a class = "font login_button" href="create_user/">Зарегистрироваться</a>
     </form>
 
     <br><br><br>
-    <button class = "font black" onclick="window.location.href='../'">Назад</button> 
+    <button class = "font black auth_button" style="font-weight: 400; padding: 3px 0" onclick="window.location.href='../'">Назад</button> 
+    <br><br><br>
 
     {% if messages %}
         {% for message in messages %}
