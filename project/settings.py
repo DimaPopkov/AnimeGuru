@@ -27,9 +27,7 @@ INSTALLED_APPS = [
     'unfold.contrib.filters',
     'unfold.contrib.forms',
     'unfold.contrib.inlines',
-
-    "crispy_forms",
-
+    
     'main',
     'login',
 

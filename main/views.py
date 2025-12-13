@@ -303,21 +303,41 @@ def card(request, product_name):
 
     # Смотрим, если есть комментарии которые мы лайкали\дизлайкали, то меняем им иконки
     allComments = Comments.objects.filter(name=products.name)
-    print("\n\n", allComments)
+    print("\n------------------------\n", 
+        allComments)
+    
     allComments_state = CommentAction.objects.filter(user=request.user)
-    print("\n\n", allComments_state)
+    print("\n------------------------\n",
+        allComments_state, "\n")
 
     focus_comment_state = []
-    for product_state in allComments_state:
-        if product_state.comment.name == products.name:
-            if product_state.action_type == "like":
-                focus_comment_state.append(2)
-            elif product_state.action_type == "dislike":
-                focus_comment_state.append(1)
-            else:
-                focus_comment_state.append(0)
 
-    print(focus_comment_state)
+    for comment in allComments:
+        for comment_action in allComments_state:
+            # print(comment_action.comment.name, "\n", comment.name)
+            if comment_action.comment.name == comment.name:
+                # print(comment_action.comment, "\n", comment)
+                if comment_action.action_type == "like":
+                    focus_comment_state.append(2)
+                elif comment_action.action_type == "dislike": 
+                    focus_comment_state.append(1)
+                else:
+                    focus_comment_state.append(0)
+        if focus_comment_state == []:
+            for element in allComments:
+                focus_comment_state.append(0)
+                
+
+    # print(focus_comment_state)
+    # print(allComments)
+    # for product_state in allComments_state:
+    #     if product_state.comment.name == products.name:
+    #         if product_state.action_type == "like":
+    #             focus_comment_state.append(2)
+    #         elif product_state.action_type == "dislike":
+    #             focus_comment_state.append(1)
+    #         else:
+    #             focus_comment_state.append(0)
 
     zipped_items = zip(comments, focus_comment_state)
     print(zipped_items)
@@ -353,7 +373,7 @@ def card(request, product_name):
         'link_name': product_link_name,
         'main_characters': MainCharacters,
         'characters': other_characters,
-        'comments': comments,
+        'comments': allComments,
         'zipped_items': zipped_items,
         'your_comment': CurrentComment,
         'star_list': star_list,

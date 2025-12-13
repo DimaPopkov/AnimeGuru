@@ -108,7 +108,7 @@ body{
 
 .catalog{
     margin: 25px 0;
-    padding: 5px 0;
+    padding: 3px 0;
 
     display: flex;
     flex-direction: column;
@@ -131,7 +131,7 @@ body{
 }
 
 .nice_info_piece{
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .filter{
@@ -151,7 +151,7 @@ body{
 .filter_form{
     padding: 10px 10px ;
 
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .products_catalog{
@@ -196,7 +196,7 @@ body{
 }
 
 .prod_element_rating_block{
-    margin-top: 5px;
+    margin-top: 3px;
     margin-left: -5px;
 
     width: 100%;
@@ -222,8 +222,8 @@ body{
     background-color: orange;
 }
 .prod_element_rating_block_dop_main{
-    width: 5px;
-    height: 5px;
+    width: 3px;
+    height: 3px;
 
     margin-left: -5px;
 
@@ -249,7 +249,7 @@ body{
 
     background: none;
 
-    padding: 3px 5px;
+    padding: 3px 3px;
 
     border-radius: 10px;
     border: 1px solid rgb(60, 60, 60);
@@ -282,7 +282,7 @@ body{
     column-gap: 8px;
     align-items: center;
 
-    padding: 5px 10px 0 10px;
+    padding: 3px 10px 0 10px;
 
     width: auto;
     height: 50px;
@@ -393,7 +393,7 @@ body{
     z-index: 1000;
 
     margin-left: 15px;
-    margin-top: 5px;
+    margin-top: 3px;
 
     scrollbar-width: none;
 }
@@ -401,7 +401,7 @@ body{
 .checkbox-item {
     display: flex;
     justify-content: center;
-    column-gap: 5px;
+    column-gap: 3px;
 
     text-align: center;
     align-items: center;
@@ -532,7 +532,7 @@ input[type="checkbox"]:checked {
 
 .card_info_list_age_rating_block{
     border: 1px solid rgb(100, 100, 100);
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: rgb(200, 200, 200);
     color: black;
 
@@ -565,7 +565,7 @@ input[type="checkbox"]:checked {
 }
 
 .card_container_body_frames_list::-webkit-scrollbar {
-    height: 5px;
+    height: 3px;
 }
 
 /*  Трек (дорожка) */
@@ -618,15 +618,15 @@ input[type="checkbox"]:checked {
 
 .related_products_card_img_block{
     display: flex;
-    column-gap: 5px;
+    column-gap: 3px;
 
-    padding-top: 5px;
+    padding-top: 3px;
 }
 
 .related_products_card_img_block_right{
     display: flex;
     flex-direction: column;
-    padding: 5px 10px;
+    padding: 3px 10px;
 
     color: gray;
     font-size: 14px;
@@ -670,7 +670,7 @@ input[type="checkbox"]:checked {
     width: auto;
     
     height: auto;
-    margin: 5px 2.5px 0 2.5px;
+    margin: 3px 2.5px 0 2.5px;
     text-decoration: none;
 }
 
@@ -797,7 +797,7 @@ input[type="checkbox"]:checked {
 
     background-color: rgb(120, 120, 120);
     border: 2px solid rgb(80, 80, 80);
-    border-radius: 5px;
+    border-radius: 3px;
 
     color: white;
     font-size: 18px;
@@ -834,7 +834,7 @@ input[type="checkbox"]:checked {
 .read_more {
     cursor: pointer;
     color: rgb(150, 150, 150);
-    margin-top: 5px;
+    margin-top: 3px;
     display: inline-block;
 }
 
@@ -956,10 +956,10 @@ input[type="checkbox"]:checked {
 
 .auth_button{
     border: 1px solid rgb(80, 80, 80);
-    border-radius: 5px;
+    border-radius: 3px;
 
     margin: 0 auto;
-    padding: 5px 5px;
+    padding: 3px 3px;
     
     width: 100px;
 
@@ -973,7 +973,7 @@ input[type="checkbox"]:checked {
 .auth_form_input{
     width: 100%;
 
-    padding: 5px 10px;
+    padding: 3px 10px;
 
     border-radius: 10px;
     border: 1px solid rgb(80, 80, 80);
@@ -1098,12 +1098,18 @@ input[type="checkbox"]:checked {
     z-index: 1000;
 }
 .avatar-modal {
-    background-color: white;
+    background-color: rgb(30, 30, 30);
+
     padding: 20px;
+
     border-radius: 8px;
+    border: 3px solid rgb(60, 60, 60);
+
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
+
     width: 90%;
-    max-width: 600px; /* Максимальная ширина окна */
+    max-width: 600px;
+
     text-align: center;
 }
 .avatar-modal h2 {
@@ -1117,20 +1123,31 @@ input[type="checkbox"]:checked {
 .modal-controls {
     margin-top: 20px;
 }
+.modal-controls input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+    width: 0;
+    padding-left: 120px;
+}
+
 .modal-controls button, .modal-controls input[type="file"] {
-    margin: 5px;
+    margin: 3px;
     padding: 10px 15px;
     cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f0f0f0;
+    border: 2px solid rgb(100, 100, 100);
+    border-radius: 8px;
+    background-color: rgb(60, 60, 60);
+
+    color: rgb(200, 200, 200);
+
+    align-content: center;
 }
-.modal-controls button:hover {
-    background-color: #e0e0e0;
+.modal-controls button:hover, .modal-controls input[type="file"]:hover {
+    background-color: rgb(80, 80, 80);
 }
 .modal-controls input[type="file"] {
     display: inline-block;
 }
+
 .cropper-container {
     margin-top: 20px; /* Отступ от элементов управления */
 }
@@ -1154,7 +1171,7 @@ input[type="checkbox"]:checked {
     width: 50%;
 
     border: 1px solid rgb(80, 80, 80);
-    border-radius: 5px;
+    border-radius: 3px;
     padding: 10px 10px;
     background-color: rgb(50, 50, 50);
 }
@@ -1170,10 +1187,10 @@ input[type="checkbox"]:checked {
 }
 
 .you_container_dop_block_text{
-    padding: 5px 10px;
+    padding: 3px 10px;
 
     border: 1px solid rgb(120, 120, 120);
-    border-radius: 5px;
+    border-radius: 3px;
 
     background-color: rgb(80, 80, 80);
 
@@ -1197,7 +1214,7 @@ input[type="checkbox"]:checked {
     height: 200px;
 
     border: 1px solid rgb(120, 120, 120);
-    border-radius: 5px;
+    border-radius: 3px;
 
     background-color: rgb(80, 80, 80);
 
@@ -1215,7 +1232,7 @@ input[type="checkbox"]:checked {
     background-color: rgb(120, 120, 120);
 
     border: 2px solid rgb(80, 80, 80);
-    border-radius: 5px;
+    border-radius: 3px;
 
     color: white;
 
@@ -1235,7 +1252,7 @@ input[type="checkbox"]:checked {
     background-color: rgb(100, 0, 0);
 
     border: 2px solid rgb(30, 0, 0);
-    border-radius: 5px;
+    border-radius: 3px;
 
     color: white;
 
@@ -1269,7 +1286,7 @@ input[type="checkbox"]:checked {
 
     column-gap: 25px;
 
-    padding: 5px 5px;
+    padding: 3px 3px;
 }
 
 .all_comments_container_block_header_block{
@@ -1295,7 +1312,7 @@ input[type="checkbox"]:checked {
     height: auto;
 
     border: 1px solid rgb(120, 120, 120);
-    border-radius: 5px;
+    border-radius: 3px;
 
     background-color: rgb(80, 80, 80);
 
@@ -1313,31 +1330,31 @@ input[type="checkbox"]:checked {
 
 .comment_buttons_button{
     cursor: pointer;
-    transition: 0.25s;
+    transition: 0.15s;
 }
 
 .comment_buttons_button:hover{
-    filter: brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(0%) hue-rotate(218deg) brightness(97%) contrast(92%);
+    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(50deg) brightness(50%) contrast(100%);
 }
 
 .comment_buttons_button_otvet{
-    padding: 0 5px;
+    padding: 0 3px;
     margin-right: 10px;
     background-color: rgb(200, 200, 200);
     text-decoration: none;
     border: 1px solid grey;
     color: black;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .likes-positive {
     color: green;
-    padding-right: 5px;
+    padding-right: 3px;
 }
 
 .likes-negative {
     color: red;
-    padding-right: 5px;
+    padding-right: 3px;
 }
 
 .likes-zero {

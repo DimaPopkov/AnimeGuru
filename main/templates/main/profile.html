@@ -24,7 +24,7 @@
                             <h2>Редактирование аватара</h2>
                             <div class="image-container">
                                 <!-- Здесь будет отображаться изображение для редактирования -->
-                                <img id="editableAvatar" src="" alt="Изображение для редактирования">
+                                <img id="editableAvatar" alt="Изображение для редактирования">
                             </div>
                             <div class="modal-controls">
                                 <input type="file" id="avatarFileInput" accept="image/*">
@@ -178,6 +178,7 @@
         // --- Функция закрытия модального окна ---
         function closeAvatarModal() {
             avatarModalOverlay.style.display = 'none'; // Скрываем модальное окно
+            avatarFileInput.style.display = 'inline-block';
             // Очищаем экземпляр Cropper.js, если он был создан
             if (cropper) {
                 cropper.destroy();
@@ -195,9 +196,10 @@
 
             // Ждем, пока изображение загрузится, чтобы Cropper.js смог его инициализировать
             editableAvatar.onload = () => {
+                avatarFileInput.style.display = 'none';
                 cropper = new Cropper(editableAvatar, {
                     aspectRatio: 1 / 1, // Можно настроить соотношение сторон (например, 16/9, null для свободной обрезки)
-                    viewMode: 1, // Режим просмотра: 0 (по умолчанию), 1 (ограничивает кроппер областью контейнера), 2 (ограничивает кроппер изображением), 3 (ограничивает кроппер контейнером и изображением)
+                    viewMode: 3, // Режим просмотра: 0 (по умолчанию), 1 (ограничивает кроппер областью контейнера), 2 (ограничивает кроппер изображением), 3 (ограничивает кроппер контейнером и изображением)
                     autoCropArea: 0.8, // Область автоматической обрезки (от 0 до 1)
                     responsive: true, // Адаптивность
                 });
@@ -224,7 +226,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': csrftoken, // Функция для получения CSRF токена
+                        'X-CSRFToken': csrftoken,
                     },
                     body: formData
                 })
@@ -234,7 +236,7 @@
                 })
                 .catch(error => console.error('Ошибка сохранения аватара:', error));
 
-                closeAvatarModal(); // Закрываем модальное окно после сохранения
+                closeAvatarModal();
             } else {
                 alert('Изображение не было отредактировано.');
             }
@@ -246,7 +248,6 @@
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -258,9 +259,6 @@
 
         // --- Основная функция add_avatar ---
         function add_avatar() {
-            // Скрываем текущий аватар, пока выбираем новый
-            // avatarElement.style.display = 'none'; // Можно сделать так, если нужно
-
             openAvatarModal(); // Открываем модальное окно
         }
 
