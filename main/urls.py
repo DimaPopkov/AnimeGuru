@@ -10,6 +10,8 @@ urlpatterns = [
     path('', views.main, name="main"),
     path('admin/', admin.site.urls),
     path('about/', views.about, name="about"),
+    path('theme/get/', views.courent_theme), 
+    path('theme/set/', views.save_theme),
     path('create/', views.create, name="create"),
     path('filtered-items/', views.filter, name='filtered-items'),
     path('comment/<int:comment_id>/state/', views.update_comment_state, name='comment'),
@@ -21,7 +23,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('main')), name='logout'),
     path('user/', views.profile, name='profile'),
     path('user/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
-]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('AI/chat', views.AIchat, name='AIchat'),
+    path('AI/history', views.AIhistory, name='AIhistory'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

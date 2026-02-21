@@ -75,45 +75,73 @@
                     {% endif %}
                 </div>
             </div>
-        </div>
 
-        <div class="profile_container_favourites">
-            <h3> Избранное </h3><hr>
-            <div class="profile_container_favourites_block">
-                {% for element in products %}                 
-                    <form action="
-                                {% if request.user.is_authenticated %} 
-                                    {% url 'card' product_name=element.name %}
-                                {% else %}
-                                    /login/    
-                                {% endif %}                
-                                " method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_name" value="{{ element }}">
+            <div class="profile_container_header_block change_button">
 
-                        <div class="prod_element" onclick="submitform(this)">
-                            <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
-                            <h5 style="padding-top: 5px"> {{ element.name }} </h5>
-                            <h8> {{ element.category }} / {{ element.season.year }}</h8>
-
-                            <div class="prod_element_rating">
-                                <div class="prod_element_rating_block"> {{ element.rating }} </div>
-                                <div class="prod_element_rating_block_dop_main">
-                                    <div class="prod_element_rating_block_dop"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>               
-                {% endfor %}
             </div>
         </div>
-        
+
+        {% if favourites or favourites != None %}
+            <div class="profile_container_favourites">
+                <h3> Избранное </h3><hr>
+                <div class="profile_container_favourites_block">
+                    {% for element in favourites %}                 
+                        <form action="
+                                    {% if request.user.is_authenticated %} 
+                                        {% url 'card' product_name=element.name %}
+                                    {% else %}
+                                        /login/    
+                                    {% endif %}                
+                                    " method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_name" value="{{ element }}">
+
+                            <div class="prod_element" onclick="submitform(this)">
+                                <div class="prod_element_pic_lock">
+                                    <!-- <img src="{{ element.image }}" style="width: 100%"> -->
+                                    {% if element.image %}
+                                        {% if element.image.name %}
+                                            <img src="{{ element.image.url }}" style="width: 100%">
+                                        {% else %}
+                                            <img src="{{ element.image }}" style="width: 100%">
+                                        {% endif %}
+                                    {% elif element.alter_pic %}
+                                        <img src="{{ element.alter_pic.url }}" style="width: 100%">
+                                    {% endif %}    
+                                </div>
+                                <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                <h8> {{ element.category }} / {{ element.season.year }}</h8>
+
+                                <div class="prod_element_rating">
+                                    <div class="prod_element_rating_block"> {{ element.rating }} </div>
+                                    <div class="prod_element_rating_block_dop_main">
+                                        <div class="prod_element_rating_block_dop"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>               
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
         <div class="profile_container_comments">
             <h3> Ваши комментарии </h3><hr>
             <div class="profile_container_favourites_block">
                 {% for element in your_comments %}                 
                     <div class="profile_container_favourites_block_comment">
-                        <img src="{{ element.product_image }}" style="width: 150px; border: 1px solid gray; border-radius: 5px; height: 100%;">
+                        {% if element.product_image %}
+                            <img src="/media/{{ element.product_image }}" alt="Product Image" style="width: 150px; border: 1px solid gray; border-radius: 5px; height: 100%;"/>
+                        {% endif %}
+                        <!-- {% if element.image %}
+                            {% if element.image.name %}
+                                <img src="{{ element.image.url }}" style="width: 100%">
+                            {% else %}
+                                <img src="{{ element.image }}" style="width: 100%">
+                            {% endif %}
+                        {% elif element.alter_pic %}
+                            <img src="{{ element.alter_pic.url }}" style="width: 100%">
+                        {% endif %}     -->
                         <div class="prod_element_rating">
                             <div class="prod_element_rating_block"> {{ element.product_rating }} </div>
                             <div class="prod_element_rating_block_dop_main">

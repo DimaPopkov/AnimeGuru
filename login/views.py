@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 from django.contrib import messages
 
+from django.http import JsonResponse
+
     #  id:
     #    Тип: AutoField (автоинкрементное целое число)
     #    Описание: Уникальный первичный ключ для каждой записи пользователя.
@@ -56,9 +58,13 @@ from django.contrib import messages
 # Create your views here.
 
 def Login(request):     
+    theme = request.session.get('courent_theme')
     context = {
         'title': "Вход в личный кабинет",
+        'theme': theme,
     }
+
+    print(theme)
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -98,7 +104,10 @@ def signup(request):
 def create_user(request):
     context = {
         'title': "Регистрация пользователя",
+        'theme': request.session['courent_theme'],
     }
+
+    print(request.session['courent_theme'])
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -129,3 +138,11 @@ def create_user(request):
             return render(request, 'login/signup.html', context)
     else:
         return render(request, 'login/signup.html', context)
+    
+def courent_theme(request):
+    return request.session['courent_theme']
+
+def save_theme(request):
+    request.session['courent_theme'] = request.POST.get('theme_content')
+
+    return JsonResponse({'success': True, 'theme': request.session['courent_theme']}, status=200)

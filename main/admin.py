@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from unfold.views import UnfoldModelAdminViewMixin
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
@@ -16,7 +17,7 @@ from django.db.models.functions import TruncDay
 from datetime import timedelta
 
 from django.contrib import admin
-from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog
+from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog, AiMessages
 
 # Register your models here.
 
@@ -157,6 +158,10 @@ class TagsAdmin(ModelAdmin):
 
 @admin.register(Pics)
 class PicsAdmin(ModelAdmin):
+    # readonly_fields = ["preview"]
+
+    # def preview(self, obj):
+    #     return mark_safe(f"<img src={obj}>")
     pass
 
 @admin.register(Album_Pics)
@@ -185,4 +190,8 @@ class CommentsAdmin(ModelAdmin):
 
 @admin.register(CommentAction)
 class CommentActionAdmin(ModelAdmin):
+    pass
+
+@admin.register(AiMessages)
+class AiMessagesAdmin(ModelAdmin):
     pass

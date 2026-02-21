@@ -4,16 +4,23 @@ from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
 from django.db.models import OuterRef, Subquery, FileField
+from django.core.cache import cache
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Album_Pics, Characters, Comments, CommentAction 
+from .models import Tags, Category, Product, Album_Pics, Characters, Comments, CommentAction, AiMessages
 from .forms import ProductForm
-import re, requests, Levenshtein
-
+import re, json, requests, Levenshtein
 
 # Create your views here.
 def main(request):
+    try:
+        theme = request.session['courent_theme']
+    except:
+        theme = request.session.get('courent_theme', 'black')
+        request.session['courent_theme'] = 'black'
+
+    print('Текущая тема: ', request.session.get('courent_theme', 'black'))
     allProducts = Product.objects.all()
     
     Allstatus = []
@@ -28,6 +35,7 @@ def main(request):
         'products' : allProducts,
         'tags': Tags.objects.all().order_by('name'),
         'status': Allstatus,
+        'theme': theme
     }
         
     return render(request, 'main/main.html', data)
@@ -38,6 +46,15 @@ def about(request):
     }
 
     return render(request, 'main/about.html', data)
+
+def courent_theme(request):
+    return request.session['courent_theme']
+
+def save_theme(request):
+    courent_theme_name = request.POST.get('theme_content')
+    request.session['courent_theme'] = courent_theme_name
+    print(courent_theme_name)
+    return JsonResponse({'success': True, 'theme': courent_theme_name}, status=200)
 
 def create(request):
     if request.method == 'POST':
@@ -191,8 +208,9 @@ def card(request, product_name):
 
     for comment in comments:
         if comment.user_name == CurrentUserName:
-            CurrentComment = comment
-            print("CurrentComment: ", CurrentComment.user_comment)
+            if(comment.locateZ == 0):
+                CurrentComment = comment
+                print("CurrentComment: ", CurrentComment.user_comment)
 
     star_list = list(range(1, 11))
     print(star_list)
@@ -326,41 +344,9 @@ def card(request, product_name):
         if focus_comment_state == []:
             for element in allComments:
                 focus_comment_state.append(0)
-                
 
-    # print(focus_comment_state)
-    # print(allComments)
-    # for product_state in allComments_state:
-    #     if product_state.comment.name == products.name:
-    #         if product_state.action_type == "like":
-    #             focus_comment_state.append(2)
-    #         elif product_state.action_type == "dislike":
-    #             focus_comment_state.append(1)
-    #         else:
-    #             focus_comment_state.append(0)
-
-    zipped_items = zip(comments, focus_comment_state)
+    zipped_items = list(zip(comments, focus_comment_state))
     print(zipped_items)
-
-    # allComments = CommentAction.objects.filter(user=request.user)
-    # print(allComments, "\n\n")
-
-    # i = 0
-    # comment_state = [0] * allComments.__len__() # 0 - нет данных, 2 - Like, 1 - Dislike
-    # print(comment_state)
-
-    # for element in allComments:
-    #     if element.comment.name == products.name:
-    #         print(element.action_type)
-    #         if element.action_type == "like":
-    #             comment_state[i] = 2
-    #         elif element.action_type == "dislike":
-    #             comment_state[i] = 1
-    #     else:
-    #         print("Комментарий не подходит: ", element.comment, " ", products)
-    #     i += 1
-
-    # print(comment_state)
 
     context = {
         'title' : selected_product.name,
@@ -375,9 +361,14 @@ def card(request, product_name):
         'characters': other_characters,
         'comments': allComments,
         'zipped_items': zipped_items,
+        'zipped_items2': zipped_items,
+        'zipped_items3': zipped_items,
         'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,
+        'AI_models': ["gemma3:12b", "deepseek-r1:14b", "qwen:0.5b"],
+        'theme': request.session.get('courent_theme', 'black'),
+        #'AI_models': {"gemma3:4b", "gemma3:12b"},
     }
     print("\n\n", request, "\n Метод POST \n")
     print("Сохранено:", target_product_name, "\n")
@@ -398,26 +389,26 @@ def profile(request):
     username = request.user.username
 
     product_image_subquery = Subquery(
-        Product.objects.filter(name=OuterRef('name')).values('image')[:1] # [:1] берет первое совпадение
+        Product.objects.filter(name=OuterRef('name')).values('image')
     )
 
     product_category_subquery = Subquery(
-        Product.objects.filter(name=OuterRef('name')).values('category__name')[:1] # [:1] берет первое совпадение
+        Product.objects.filter(name=OuterRef('name')).values('category__name')
     )
 
     product_rating_subquery = Subquery(
-        Product.objects.filter(name=OuterRef('name')).values('rating')[:1] # [:1] берет первое совпадение
+        Product.objects.filter(name=OuterRef('name')).values('rating')
     )
 
     product_season_subquery = Subquery(
-        Product.objects.filter(name=OuterRef('name')).values('season')[:1] # [:1] берет первое совпадение
+        Product.objects.filter(name=OuterRef('name')).values('season')
     )
-    
+
     allComents = Comments.objects.filter(user_name=username).annotate(
-        product_image=product_image_subquery,
-        product_category=product_category_subquery,
-        product_rating=product_rating_subquery,
-        net_likes=models.F('like_count') - models.F('dislike_count'),
+        product_image = product_image_subquery,
+        product_category = product_category_subquery,
+        product_rating = product_rating_subquery,
+        net_likes = models.F('like_count') - models.F('dislike_count'),
         product_season=product_season_subquery,
     )
     
@@ -427,6 +418,7 @@ def profile(request):
         'title' : 'Личный кабинет',
         'your_comments': allComents,
         'star_list': star_list,
+        'favourites': None,
     }
 
     return render(request, 'main/profile.html', context)
@@ -437,11 +429,29 @@ def add_comments(request, product_name):
 
     #Comments.objects.all().delete() # Очистка таблицы
 
-    User_comment = request.POST.get('text')
-    User_rating = request.POST.get('rating')
+    try:
+        User_comment = request.POST.get('text')
+    except:
+        User_comment = None
+
+    try:
+        User_rating = request.POST.get('rating')
+    except:
+        User_rating = 0
+
+    try:
+        parentId = request.POST.get('parentId')
+        parentComment = Comments.objects.get(id=parentId)
+        locateZ_find = int(parentComment.locateZ) + 1    
+    except:
+        parentId = None
+        locateZ_find = 0
 
     user_name = request.user.username
     user_image = request.user.profile.image
+
+    print("product: ", product, "\nUser_comment: ", User_comment, "\nUser_rating: ", User_rating, "\nuser_name: ", user_name, "\nparentId: ", parentId)
+
 
     new_comment = Comments(
         name = product,
@@ -451,6 +461,8 @@ def add_comments(request, product_name):
         user_comment = User_comment,
         like_count = 0,
         dislike_count = 0,
+        parentId = parentId,
+        locateZ = locateZ_find,
     )
 
     new_comment.save()
@@ -601,10 +613,8 @@ def update_comment_state(request, comment_id):
     
 def profile_change_avatar(request):
     if request.method == 'POST':
-        print("ФОТКА ДОШЛА")
-
         username = request.POST.get('user_id')
-        image_file = request.POST.get('image') # получение фотки
+        image_file = request.POST.get('image')
         print(image_file)
 
         if not username or not image_file:
@@ -616,12 +626,10 @@ def profile_change_avatar(request):
 
             # Присваиваем файл изображению в профиле
             user.profile.image = image_file
-            print(image_file)
             user.profile.save()
 
             print(f"Аватар успешно обновлен для пользователя: {username}")
 
-            # Возвращаем URL изображения
             return JsonResponse({
                 'image_url': user.profile.image.url if user.profile.image else None,
             })
@@ -634,3 +642,88 @@ def profile_change_avatar(request):
 
     # Если запрос не POST, возвращаем ошибку или пустой ответ
     return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
+
+def AIchat(request):
+    json_data = json.loads(request.body)
+
+    json_data[0]['person'] = request.user.username
+
+    AiMessages.objects.create(
+        user = request.user,
+        role = "user",
+        user_message = json_data[0]['message'],
+        ai = json_data[1]['person'],
+        ai_message = json_data[1]['message'],
+    )
+
+    with open('lib.json', 'a', encoding='utf-8') as f:
+        json.dump(json_data, f, ensure_ascii=False)
+        f.write('\n')
+
+    return JsonResponse({'status': 'success', 'message': 'Data saved successfully'})
+
+def AIhistory(request):
+    user_history = AiMessages.objects.filter(user=request.user)
+
+    user_history_final = []
+    
+    for element in user_history:
+        user_history_final.append(
+            {
+                "role" : "user", 
+                "content" : element.user_message
+            },
+        )
+
+    if(user_history_final == []):
+        system_prompt = AiMessages.objects.create(
+            user = request.user,
+            role = "system",
+            user_message = 'Ты - AI ассистент на сайте по поиску Аниме, Кино и Манги. Поддерживай деловой стиль общения с пользователем. Главное правило чата для тебя - Отвечать только на вопрос пользователя. Остальные правила чата с пользователем: - Не используй смайлики в ответах. - Тебе нельзя грубить пользователю. - Ты должен отвечать на вопросы пользователя четко и правильно. - Нельзя общаться про политику. - Если пользователь хвалит тебя, то поблагодари его и расскажи что ты можешь. - Переспрашивай пользователя, если ты не понял его сообщение. - Не упоминай политику в своих ответах. - Если пользователь задаёт вопрос не по темам сайта (Аниме, Кино и Манга), то напомни ему, на что ты можешь отвечать. - Не напоминай пользователю о своём функционале.',
+            ai = "",
+            ai_message = "",
+        )
+        system_prompt.save()
+
+    print(user_history_final)
+    # data = list(user_history.values())
+
+    return JsonResponse(user_history_final, safe=False)
+
+# def chat_view(request):
+#     # Получаем сообщение пользователя
+#     user_message = request.POST.get('message', '').strip()
+#     if not user_message:
+#         return JsonResponse({'error': 'Empty message'}, status=400)
+
+#     # Получаем историю и форматируем для Ollama
+#     history = get_user_history(request.user)
+#     ollama_messages = format_for_ollama(history)
+
+#     # Добавляем текущее сообщение
+#     ollama_messages.append({
+#         "role": "user",
+#         "content": user_message
+#     })
+
+#     # Получаем ответ от Ollama
+#     ai_response = call_ollama_api(ollama_messages)
+
+#     if not ai_response:
+#         return JsonResponse({'error': 'AI service unavailable'}, status=503)
+
+#     # Сохраняем вопрос\ответ
+#     massages = AiMessages.objects.create(
+#         user = request.user,
+#         user_message = user_message,
+#         ai = "gemma3:12b",
+#         ai_message = ai_response,
+#     )
+
+#     # Очищаем кэш истории
+#     cache.delete(f"chat_history_{request.user.id}")
+
+#     return JsonResponse({
+#         'response': ai_response,
+#         'message_id': massages.id
+#     })

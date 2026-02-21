@@ -49,22 +49,6 @@ body{
     height: auto;
 }
 
-.header{
-    margin: 0.5% 0.5%;
-    width: 99%;
-    /* background: url("../img/dot.png"); */
-    background-size: 0.5%;
-
-    height: 50px;
-
-    display: flex;
-    flex-direction: row;
-
-    justify-content: space-around;
-
-    align-items: center;
-}
-
 .main_items_background{
     background-color: rgba(30, 30, 30);
     
@@ -74,6 +58,32 @@ body{
     color: rgb(200, 200, 200);
 }
 
+main{
+    margin-top: 50px;
+}
+
+.header{
+    width: 100%;
+    /* background: url("../img/dot.png"); */
+    /* background-size: 0.5%; */
+
+    position: fixed;
+
+    height: 50px;
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid rgb(60, 60, 60);
+    z-index: 9999;
+}
+
 .btn-auto{
     height: 40px;
 }
@@ -81,15 +91,28 @@ body{
 .btn_logo{
     background: none;
     height: 100%;
-    width: 200px;
+    /* width: 200px; */
 
     text-decoration: none;
     color: white;
     align-content: center;
     
-    margin-right: 100px;
+    /* margin-right: 100px; */
     font-size: 180%;
 }
+
+.header_change_style_button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+
+    padding-right: 5px;
+
+    /* border: 1px solid white; */
+}
+
 
 .main_container{
     width: 100%;
@@ -231,8 +254,13 @@ body{
 }
 
 .prod_element_pic_lock{
-    height: 240px;
+    height: 245px;
+
+    align-content: center;
+
     overflow: hidden;
+
+    border-radius: 5px;
 }
 
 /* Filter */
@@ -348,6 +376,8 @@ body{
     justify-content: center;
 
     text-align: center;
+
+    color: rgb(200, 200, 200);
 }
 
 
@@ -372,7 +402,7 @@ body{
 
     padding: 10px;
 
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: left;
 }
@@ -408,17 +438,19 @@ body{
 
     padding: 8px 12px;
     cursor: pointer;
+
+    background: var(--pseudo-bg-color,  rgb(30, 30, 30));
 }
 
 .checkbox-item:hover {
-    background: rgb(35, 35, 35);
+    background: var(--pseudo-bg-hover-color,  rgb(35, 35, 35));
 }
 
 input[type="checkbox"] {
     appearance: none;
     width: 10px;
     height: 10px;
-    background: black;
+    background: var(--pseudo-bg-checkbox-color, rgb(0, 0, 0));
     background-origin: border-box;
     border: 2px solid #444;
     border-radius: 1px;
@@ -426,7 +458,7 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-    background: rgb(200, 200, 200);
+    background: var(--pseudo-bg-checked-color, rgb(200, 200, 200));
     border-color: rgb(30, 30, 30);
 }
 
@@ -446,7 +478,153 @@ input[type="checkbox"]:checked {
     text-overflow: ellipsis;
 }
 
+/* AI */
+
+.AI_button{
+    display: block;
+    position: fixed;
+
+    width: 40px;
+    height: 40px;
+
+    margin-top: 80px;
+    margin-left: 93%;
+
+    border: 2px solid rgb(60, 60, 60);
+    border-radius: 100%;
+    
+    background-color: rgb(30, 30, 30);
+
+    color: rgb(200, 200, 200);
+    font-size: 110%;
+
+    cursor: pointer;
+}
+
+.AI_content{
+    display: block;
+
+    width: 650px;
+    height: auto;
+    min-height: 36px;
+
+    border-radius: 10px 0 0 10px;
+    border: 2px solid rgb(60, 60, 60);
+    border-right: none;
+
+    background-color: rgb(30,30,30);
+
+    position: fixed;
+
+    margin-top: 80px;
+    margin-left: calc(100% - 650px);
+
+    z-index: 1;
+}
+
+.hidden{
+    display: none;
+}
+
+.content{
+    margin-top: 0;
+    margin-left: 0;
+
+    border: 0;
+    position: relative;
+}
+
+.send{
+    position: relative;
+
+    width: 33px;
+    height: 33px;
+
+    margin-top: 10px;
+    margin-left: 0;
+
+    border: 0;
+}
+
+.AI_user_message_block_text{
+    width: calc(100% - 20px - 43px);
+    min-height: 36px;
+    max-height: 300px;
+    resize: none;
+
+    margin: 10px;
+    padding: 5px;
+
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: 10px;
+    background-color: rgb(40, 40, 40);
+
+    color: rgb(200, 200, 200);
+
+}
+
+.AI_content_chat{
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 10px;
+
+    border: 0;
+
+    border-radius: 10px;
+    background-color: rgb(40, 40, 40);
+
+    margin: 0 10px;
+    padding: 10px;
+
+    width: calc(100% - 20px);
+    height: 400px;
+
+    overflow-y: auto;
+}
+
+.child-person{
+    /* margin-left: calc(100% - auto); */
+    width: auto;
+    height: auto;
+    min-height: 24px;
+
+    border: 0;
+    border-radius: 10px;
+
+    text-align: center;
+    align-content: center;
+
+    font-weight: 600;
+    
+    background-color: rgb(200, 200, 200);
+}
+
+.child-AI{
+    color: white;
+}
+
+.Ai_clear_chat_button{
+    display: block;
+    position: relative;
+
+    width: auto;
+    height: auto;
+
+    margin-top: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 0%;
+
+    border-radius: 10px;
+    border-width: 1px;
+
+    padding: 0 10px;
+    color: rgb(200, 200, 200);
+}
+
 /* card */
+
 .card_container_main{
     width: 85%;
     height: auto;
@@ -523,6 +701,10 @@ input[type="checkbox"]:checked {
     font-size: 15px;
 
     text-align: start;
+}
+
+.gray_font{
+    color: gray;
 }
 
 .card_info_list_block{
@@ -602,6 +784,11 @@ input[type="checkbox"]:checked {
 
 .card_prew_pics{
     max-width: 80%;
+
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+
     cursor: pointer;
 }
 
@@ -813,6 +1000,8 @@ input[type="checkbox"]:checked {
     position: relative;    
 
     padding: 0 20px;
+
+    --pseudo-bg-color: rgb(30, 30, 30);
 }
 
 .text-content::after {
@@ -822,7 +1011,7 @@ input[type="checkbox"]:checked {
     right: 0;
     width: 100%;
     height: 20px;
-    background: linear-gradient(transparent, rgb(30, 30, 30));
+    background: linear-gradient(transparent, var(--pseudo-bg-color));
 }
 
 .text-content.expanded {
@@ -876,7 +1065,7 @@ input[type="checkbox"]:checked {
 .star {
     cursor: pointer;
     font-size: 30px; /* Размер звезд */
-    color: #ccc; /* Цвет пустой звезды */
+    color: gray; /* Цвет пустой звезды */
     transition: color 0.2s ease; /* Плавный переход цвета при наведении */
     align-content: center;
 }
@@ -978,7 +1167,7 @@ input[type="checkbox"]:checked {
     border-radius: 10px;
     border: 1px solid rgb(80, 80, 80);
 
-    color: rgb(200, 200, 200);  
+    color: #c8c8c8;  
 
     background: rgb(60, 60, 60);
 }
@@ -1024,9 +1213,9 @@ input[type="checkbox"]:checked {
     display: flex;
     flex-direction: row;
 
-    background-color: rgb(30, 30, 30);
+    background-color: #1e1e1e;
     
-    border: 1px solid rgb(60, 60, 60);
+    border: 1px solid #3c3c3c;
     border-radius: 10px;
 
     padding: 15px 15px;
@@ -1040,6 +1229,8 @@ input[type="checkbox"]:checked {
     font-size: 20px;
     font-weight: 400;
 }
+
+.change_button{}
 
 .profile_container_header_block_info_flex{
     display: flex;
@@ -1276,6 +1467,14 @@ input[type="checkbox"]:checked {
     row-gap: 50px;
 }
 
+.all_comments_dop_line{
+    width: 2px;
+
+    margin: 0 40px 0 35px;
+
+    background-color: rgb(100, 100, 100);
+}
+
 .all_comments_container_block{
     width: 100%; 
     min-width: 400px;
@@ -1322,10 +1521,17 @@ input[type="checkbox"]:checked {
     margin-bottom: 10px;
 }
 
+.comment_answer{
+    height: auto;
+}
+
 .comment_buttons{
     display: flex;
+    
     height: 25px;
-    padding-left: 15px;
+
+    padding-left: 10px;
+    margin-bottom: 10px;
 }
 
 .comment_buttons_button{
@@ -1338,13 +1544,60 @@ input[type="checkbox"]:checked {
 }
 
 .comment_buttons_button_otvet{
-    padding: 0 3px;
-    margin-right: 10px;
-    background-color: rgb(200, 200, 200);
-    text-decoration: none;
-    border: 1px solid grey;
-    color: black;
+    padding: 0 15px;
+
+    border: 1px solid  rgb(30, 30, 30);
+    border-radius: 10px;
+
+    color: rgb(200, 200, 200);
+    background-color: #3c3c3c;
     border-radius: 3px;
+
+    opacity: 1;
+}
+
+.comment_textarea_otvet{
+    width: 400px;
+    height: auto;
+    min-height: 100px;
+
+    display: none;
+}
+
+.comment_textarea_otvet_header{
+    display: flex;
+
+    width: 100%;
+    height: 35px;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.comment_textarea_otvet_header_button{
+    padding: 0 15px;
+
+    border: 1px solid rgb(30, 30, 30);
+    border-radius: 10px;
+
+    color: rgb(200, 200, 200);
+
+    background-color: #3c3c3c;
+}
+
+.comment_textarea_otvet_textarea{
+    width: 100%;
+    height: 100px;
+    min-height: 100px;
+
+    padding: 2px 5px;
+
+    background-color: rgb(60, 60, 60);
+
+    border: 2px solid rgb(20, 20, 20);
+    border-radius: 10px;
+
+    color: rgb(200, 200, 200);
 }
 
 .likes-positive {

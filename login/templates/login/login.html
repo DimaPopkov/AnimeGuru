@@ -7,7 +7,7 @@
 {% block content %}
 <div class="login_container">
     <form class="login_form" method="POST">     
-        <h2 style="text-align: center">Вход</h2>
+        <h2 class = "font" style="text-align: center">Вход</h2>
 
         {% csrf_token %}
         <div class="login_form_row">
@@ -20,7 +20,7 @@
             <input class="auth_form_input" type="password" id="password" name="password">
         </div>
 
-        <button class="auth_button" type="submit">Войти</button> 
+        <button class="auth_button font" type="submit">Войти</button> 
 
         <a class = "font login_button" href="create_user/">Зарегистрироваться</a>
     </form>

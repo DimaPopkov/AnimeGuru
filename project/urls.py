@@ -26,8 +26,7 @@ urlpatterns = (
     [
         path('', include('main.urls')),
         path("i18n/", include("django.conf.urls.i18n")),
-    ] + i18n_patterns(
-    )
+    ] + i18n_patterns()
 )
 
 if settings.DEBUG:

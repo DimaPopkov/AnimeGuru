@@ -17,10 +17,9 @@
                         <input class="filter_category_filter" type="text" placeholder="Поиск по названию">
                     </div> -->
                     <label for="tags"> Поиск по названию:</label> 
-                    <input class="filter_category_filter find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
+                    <input class="filter_category_filter main_items_background find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
                     <br>
                 
-
                     <label for="tags"> Категории:</label> 
                     <select class="filter_category_filter main_items_background" name="category" id="category">
                         <option value="" class="font16 main_items_background"> Все категории </option>
@@ -78,7 +77,15 @@
                             <input type="hidden" name="product_name" value="{{ element }}">
 
                             <div class="prod_element" onclick="submitform(this)">
-                                <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                {% if element.image %}
+                                    {% if element.image.name %}
+                                        <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                    {% else %}
+                                        <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                    {% endif %}
+                                {% elif element.alter_pic %}
+                                    <div class="prod_element_pic_lock"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                {% endif %}
                                 <h5 style="padding-top: 5px"> {{ element.name }} </h5>
                                 <h8> {{ element.category }} / {{ element.season.year }}</h8>
 

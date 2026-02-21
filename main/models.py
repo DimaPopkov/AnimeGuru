@@ -23,10 +23,20 @@ class UserActivityLog(models.Model):
             models.Index(fields=['user', 'date']),
         ]
 
-class Pics(models.Model):
-    image = models.URLField('Изображение', blank=True, null=True)
+class AiMessages(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.TextField(null=True, default="user")
+    user_message = models.TextField()
+    ai = models.TextField()
+    ai_message = models.TextField()
+
     def __str__(self):
-        return self.image
+        return self.user.username
+
+class Pics(models.Model):
+    image = models.ImageField('Изображение', upload_to='img/pics/', null=True)
+    def __str__(self):
+        return self.image.name
     
 class Album_Pics(models.Model):
     name = models.TextField('Название Альбома (для какого тайтла)', null=True)
@@ -65,7 +75,7 @@ class Product(models.Model):
     description = models.TextField('Описание')
     season_info = models.TextField('Пересказ сезона:', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    image = models.URLField('Изображение', blank=True, null=True)
+    image = models.ImageField('Изображение', blank=True, null=True)
     season = models.DateField('Когда вышел (сезон)')
     tags = models.ManyToManyField(Tags, related_name='products')
     rating = models.TextField('Рейтинг', max_length=3)
@@ -74,9 +84,9 @@ class Product(models.Model):
     episods = models.TextField('Кол-во эпизодов', null=True)
     status = models.ForeignKey(Status, null=True, on_delete=models.SET_NULL, related_name='products')
     trailer = models.URLField('Трейлер', blank=True, null=True)
-    links = models.ManyToManyField(Weblinks, related_name='links')
-    main_characters = models.ManyToManyField('Characters', related_name='main_characters')
-    characters = models.ManyToManyField('Characters', related_name='other_characters')
+    links = models.ManyToManyField(Weblinks, related_name='links', null=True)
+    main_characters = models.ManyToManyField('Characters', related_name='main_characters', null=True)
+    characters = models.ManyToManyField('Characters', related_name='other_characters', null=True)
 
     def __str__(self):
         return self.name
@@ -85,20 +95,20 @@ class Voice_maker(models.Model):
     first_name = models.TextField('Имя')
     second_name = models.TextField('Фамилия', null=True)
     age = models.IntegerField('Возраст', null=True)
-    products_in = models.ManyToManyField(Product, related_name="product_in")
+    #products_in = models.ManyToManyField(Product, related_name="product_in")
 
     def __str__(self):
         return self.first_name
 
 class Characters(models.Model):
     image = models.URLField('Картинка', blank=True, null=True)
+    alter_pic = models.ImageField('Альтернативный доступ к картинке (если ссылка отвалилась)', blank=True, null=True)
     first_name = models.TextField('Имя')
     second_name = models.TextField('Фамилия', null=True)
     age = models.IntegerField('Возраст', null=True)
     description = models.TextField('Всё о герое, где появляется, что делал и т.д. и т.п.')
     products = models.ManyToManyField(Product, related_name='products_in')
-    #close_charecters = models.ManyToManyField(Characters, , related_name='simps')
-    voice_makers = models.ManyToManyField(Voice_maker, related_name='voices')
+    #voice_makers = models.ManyToManyField(Voice_maker, related_name='voices', null=True)
     link_to_wiki = models.URLField('Ссылка на вики', blank=True, null=True)
 
     def __str__(self):
@@ -108,11 +118,13 @@ class Comments(models.Model):
     name = models.TextField('Имя тайтла', null=True)
     user_image = models.ImageField('Image:', null=True)
     user_name = models.TextField('Логин пользователя:')
-    user_rating = models.IntegerField('Оценка пользователя:')
+    user_rating = models.IntegerField('Оценка пользователя:', null=True)
     user_comment = models.TextField('Комментарий пользователя:', null=True)
     like_count = models.IntegerField('Кол-во лайков под постом')
     dislike_count = models.IntegerField('Кол-во дизлайков под постом')
     state = models.BooleanField('True - like, False - dislike, None - not yet', null=True)
+    parentId = models.IntegerField('ID родительского коммента (если нет - null/none)', null=True)
+    locateZ = models.IntegerField('Z-index комментария относительно тайтла (0 уровень)', null=True)
 
     def __str__(self):
         return self.name
@@ -133,6 +145,7 @@ class CommentAction(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
+    favourites = models.ManyToManyField(Product)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
