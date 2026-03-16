@@ -107,7 +107,7 @@ class Characters(models.Model):
     second_name = models.TextField('Фамилия', null=True)
     age = models.IntegerField('Возраст', null=True)
     description = models.TextField('Всё о герое, где появляется, что делал и т.д. и т.п.')
-    products = models.ManyToManyField(Product, related_name='products_in')
+    #products = models.ManyToManyField(Product, related_name='products_in')
     #voice_makers = models.ManyToManyField(Voice_maker, related_name='voices', null=True)
     link_to_wiki = models.URLField('Ссылка на вики', blank=True, null=True)
 
@@ -146,6 +146,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
     favourites = models.ManyToManyField(Product)
+    
+    def __str__(self):
+        return self.user.username
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

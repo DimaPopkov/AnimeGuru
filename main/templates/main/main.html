@@ -4,12 +4,25 @@
     {{ title }}
 {% endblock %}
 
+{% load static %}
 {% block content %}
     <div class="container_d">
         <div class="filter main_items_background">
+            <div class="filter_blocks_grid">
+                <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
+                    <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"></path>
+                </svg>
+                <svg onclick="ChangeGrid('big_block')" id='big_block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
+                    <path d="M224 80c0-26.5-21.5-48-48-48H80C53.5 32 32 53.5 32 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80zm0 256c0-26.5-21.5-48-48-48H80c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336zM288 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z"></path>
+                </svg>
+                <svg onclick="ChangeGrid('line')" id='line' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
+                    <path d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"></path>
+                </svg>
+            </div>
+            
             <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
                 <div class="filter_main">
-                    <br><h4 for="category">Фильтр:</h4><br>
+                    <h4 for="category">Фильтр:</h4><br>
 
                     <!-- Поиск по названию (В разработке) -->
                     <!-- <div name="titlename" id="titlename">
@@ -41,7 +54,10 @@
                         <!-- Кнопка для открытия/закрытия списка -->
                         <button class="dropdown-toggle main_items_background" type="button">
                             <span class="selected-tags">Выберите теги</span>
-                            <span class="arrow">▼</span>
+                            <span class="arrow">
+                                <!-- ▼  -->
+                                <img src="{% static '/img/arrow.png' %}" width="10px">
+                            </span>
                         </button>
 
                         <!-- Скрытый контейнер с чекбоксами -->
@@ -58,12 +74,12 @@
             </form>
         </div>
 
-        <div class="main_items_background catalog">
+        <div class="catalog main_items_background">
             <div id="products_catalog" class="products_catalog">    
                 {% if products %}
-                    <div class="nice_info">
+                    <!-- <div class="nice_info">
                         <h class="nice_info_piece"> Всего: {{ products|length }} </h>
-                    </div>         
+                    </div>          -->
                                 
                     {% for element in products %}                 
                         <form action="
@@ -86,20 +102,23 @@
                                 {% elif element.alter_pic %}
                                     <div class="prod_element_pic_lock"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
                                 {% endif %}
-                                <h5 style="padding-top: 5px"> {{ element.name }} </h5>
-                                <h8> {{ element.category }} / {{ element.season.year }}</h8>
-
                                 <div class="prod_element_rating">
                                     <div class="prod_element_rating_block"> {{ element.rating }} </div>
                                     <div class="prod_element_rating_block_dop_main">
                                         <div class="prod_element_rating_block_dop"></div>
                                     </div>
                                 </div>
+                                <div class="prod_element_info">
+                                    <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                    <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                    <br><br>
+                                    <p class="hidden_description hidden"> {{ element.description|safe }} </p>
+                                </div>
                             </div>
                         </form>               
                     {% endfor %}
                 {% else %}
-                    <p> Ничего не найдено </p>
+                    <h4 style="margin-bottom: 2px;"> Ничего не найдено </h4>
                 {% endif %}
             </div>
         </div>
@@ -142,7 +161,8 @@
                             const desiredHtmlContent = new_filter.innerHTML;
                             //console.log(desiredHtmlContent)
 
-                            productsListContainer.innerHTML = new_filter.innerHTML;
+                            productsListContainer.innerHTML = new_filter.innerHTML;          
+                            UpdateGrid();
                         }                     
                     })
                     .catch(error => {

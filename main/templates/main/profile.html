@@ -240,7 +240,7 @@
                 // Получаем изображение в формате Canvas
                 const canvas = cropper.getCroppedCanvas();
                 // Преобразуем Canvas в Data URL (base64 строку)
-                const croppedImageUrl = canvas.toDataURL('image/jpeg'); // Можно указать 'image/png'
+                const croppedImageUrl = canvas.toDataURL('image/jpeg');
 
                 const csrftoken = getCookie('csrftoken');
                 // Устанавливаем отредактированное изображение как src для основного аватара

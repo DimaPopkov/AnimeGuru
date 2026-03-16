@@ -8,7 +8,7 @@ from django.core.cache import cache
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Album_Pics, Characters, Comments, CommentAction, AiMessages
+from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages
 from .forms import ProductForm
 import re, json, requests, Levenshtein
 
@@ -549,7 +549,7 @@ def update_comment_state(request, comment_id):
                     existing_action.save()
 
                     comments.dislike_count -= 1
-                    comments.like_count += 1    # Увеличиваем лайк
+                    comments.like_count += 1 # Увеличиваем лайк
 
                     comments.save()
 

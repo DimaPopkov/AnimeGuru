@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static './main/adaptive.css' %}">
     <title> {% block title %} {% endblock %} </title>
     <script src="{% static 'main/js/theme.js' %}"></script>
+    <script src="{% static 'main/js/filter_grid.js' %}"></script>
 </head>
 <body id="products-list-container" class="body">
 
@@ -21,7 +22,7 @@
             <!-- Кнопка смены темы в разработке -->
             
             <div class="header_change_style_button" onclick="ChangeTheme('{{ request.user.username }}')">
-                <img id="img" src="{% static 'img/moon.png' %}" width="22px" data-sun="{% static 'img/sun.png' %}" data-moon="{% static 'img/moon.png' %}">
+                <img id="img" src="{% static 'img/moon.png' %}" width="22px" data-sun="{% static 'img/sun.png' %}" data-moon="{% static 'img/moon.png' %}" style="cursor: pointer;">
                 <input id="theme_input" type="checkbox" style="width: 12px; height: 12px; display: none;">
             </div> 
            
@@ -51,7 +52,7 @@
         {% else %}
             <a class="login_button" href="{% url 'Login' %}">
                 <img style="height: 50%" src="{% static "img/png-clipart-computer-icons-login-symbol-login-interface-miscellaneous-text.png" %}">
-                <p style="margin-block-start: 0; margin-block-end: 0;"> Войти </p>
+                <p class="font" style="margin-block-start: 0; margin-block-end: 0;"> Войти </p>
             </a> 
         {% endif %}
     </header>

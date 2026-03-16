@@ -11,6 +11,16 @@ function ChangeTheme(username){
     let input = document.getElementById('theme_input');
     let img = document.getElementById('img');
     let main_items_background = document.getElementsByClassName('main_items_background');
+
+    let find_by_name = null;
+    if(document.querySelector('.find_by_name')){
+       find_by_name = document.querySelector('.find_by_name');
+    }
+
+    let filter = null;
+    if (document.querySelector('.filter')){
+        filter = document.querySelector('.filter');
+    }
     let btn_logo = document.getElementById('btn_logo');
     if (username){
         let nickname = document.getElementById('nickname');
@@ -36,6 +46,10 @@ function ChangeTheme(username){
     let filterList_tags = document.querySelectorAll('.checkbox-item');
     let filterList_tags_checkBoxes = document.querySelectorAll('input');
 
+    let filter_blocks_grid = null;
+    if (document.querySelectorAll('.filter_blocks_grid')){
+        filter_blocks_grid = document.querySelectorAll('.filter_blocks_grid');
+    }
 
     let you_container_dop = null;
     if (document.querySelectorAll('.you_container_dop')){
@@ -71,6 +85,11 @@ function ChangeTheme(username){
             element.style.backgroundColor = "white";
             element.style.color = "black";
             element.style.border =  "1px solid rgb(150, 150, 150)";
+        }
+        if (filter != null || find_by_name != null){
+            filter.style.background = "none";
+            filter.style.border = "none";
+            find_by_name.style.setProperty('--text-color', 'black');
         }
 
         for (const element of font1) {
@@ -155,6 +174,13 @@ function ChangeTheme(username){
             }
         }
 
+        if (filter_blocks_grid != null){
+            for (const element of filter_blocks_grid) {
+                element.style.background = 'rgb(255, 255, 255)';
+                element.style.border = '1px solid rgb(150, 150, 150)';
+            }
+        }
+
         body.style.background = "rgb(220, 220, 220)";
 
         input.checked = true;
@@ -190,6 +216,11 @@ function ChangeTheme(username){
         for (const element of filterList_tags_checkBoxes) {
             element.style.setProperty('--pseudo-bg-checkbox-color', 'rgb(0, 0, 0)');
             element.style.setProperty('--pseudo-bg-checked-color', 'rgb(200, 200, 200)');
+        }
+        if (filter != null || find_by_name != null){
+            filter.style.background = "none";
+            filter.style.border = "none";
+            find_by_name.style.setProperty('--text-color', 'rgb(200, 200, 200)');
         }
 
         btn_logo.style.color = "rgb(255, 255, 255)";
@@ -248,6 +279,13 @@ function ChangeTheme(username){
         if (main_characters_img_block_fade != null){
             for (const element of main_characters_img_block_fade) {
                 element.style.background = 'linear-gradient(to right, rgba(255, 255, 255, 0), rgb(30, 30, 30))';
+            }
+        }
+
+        if (filter_blocks_grid != null){
+            for (const element of filter_blocks_grid) {
+                element.style.background = 'rgb(30, 30, 30)';
+                element.style.border = '1px solid rgb(60, 60, 60)';
             }
         }
 

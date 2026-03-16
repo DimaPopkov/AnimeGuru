@@ -145,7 +145,8 @@
             <div class="card_container_body_frames_name">
                 <h3> Кадры </h3>
                 {% if product.trailer %}
-                    <h3 style="margin-right: 220px"> Трейлер </h3>
+                    <!-- <h3 style="margin-right: 15%"> Трейлер </h3> -->
+                    <h3> Трейлер </h3>
                 {% endif %}    
             </div>
             <div class="card_container_body_frames">
@@ -159,11 +160,11 @@
                     {% endfor %}
                 </list>
 
-                <!-- {% if product.trailer %}             
+                {% if product.trailer %}
                     <div class="trailer">
                         <iframe class="trailer_frame" src="https://www.youtube.com/embed/rJFZ_s0R4dQ" title="Bleach / Change (Nika Lenina Russian TV Art Version)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
-                {% endif %}       -->
+                {% endif %}
             </div>
         {% endif %}
 
@@ -180,7 +181,7 @@
                             <a class="related_product_link" href="{% url 'card' element.name %}" data-product-name="{{ element.name }}" id="product_name">{{ element.name }}</a>
                         </h6>
                         <div class="related_products_card_img_block">
-                            <img src="{{ element.image.url }}" style="width:80px">
+                            <img src="{{ element.image.url }}" style="width: 80px; border-radius: 5px;">
                             <div class="related_products_card_img_block_right">
                                 <p> {{ element.category }} / {{ element.season.year }} </p>
                                 <p> {{ element.episods }} эпизодов </p>
@@ -454,32 +455,37 @@
                             <div class="all_comments_container_block">
                                 <div class="all_comments_container_block_header">
                                     <div class="all_comments_container_block_header_block">
-                                        <img src="{{ element.user_image }}" default="{% static "/img/null_avatar.png" %}" class="comment_user_image">
-                                        <p class="all_comments_container_block_header_username"> {{ element.user_name }} </p>
+                                        {% if element.user_image and element.user_image != 'avatars/null_avatar.png' %}
+                                            <img src="{{ element.user_image }}" class="comment_user_image">
+                                        {% else %}
+                                            <img src="{% static "/img/null_avatar.png" %}" class="comment_user_image">
+                                        {% endif %}
                                     </div>
-                                    <div style="display:flex; text-align: center">
-                                        <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <p class="all_comments_container_block_header_username"> {{ element.user_name }} </p>
                                         
                                         <div style="display: flex;">
-                                            {% for current_number in star_list %}
-                                                {% if current_number <= element.user_rating %}
-                                                    <span class="star-icon" style="color: #ff9900;">&#9733;</span>
-                                                {% else %}
-                                                    <span class="star-icon" style="color: gray;">&#9733;</span>
-                                                {% endif %}
-                                            {% endfor %}
+                                            <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
+                                            <div style="display: flex;">
+                                                {% for current_number in star_list %}
+                                                    {% if current_number <= element.user_rating %}
+                                                        <span class="star-icon" style="color: #ff9900; font-size: 20px;">&#9733;</span>
+                                                    {% else %}
+                                                        <span class="star-icon" style="color: gray; font-size: 20px;">&#9733;</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <!--
+                                            <p style="font-size: 16px; align-content: center;"> {{ element.user_rating }} </p>
+                                            <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
+                                            -->
                                         </div>
-                                        <!--
-                                        <p style="font-size: 16px; align-content: center;"> {{ element.user_rating }} </p>
-                                        <p class="card_info_rating_10" style="align-content: center;"> /10 </p>
-                                        -->
                                     </div>
                                 </div>
                                 <div class="comments_container">
                                     {{ element.user_comment }}
                                 </div>
-                                <div class="comment_buttons">
-                                    
+                                <div class="comment_buttons"> 
                                     {% if element.net_likes > 0 %}
                                         <span style="color: green; padding-right: 5px;" id="like_count_{{ element.id }}">
                                     {% elif element.net_likes < 0 %}
@@ -520,29 +526,34 @@
                                                 data-action="dislike">
                                         {% endif %}
                                     </form>
+
+                                    <div class="comment_answer">
+                                        <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
+                                        <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+                                            {% csrf_token %}
+                                            <div class="comment_textarea_otvet_header">
+                                                <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
+                                                <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+                                            </div>
+                                            <input type="hidden" name="parentId" value="{{ element.id }}"></input>
+                                            <input type="hidden" name="rating" value="0"></input>
+                                            <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
+                                        </form> 
+                                    </div>
                                 </div>
-                                <div class="comment_answer">
-                                    <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                    <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
-                                        {% csrf_token %}
-                                        <div class="comment_textarea_otvet_header">
-                                            <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                            <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                        </div>
-                                        <input type="hidden" name="parentId" value="{{ element2.id }}"></input>
-                                        <input type="hidden" name="rating" value="0"></input>
-                                        <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                    </form> 
-                                </div>
-                                                
+        
                                 {% for element2, state2 in zipped_items2 %}
                                     {% if element2.locateZ != "0" and element2.parentId == element.id %}
                                         <div style="width: 100%; display: flex;">
                                             <div class="all_comments_dop_line"></div>
-                                            <div class="all_comments_container_block" style="padding-top: 15px; width: auto;">
+                                            <div class="all_comments_container_block" style="width: 100%; padding-top: 15px;">
                                                 <div class="all_comments_container_block_header">
                                                     <div class="all_comments_container_block_header_block">
-                                                        <img src="{{ element2.user_image }}" default="{% static "/img/null_avatar.png" %}" class="comment_user_image">
+                                                        {% if element2.user_image and element2.user_image != 'avatars/null_avatar.png' %}
+                                                            <img src="{{ element2.user_image }}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                        {% else %}
+                                                            <img src="{% static "/img/null_avatar.png" %}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                        {% endif %}                      
                                                         <p class="all_comments_container_block_header_username"> {{ element2.user_name }} </p>
                                                     </div>                              
                                                 </div>
@@ -550,7 +561,6 @@
                                                     {{ element2.user_comment }}
                                                 </div>
                                                 <div class="comment_buttons">
-                                                    
                                                     {% if element2.net_likes > 0 %}
                                                         <span style="color: green; padding-right: 5px;" id="like_count_{{ element2.id }}">
                                                     {% elif element2.net_likes < 0 %}
@@ -591,30 +601,36 @@
                                                                 data-action="dislike">
                                                         {% endif %}
                                                     </form>
+
+                                                    <div class="comment_answer">
+                                                        <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
+                                                        <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+                                                            {% csrf_token %}
+                                                            <div class="comment_textarea_otvet_header">
+                                                                <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
+                                                                <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+                                                            </div>
+                                                            <input type="hidden" name="parentId" value="{{ element2.id }}"></input>
+                                                            <input type="hidden" name="rating" value="0"></input>
+                                                            <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
+                                                        </form> 
+                                                    </div>
                                                 </div>
-                                                <div class="comment_answer">
-                                                    <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                                    <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
-                                                        {% csrf_token %}
-                                                        <div class="comment_textarea_otvet_header">
-                                                            <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                                            <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                                        </div>
-                                                        <input type="hidden" name="parentId" value="{{ element2.id }}"></input>
-                                                        <input type="hidden" name="rating" value="0"></input>
-                                                        <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                                    </form> 
-                                                </div>
+                                                
 
                                                 {% for element3, state3 in zipped_items3 %}
                                                     {% if element3.locateZ != 0 and element3.locateZ != 1 %}
-                                                        {% if element3.parentId == element2.id or element3.parentId %}
+                                                        {% if element3.parentId == element2.id %}
                                                             <div style="width: 100%; display: flex;">
                                                                 <div class="all_comments_dop_line"></div>
-                                                                <div class="all_comments_container_block" style="padding-top: 15px; width: auto;">
+                                                                <div class="all_comments_container_block" style="width: 100%;">
                                                                     <div class="all_comments_container_block_header">
                                                                         <div class="all_comments_container_block_header_block">
-                                                                            <img src="{{ element3.user_image }}" default="{% static "/img/null_avatar.png" %}" class="comment_user_image">
+                                                                            {% if element3.user_image and element3.user_image != 'avatars/null_avatar.png' %}
+                                                                                <img src="{{ element3.user_image }}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                                            {% else %}
+                                                                                <img src="{% static "/img/null_avatar.png" %}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                                            {% endif %}    
                                                                             <p class="all_comments_container_block_header_username"> {{ element3.user_name }} </p>
                                                                         </div>                              
                                                                     </div>
@@ -663,19 +679,20 @@
                                                                                     data-action="dislike">
                                                                             {% endif %}
                                                                         </form>
-                                                                    </div>
-                                                                    <div class="comment_answer">
-                                                                        <button class="comment_buttons_button_otvet" value="{{ element3 }}"> Ответить </button>
-                                                                        <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
-                                                                            {% csrf_token %}
-                                                                            <div class="comment_textarea_otvet_header">
-                                                                                <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                                                                <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                                                            </div>
-                                                                            <input type="hidden" name="parentId" value="{{ element3.id }}"></input>
-                                                                            <input type="hidden" name="rating" value="0"></input>
-                                                                            <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                                                        </form> 
+
+                                                                        <!-- <div class="comment_answer">
+                                                                            <button class="comment_buttons_button_otvet" value="{{ element3 }}"> Ответить </button>
+                                                                            <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+                                                                                {% csrf_token %}
+                                                                                <div class="comment_textarea_otvet_header">
+                                                                                    <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
+                                                                                    <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+                                                                                </div>
+                                                                                <input type="hidden" name="parentId" value="{{ element3.id }}"></input>
+                                                                                <input type="hidden" name="rating" value="0"></input>
+                                                                                <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
+                                                                            </form> 
+                                                                        </div> -->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -824,7 +841,6 @@
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -1130,6 +1146,7 @@
             })
         }
     
+        let comment_buttons = null;
         let openAnswerBlockButton = document.querySelector('.comment_buttons_button_otvet');
         let answerBlock = document.querySelector('.comment_textarea_otvet');
 
@@ -1138,7 +1155,8 @@
         all_comments_container.addEventListener('click', function(event) {
             if (event.target.classList.contains('comment_buttons_button_otvet')) {
                 const commentContainer = event.target.closest('.comment_answer');
-                
+                comment_buttons = event.target.closest('.comment_buttons');
+
                 if (commentContainer) {
                     const targetForm = commentContainer.querySelector('#form');
 
@@ -1148,13 +1166,14 @@
         })
 
         function toggleAnswerBlock(buttonElement, FormElement) {
-            
             if (FormElement.style.display == "block") {
                 buttonElement.textContent = 'Ответить';
                 FormElement.style.display = "none";
+                comment_buttons.style.marginBottom = "10px";
             } else {
                 buttonElement.textContent = 'Отмена';
                 FormElement.style.display = "block";
+                comment_buttons.style.marginBottom = "130px";
             }
         }
 

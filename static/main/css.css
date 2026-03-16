@@ -124,6 +124,7 @@ main{
     flex-direction: row-reverse;
 
     column-gap: 20px;
+
     max-width: 1500px;
 
     margin: 0 auto;
@@ -131,6 +132,7 @@ main{
 
 .catalog{
     margin: 25px 0;
+    margin-right: auto;
     padding: 3px 0;
 
     display: flex;
@@ -166,9 +168,13 @@ main{
     text-align: center;
 
     width: 450px;
-    height: 100%;
 
     color: rgb(200, 200, 200);
+    
+    background: none;
+    border: none;
+
+    position: fixed;
 }
 
 .filter_form{
@@ -188,7 +194,8 @@ main{
     column-gap: 15px;
     grid-template-columns: 175px 175px 175px 175px 175px;
 
-    padding: 30px 20px 20px 20px;
+    /* padding: 30px 20px 20px 20px; */
+    padding: 20px;
     row-gap: 20px;
 }
 
@@ -275,8 +282,6 @@ main{
 .filter_category_filter{
     width: 400px;
 
-    background: none;
-
     padding: 3px 3px;
 
     border-radius: 10px;
@@ -286,11 +291,14 @@ main{
 }
 
 .find_by_name{
+    height: 31px;
+
     padding: 3px 8px 1px 8px;
+    --text-color: rgb(200, 200, 200);
 }
 
 .find_by_name::placeholder{
-    color: rgb(200, 200, 200);
+    color: var(--text-color);
 }
 
 .products_filter{
@@ -398,12 +406,12 @@ main{
 
 .dropdown-toggle {
     width: 400px;
-    height: 50px;
-
-    padding: 10px;
+    height: 31px;
 
     border-radius: 10px;
+
     cursor: pointer;
+
     text-align: left;
 }
 
@@ -416,7 +424,7 @@ main{
     position: absolute;
 
     width: 400px;
-    max-height: 500px;
+    max-height: 300px;
 
     overflow-y: auto;
 
@@ -467,14 +475,22 @@ input[type="checkbox"]:checked {
 /* Иконка стрелки */
 .arrow {
     float: right;
+
+    /* padding-top: 5px; */
+    filter: invert(1);
 }
 
 /* Отображение выбранных элементов в кнопке */
 .selected-tags {
     display: inline-block;
+
     max-width: 80%;
+
     white-space: nowrap;
+
     overflow: hidden;
+
+    padding-top: 2px;
     text-overflow: ellipsis;
 }
 
@@ -743,20 +759,20 @@ input[type="checkbox"]:checked {
     width: 73%;
     height: 200px;
 
+    border-radius: 10px;
+
     overflow-x: scroll;
 }
 
 .card_container_body_frames_list::-webkit-scrollbar {
-    height: 3px;
+    height: 5px;
 }
 
-/*  Трек (дорожка) */
 .card_container_body_frames_list::-webkit-scrollbar-track {
     background: transparent;
     border-radius: 10px;
 }
 
-/*  Бегунок (Thumb) */
 .card_container_body_frames_list::-webkit-scrollbar-thumb {
     background: rgb(80, 80, 80); 
     border-radius: 10px;
@@ -784,8 +800,10 @@ input[type="checkbox"]:checked {
 
 .card_prew_pics{
     max-width: 80%;
-
     height: 100%;
+
+    border-radius: 10px;
+
     aspect-ratio: 16 / 9;
     object-fit: cover;
 
@@ -1105,8 +1123,8 @@ input[type="checkbox"]:checked {
 }
 
 .comment_user_image{
-    width: 75px; 
-    height: 75px;
+    width: 55px; 
+    height: 55px;
 
     border-radius: 100px;
 }
@@ -1468,7 +1486,7 @@ input[type="checkbox"]:checked {
 }
 
 .all_comments_dop_line{
-    width: 2px;
+    width: 0px;
 
     margin: 0 40px 0 35px;
 
@@ -1483,15 +1501,17 @@ input[type="checkbox"]:checked {
 .all_comments_container_block_header{
     display:flex;
 
-    column-gap: 25px;
+    column-gap: 20px;
 
-    padding: 3px 3px;
+    padding: 10px 5px;
 }
 
 .all_comments_container_block_header_block{
     display:flex;
     
-    column-gap: 25px;
+    align-items: center;
+
+    column-gap: 20px;
 }
 
 .all_comments_container_block_header_username{
@@ -1616,4 +1636,50 @@ input[type="checkbox"]:checked {
 
 .activebtn {
     filter: brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(0%) hue-rotate(218deg) brightness(97%) contrast(92%);
+}
+
+.grid_buttons{
+    fill: var(--fill-active);
+    width: 20px;
+    height: 20px;
+
+    cursor: pointer;
+
+    --fill-active: rgb(150, 150, 150);
+}
+
+.grid_buttons.active{
+    fill: var(--fill-active);
+    filter: brightness(0) brightness(55%) contrast(50%);
+}
+
+.filter_blocks_grid{
+    display: flex;
+    justify-content: space-between;
+
+    position: absolute;
+
+    width: 120px;
+
+    padding: 15px;
+    margin: 0 0 0 25px;
+
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: 20px;
+
+    background-color: rgb(30, 30, 30);
+}
+
+.hidden_description{
+    width: 700px;
+
+	display: -webkit-box;
+    -webkit-line-clamp: 6;
+	line-clamp: 6;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.hidden_description.hidden{
+	display: none;
 }

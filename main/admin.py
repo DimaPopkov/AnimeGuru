@@ -17,7 +17,7 @@ from django.db.models.functions import TruncDay
 from datetime import timedelta
 
 from django.contrib import admin
-from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog, AiMessages
+from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog, AiMessages, Profile
 
 # Register your models here.
 
@@ -194,4 +194,8 @@ class CommentActionAdmin(ModelAdmin):
 
 @admin.register(AiMessages)
 class AiMessagesAdmin(ModelAdmin):
+    pass
+
+@admin.register(Profile)
+class ProfileAdmin(ModelAdmin):
     pass
