@@ -834,6 +834,14 @@ input[type="checkbox"]:checked {
     display: block;
     margin: 0;
     pointer-events: auto;
+
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+.swiper-slide img:hover {
+    height: 215px;
+    margin-bottom: 0;
+    position: relative; 
 }
 
 
