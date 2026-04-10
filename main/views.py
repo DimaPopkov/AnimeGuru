@@ -8,7 +8,7 @@ from django.core.cache import cache
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages
+from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort
 from .forms import ProductForm
 import re, json, requests, Levenshtein
 
@@ -32,10 +32,11 @@ def main(request):
     data = {
         'title' : 'Основная страница',
         'categories' : Category.objects.all().order_by('-name'),
-        'products' : allProducts,
+        'products' : allProducts.order_by('-id'),
         'tags': Tags.objects.all().order_by('name'),
         'status': Allstatus,
-        'theme': theme
+        'theme': theme,
+        'sort': Sort.objects.all().order_by('name'),
     }
         
     return render(request, 'main/main.html', data)
@@ -113,11 +114,26 @@ def filter(request):
     else:
         final_products = products
 
-    filter_data = [category_id, tags_ids, status_id]
+    # Фильтр по сортировке
+    sort_id = request.GET.get('sort')
+    if sort_id:
+        sort = Sort.objects.get(id=sort_id)
+        if(sort_id == '2'): # Сортировка по рейтингу
+            final_products = final_products.order_by('-rating')
+            pass
+        if(sort_id == '4'): # Сортировка по новизне
+            final_products = final_products.order_by('-season')
+            pass
+        if(sort_id == '3'): # Сортировка по дате добавления
+            final_products = final_products.order_by('-id')
+            pass
+
+    filter_data = [category_id, tags_ids, status_id, sort_id]
 
     selected_category = category_id
     selected_tags = tags_ids
     selected_status = status_id
+    selected_sort = sort_id
 
     context = {
         'title' : 'Основная страница',
@@ -128,6 +144,7 @@ def filter(request):
         'selected_category': selected_category,
         'selected_tags': selected_tags,
         'selected_status': selected_status,
+        'selected_sort': selected_sort,
     }
     
     return render(request, 'main/main.html', context)

@@ -1,16 +1,16 @@
 html {
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
   -ms-overflow-style: none;
 
   height: 100%;
 }
 
 html::-webkit-scrollbar {
-  display: none;
+  /* display: none; */
 }
 
 body {
-  -ms-overflow-style: none;
+  /* -ms-overflow-style: none; */
 }
 
 
@@ -47,6 +47,10 @@ body{
     width: 100%;
     min-height: 100vh;
     height: auto;
+}
+
+select:focus {
+    outline: none;
 }
 
 .main_items_background{
@@ -288,6 +292,8 @@ main{
     border: 1px solid rgb(60, 60, 60);
 
     color: rgb(200, 200, 200);
+
+    cursor: pointer;
 }
 
 .find_by_name{
@@ -753,7 +759,7 @@ input[type="checkbox"]:checked {
 .card_container_body_frames_list{
     display: flex;
     
-    column-gap: 20px;
+    column-gap: 10px;
     row-gap: 20px;
 
     width: 73%;
@@ -762,10 +768,16 @@ input[type="checkbox"]:checked {
     border-radius: 10px;
 
     overflow-x: scroll;
+
+    user-select: none;
+}
+.card_container_body_frames_list:active {
+    cursor: grabbing;
 }
 
 .card_container_body_frames_list::-webkit-scrollbar {
-    height: 5px;
+    /* height: 5px; */
+    height: 0;
 }
 
 .card_container_body_frames_list::-webkit-scrollbar-track {
@@ -780,6 +792,48 @@ input[type="checkbox"]:checked {
 
 .card_container_body_frames_list::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+.mySwiper {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden !important;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+    display: block;
+}
+
+/* Настраиваем ленту внутри */
+.swiper-wrapper {
+    position: relative;
+    width: max-content !important;
+    min-width: 100%; 
+    height: 100%;
+    z-index: 1;
+    display: flex !important;
+    transition-property: transform;
+    box-sizing: content-box;
+}
+
+/* Настраиваем каждый слайд */
+.swiper-slide {
+    width: auto !important;
+    display: block;
+    flex-shrink: 0;
+
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.swiper-slide img {
+    height: 200px;
+    width: auto !important;
+    max-width: none !important;
+    display: block;
+    margin: 0;
+    pointer-events: auto;
 }
 
 

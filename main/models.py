@@ -49,6 +49,12 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Sort(models.Model):
+    name = models.CharField('Название', max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Tags(models.Model):
     name = models.CharField('Тэг', max_length=50)
@@ -78,8 +84,8 @@ class Product(models.Model):
     image = models.ImageField('Изображение', blank=True, null=True)
     season = models.DateField('Когда вышел (сезон)')
     tags = models.ManyToManyField(Tags, related_name='products')
-    rating = models.TextField('Рейтинг', max_length=3)
-    age_rating = models.IntegerField('Возрастной рейтинг')
+    rating = models.DecimalField('Рейтинг', max_digits=2, decimal_places=1, null=True, blank=True)
+    age_rating = models.IntegerField('Возрастной рейтинг', null=True, blank=True)
     product_manager = models.CharField('Студия выпуска', max_length=100, null=True)
     episods = models.TextField('Кол-во эпизодов', null=True)
     status = models.ForeignKey(Status, null=True, on_delete=models.SET_NULL, related_name='products')

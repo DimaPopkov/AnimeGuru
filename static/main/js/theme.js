@@ -16,7 +16,6 @@ function ChangeTheme(username){
     if(document.querySelector('.find_by_name')){
        find_by_name = document.querySelector('.find_by_name');
     }
-
     let filter = null;
     if (document.querySelector('.filter')){
         filter = document.querySelector('.filter');
@@ -76,6 +75,11 @@ function ChangeTheme(username){
         main_characters_img_block_fade = document.querySelectorAll('.main_characters_img_block_fade');
     }
 
+    let related_product_link = null;
+    if (document.querySelectorAll('.related_product_link')){
+        related_product_link = document.querySelectorAll('.related_product_link');
+    }
+
 
     if (input.checked != true){ 
         // Светлая тема
@@ -101,7 +105,7 @@ function ChangeTheme(username){
         }
 
         for (const element of textC_gr) {
-            element.style.setProperty('--pseudo-bg-color', 'linear-gradient(transparent, rgb(30, 30, 30))');
+            element.style.setProperty('--pseudo-bg-color', 'rgb(255, 255, 255)');
         }
 
         for (const element of filterList_tags) {
@@ -168,6 +172,10 @@ function ChangeTheme(username){
             }
         }
 
+        for (const element of related_product_link) {
+            element.style.color = 'rgb(50, 50, 50)';
+        }
+
         if (main_characters_img_block_fade != null){
             for (const element of main_characters_img_block_fade) {
                 element.style.background = 'linear-gradient(to right, rgba(255, 255, 255, 0), rgb(255, 255, 255))';
@@ -205,7 +213,7 @@ function ChangeTheme(username){
         }
 
         for (const element of textC_gr) {
-            element.style.setProperty('--pseudo-bg-color', 'linear-gradient(transparent, rgb(30, 30, 30))');
+            element.style.setProperty('--pseudo-bg-color', 'rgb(30, 30, 30)');
         }
 
         for (const element of filterList_tags) {
@@ -274,6 +282,10 @@ function ChangeTheme(username){
                 element.style.border = '1px solid rgb(80, 80, 80)';
                 element.style.color = 'rgb(200, 200, 200)';
             }
+        }
+
+        for (const element of related_product_link) {
+            element.style.color = 'rgb(200, 200, 200)';
         }
 
         if (main_characters_img_block_fade != null){

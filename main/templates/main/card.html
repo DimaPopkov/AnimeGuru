@@ -149,22 +149,28 @@
                     <h3> Трейлер </h3>
                 {% endif %}    
             </div>
-            <div class="card_container_body_frames">
-                {% if product.trailer %}
-                    <list class="card_container_body_frames_list" id="card_prew_pics_list">   
-                {% else %}
-                    <list class="card_container_body_frames_list" style="width: 100%" id="card_prew_pics_list">   
-                {% endif %}      
-                    {% for element in pics %}
-                        <img class="card_prew_pics" src="{{ element.image.url }}" style="width:100%" id="{{ element.id }}">             
-                    {% endfor %}
-                </list>
+            <div class = "card_container_body_frames">
+                <div class = "swiper mySwiper">
+                    {% if product.trailer %}
+                        <list class="card_container_body_frames_list swiper-wrapper" id="card_prew_pics_list">   
+                    {% else %}
+                        <list class="card_container_body_frames_list swiper-wrapper" style="width: 100%" id="card_prew_pics_list">   
+                    {% endif %}      
+                        {% for element in pics %}
+                            <div class="swiper-slide">
+                                <img class="card_prew_pics" src="{{ element.image.url }}" style="width:100%" id="{{ element.id }}" loading="lazy">
+                                <div class="swiper-lazy-preloader"></div> 
+                            </div>      
+                        {% endfor %}
+                        </list>
 
-                {% if product.trailer %}
-                    <div class="trailer">
-                        <iframe class="trailer_frame" src="https://www.youtube.com/embed/rJFZ_s0R4dQ" title="Bleach / Change (Nika Lenina Russian TV Art Version)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                {% endif %}
+                        <div class="swiper-scrollbar"></div>
+                    {% if product.trailer %}
+                        <div class="trailer">
+                            <iframe class="trailer_frame" src="https://www.youtube.com/embed/rJFZ_s0R4dQ" title="Bleach / Change (Nika Lenina Russian TV Art Version)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
 
@@ -707,13 +713,45 @@
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    <h4> Пока нет комментариев </h4>
+                    <div style="width: 100%; height: 300px; text-align: center; align-content: center;">
+                        <h3> Пока нет комментариев </h3>
+                    </div>
                 {% endif %}
             </div>
         </div>
     </div>  
 
     <script>
+        window.addEventListener('load', () => {
+            try {
+                const swiper = new Swiper(".mySwiper", {
+                    slidesPerView: "auto",
+                    spaceBetween: 0,
+                    freeMode: true,
+                    roundLengths: true,
+                    grabCursor: true,
+                    observer: true,
+                    observeParents: true,
+                    watchSlidesProgress: true,
+                    updateOnImagesReady: true,
+                    scrollbar: {
+                        el: ".swiper-scrollbar",
+                        draggable: true,
+                    },
+                    lazy: {
+                        loadPrevNext: true,
+                        loadPrevNextAmount: 3,
+                    },
+                    resistance: true,
+                    resistanceRatio: 0,
+                    slidesOffsetAfter: 75,
+                });
+                console.log("Swiper успешно запущен!");
+            } catch (error) {
+                console.error("Ошибка при запуске Swiper:", error);
+            }
+        });
+
         {% if most_popular_comment.user_rating != null %}
             const userRating = {{ most_popular_comment.user_rating }};
 
