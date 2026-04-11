@@ -81,6 +81,20 @@ function ChangeTheme(username){
         related_product_link = document.querySelectorAll('.related_product_link');
     }
 
+    let all_comments_container = null;
+    if (document.querySelectorAll('.all_comments_container')){
+        all_comments_container = document.querySelectorAll('.all_comments_container');
+    }
+
+    let answer = null;
+    if (document.querySelectorAll('.answer')){
+        answer = document.querySelectorAll('.answer');
+    }
+
+    let blur_overlay = null;
+    if (document.querySelectorAll('.blur-overlay')){
+        blur_overlay = document.querySelectorAll('.blur-overlay');
+    }
 
     if (input.checked != true){ 
         // Светлая тема
@@ -194,6 +208,25 @@ function ChangeTheme(username){
         if (text_fix != null){
             for (const element of text_fix) {
                 element.style.color = 'rgb(0, 0, 0)';
+            }
+        }
+
+        if (all_comments_container != null){
+            for (const element of all_comments_container) {
+                element.style.setProperty('--pseudo-comment-border-color', 'rgb(205, 205, 205)');
+            }
+        }
+
+        if (answer != null){
+            for (const element of answer) {
+                element.style.setProperty('--pseudo-comment-border-color', 'rgb(205, 205, 205)');
+            }
+        }
+
+        if (blur_overlay != null){
+            for (const element of blur_overlay) {
+                element.style.setProperty('--psuedo-perescaz-overlay-color', 'rgb(255, 255, 255)');
+                element.style.color = 'rgb(40, 40, 40)';
             }
         }
 
@@ -312,6 +345,25 @@ function ChangeTheme(username){
         if (text_fix != null){
             for (const element of text_fix) {
                 element.style.color = 'rgb(200, 200, 200)';
+            }
+        }
+
+        if (all_comments_container != null){
+            for (const element of all_comments_container) {
+                element.style.setProperty('--pseudo-comment-border-color', 'rgb(45, 45, 45)');
+            }
+        }
+
+        if (answer != null){
+            for (const element of answer) {
+                element.style.setProperty('--pseudo-comment-border-color', 'rgb(45, 45, 45)');
+            }
+        }
+
+        if (blur_overlay != null){
+            for (const element of blur_overlay) {
+                element.style.setProperty('--psuedo-perescaz-overlay-color', 'rgb(30, 30, 30)');
+                element.style.color = 'rgb(255, 255, 255)';
             }
         }
 

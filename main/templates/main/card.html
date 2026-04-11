@@ -551,9 +551,9 @@
         
                                 {% for element2 in comments %}
                                     {% if element2.locateZ != "0" and element2.parentId == element.id %}
-                                        <div style="width: 100%; display: flex;">
+                                        <div style="width: 100%; display: flex;" class="answer">
                                             <div class="all_comments_dop_line"></div>
-                                            <div class="all_comments_container_block" style="width: 100%; padding-top: 15px;">
+                                            <div class="all_comments_container_block" style="width: 100%;">
                                                 <div class="all_comments_container_block_header">
                                                     <div class="all_comments_container_block_header_block">
                                                         {% if element2.user_image and element2.user_image != 'avatars/null_avatar.png' %}
@@ -626,7 +626,7 @@
                                                 {% for element3 in comments %}
                                                     {% if element3.locateZ != 0 and element3.locateZ != 1 %}
                                                         {% if element3.parentId == element2.id %}
-                                                            <div style="width: 100%; display: flex;">
+                                                            <div style="width: 100%; display: flex;" class="answer">
                                                                 <div class="all_comments_dop_line"></div>
                                                                 <div class="all_comments_container_block" style="width: 100%;">
                                                                     <div class="all_comments_container_block_header">
