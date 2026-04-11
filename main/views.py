@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
-from django.db.models import OuterRef, Subquery, FileField
+from django.db.models import OuterRef, Subquery, FileField, F
 from django.core.cache import cache
 
 from django.contrib.auth.models import User
@@ -373,8 +373,8 @@ def card(request, product_name):
                     comment.my_state = 1
                 break
 
-    zipped_items = list(zip(comments, focus_comment_state))
-    print(zipped_items)
+    # zipped_items = list(zip(comments, focus_comment_state))
+    # print(zipped_items)
 
     context = {
         'title' : selected_product.name,
@@ -545,99 +545,70 @@ def delete_comments(request, product_name):
     return redirect(url_to_redirect_to)
 
 def update_comment_state(request, comment_id):
-    if request.method == 'POST':      
-        try:
-            action = request.POST.get("action_ty")
-            product_name = request.POST.get("product_name")
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
+    
+    try:
+        action = request.POST.get("action_ty")
+        # Получаем комментарий один раз (без аннотации пока)
+        comment = get_object_or_404(Comments, id=comment_id)
+        
+        # Получаем или создаем действие пользователя
+        existing_action, created = CommentAction.objects.get_or_create(
+            user=request.user, 
+            comment=comment,
+            defaults={'action_type': 'none'}
+        )
 
-            AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-            comments = get_object_or_404(AllComments, id=comment_id)
-            try:
-                existing_action = CommentAction.objects.get(user=request.user, comment=comments)
-            except: 
-                existing_action = CommentAction.objects.create(user=request.user, comment=comments, action_type='none')
+        old_type = existing_action.action_type
+        new_type = action # 'like' или 'dislike'
 
-            existing_action_user = existing_action.user
-            existing_action_comment = existing_action.comment
-            existing_action_action_type = existing_action.action_type
-
-            if action == "like":
-                if existing_action and existing_action.action_type == "like":
-                    existing_action.action_type = "none"
-                    existing_action.save()
-
-                    comments.like_count -= 1
-                    comments.save()
-
-                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                    comments = get_object_or_404(AllComments, id=comment_id)      
-
-                elif existing_action and existing_action.action_type == "dislike":
-                    existing_action.action_type = "like"
-                    existing_action.save()
-
-                    comments.dislike_count -= 1
-                    comments.like_count += 1 # Увеличиваем лайк
-
-                    comments.save()
-
-                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                    comments = get_object_or_404(AllComments, id=comment_id)
-                else:
-                    existing_action.action_type = 'like'
-                    existing_action.save()
-
-                    comments.like_count += 1
-                    comments.save()
-
-                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                    comments = get_object_or_404(AllComments, id=comment_id)
-
-            elif action == "dislike":
-                if existing_action and existing_action.action_type == "dislike":
-                    existing_action.action_type = "none"
-                    existing_action.save()
-
-                    comments.dislike_count -= 1
-                    comments.save()
-
-                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                    comments = get_object_or_404(AllComments, id=comment_id)
-
-                elif existing_action and existing_action.action_type == "like":
-                    # Пользователь сначала лайкнул, теперь дизлайкает
-                    existing_action.action_type = "dislike"
-                    existing_action.save()
-
-                    comments.like_count -= 1
-                    comments.dislike_count += 1 # Увеличиваем дизлайк
-                    comments.save()
-
-                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                    comments = get_object_or_404(AllComments, id=comment_id)
-                
-                else:
-                    existing_action.action_type = 'dislike'
-                    existing_action.save()
-
-                    comments.dislike_count += 1
-                    comments.save()
-
-                    AllComments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
-                    comments = get_object_or_404(AllComments, id=comment_id)
+        if action == "like":
+            if old_type == "like":
+                # Отмена лайка
+                existing_action.action_type = "none"
+                comment.like_count = F('like_count') - 1
+            elif old_type == "dislike":
+                # Переключение с дизлайка на лайк
+                existing_action.action_type = "like"
+                comment.dislike_count = F('dislike_count') - 1
+                comment.like_count = F('like_count') + 1
             else:
-                return JsonResponse({'error': 'Invalid action'}, status=400)
-        except:
-            return JsonResponse({'error': 'Failed to load action'}, status=400)
+                # Новый лайк
+                existing_action.action_type = "like"
+                comment.like_count = F('like_count') + 1
+
+        elif action == "dislike":
+            if old_type == "dislike":
+                # Отмена дизлайка
+                existing_action.action_type = "none"
+                comment.dislike_count = F('dislike_count') - 1
+            elif old_type == "like":
+                # Переключение с лайка на дизлайк
+                existing_action.action_type = "dislike"
+                comment.like_count = F('like_count') - 1
+                comment.dislike_count = F('dislike_count') + 1
+            else:
+                # Новый дизлайк
+                existing_action.action_type = "dislike"
+                comment.dislike_count = F('dislike_count') + 1
+
+        # Сохраняем изменения в базе
+        existing_action.save()
+        comment.save()
+
+        # Теперь ОДИН РАЗ обновляем объект, чтобы получить актуальные числа и net_likes
+        comment.refresh_from_db()
+        current_net_likes = comment.like_count - comment.dislike_count
 
         return JsonResponse({
-            'comment': "",
             'status': 'success',
-            'net_likes': comments.net_likes,
+            'net_likes': current_net_likes,
             'existing_action': existing_action.action_type
         })
-    else:
-        return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
     
 def profile_change_avatar(request):
     if request.method == 'POST':

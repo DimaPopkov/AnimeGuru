@@ -352,15 +352,15 @@ function ChangeTheme(username){
     })
     .then(responce => responce.json())
     .then(responce => {
-        console.log(responce)
+        // console.log(responce)
     })
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     courent_theme = window.currentTheme;
     username = window.username;
-    console.log(username);
-    console.log(page_style, courent_theme);
+    // console.log(username);
+    // console.log(page_style, courent_theme);
     if (page_style != courent_theme && courent_theme){
         ChangeTheme(username);
     }

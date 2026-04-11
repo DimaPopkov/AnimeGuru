@@ -742,9 +742,9 @@
                     resistanceRatio: 0,
                     slidesOffsetAfter: 75,
                 });
-                console.log("Swiper успешно запущен!");
+                // console.log("Swiper успешно запущен!");
             } catch (error) {
-                console.error("Ошибка при запуске Swiper:", error);
+                // console.error("Ошибка при запуске Swiper:", error);
             }
         });
 
@@ -940,14 +940,14 @@
                                 }
 
                                 if (data.existing_action == "like"){
-                                    likeButton.classList.add("activebtn")
-                                    dislikeButton.classList.remove("activebtn")
+                                    likeButton.src = "/static/img/active_like.png";
+                                    dislikeButton.src = "/static/img/dislike.png";
                                 } else if (data.existing_action  == "dislike") {
-                                    likeButton.classList.remove("activebtn")
-                                    dislikeButton.classList.add("activebtn")
+                                    likeButton.src = "/static/img/like.png";
+                                    dislikeButton.src = "/static/img/active_dislike.png";
                                 } else {
-                                    likeButton.classList.remove("activebtn")
-                                    dislikeButton.classList.remove("activebtn")
+                                    likeButton.src = "/static/img/like.png";
+                                    dislikeButton.src = "/static/img/dislike.png";
                                 }
                             }
                         } else {
