@@ -330,8 +330,11 @@
         {% endif %}
 
         {% if product.season_info and product.season_info != "null" %}
-            <div class="season_info">
-                {{ product.season_info|safe }}
+            <div class="season_info blur-wrapper" id="seasonBlock" onclick="revealSeason()">
+                <div class="blur-content" id="seasonContent">
+                    {{ product.season_info|safe }}
+                </div>
+                <div class="blur-overlay font24" id="seasonOverlay">Показать пересказ</div>
             </div>
         {% endif %}
 
@@ -456,7 +459,7 @@
             
             <div class="all_comments_container">
                 {% if comments and comments != None %}
-                    {% for element, state in zipped_items %}
+                    {% for element in comments %}
                         {% if element.locateZ == 0 %}
                             <div class="all_comments_container_block">
                                 <div class="all_comments_container_block_header">
@@ -492,19 +495,17 @@
                                     {{ element.user_comment }}
                                 </div>
                                 <div class="comment_buttons"> 
-                                    {% if element.net_likes > 0 %}
-                                        <span style="color: green; padding-right: 5px;" id="like_count_{{ element.id }}">
-                                    {% elif element.net_likes < 0 %}
-                                        <span style="color: red; padding-right: 5px;" id="like_count_{{ element.id }}">
-                                    {% else %}
-                                        <span style="color: white; padding-right: 5px;" id="like_count_{{ element.id }}">
-                                    {% endif %}
-                                            {{ element.net_likes }} 
-                                        </span>
+                                    <span id="like_count_{{ element.id }}" style="padding-right: 5px; color: 
+                                    {% if element.net_likes > 0 %} green 
+                                    {% elif element.net_likes < 0 %} red 
+                                    {% else %} white 
+                                    {% endif %};">
+                                        {{ element.net_likes }} 
+                                    </span>
 
                                     <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element.id %}" method="POST">
                                         {% csrf_token %}
-                                        {% if state == 2 %}
+                                        {% if element.my_state == 2 %}
                                             <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
                                                 value="{{ element.like_count }}" 
                                                 id="like_button_{{ element.id }}"
@@ -518,7 +519,7 @@
                                                 data-action="like">
                                         {% endif %}
 
-                                        {% if state == 1 %}
+                                        {% if element.my_state == 1 %}
                                             <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
                                                 value="{{ element.dislike_count }}"
                                                 id="dislike_button_{{ element.id }}"
@@ -548,7 +549,7 @@
                                     </div>
                                 </div>
         
-                                {% for element2, state2 in zipped_items2 %}
+                                {% for element2 in comments %}
                                     {% if element2.locateZ != "0" and element2.parentId == element.id %}
                                         <div style="width: 100%; display: flex;">
                                             <div class="all_comments_dop_line"></div>
@@ -567,19 +568,17 @@
                                                     {{ element2.user_comment }}
                                                 </div>
                                                 <div class="comment_buttons">
-                                                    {% if element2.net_likes > 0 %}
-                                                        <span style="color: green; padding-right: 5px;" id="like_count_{{ element2.id }}">
-                                                    {% elif element2.net_likes < 0 %}
-                                                        <span style="color: red; padding-right: 5px;" id="like_count_{{ element2.id }}">
-                                                    {% else %}
-                                                        <span style="color: white; padding-right: 5px;" id="like_count_{{ element2.id }}">
-                                                    {% endif %}
-                                                            {{ element2.net_likes }} 
-                                                        </span>
+                                                    <span id="like_count_{{ element2.id }}" style="padding-right: 5px; color: 
+                                                    {% if element2.net_likes > 0 %} green 
+                                                    {% elif element2.net_likes < 0 %} red 
+                                                    {% else %} white 
+                                                    {% endif %};">
+                                                        {{ element2.net_likes }} 
+                                                    </span>
 
                                                     <form class="comment_buttons" id="comment-{{ element2.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element2.id %}" method="POST">
                                                         {% csrf_token %}
-                                                        {% if state2 == 2 %}
+                                                        {% if element2.my_state == 2 %}
                                                             <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
                                                                 value="{{ element2.like_count }}" 
                                                                 id="like_button_{{ element2.id }}"
@@ -593,7 +592,7 @@
                                                                 data-action="like">
                                                         {% endif %}
 
-                                                        {% if state2 == 1 %}
+                                                        {% if element2.my_state == 1 %}
                                                             <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
                                                                 value="{{ element2.dislike_count }}"
                                                                 id="dislike_button_{{ element2.id }}"
@@ -624,7 +623,7 @@
                                                 </div>
                                                 
 
-                                                {% for element3, state3 in zipped_items3 %}
+                                                {% for element3 in comments %}
                                                     {% if element3.locateZ != 0 and element3.locateZ != 1 %}
                                                         {% if element3.parentId == element2.id %}
                                                             <div style="width: 100%; display: flex;">
@@ -644,20 +643,17 @@
                                                                         {{ element3.user_comment }}
                                                                     </div>
                                                                     <div class="comment_buttons">
-                                                                        
-                                                                        {% if element3.net_likes > 0 %}
-                                                                            <span style="color: green; padding-right: 5px;" id="like_count_{{ element3.id }}">
-                                                                        {% elif element3.net_likes < 0 %}
-                                                                            <span style="color: red; padding-right: 5px;" id="like_count_{{ element3.id }}">
-                                                                        {% else %}
-                                                                            <span style="color: white; padding-right: 5px;" id="like_count_{{ element3.id }}">
-                                                                        {% endif %}
-                                                                                {{ element3.net_likes }} 
-                                                                            </span>
+                                                                        <span id="like_count_{{ element3.id }}" style="padding-right: 5px; color: 
+                                                                        {% if element3.net_likes > 0 %} green 
+                                                                        {% elif element3.net_likes < 0 %} red 
+                                                                        {% else %} white 
+                                                                        {% endif %};">
+                                                                            {{ element3.net_likes }} 
+                                                                        </span>
 
                                                                         <form class="comment_buttons" id="comment-{{ element3.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element3.id %}" method="POST">
                                                                             {% csrf_token %}
-                                                                            {% if state3 == 2 %}
+                                                                            {% if element3.my_state == 2 %}
                                                                                 <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
                                                                                     value="{{ element3.like_count }}" 
                                                                                     id="like_button_{{ element3.id }}"
@@ -671,7 +667,7 @@
                                                                                     data-action="like">
                                                                             {% endif %}
 
-                                                                            {% if state2 == 1 %}
+                                                                            {% if element3.my_state == 1 %}
                                                                                 <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
                                                                                     value="{{ element3.dislike_count }}"
                                                                                     id="dislike_button_{{ element3.id }}"
@@ -686,7 +682,7 @@
                                                                             {% endif %}
                                                                         </form>
 
-                                                                        <!-- <div class="comment_answer">
+                                                                        <div class="comment_answer">
                                                                             <button class="comment_buttons_button_otvet" value="{{ element3 }}"> Ответить </button>
                                                                             <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
                                                                                 {% csrf_token %}
@@ -698,7 +694,7 @@
                                                                                 <input type="hidden" name="rating" value="0"></input>
                                                                                 <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
                                                                             </form> 
-                                                                        </div> -->
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -846,7 +842,7 @@
         /* ----------   3. Функция закрытия   ---------- */
         function closeLightbox() {
             overlay.classList.remove('active');              // скрываем
-            overlay.innerHTML = '';                           // убираем изображение
+            overlay.innerHTML = '';                          // убираем изображение
         }
 
         /* ----------   4. Действие on Клик по любой картинке  ---------- */
@@ -897,13 +893,18 @@
                     const commentId = this.dataset.commentId;
                     const action = this.dataset.action;
                     const product_name = "{{product.name}}";
-                    const likeCountSpan = document.getElementById(`like_count_${commentId}`);
 
-                    const likeButton = document.getElementById(`like_button_${commentId}`)
-                    const dislikeButton = document.getElementById(`dislike_button_${commentId}`)
+                    // const likeCountSpan = document.getElementById(`like_count_${commentId}`);
+                    // const likeButton = document.getElementById(`like_button_${commentId}`);
+                    // const dislikeButton = document.getElementById(`dislike_button_${commentId}`);
+
+                    const container = this.closest('.comment_buttons');
+                    const likeCountSpan = document.getElementById(`like_count_${commentId}`);
+                    const likeButton = container.querySelector('[data-action="like"]');
+                    const dislikeButton = container.querySelector('[data-action="dislike"]');
+
 
                     const filterForm = document.getElementById(`comment-${commentId}`);
-
                     const csrftoken = getCookie('csrftoken');
                    
                     const formData = new URLSearchParams();
@@ -1234,6 +1235,15 @@
                 },
                 body: formData,
             })
+        }
+
+        function revealSeason() {
+            const block = document.getElementById('seasonBlock');
+            const overlay = document.getElementById('seasonOverlay');
+
+            block.classList.add('is-revealed');
+            
+            block.style.maxHeight = "100%"; 
         }
     </script>
 {% endblock %}

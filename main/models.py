@@ -77,9 +77,9 @@ class Weblinks(models.Model):
     
 class Product(models.Model):
     name = models.CharField('Название', max_length=100)
-    eng_name = models.CharField('Английское название', max_length=100, null=True)
+    eng_name = models.CharField('Английское название', max_length=100, null=True, blank=True)
     description = models.TextField('Описание')
-    season_info = models.TextField('Пересказ сезона:', null=True)
+    season_info = models.TextField('Пересказ сезона:', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     image = models.ImageField('Изображение', blank=True, null=True)
     season = models.DateField('Когда вышел (сезон)')
@@ -87,10 +87,10 @@ class Product(models.Model):
     rating = models.DecimalField('Рейтинг', max_digits=2, decimal_places=1, null=True, blank=True)
     age_rating = models.IntegerField('Возрастной рейтинг', null=True, blank=True)
     product_manager = models.CharField('Студия выпуска', max_length=100, null=True)
-    episods = models.TextField('Кол-во эпизодов', null=True)
+    episods = models.CharField('Кол-во эпизодов', null=True)
     status = models.ForeignKey(Status, null=True, on_delete=models.SET_NULL, related_name='products')
     trailer = models.URLField('Трейлер', blank=True, null=True)
-    links = models.ManyToManyField(Weblinks, related_name='links', null=True)
+    links = models.ManyToManyField(Weblinks, related_name='links', null=True, blank=True)
     main_characters = models.ManyToManyField('Characters', related_name='main_characters', null=True)
     characters = models.ManyToManyField('Characters', related_name='other_characters', null=True)
 

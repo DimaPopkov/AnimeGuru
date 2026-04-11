@@ -24,12 +24,12 @@
                 <div class="filter_main">
                     <h4 for="category">Фильтр:</h4><br>
 
-                    <div>
+                    <div class="sort-wrapper">
                         <label for="sort"> Сортировать по:</label>
-                        <select class="filter_category_filter main_items_background font16" name="sort" id="sort" style="width: auto; border: none; background: none; text-align: center;">
+                        <select class="font16 text_fix" name="sort" id="sort">
                             {% for element in sort %}
-                                <option value="{{ element.id }}" class="main_items_background" {% if filter_data.3 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
-                            {% endfor %}                      
+                                <option value="{{ element.id }}" class="main_items_background" {% if filter_data.3 == element.id|stringformat:"s" %} selected {% endif %}>{{ element.name }}</option>
+                            {% endfor %}
                         </select>
                     </div><br>
 
@@ -100,6 +100,8 @@
                                 {% if element.image %}
                                     {% if element.image.name %}
                                         <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                    {% elif element.image %}
+                                        <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
                                     {% else %}
                                         <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
                                     {% endif %}
@@ -139,6 +141,24 @@
             const sort = document.getElementById('sort');   
 
             console.log(activeStatus);
+
+            const element = document.querySelector('#sort');
+            const choices = new Choices(element, {
+                searchEnabled: false,
+                itemSelectText: '',
+                shouldSort: false,
+                renderSelectedChoices: 'always',
+                position: 'bottom',
+            });
+
+            // const element2 = document.querySelector('#category');
+            // const choices2 = new Choices(element2, {
+            //     searchEnabled: false,
+            //     itemSelectText: '',
+            //     shouldSort: false,
+            //     renderSelectedChoices: 'always',
+            //     position: 'bottom',
+            // });
 
             // Функция для отправки AJAX запроса и обновления списка товаров
             function updateProducts() {

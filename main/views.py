@@ -20,7 +20,7 @@ def main(request):
         theme = request.session.get('courent_theme', 'black')
         request.session['courent_theme'] = 'black'
 
-    print('Текущая тема: ', request.session.get('courent_theme', 'black'))
+    # print('Текущая тема: ', request.session.get('courent_theme', 'black'))
     allProducts = Product.objects.all()
     
     Allstatus = []
@@ -54,7 +54,7 @@ def courent_theme(request):
 def save_theme(request):
     courent_theme_name = request.POST.get('theme_content')
     request.session['courent_theme'] = courent_theme_name
-    print(courent_theme_name)
+    # print(courent_theme_name)
     return JsonResponse({'success': True, 'theme': courent_theme_name}, status=200)
 
 def create(request):
@@ -112,20 +112,19 @@ def filter(request):
                     final_products.append(product)
 
     else:
-        final_products = products
+        final_products = list(products)
 
     # Фильтр по сортировке
     sort_id = request.GET.get('sort')
     if sort_id:
-        sort = Sort.objects.get(id=sort_id)
         if(sort_id == '2'): # Сортировка по рейтингу
-            final_products = final_products.order_by('-rating')
+            final_products.sort(key=lambda x: x.rating, reverse=True)
             pass
         if(sort_id == '4'): # Сортировка по новизне
-            final_products = final_products.order_by('-season')
+            final_products.sort(key=lambda x: x.season, reverse=True)
             pass
         if(sort_id == '3'): # Сортировка по дате добавления
-            final_products = final_products.order_by('-id')
+            final_products.sort(key=lambda x: x.id, reverse=True)
             pass
 
     filter_data = [category_id, tags_ids, status_id, sort_id]
@@ -347,20 +346,32 @@ def card(request, product_name):
 
     focus_comment_state = []
 
+    # for comment in allComments:
+    #     for comment_action in allComments_state:
+    #         # print(comment_action.comment.name, "\n", comment.name)
+    #         if comment_action.comment.name == comment.name:
+    #             # print(comment_action.comment, "\n", comment)
+    #             if comment_action.action_type == "like":
+    #                 focus_comment_state.append(2)
+    #             elif comment_action.action_type == "dislike": 
+    #                 focus_comment_state.append(1)
+    #             else:
+    #                 focus_comment_state.append(0)
+    #     if focus_comment_state == []:
+    #         for element in allComments:
+    #             focus_comment_state.append(0)
+
     for comment in allComments:
-        for comment_action in allComments_state:
-            # print(comment_action.comment.name, "\n", comment.name)
-            if comment_action.comment.name == comment.name:
-                # print(comment_action.comment, "\n", comment)
-                if comment_action.action_type == "like":
-                    focus_comment_state.append(2)
-                elif comment_action.action_type == "dislike": 
-                    focus_comment_state.append(1)
-                else:
-                    focus_comment_state.append(0)
-        if focus_comment_state == []:
-            for element in allComments:
-                focus_comment_state.append(0)
+        comment.net_likes = comment.like_count - comment.dislike_count
+        comment.my_state = 0
+    
+        for action in allComments_state:
+            if action.comment_id == comment.id: 
+                if action.action_type == "like":
+                    comment.my_state = 2
+                elif action.action_type == "dislike":
+                    comment.my_state = 1
+                break
 
     zipped_items = list(zip(comments, focus_comment_state))
     print(zipped_items)
@@ -377,9 +388,9 @@ def card(request, product_name):
         'main_characters': MainCharacters,
         'characters': other_characters,
         'comments': allComments,
-        'zipped_items': zipped_items,
-        'zipped_items2': zipped_items,
-        'zipped_items3': zipped_items,
+        # 'zipped_items': zipped_items,
+        # 'zipped_items2': zipped_items,
+        # 'zipped_items3': zipped_items,
         'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,

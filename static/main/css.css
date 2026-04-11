@@ -18,6 +18,10 @@ p{
     margin-bottom: 0.5rem;
 }
 
+li{
+    margin-left: 25px;
+}
+
 /* fonts */
 .font16{
     font-size: 16px;
@@ -376,7 +380,7 @@ main{
     align-items: center;
 
     grid-template-columns: 200px 200px 200px;
-    grid-template-rows: 300px;
+    grid-template-rows: 200px;
 
     grid-auto-flow: row;
 }
@@ -430,7 +434,7 @@ main{
     position: absolute;
 
     width: 400px;
-    max-height: 300px;
+    max-height: 200px;
 
     overflow-y: auto;
 
@@ -541,7 +545,7 @@ input[type="checkbox"]:checked {
     margin-top: 80px;
     margin-left: calc(100% - 650px);
 
-    z-index: 1;
+    z-index: 100;
 }
 
 .hidden{
@@ -571,7 +575,7 @@ input[type="checkbox"]:checked {
 .AI_user_message_block_text{
     width: calc(100% - 20px - 43px);
     min-height: 36px;
-    max-height: 300px;
+    max-height: 200px;
     resize: none;
 
     margin: 10px;
@@ -985,7 +989,7 @@ input[type="checkbox"]:checked {
 
 .main_characters_img_block{
     width: 320px; 
-    height: 300px; 
+    height: 200px; 
     
     overflow: hidden; 
     
@@ -995,7 +999,7 @@ input[type="checkbox"]:checked {
 
 .main_characters_img_block_fade{
     width: 100px;
-    height: 300px;
+    height: 200px;
 
     position: absolute;
     margin-left: 220px;
@@ -1107,7 +1111,88 @@ input[type="checkbox"]:checked {
     display: inline-block;
 }
 
+.text_fix{
+    width: auto;
+    border: none;
+    background: none; 
+    text-align: center;
+    color: rgb(200, 200, 200);
+    cursor: pointer;
+    padding: 3px 3px;
+    border-radius: 10px;
+}
 
+/* -------- Choises.js (выпадающий список) -------------- */
+
+.sort-wrapper{
+    display: flex;
+
+    column-gap: 10px;
+}
+
+.choices {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+    user-select: none;         /* Standard */
+    cursor: pointer;
+}
+
+.choices__inner {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    display: inline-block;
+}
+
+.choices__list--single {
+    padding: 0 !important;
+    text-align: center;
+}
+
+.choices__list--dropdown {
+    background-color: rgb(50, 50, 50) !important;
+    border-radius: 12px !important;
+    margin-top: 5px !important;
+    margin-left: -15px !important;
+    overflow: hidden;
+
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+
+    position: absolute;
+}
+
+.choices__list--dropdown .choices__item.is-selected {
+    background-color: rgb(100, 100, 100) !important;
+}
+
+.choices:focus, 
+.choices__inner:focus,
+.choices__list--single:focus {
+    outline: none !important;
+    border: none !important;
+}
+
+.choices.is-open .choices__list--dropdown {
+    visibility: visible;
+    opacity: 1;
+    display: block !important;
+    transition: opacity 0.2s ease;
+}
+
+.choices__list--dropdown .choices__item {
+    padding: 5px 15px !important;
+    color: rgb(200, 200, 200);
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: rgb(100, 100, 100) !important;
+}
+
+/* ---------------------------- */
 
 .lightbox-overlay {
     position: fixed;
@@ -1183,6 +1268,83 @@ input[type="checkbox"]:checked {
 .season_info{
     padding: 0 15px;
 }
+
+/* ------ Блюр ------- */
+
+.blur-wrapper {
+    position: relative;
+    overflow: hidden;
+
+    max-height: 300px;
+    transition: max-height 0.8s ease-in-out;
+}
+
+.blur-content {
+    filter: blur(8px);
+    transition: filter 0.5s ease;
+    user-select: none;
+}
+
+.blur-overlay {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(100, 100, 100, 0.2);
+    /* background-color: rgba(255, 255, 255, 1); */
+
+    border-radius: 10px;
+
+    font-weight: 700;
+    color: #ffffff;
+
+    z-index: 2;
+
+    cursor: pointer;
+}
+
+.blur-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    box-shadow: inset 0 50px 80px 10px rgb(30, 30, 30),   /* Тень сверху */
+                inset 0 -50px 80px 10px rgb(30, 30, 30),  /* Тень снизу */
+                inset 35px 0 60px -10px rgb(30, 30, 30),  /* Тень слева */
+                inset -35px 0 60px -10px rgb(30, 30, 30); /* Тень справа */
+    z-index: 5;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.is-revealed .blur-content {
+    filter: blur(0);
+    user-select: text;
+}
+
+.is-revealed .blur-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.is-revealed .blur-wrapper {
+    max-height: 100% !important;
+    cursor: default;
+}
+
+/* ------------------- */
 
 .comment_user_image{
     width: 55px; 
@@ -1473,7 +1635,7 @@ input[type="checkbox"]:checked {
     flex-direction: column;
 
     width: auto;
-    height: 300px;
+    height: 200px;
 
     border: 1px solid grey;
     border-radius: 10px;

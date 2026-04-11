@@ -11,6 +11,7 @@ function ChangeTheme(username){
     let input = document.getElementById('theme_input');
     let img = document.getElementById('img');
     let main_items_background = document.getElementsByClassName('main_items_background');
+    let text_fix = document.getElementsByClassName('text_fix');
 
     let find_by_name = null;
     if(document.querySelector('.find_by_name')){
@@ -90,6 +91,7 @@ function ChangeTheme(username){
             element.style.color = "black";
             element.style.border =  "1px solid rgb(150, 150, 150)";
         }
+        
         if (filter != null || find_by_name != null){
             filter.style.background = "none";
             filter.style.border = "none";
@@ -186,6 +188,12 @@ function ChangeTheme(username){
             for (const element of filter_blocks_grid) {
                 element.style.background = 'rgb(255, 255, 255)';
                 element.style.border = '1px solid rgb(150, 150, 150)';
+            }
+        }
+
+        if (text_fix != null){
+            for (const element of text_fix) {
+                element.style.color = 'rgb(0, 0, 0)';
             }
         }
 
@@ -298,6 +306,12 @@ function ChangeTheme(username){
             for (const element of filter_blocks_grid) {
                 element.style.background = 'rgb(30, 30, 30)';
                 element.style.border = '1px solid rgb(60, 60, 60)';
+            }
+        }
+
+        if (text_fix != null){
+            for (const element of text_fix) {
+                element.style.color = 'rgb(200, 200, 200)';
             }
         }
 
