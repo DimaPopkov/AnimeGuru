@@ -321,7 +321,7 @@ def card(request, product_name):
             break
 
     related_products = []
-    similarity_threshold = 0.5 
+    similarity_threshold = 0.7 
 
     for product in all_products:
         # Пропускаем сам целевой продукт

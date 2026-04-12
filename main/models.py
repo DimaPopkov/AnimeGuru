@@ -83,16 +83,16 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     image = models.ImageField('Изображение', blank=True, null=True)
     season = models.DateField('Когда вышел (сезон)')
-    tags = models.ManyToManyField(Tags, related_name='products')
+    tags = models.ManyToManyField(Tags, related_name='products', blank=True, null=True)
     rating = models.DecimalField('Рейтинг', max_digits=2, decimal_places=1, null=True, blank=True)
     age_rating = models.IntegerField('Возрастной рейтинг', null=True, blank=True)
-    product_manager = models.CharField('Студия выпуска', max_length=100, null=True)
+    product_manager = models.CharField('Студия выпуска', max_length=100, null=True, blank=True)
     episods = models.CharField('Кол-во эпизодов', null=True)
     status = models.ForeignKey(Status, null=True, on_delete=models.SET_NULL, related_name='products')
     trailer = models.URLField('Трейлер', blank=True, null=True)
     links = models.ManyToManyField(Weblinks, related_name='links', null=True, blank=True)
-    main_characters = models.ManyToManyField('Characters', related_name='main_characters', null=True)
-    characters = models.ManyToManyField('Characters', related_name='other_characters', null=True)
+    main_characters = models.ManyToManyField('Characters', related_name='main_characters', null=True, blank=True)
+    characters = models.ManyToManyField('Characters', related_name='other_characters', null=True, blank=True)
 
     def __str__(self):
         return str(self.name) if self.name else ""
