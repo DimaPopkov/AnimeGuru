@@ -13,26 +13,33 @@ function ChangeTheme(username){
     let main_items_background = document.getElementsByClassName('main_items_background');
     let text_fix = document.getElementsByClassName('text_fix');
 
+    let login_pic = document.getElementById('login_pic');
+
     let find_by_name = null;
     if(document.querySelector('.find_by_name')){
        find_by_name = document.querySelector('.find_by_name');
     }
+
     let filter = null;
     if (document.querySelector('.filter')){
         filter = document.querySelector('.filter');
     }
+
     let btn_logo = document.getElementById('btn_logo');
     if (username){
         let nickname = document.getElementById('nickname');
     }
+
     let fonts = null;
     if (document.querySelectorAll('.font')){
         fonts = document.querySelectorAll('.font');
     }
+
     let auth_form_input = null;
     if (document.querySelectorAll('.auth_form_input')){
         auth_form_input = document.querySelectorAll('.auth_form_input');
     }
+
     let auth_button = null;
     if (document.querySelectorAll('.auth_button')){
         auth_button = document.querySelectorAll('.auth_button');
@@ -49,6 +56,26 @@ function ChangeTheme(username){
     let filter_blocks_grid = null;
     if (document.querySelectorAll('.filter_blocks_grid')){
         filter_blocks_grid = document.querySelectorAll('.filter_blocks_grid');
+    }
+
+    let choices__list = null;
+    if (document.querySelectorAll('.choices__list--dropdown')){
+        choices__list = document.querySelectorAll('.choices__list--dropdown');
+    }
+
+    let select_sort = null;
+    if (document.querySelectorAll('.choices__list')){
+        select_sort = document.querySelectorAll('.choices__list');
+    }
+
+    let dropdown_content = null;
+    if (document.querySelectorAll('.dropdown-content')){
+        dropdown_content = document.querySelectorAll('.dropdown-content');
+    }
+
+    let dropdown_content_linear_gr = null;
+    if (document.querySelectorAll('.dropdown-content-linear-gr')){
+        dropdown_content_linear_gr = document.querySelectorAll('.dropdown-content-linear-gr');
     }
 
     let you_container_dop = null;
@@ -96,9 +123,53 @@ function ChangeTheme(username){
         blur_overlay = document.querySelectorAll('.blur-overlay');
     }
 
+    let profile_container_header = null;
+    if (document.querySelectorAll('.profile_container_header')){
+        profile_container_header = document.querySelectorAll('.profile_container_header');
+    }
+
+    let profile_container_header_block = null;
+    if (document.querySelectorAll('.profile_container_header_block')){
+        profile_container_header_block = document.querySelectorAll('.profile_container_header_block');
+    }
+
+    let header = null;
+    if (document.querySelectorAll('.header')){
+        header = document.querySelectorAll('.header');
+    }
+
+    let profile_container_favourites_block_comment = null;
+    if (document.querySelectorAll('.profile_container_favourites_block_comment')){
+        profile_container_favourites_block_comment = document.querySelectorAll('.profile_container_favourites_block_comment');
+    }
+
+    let profile_container_header_block_info_flex_vis = null;
+    if (document.querySelectorAll('.profile_container_header_block_info_flex_vis')){
+        profile_container_header_block_info_flex_vis = document.querySelectorAll('.profile_container_header_block_info_flex_vis');
+    }
+
+    let changeAvatarBtn = null;
+    if (document.getElementById('changeAvatarBtn')){
+        changeAvatarBtn = document.getElementById('changeAvatarBtn');
+    }
+
+    let h3 = null;
+    if (document.querySelectorAll('h3')){
+        h3 = document.querySelectorAll('h3');
+    }
+
+    let hr = null;
+    if (document.querySelectorAll('hr')){
+        hr = document.querySelectorAll('hr');
+    }
+
     if (input.checked != true){ 
         // Светлая тема
-        img.src = img.dataset.sun;     
+        img.src = img.dataset.sun;
+        
+        login_pic.style.filter = 'invert(0)';
+
+        document.body.classList.remove('dark-theme');
         
         for (const element of main_items_background) {
             element.style.backgroundColor = "white";
@@ -205,6 +276,22 @@ function ChangeTheme(username){
             }
         }
 
+        if (choices__list != null){
+            for (const element of choices__list) {
+                element.style.backgroundColor = 'rgb(255, 255, 255)';
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (select_sort != null){
+            for (const element of select_sort) {
+                element.style.setProperty('--pseudo-list-dropdown-bg', 'rgb(255, 255, 255)');
+                element.style.setProperty('--pseudo-list-dropdown-selected', 'rgb(200, 200, 200)');
+                element.style.setProperty('--pseudo-list-dropdown-is-highlighted', 'rgb(200, 200, 200)');
+                element.style.setProperty('--pseudo-list-dropdown-choices-item-color', 'rgb(30, 30, 30)');
+            }
+        }
+
         if (text_fix != null){
             for (const element of text_fix) {
                 element.style.color = 'rgb(0, 0, 0)';
@@ -230,14 +317,86 @@ function ChangeTheme(username){
             }
         }
 
+        if (profile_container_header != null){
+            for (const element of profile_container_header) {
+                element.style.backgroundColor = 'rgb(255, 255, 255)';
+                element.style.border = '1px solid rgb(150, 150, 150)';
+            }
+        }
+
+        if (profile_container_header_block != null){
+            for (const element of profile_container_header_block) {
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (header != null){
+            for (const element of header) {
+                element.style.border = 'none';
+                element.style.borderBottom = '1px solid rgb(150, 150, 150)';
+            }
+        }
+
+        if (profile_container_favourites_block_comment != null){
+            for (const element of profile_container_favourites_block_comment) {
+                element.style.backgroundColor = 'rgb(255, 255, 255)';
+                element.style.border = '1px solid rgb(150, 150, 150)';
+                element.style.color = 'rgb(50, 50, 50)';
+            }
+        }
+
+        if (profile_container_header_block_info_flex_vis != null){
+            for (const element of profile_container_header_block_info_flex_vis) {
+                element.style.backgroundColor = 'rgb(230, 230, 230)';
+                element.style.border = '1px solid rgb(150, 150, 150)';
+            }
+        }
+
+        if (changeAvatarBtn != null){
+            changeAvatarBtn.style.background = 'rgb(255, 255, 255)';
+            changeAvatarBtn.style.border = '1px solid rgb(200, 200, 200)';
+            changeAvatarBtn.style.color = 'rgb(30, 30, 30)';
+        }
+
+        if (h3 != null){
+            for (const element of h3) {
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (hr != null){
+            for (const element of hr) {
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (dropdown_content_linear_gr != null){
+            for (const element of dropdown_content_linear_gr) {
+                element.style.setProperty('--pseudo-dropdown-content-linear-gr-background', 'linear-gradient(to bottom, rgba(255, 255, 255, 100%), rgba(255, 255, 255, 0))');
+            }
+        }
+
+        if (dropdown_content != null){
+            for (const element of dropdown_content) {
+                element.style.setProperty('--pseudo-dropdown-content-scrollbar-color', 'rgb(150, 150, 150)');
+            }
+        }
+        
+
         body.style.background = "rgb(220, 220, 220)";
 
         input.checked = true;
         page_style = 'white';
+
+        favicon.href = window.favicons.light;
     }
     else{
         // Тёмная тема
         img.src = img.dataset.moon;
+
+        login_pic.style.filter = 'invert(1)';
+
+        document.body.classList.add('dark-theme');
 
         for (const element of main_items_background) {
             element.style.backgroundColor = "rgba(30, 30, 30)";
@@ -306,6 +465,7 @@ function ChangeTheme(username){
             for (const element of you_container_text_container) {
                 element.style.background = 'rgb(80, 80, 80)';
                 element.style.border = '1px solid rgb(80, 80, 80)';
+                element.style.color = 'rgb(200, 200, 200)';
             }
         }
 
@@ -320,7 +480,7 @@ function ChangeTheme(username){
         if (comments_container != null){
             for (const element of comments_container) {
                 element.style.background = 'rgb(80, 80, 80)';
-                element.style.border = '1px solid rgb(80, 80, 80)';
+                element.style.border = '1px solid rgb(120, 120, 120)';
                 element.style.color = 'rgb(200, 200, 200)';
             }
         }
@@ -339,6 +499,22 @@ function ChangeTheme(username){
             for (const element of filter_blocks_grid) {
                 element.style.background = 'rgb(30, 30, 30)';
                 element.style.border = '1px solid rgb(60, 60, 60)';
+            }
+        }
+
+        if (choices__list != null){
+            for (const element of choices__list) {
+                element.style.backgroundColor = 'rgb(255, 255, 255)';
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (select_sort != null){
+            for (const element of select_sort) {
+                element.style.setProperty('--pseudo-list-dropdown-bg', 'rgb(50, 50, 50)');
+                element.style.setProperty('--pseudo-list-dropdown-selected', 'rgb(100, 100, 100)');
+                element.style.setProperty('--pseudo-list-dropdown-is-highlighted', 'rgb(100, 100, 100)');
+                element.style.setProperty('--pseudo-list-dropdown-choices-item-color', 'rgb(200, 200, 200)');
             }
         }
 
@@ -367,10 +543,77 @@ function ChangeTheme(username){
             }
         }
 
+        if (profile_container_header != null){
+            for (const element of profile_container_header) {
+                element.style.backgroundColor = '#1e1e1e';
+                element.style.border = '1px solid #3c3c3c';
+            }
+        }
+
+        if (profile_container_header_block != null){
+            for (const element of profile_container_header_block) {
+                element.style.color = 'rgb(200, 200, 200)';
+            }
+        }
+
+        if (header != null){
+            for (const element of header) {
+                element.style.border = 'none';
+                element.style.borderBottom = '1px solid rgb(60, 60, 60)';
+            }
+        }
+
+        if (profile_container_favourites_block_comment != null){
+            for (const element of profile_container_favourites_block_comment) {
+                element.style.backgroundColor = 'rgb(40, 40, 40)';
+                element.style.border = '1px solid rgb(60, 60, 60)';
+                element.style.color = 'rgb(200, 200, 200)';
+            }
+        }
+
+        if (profile_container_header_block_info_flex_vis != null){
+            for (const element of profile_container_header_block_info_flex_vis) {
+                element.style.backgroundColor = 'rgb(60, 60, 60)';
+                element.style.border = '1px solid rgb(100, 100, 100)';
+            }
+        }
+
+        if (changeAvatarBtn != null){
+            changeAvatarBtn.style.background = 'rgb(120, 120, 120)';
+            changeAvatarBtn.style.border = '1px solid rgb(30, 30, 30)';
+            changeAvatarBtn.style.color = 'rgb(10, 10, 10)';
+        }
+        
+        if (h3 != null){
+            for (const element of h3) {
+                element.style.color = 'inherit';
+            }
+        }
+
+        if (hr != null){
+            for (const element of hr) {
+                element.style.color = 'inherit';
+            }
+        }
+
+        if (dropdown_content_linear_gr != null){
+            for (const element of dropdown_content_linear_gr) {
+                element.style.setProperty('--pseudo-dropdown-content-linear-gr-background', 'linear-gradient(to bottom, rgba(30, 30, 30, 100%), rgba(30, 30, 30, 0))');
+            }
+        }
+
+        if (dropdown_content != null){
+            for (const element of dropdown_content) {
+                element.style.setProperty('--pseudo-dropdown-content-scrollbar-color', 'rgb(50, 50, 50)');
+            }
+        }
+
         body.style.background = "rgb(20, 20, 20)";
 
         input.checked = false;
         page_style = 'black';
+
+        favicon.href = window.favicons.dark;
     }
 
     function getCookie(name) {
@@ -403,11 +646,9 @@ function ChangeTheme(username){
         body: formData
     })
     .then(responce => responce.json())
-    .then(responce => {
-        // console.log(responce)
-    })
 }
 
+const favicon = document.getElementById('favicon');
 document.addEventListener('DOMContentLoaded', function() {
     courent_theme = window.currentTheme;
     username = window.username;
@@ -415,5 +656,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // console.log(page_style, courent_theme);
     if (page_style != courent_theme && courent_theme){
         ChangeTheme(username);
+    }
+    if (page_style == 'black'){
+        document.body.classList.add('dark-theme');
+        login_pic.style.filter = 'invert(1)';
+        favicon.href = window.favicons.dark;
+    } else {
+        document.body.classList.remove('dark-theme');
+        login_pic.style.filter = 'invert(0)';
+        favicon.href = window.favicons.light;
     }
 })

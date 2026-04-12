@@ -7,10 +7,10 @@
 {% load static %}
 {% block content %}
     <!-- AI button (img) and Ai content block (div) -->
-    <button class="AI_button" src="{% static '/img/AI_button.png' %}" onclick="AIbutton()"> AI </button>
+    <button class="AI_button" type="button" src="{% static '/img/AI_button.png' %}" onclick="AIbutton()"> AI </button>
     <div id="AI_content" class="AI_content hidden">
         <div style="width: 100%; height: 40px; display: flex; justify-content: space-between;">
-            <button class="AI_button content" src="{% static '/img/AI_button.png' %}" onclick="AIbutton()"> X </button>
+            <button class="AI_button content" type="button" src="{% static '/img/AI_button.png' %}" onclick="AIbutton()"> X </button>
             
             <div style="display: flex; align-items: center; column-gap: 5px; margin-right: 5px;">
                 <h6 style="color: rgb(200, 200, 200); margin-bottom: 0;"> Выберите модель </h6>
@@ -682,7 +682,7 @@
                                                                             {% endif %}
                                                                         </form>
 
-                                                                        <div class="comment_answer">
+                                                                        <!-- <div class="comment_answer">
                                                                             <button class="comment_buttons_button_otvet" value="{{ element3 }}"> Ответить </button>
                                                                             <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
                                                                                 {% csrf_token %}
@@ -694,7 +694,7 @@
                                                                                 <input type="hidden" name="rating" value="0"></input>
                                                                                 <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
                                                                             </form> 
-                                                                        </div>
+                                                                        </div> -->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -890,6 +890,7 @@
             commentButtons.forEach(button => 
             {
                 button.addEventListener('click', function() {
+
                     const commentId = this.dataset.commentId;
                     const action = this.dataset.action;
                     const product_name = "{{product.name}}";
@@ -1058,7 +1059,7 @@
             api = document.getElementById('api').value; 
         });
 
-        let button_state = false; // bool переменная: true - окно открыто, false - закрыто
+        let button_state = false;
         function AIbutton(){
             let AI_content = document.getElementById('AI_content');
 
@@ -1212,7 +1213,7 @@
             } else {
                 buttonElement.textContent = 'Отмена';
                 FormElement.style.display = "block";
-                comment_buttons.style.marginBottom = "130px";
+                // comment_buttons.style.marginBottom = "130px";
             }
         }
 

@@ -95,7 +95,7 @@ class Product(models.Model):
     characters = models.ManyToManyField('Characters', related_name='other_characters', null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name) if self.name else ""
 
 class Voice_maker(models.Model):
     first_name = models.TextField('Имя')

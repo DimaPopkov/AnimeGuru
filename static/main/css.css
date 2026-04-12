@@ -1,18 +1,52 @@
 html {
   /* scrollbar-width: none; */
-  -ms-overflow-style: none;
+  /* -ms-overflow-style: none; */
 
-  height: 100%;
-}
-
-html::-webkit-scrollbar {
-  /* display: none; */
+    height: auto;
+    overflow-y: scroll;
 }
 
 body {
-  /* -ms-overflow-style: none; */
+    --pseudo-list-dropdown-bg: rgb(255, 255, 255);
+    --pseudo-list-dropdown-selected: rgb(200, 200, 200);
+    --pseudo-list-dropdown-is-highlighted: rgb(200, 200, 200);
+    --pseudo-list-dropdown-choices-item-color: rgb(30, 30, 30);
+    
+    --scroll-track: rgb(240, 240, 240);
+    --scroll-thumb: rgb(150, 150, 150);
+
+    --arrow-filter: invert(0);
 }
 
+body.dark-theme {
+    --pseudo-list-dropdown-bg: rgb(50, 50, 50);
+    --pseudo-list-dropdown-selected: rgb(100, 100, 100);
+    --pseudo-list-dropdown-is-highlighted: rgb(100, 100, 100);
+    --pseudo-list-dropdown-choices-item-color: rgb(200, 200, 200);
+
+    --scroll-track: rgb(50, 50, 50);
+    --scroll-thumb: rgb(85, 85, 85);
+
+    --arrow-filter: invert(1);
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scroll-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 10px;
+    border: 3px solid var(--scroll-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    filter: brightness(1.7);
+}
 
 p{
     margin-bottom: 0.5rem;
@@ -401,9 +435,6 @@ main{
 
 
 
-
-
-
 .checkbox-item p {
     user-select: none;
     margin-bottom: 0;
@@ -423,6 +454,8 @@ main{
     cursor: pointer;
 
     text-align: left;
+
+    outline: none;
 }
 
 .dropdown-toggle::after{
@@ -441,9 +474,40 @@ main{
     z-index: 1000;
 
     margin-left: 15px;
-    margin-top: 3px;
+    margin-top: -5px;
 
-    scrollbar-width: none;
+    --pseudo-dropdown-content-scrollbar-color: rgb(50, 50, 50);
+}
+
+.dropdown-content-linear-gr {
+    --pseudo-dropdown-content-linear-gr-background: linear-gradient(to bottom, rgba(30, 30, 30, 100%), rgba(30, 30, 30, 0));
+
+    content: "";
+    position: fixed;
+    margin-top: -1px;
+
+    width: calc(400px - 2px);
+
+    height: 20px;
+
+    background: var(--pseudo-dropdown-content-linear-gr-background);
+    
+    z-index: 2;
+    pointer-events: none;
+}
+
+.dropdown-content::-webkit-scrollbar {
+    width: 7px;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+    background: none;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+    background: var(--pseudo-dropdown-content-scrollbar-color); 
+    border-radius: 10px;
+    border: 0;
 }
 
 .checkbox-item {
@@ -484,10 +548,20 @@ input[type="checkbox"]:checked {
 
 /* Иконка стрелки */
 .arrow {
-    float: right;
+    display: block;
+
+    position: absolute;
+
+    right: 21px;
+    top: 30%; 
+
+    margin-left: auto; 
 
     /* padding-top: 5px; */
-    filter: invert(1);
+    filter: var(--arrow-filter);
+
+    /* transition: transform 0.2s ease-in-out !important;
+    transform-origin: center center;  */
 }
 
 /* Отображение выбранных элементов в кнопке */
@@ -507,7 +581,8 @@ input[type="checkbox"]:checked {
 /* AI */
 
 .AI_button{
-    display: block;
+    /* display: block; */
+    display: none;
     position: fixed;
 
     width: 40px;
@@ -1139,7 +1214,7 @@ input[type="checkbox"]:checked {
 }
 
 .choices__inner {
-    background-color: transparent !important;
+    background-color: transparent;
     border: none !important;
     padding: 0 !important;
     min-height: auto !important;
@@ -1152,7 +1227,7 @@ input[type="checkbox"]:checked {
 }
 
 .choices__list--dropdown {
-    background-color: rgb(50, 50, 50) !important;
+    background: var(--pseudo-list-dropdown-bg) !important;
     border-radius: 12px !important;
     margin-top: 5px !important;
     margin-left: -15px !important;
@@ -1166,7 +1241,7 @@ input[type="checkbox"]:checked {
 }
 
 .choices__list--dropdown .choices__item.is-selected {
-    background-color: rgb(100, 100, 100) !important;
+    background-color: var(--pseudo-list-dropdown-selected) !important;
 }
 
 .choices:focus, 
@@ -1185,11 +1260,15 @@ input[type="checkbox"]:checked {
 
 .choices__list--dropdown .choices__item {
     padding: 5px 15px !important;
-    color: rgb(200, 200, 200);
+    color: var(--pseudo-list-dropdown-choices-item-color) !important;
 }
 
 .choices__list--dropdown .choices__item--selectable.is-highlighted {
-    background-color: rgb(100, 100, 100) !important;
+    background-color: var(--pseudo-list-dropdown-is-highlighted) !important;
+}
+
+.choices__list--dropdown .choices__item--selectable:hover {
+    background-color: var(--pseudo-list-dropdown-is-highlighted) !important;
 }
 
 /* ---------------------------- */
@@ -1299,7 +1378,7 @@ input[type="checkbox"]:checked {
     justify-content: center;
 
     --psuedo-perescaz-overlay-color: rgb(30, 30, 30);
-    background-color: rgba(100, 100, 100, 0.2);
+    /* background-color: rgba(100, 100, 100, 0.2); */
     /* background-color: rgba(255, 255, 255, 1); */
 
     border-radius: 10px;
@@ -1480,6 +1559,19 @@ input[type="checkbox"]:checked {
     flex-direction: row;
 
     align-items: center;
+}
+
+.profile_container_header_block_info_flex_vis{
+    display: flex;
+    flex-direction: column;
+    
+    background-color: rgb(60, 60, 60);
+
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 5px;
+
+    padding: 10px 15px;
+    margin-bottom: 15px
 }
 
 .profile_button_change_password{
@@ -1746,6 +1838,7 @@ input[type="checkbox"]:checked {
     border-bottom: 3px solid var(--pseudo-comment-border-color);
 
     border-bottom-left-radius: 12px;
+    pointer-events: none;
 }
 
 .all_comments_container_block_header{
@@ -1831,8 +1924,19 @@ input[type="checkbox"]:checked {
     width: 400px;
     height: auto;
     min-height: 100px;
+    max-height: 300px;
 
     display: none;
+
+    position: absolute;
+    padding: 0 5px;
+
+    z-index: 1000;
+
+    background-color: rgb(50, 50, 50);
+    border: 1px solid rgb(30, 30, 30);
+
+    border-radius: 10px;
 }
 
 .comment_textarea_otvet_header{
@@ -1857,9 +1961,10 @@ input[type="checkbox"]:checked {
 }
 
 .comment_textarea_otvet_textarea{
-    width: 100%;
-    height: 100px;
+    width: calc(100%);
+    height: 120px;
     min-height: 100px;
+    max-height: 200px;
 
     padding: 2px 5px;
 

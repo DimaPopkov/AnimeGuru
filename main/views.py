@@ -30,7 +30,7 @@ def main(request):
             Allstatus.append(element.status)
 
     data = {
-        'title' : 'Основная страница',
+        'title' : 'Каталог',
         'categories' : Category.objects.all().order_by('-name'),
         'products' : allProducts.order_by('-id'),
         'tags': Tags.objects.all().order_by('name'),
@@ -498,7 +498,7 @@ def add_comments(request, product_name):
     print("Комментарий для ", product_name, " добавлен")
 
     url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
-    return redirect(url_to_redirect_to)
+    return redirect(f"{url_to_redirect_to}#comment-{new_comment.id}")
 
 def edit_comments(request, product_name):
 

@@ -26,9 +26,9 @@
 
                     <div class="sort-wrapper">
                         <label for="sort"> Сортировать по:</label>
-                        <select class="font16 text_fix" name="sort" id="sort">
+                        <select class="font16 text_fix choices__list" name="sort" id="sort">
                             {% for element in sort %}
-                                <option value="{{ element.id }}" class="main_items_background" {% if filter_data.3 == element.id|stringformat:"s" %} selected {% endif %}>{{ element.name }}</option>
+                                <option value="{{ element.id }}" {% if filter_data.3 == element.id|stringformat:"s" %} selected {% endif %}>{{ element.name }}</option>
                             {% endfor %}
                         </select>
                     </div><br>
@@ -37,13 +37,15 @@
                     <input class="filter_category_filter main_items_background find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
                     <br>
                 
-                    <label for="category"> Категории:</label> 
-                    <select class="filter_category_filter main_items_background" name="category" id="category">
-                        <option value="" class="font16 main_items_background"> Все категории </option>
-                        {% for element in categories %}
-                            <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
-                        {% endfor %}                      
-                    </select><br>
+                    <div style="flex-direction: column;"> <!-- class="sort-wrapper"  -->
+                        <label for="category"> Категории:</label> 
+                        <select class="filter_category_filter main_items_background" name="category" id="category"> <!-- choices__list -->
+                            <option value="" class="font16 main_items_background"> Все категории </option>
+                            {% for element in categories %}
+                                <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div><br>
 
                     <label for="status"> Статус:</label> 
                     <select class="filter_category_filter main_items_background" name="activeStatus" id="activeStatus">
@@ -57,15 +59,13 @@
                     <div class="custom-dropdown">
                         <!-- Кнопка для открытия/закрытия списка -->
                         <button class="dropdown-toggle main_items_background" type="button">
-                            <span class="selected-tags">Выберите теги</span>
-                            <span class="arrow">
-                                <!-- ▼  -->
-                                <img src="{% static '/img/arrow.png' %}" width="10px">
-                            </span>
+                            <span class="selected-tags">Выберите теги</span>                     
+                            <img class="arrow" id="arrow" src="{% static '/img/arrow.png' %}" width="10px">
                         </button>
 
                         <!-- Скрытый контейнер с чекбоксами -->
                         <div class="dropdown-content main_items_background" id="tags">
+                            <div class="dropdown-content-linear-gr"></div>
                             {% for tag in tags %}
                                 <label class="checkbox-item">
                                     <input class="checkbox-item-checkbox" type="checkbox" name="tags" value="{{ tag.id }}">
@@ -92,7 +92,7 @@
                                     {% else %}
                                         /login/    
                                     {% endif %}                
-                                    " method="POST">
+                                    " method="GET">
                             {% csrf_token %}
                             <input type="hidden" name="product_name" value="{{ element }}">
 
@@ -142,8 +142,10 @@
 
             console.log(activeStatus);
 
-            const element = document.querySelector('#sort');
-            const choices = new Choices(element, {
+            const choice1 = document.querySelector('#sort');
+            // const choice2 = document.querySelector('#category');
+
+            const choices = new Choices(choice1, {
                 searchEnabled: false,
                 itemSelectText: '',
                 shouldSort: false,
@@ -151,8 +153,7 @@
                 position: 'bottom',
             });
 
-            // const element2 = document.querySelector('#category');
-            // const choices2 = new Choices(element2, {
+            // const choices2 = new Choices(choice2, {
             //     searchEnabled: false,
             //     itemSelectText: '',
             //     shouldSort: false,
@@ -214,65 +215,93 @@
         if(hi != ActiveTags)
             updateProducts()
 
+            const dropdown_toggle = document.querySelectorAll('.dropdown-toggle');
+
+
             document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.dropdown-toggle').forEach(button => {
-            // Открытие/закрытие списка
-                button.addEventListener('click', function(e) {
-                    const dropdownContent = this.nextElementSibling;
-                    const isOpen = dropdownContent.style.display === 'block';
-                    dropdownContent.style.display = isOpen ? 'none' : 'block';
-                });
-            });
+                const arrow = document.getElementById('arrow');
 
-            // Закрытие списка при клике вне области
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.custom-dropdown')) {
-                    document.querySelectorAll('.dropdown-content').forEach(menu => {
-                        menu.style.display = 'none';
-                    });
-                }
-            });
+                dropdown_toggle.forEach(button => {
+                    // Открытие/закрытие списка
+                    button.addEventListener('click', function(e) {
+                        const dropdownContent = this.nextElementSibling;
+                        const isOpen = dropdownContent.style.display === 'block';
+                        dropdownContent.style.display = isOpen ? 'none' : 'block';
+                        
+                        if (dropdownContent.style.display == 'block'){
+                            dropdownContent.style.borderRadius = '0 0 10px 10px';
+                            dropdownContent.style.borderTop = 'none';
 
-            // Обновление текста кнопки при выборе чекбоксов           
-            document.querySelectorAll('.dropdown-content input').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const dropdownContent = this.closest('.dropdown-content');
-                    if (!dropdownContent) return; // Дополнительная проверка
+                            this.style.borderRadius = '10px 10px 0 0';
+                            this.style.borderBottom = this.style.borderTop;
+                
+                            arrow.style.transform = "rotate(180deg)";
+                        } else {
+                            this.style.borderRadius = '10px';
+                            this.style.borderBottom = this.style.borderTop;
 
-                    const allH = document.querySelectorAll(".checkbox-item-text");
-                    const arrayAllH = Array.from(allH)
-
-                    const ArrayTags = arrayAllH.map(
-                        item => { 
-                            return item.textContent.trim(); 
+                            arrow.style.transform = "rotate(0deg)";
                         }
-                    );
+                    });
+                });
 
-                    let selectedLabels = Array.from(
-                        dropdownContent.querySelectorAll('input:checked')
-                    ).map(input => {
-                        // Пытаемся найти родительский label
-                        const label = input.closest('label');
-                        // Возвращаем или текст из label, или содержимое следующего элемента
-                        return label ? label.textContent : input.nextElementSibling?.textContent;
-                    }).filter(Boolean);
+                // Закрытие списка при клике вне области
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.custom-dropdown')) {
+                        document.querySelectorAll('.dropdown-content').forEach(menu => {
+                            menu.style.display = 'none';
 
-                    const button = this.closest('.custom-dropdown')?.querySelector('.dropdown-toggle');
-                    if (!button) return; // Проверка на существование кнопки
+                            dropdown_toggle.forEach(button => {
+                                button.style.borderRadius = '10px';
+                                button.style.borderBottom = button.style.borderTop;
+                            })
 
-                    const selectedTagsElement = button.querySelector('.selected-tags');
-                    if (selectedTagsElement) {                    
-
-                        ActiveTags = selectedLabels.map(str => 
-                            str.replace(/\s+/g, ' ').trim()
-                        );                    
-                        console.log(ActiveTags);
-
-                        selectedTagsElement.textContent = selectedLabels.join(', ') || 'Выберите теги';                       
+                            arrow.style.transform = "rotate(0deg)";
+                        });
                     }
                 });
-            });
-        });
+
+                // Обновление текста кнопки при выборе чекбоксов           
+                document.querySelectorAll('.dropdown-content input').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const dropdownContent = this.closest('.dropdown-content');
+                        if (!dropdownContent) return; // Дополнительная проверка
+
+                        const allH = document.querySelectorAll(".checkbox-item-text");
+                        const arrayAllH = Array.from(allH)
+
+                        const ArrayTags = arrayAllH.map(
+                            item => { 
+                                return item.textContent.trim(); 
+                            }
+                        );
+
+                        let selectedLabels = Array.from(
+                            dropdownContent.querySelectorAll('input:checked')
+                        ).map(input => {
+                            // Пытаемся найти родительский label
+                            const label = input.closest('label');
+                            // Возвращаем или текст из label, или содержимое следующего элемента
+                            return label ? label.textContent : input.nextElementSibling?.textContent;
+                        }).filter(Boolean);
+
+                        const button = this.closest('.custom-dropdown')?.querySelector('.dropdown-toggle');
+                        if (!button) return; // Проверка на существование кнопки
+
+                        const selectedTagsElement = button.querySelector('.selected-tags');
+                        if (selectedTagsElement) {                    
+
+                            ActiveTags = selectedLabels.map(str => 
+                                str.replace(/\s+/g, ' ').trim()
+                            );                    
+                            console.log(ActiveTags);
+
+                            selectedTagsElement.textContent = selectedLabels.join(', ') || 'Выберите теги';                       
+                        }
+                    });
+                });
+            }
+        );
 
         function submitform(element)
         {
