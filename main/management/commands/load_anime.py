@@ -14,13 +14,19 @@ class Command(BaseCommand):
             default_status = Status.objects.get(name=item.get('status', ''))
             default_tags = []
             default_album_pics, created = Album_Pics.objects.get_or_create(name=item.get('name', ''))
-            if created:
-                for pic_name in item.get('pics_name', []):
-                    new_pic = Pics.objects.create(image=f"img/pics/{pic_name}")
 
-                    default_album_pics.image.add(new_pic)
-                    
-                    pass
+            pics_info = item.get('pics_name', [])
+            
+            base_name = pics_info[0]
+            pics_count = pics_info[1]
+            i = 1
+            while i <= pics_count:
+                file_path = f"img/pics/{base_name}_pic{i}.webp"
+
+                new_pic = Pics.objects.create(image=file_path)
+                default_album_pics.image.add(new_pic)
+
+                i += 1
 
             for tag in item.get('tags', ''):
                 find_tag, _  = Tags.objects.get_or_create(name=tag)

@@ -167,8 +167,10 @@ function ChangeTheme(username){
         // Светлая тема
         img.src = img.dataset.sun;
         
-        login_pic.style.filter = 'invert(0)';
-
+        if (login_pic != null){
+            login_pic.style.filter = 'invert(0)';
+        }
+        
         document.body.classList.remove('dark-theme');
         
         for (const element of main_items_background) {
@@ -394,7 +396,9 @@ function ChangeTheme(username){
         // Тёмная тема
         img.src = img.dataset.moon;
 
-        login_pic.style.filter = 'invert(1)';
+        if (login_pic != null){
+            login_pic.style.filter = 'invert(1)';
+        }
 
         document.body.classList.add('dark-theme');
 
