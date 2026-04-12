@@ -13,7 +13,10 @@ function ChangeTheme(username){
     let main_items_background = document.getElementsByClassName('main_items_background');
     let text_fix = document.getElementsByClassName('text_fix');
 
-    let login_pic = document.getElementById('login_pic');
+    let login_pic = null;
+    if(document.getElementById('login_pic')){
+       login_pic = document.getElementById('login_pic');;
+    }
 
     let find_by_name = null;
     if(document.querySelector('.find_by_name')){
@@ -170,7 +173,7 @@ function ChangeTheme(username){
         if (login_pic != null){
             login_pic.style.filter = 'invert(0)';
         }
-        
+
         document.body.classList.remove('dark-theme');
         
         for (const element of main_items_background) {
@@ -656,6 +659,12 @@ const favicon = document.getElementById('favicon');
 document.addEventListener('DOMContentLoaded', function() {
     courent_theme = window.currentTheme;
     username = window.username;
+
+    let login_pic = null;
+    if(document.getElementById('login_pic')){
+       login_pic = document.getElementById('login_pic');;
+    }
+
     // console.log(username);
     // console.log(page_style, courent_theme);
     if (page_style != courent_theme && courent_theme){
@@ -663,11 +672,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (page_style == 'black'){
         document.body.classList.add('dark-theme');
-        login_pic.style.filter = 'invert(1)';
+        if (login_pic != null){
+            login_pic.style.filter = 'invert(1)';
+        }
         favicon.href = window.favicons.dark;
     } else {
         document.body.classList.remove('dark-theme');
-        login_pic.style.filter = 'invert(0)';
+        if (login_pic != null){
+            login_pic.style.filter = 'invert(0)';
+        }
         favicon.href = window.favicons.light;
     }
 })
