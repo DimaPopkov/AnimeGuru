@@ -643,7 +643,7 @@ function ChangeTheme(username){
     formData.append('theme_content', page_style);
 
     //отправляем page_style на сервер
-    const api_url = "http://127.0.0.1:8000/theme/set/";
+    const api_url = window.location.origin + "/theme/set/";
     fetch(api_url, {
         method: 'POST',
         headers: {

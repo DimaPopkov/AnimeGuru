@@ -37,15 +37,14 @@
                     <input class="filter_category_filter main_items_background find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
                     <br>
                 
-                    <div style="flex-direction: column;"> <!-- class="sort-wrapper"  -->
-                        <label for="category"> Категории:</label> 
-                        <select class="filter_category_filter main_items_background" name="category" id="category"> <!-- choices__list -->
-                            <option value="" class="font16 main_items_background"> Все категории </option>
-                            {% for element in categories %}
-                                <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div><br>
+                    <label for="category"> Категории:</label> 
+                    <select class="filter_category_filter main_items_background" name="category" id="category"> <!-- choices__list -->
+                        <option value="" class="font16 main_items_background"> Все категории </option>
+                        {% for element in categories %}
+                            <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
 
                     <label for="status"> Статус:</label> 
                     <select class="filter_category_filter main_items_background" name="activeStatus" id="activeStatus">

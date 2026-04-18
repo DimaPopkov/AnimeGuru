@@ -464,6 +464,8 @@ def add_comments(request, product_name):
 
     try:
         User_rating = request.POST.get('rating')
+        if(User_rating == ''):
+            User_rating = 0
     except:
         User_rating = 0
 

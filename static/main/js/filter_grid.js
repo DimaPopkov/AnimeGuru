@@ -17,10 +17,10 @@ function UpdateGrid(){
         big_blockGridButton.classList.remove('active');
         lineGridButton.classList.remove('active');
 
-        catalog.style.gridTemplateColumns = '175px 175px 175px 175px 175px';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
-            element.style.height = '245px';
+            element.style.height = 'auto';
         }
         for(const element of block_container){
             element.style.flexDirection = 'column';
@@ -34,10 +34,10 @@ function UpdateGrid(){
         big_blockGridButton.classList.add('active');
         lineGridButton.classList.remove('active');
 
-        catalog.style.gridTemplateColumns = '301.67px 301.67px 301.67px';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
-            element.style.height = '400px';
+            element.style.height = '100%';
         }
         for(const element of block_container){
             element.style.flexDirection = 'column';
@@ -51,10 +51,10 @@ function UpdateGrid(){
         big_blockGridButton.classList.remove('active');
         lineGridButton.classList.add('active');
 
-        catalog.style.gridTemplateColumns = '935px';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 700px), 1fr))';
         for(const element of block_img){
             element.style.width = '175px';
-            element.style.height = '245px';
+            element.style.height = 'auto';
         }
         for(const element of block_container){
             element.style.flexDirection = 'row';
@@ -81,10 +81,10 @@ function ChangeGrid(type){
         big_blockGridButton.classList.remove('active');
         lineGridButton.classList.remove('active');
 
-        catalog.style.gridTemplateColumns = '175px 175px 175px 175px 175px';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
-            element.style.height = '245px';
+            element.style.height = 'auto';
         }
         for(const element of block_container){
             element.style.flexDirection = 'column';
@@ -98,10 +98,10 @@ function ChangeGrid(type){
         big_blockGridButton.classList.add('active');
         lineGridButton.classList.remove('active');
 
-        catalog.style.gridTemplateColumns = '301.67px 301.67px 301.67px';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
-            element.style.height = '400px';
+            element.style.height = '100%';
         }
         for(const element of block_container){
             element.style.flexDirection = 'column';
@@ -115,10 +115,10 @@ function ChangeGrid(type){
         big_blockGridButton.classList.remove('active');
         lineGridButton.classList.add('active');
 
-        catalog.style.gridTemplateColumns = '935px';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 700px), 1fr))';
         for(const element of block_img){
             element.style.width = '175px';
-            element.style.height = '245px';
+            element.style.height = 'auto';
         }
         for(const element of block_container){
             element.style.flexDirection = 'row';

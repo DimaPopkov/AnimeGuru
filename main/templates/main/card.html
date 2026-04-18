@@ -47,6 +47,7 @@
             <div class="card_header">
                 <img src="{{ product.image.url }}" id="product_img" style="width: 100%; border-radius: 3px;">
 
+                <!--
                 {% if links %}
                     {% if link_name %}
                         {% for link in links %}
@@ -72,6 +73,7 @@
                         {% endfor %}
                     {% endif %}
                 {% endif %}
+                -->
             </div>
 
             <div class="card_info">
@@ -332,7 +334,7 @@
         {% if product.season_info and product.season_info != "null" %}
             <div class="season_info blur-wrapper" id="seasonBlock" onclick="revealSeason()">
                 <div class="blur-content" id="seasonContent">
-                    {{ product.season_info|safe }}
+                    <p>{{ product.season_info|safe }}</p>
                 </div>
                 <div class="blur-overlay font24" id="seasonOverlay">Показать пересказ</div>
             </div>

@@ -37,7 +37,7 @@
         
         {% if request.user.is_authenticated %}
             <div class="login_status_bar">
-                <div style="display: flex;">
+                <div style="display: flex;" class="login_status_bar_block">
                     {% if request.user.profile.image != "avatars/null_avatar.png" %}
                         <img src={{ request.user.profile.image }} style="width: 35px; height: 35px; border-radius: 100px;">
                     {% else %}
@@ -47,12 +47,12 @@
                 </div>
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-secondary">Выйти</button>
+                    <button type="submit" class="btn btn-secondary logout_btn">Выйти</button>
                 </form>
 
                 {% if request.user.is_superuser or request.user.is_staff %}
-                    <a class="btn btn-info btn-auto" href="{% url 'create' %}"> Добавить </a>
-                    <a class="btn btn-danger btn-auto" href="/admin"> Админка </a>
+                    <a class="btn btn-info btn-auto logout_btn" href="{% url 'create' %}"> Добавить </a>
+                    <a class="btn btn-danger btn-auto logout_btn" href="/admin"> Админка </a>
                 {% endif %}
             </div>
         {% else %}
