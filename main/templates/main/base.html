@@ -27,8 +27,6 @@
         <div style="display:flex; align-items: center; column-gap: 10px;">
             <a id="btn_logo" class="btn_logo" href="{% url 'main' %}"> AnimeGuru </a>
             
-            <!-- Кнопка смены темы в разработке -->
-            
             <div class="header_change_style_button" onclick="ChangeTheme('{{ request.user.username }}')">
                 <img id="img" src="{% static 'img/moon.png' %}" width="22px" data-sun="{% static 'img/sun.png' %}" data-moon="{% static 'img/moon.png' %}" style="cursor: pointer;">
                 <input id="theme_input" type="checkbox" style="width: 12px; height: 12px; display: none;">

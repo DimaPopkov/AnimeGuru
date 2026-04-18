@@ -662,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let login_pic = null;
     if(document.getElementById('login_pic')){
-       login_pic = document.getElementById('login_pic');;
+       login_pic = document.getElementById('login_pic');
     }
 
     // console.log(username);
