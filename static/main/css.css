@@ -6,6 +6,10 @@ html {
     overflow-y: scroll;
 }
 
+h8{
+    font-size: 0.85rem;
+}
+
 body {
     --pseudo-list-dropdown-bg: rgb(255, 255, 255);
     --pseudo-list-dropdown-selected: rgb(200, 200, 200);
@@ -50,6 +54,10 @@ body.dark-theme {
 
 p{
     margin-bottom: 0.5rem;
+}
+
+h5 {
+    font-size: 1rem;
 }
 
 li{
@@ -237,7 +245,7 @@ main{
 
     row-gap: 15px;
     column-gap: 15px;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
 
     /* padding: 30px 20px 20px 20px; */
     padding: 20px;
@@ -773,6 +781,11 @@ input[type="checkbox"]:checked {
 
 .card_header{
     height: auto;
+}
+
+.card_header img{
+    position: sticky;
+    top: 55px;
 }
 
 .card_info{
@@ -2049,7 +2062,7 @@ input[type="checkbox"]:checked {
     width: auto;
 
 	display: -webkit-box;
-    -webkit-line-clamp: 6;
+    -webkit-line-clamp: 4;
 	line-clamp: 6;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
@@ -2057,4 +2070,11 @@ input[type="checkbox"]:checked {
 
 .hidden_description.hidden{
 	display: none;
+}
+
+.star_list_block_number{
+    display: none;
+}
+.star_list_block_number h5{
+    margin-block-end: 0;
 }

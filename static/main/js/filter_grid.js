@@ -17,7 +17,7 @@ function UpdateGrid(){
         big_blockGridButton.classList.remove('active');
         lineGridButton.classList.remove('active');
 
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
             element.style.height = 'auto';
@@ -37,7 +37,7 @@ function UpdateGrid(){
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
-            element.style.height = '100%';
+            element.style.height = 'auto';
         }
         for(const element of block_container){
             element.style.flexDirection = 'column';
@@ -81,7 +81,7 @@ function ChangeGrid(type){
         big_blockGridButton.classList.remove('active');
         lineGridButton.classList.remove('active');
 
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
             element.style.height = 'auto';
@@ -101,7 +101,7 @@ function ChangeGrid(type){
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
         for(const element of block_img){
             element.style.width = 'auto';
-            element.style.height = '100%';
+            element.style.height = 'auto';
         }
         for(const element of block_container){
             element.style.flexDirection = 'column';

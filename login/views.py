@@ -104,10 +104,8 @@ def signup(request):
 def create_user(request):
     context = {
         'title': "Регистрация пользователя",
-        'theme': request.session['courent_theme'],
+        'theme': request.session.get('current_theme', 'default_theme_name')
     }
-
-    print(request.session['courent_theme'])
 
     if request.method == 'POST':
         username = request.POST.get('username')
