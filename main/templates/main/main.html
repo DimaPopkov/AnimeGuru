@@ -33,9 +33,9 @@
                         </select>
                     </div><br>
 
-                    <label for="name"> Поиск по названию:</label> 
-                    <input class="filter_category_filter main_items_background find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
-                    <br>
+                    <!-- <label for="name"> Поиск по названию:</label>  -->
+                    <!-- <input class="filter_category_filter main_items_background find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename"> -->
+                    <!-- <br> -->
                 
                     <label for="category"> Категории:</label> 
                     <select class="filter_category_filter main_items_background" name="category" id="category"> <!-- choices__list -->
@@ -77,54 +77,114 @@
             </form>
         </div>
 
-        <div class="catalog main_items_background">   
-            <div id="products_catalog" class="products_catalog">    
-                {% if products %}
-                    <!-- <div class="nice_info">
-                        <h class="nice_info_piece"> Всего: {{ products|length }} </h>
-                    </div>          -->
-                                
-                    {% for element in products %}                 
+        <div class="container_e">
+            <div class="new_products main_items_background">
+                <h4 class="new_products_h4"> Новое: </h4>
+                <div class="new_products_list">
+                    {% for element in new_products %}
                         <form action="
                                     {% if request.user.is_authenticated %} 
                                         {% url 'card' product_name=element.name %}
                                     {% else %}
                                         /login/    
                                     {% endif %}                
-                                    " method="GET">
+                                    " method="GET" class="new_products_list_product">
                             {% csrf_token %}
                             <input type="hidden" name="product_name" value="{{ element }}">
 
-                            <div class="prod_element" onclick="submitform(this)">
+                            <div class="prod_element2" onclick="submitform(this)">
                                 {% if element.image %}
                                     {% if element.image.name %}
-                                        <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                        <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
                                     {% elif element.image %}
-                                        <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                        <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
                                     {% else %}
-                                        <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                        <div class="prod_element_pic_lock2"><img src="{{ element.image }}" style="width: 100%"></div>
                                     {% endif %}
                                 {% elif element.alter_pic %}
-                                    <div class="prod_element_pic_lock"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                    <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
                                 {% endif %}
                                 <div class="prod_element_rating">
-                                    <div class="prod_element_rating_block"> {{ element.rating }} </div>
-                                    <div class="prod_element_rating_block_dop_main">
+                                    <div class="prod_element_rating_block" style="
+                                        background:
+                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(60,100,60))
+                                            {% elif element.rating > 6 %} linear-gradient(rgb(200,200,50), rgb(150,150,30))
+                                            {% else %} red {% endif %};
+                                        "> {{ element.rating }} </div>
+                                    <!-- <div class="prod_element_rating_block_dop_main">
                                         <div class="prod_element_rating_block_dop"></div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="prod_element_info">
                                     <h5 style="padding-top: 5px"> {{ element.name }} </h5>
                                     <h8> {{ element.category }} / {{ element.season.year }}</h8>
                                     <br><br>
-                                    <p class="hidden_description hidden"> {{ element.description|safe }} </p>
                                 </div>
                             </div>
-                        </form>               
+                        </form>
                     {% endfor %}
-                {% else %}
-                    <h4 style="margin-bottom: 2px;"> Ничего не найдено </h4>
-                {% endif %}
+                </div>
+            </div>
+
+            <h4 class="new_products_h4" style="text-align: start; padding-left: 0;"> Поиск: </h4>
+            <form id="filter-form-text" method="GET" action="{% url 'filtered-items' %}">
+                <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
+            </form>
+
+            <div class="catalog main_items_background">
+                <div id="products_catalog" class="products_catalog">    
+                    {% if products %}
+                        <!-- <div class="nice_info">
+                            <h class="nice_info_piece"> Всего: {{ products|length }} </h>
+                        </div>          -->
+                                    
+                        {% for element in products %}                 
+                            <form action="
+                                        {% if request.user.is_authenticated %} 
+                                            {% url 'card' product_name=element.name %}
+                                        {% else %}
+                                            /login/    
+                                        {% endif %}                
+                                        " method="GET">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="prod_element" onclick="submitform(this)">
+                                    {% if element.image %}
+                                        {% if element.image.name %}
+                                            <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                        {% elif element.image %}
+                                            <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                        {% else %}
+                                            <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                        {% endif %}
+                                    {% elif element.alter_pic %}
+                                        <div class="prod_element_pic_lock"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                    {% endif %}
+                                    <div class="prod_element_rating">
+                                        <div class="prod_element_rating_block" style="
+                                        background:
+                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(60,100,60))
+                                            {% elif element.rating > 6 %} linear-gradient(rgb(200,200,50), rgb(150,150,30))
+                                            {% else %} red {% endif %};
+                                        "> {{ element.rating }} </div>
+                                        <!-- <div class="prod_element_rating_block_dop_main">
+                                            <div class="prod_element_rating_block_dop"></div>
+                                        </div> -->
+                                    </div>
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                        <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                        <br><br>
+                                        <p class="hidden_description hidden"> {{ element.description|safe }} </p>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    {% else %}
+                        <h4> Ничего не найдено </h4>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -132,6 +192,7 @@
     <script>    
         document.addEventListener('DOMContentLoaded', function() {
             const filterForm = document.getElementById('filter-form');
+            const filterFormText = document.getElementById('filter-form-text');
             const NameSelect = document.getElementById('titlename');
             const categorySelect = document.getElementById('category');
             const productsListContainer = document.getElementById('products_catalog');
@@ -165,7 +226,7 @@
                 // Формируем URL для AJAX запроса, используя action формы
                 let url = null;
 
-                url = filterForm.action + '?' + new URLSearchParams(new FormData(filterForm)).toString();
+                url = filterForm.action + '?' + new URLSearchParams(new FormData(filterForm)).toString() + '&' + new URLSearchParams(new FormData(filterFormText)).toString();
             
                 fetch(url)
                     .then(response => {

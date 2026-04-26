@@ -28,6 +28,8 @@ def main(request):
     for element in allProducts:
         if element.status not in Allstatus:
             Allstatus.append(element.status)
+    
+    new_products = sorted(allProducts, key=lambda x: x.season, reverse=True)[:7]
 
     data = {
         'title' : 'Каталог',
@@ -37,6 +39,7 @@ def main(request):
         'status': Allstatus,
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
+        'new_products': new_products
     }
         
     return render(request, 'main/main.html', data)
@@ -134,10 +137,13 @@ def filter(request):
     selected_status = status_id
     selected_sort = sort_id
 
+    new_products = sorted(products, key=lambda x: x.season, reverse=True)[:7]
+
     context = {
         'title' : 'Основная страница',
         'categories' : Category.objects.all(),
         'products': final_products,
+        'new_products': new_products,
         'tags': finalTags,
         'filter_data': filter_data,
         'selected_category': selected_category,

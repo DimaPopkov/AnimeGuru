@@ -156,6 +156,14 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+class PublicPublication(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.TextField('Оглавление', null=True)
+    text = models.TextField('Текст', null=True)
+    
+    def __str__(self):
+        return self.user.username
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
