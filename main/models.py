@@ -87,7 +87,7 @@ class Product(models.Model):
     rating = models.DecimalField('Рейтинг', max_digits=2, decimal_places=1, null=True, blank=True)
     age_rating = models.IntegerField('Возрастной рейтинг', null=True, blank=True)
     product_manager = models.CharField('Студия выпуска', max_length=100, null=True, blank=True)
-    episods = models.CharField('Кол-во эпизодов', null=True)
+    episods = models.CharField('Кол-во эпизодов', max_length=5, null=True)
     status = models.ForeignKey(Status, null=True, on_delete=models.SET_NULL, related_name='products')
     trailer = models.URLField('Трейлер', blank=True, null=True)
     links = models.ManyToManyField(Weblinks, related_name='links', null=True, blank=True)
