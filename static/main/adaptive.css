@@ -69,17 +69,17 @@
         margin: 0;
     }
     .filter_form{
-        margin-top: 60px;
+        /* margin-top: 60px; */
     }
     /* .filter_category_filter{
         width: 250px;
     } */
     .dropdown-toggle{
-        width: 250px;
+        /* width: 250px; */
     }
     .arrow{
-        right: auto;
-        margin-left: 228px;
+        /* right: auto; */
+        /* margin-left: 228px; */
     }
     .card_info_list_age_rating_block{
         font-size: 16px;
@@ -91,7 +91,7 @@
         margin-left: 200px;
     }
     .dropdown-content{
-        width: 250px;
+        /* width: 250px; */
     }
     .card_container_main {
         padding: 15px 15px;
@@ -112,6 +112,13 @@
 }
 
 @media screen and (max-width: 900px){
+    .filter{
+        height: auto;
+    }
+    .filter_form{
+        margin-top: 0;
+        height: auto;
+    }
     .container_d{
         flex-direction: column;
     }
@@ -190,7 +197,7 @@
     }
     .find_by_name2_container{
         width: 100%;
-        padding: 0 20px 20px 20px;
+        padding: 20px;
     }
 }
 

@@ -7,20 +7,19 @@
 {% load static %}
 {% block content %}
     <div class="container_d">
-        <div class="filter main_items_background">
-            <div class="filter_blocks_grid">
-                <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
-                    <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"></path>
-                </svg>
-                <svg onclick="ChangeGrid('big_block')" id='big_block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
-                    <path d="M224 80c0-26.5-21.5-48-48-48H80C53.5 32 32 53.5 32 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80zm0 256c0-26.5-21.5-48-48-48H80c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336zM288 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z"></path>
-                </svg>
-                <svg onclick="ChangeGrid('line')" id='line' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
-                    <path d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"></path>
-                </svg>
-            </div>
-            
+        <div class="filter main_items_background">            
             <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
+                <div class="filter_blocks_grid">
+                    <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
+                        <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"></path>
+                    </svg>
+                    <svg onclick="ChangeGrid('big_block')" id='big_block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
+                        <path d="M224 80c0-26.5-21.5-48-48-48H80C53.5 32 32 53.5 32 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80zm0 256c0-26.5-21.5-48-48-48H80c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336zM288 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z"></path>
+                    </svg>
+                    <svg onclick="ChangeGrid('line')" id='line' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
+                        <path d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"></path>
+                    </svg>
+                </div>
                 <div class="filter_main">
                     <h4 for="category">Фильтр:</h4><br>
 
@@ -63,8 +62,8 @@
                         </button>
 
                         <!-- Скрытый контейнер с чекбоксами -->
-                        <div class="dropdown-content main_items_background" id="tags">
-                            <div class="dropdown-content-linear-gr"></div>
+                        <div class="dropdown-content" id="tags"> <!-- main_items_background -->
+                            <!-- <div class="dropdown-content-linear-gr"></div> -->
                             {% for tag in tags %}
                                 <label class="checkbox-item">
                                     <input class="checkbox-item-checkbox" type="checkbox" name="tags" value="{{ tag.id }}">
@@ -79,7 +78,10 @@
 
         <div class="container_e">
             <div class="new_products main_items_background">
-                <h4 class="new_products_h4"> Новое: </h4>
+                <div class="new_products_title">
+                    <h4 class="new_products_h4"> Новое: </h4>
+                    <img class="arrow arrow2" id="arrow2" src="{% static '/img/arrow.png' %}" width="10px">
+                </div>
                 <div class="new_products_list">
                     {% for element in new_products %}
                         <form action="
@@ -166,8 +168,8 @@
                                     <div class="prod_element_rating">
                                         <div class="prod_element_rating_block" style="
                                         background:
-                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(60,100,60))
-                                            {% elif element.rating > 6 %} linear-gradient(rgb(200,200,50), rgb(150,150,30))
+                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                            {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
                                             {% else %} red {% endif %};
                                         "> {{ element.rating }} </div>
                                         <!-- <div class="prod_element_rating_block_dop_main">
@@ -184,7 +186,7 @@
                             </form>
                         {% endfor %}
                     {% else %}
-                        <h4> Ничего не найдено </h4>
+                        <h4 style="margin-bottom: 0;"> Ничего не найдено </h4>
                     {% endif %}
                 </div>
             </div>
@@ -193,6 +195,7 @@
 
     <script>    
         document.addEventListener('DOMContentLoaded', function() {
+            const filter = document.querySelector('.filter');
             const filterForm = document.getElementById('filter-form');
             const filterFormText = document.getElementById('filter-form-text');
             const NameSelect = document.getElementById('titlename');
@@ -200,7 +203,10 @@
             const productsListContainer = document.getElementById('products_catalog');
             const activeTags = document.getElementById('tags');
             const activeStatus = document.getElementById('activeStatus');
-            const sort = document.getElementById('sort');   
+            const sort = document.getElementById('sort');
+            
+            const dropdown_new = document.querySelector('.new_products_title');
+            const arrow2 = document.getElementById('arrow2');
 
             // console.log(activeStatus);
 
@@ -214,6 +220,11 @@
                 renderSelectedChoices: 'always',
                 position: 'bottom',
             });
+
+            const container = choice1.closest('.choices');
+            if (container) {
+                container.classList.add('theme-fix');
+            }
 
             // const choices2 = new Choices(choice2, {
             //     searchEnabled: false,
@@ -261,6 +272,29 @@
             }
 
 
+            dropdown_new.addEventListener('click', function(e) {
+                const dropdownContent = this.nextElementSibling;
+                const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
+                dropdownContent.style.display = isOpen ? 'none' : 'grid';
+                
+                if (dropdownContent.style.display == 'grid'){
+                    dropdown_new.style.paddingBottom = '0';
+
+                    const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                    filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+
+                    arrow2.style.transform = "rotate(180deg)";
+                } else {
+                    dropdownContent.style.display = 'none';
+                    dropdown_new.style.padding = '20px';
+
+                    const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                    filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+
+                    arrow2.style.transform = "rotate(0deg)";
+                }
+            });
+
             // Добавляем обработчики событий на каждый элемент фильтра
             NameSelect.addEventListener('input', updateProducts);
             categorySelect.addEventListener('change', updateProducts);
@@ -287,20 +321,21 @@
                     // Открытие/закрытие списка
                     button.addEventListener('click', function(e) {
                         const dropdownContent = this.nextElementSibling;
-                        const isOpen = dropdownContent.style.display === 'block';
-                        dropdownContent.style.display = isOpen ? 'none' : 'block';
+                        const isOpen = dropdownContent.style.display === 'grid';
+                        dropdownContent.style.display = isOpen ? 'none' : 'grid';
                         
-                        if (dropdownContent.style.display == 'block'){
-                            dropdownContent.style.borderRadius = '0 0 10px 10px';
-                            dropdownContent.style.borderTop = 'none';
+                        if (dropdownContent.style.display == 'grid'){
+                            dropdownContent.style.ChangeGrid = '';
+                            // dropdownContent.style.borderRadius = '0 0 10px 10px';
+                            // dropdownContent.style.borderTop = 'none';
 
-                            this.style.borderRadius = '10px 10px 0 0';
-                            this.style.borderBottom = this.style.borderTop;
+                            // this.style.borderRadius = '10px 10px 0 0';
+                            // this.style.borderBottom = this.style.borderTop;
                 
                             arrow.style.transform = "rotate(180deg)";
                         } else {
-                            this.style.borderRadius = '10px';
-                            this.style.borderBottom = this.style.borderTop;
+                            // this.style.borderRadius = '10px';
+                            // this.style.borderBottom = this.style.borderTop;
 
                             arrow.style.transform = "rotate(0deg)";
                         }

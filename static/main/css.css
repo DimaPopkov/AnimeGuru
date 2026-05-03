@@ -231,6 +231,8 @@ main{
 }
 
 .filter{
+    --pseudo-filter-height: 940px;
+
     margin-top: 25px;
 
     display: flex;
@@ -239,7 +241,8 @@ main{
     text-align: center;
 
     width: 450px;
-    height: 100%;
+    /* height: 100%; */
+    height: var(--pseudo-filter-height);
 
     color: rgb(200, 200, 200);
     
@@ -247,14 +250,18 @@ main{
     border: none;
 
     /* position: fixed; */
-    top: 75px;
-    position: sticky;
+    /* top: 75px; */
+    /* position: sticky; */
 }
 
 .filter_form{
     padding: 10px 10px ;
 
     border-radius: 3px;
+    height: 500px;
+
+    position: sticky;
+    top: 75px;
 }
 
 .products_catalog{
@@ -280,6 +287,7 @@ main{
     flex-direction: column;
 
     text-align: left;
+    user-select: none; 
     
     /* height: 400px; */
 
@@ -288,8 +296,18 @@ main{
     /* max-height: 400px; */
 }
 
-.new_products_h4{
+.new_products_title{
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
     padding: 20px 20px 0 20px;
+
+    cursor: pointer;
+}
+
+.new_products_h4{
     margin-bottom: 0;
 }
 
@@ -490,7 +508,7 @@ main{
     top: 2px;
     /* top: 50px; */
 
-    padding-bottom: 20px;
+    padding: 20px 0;
 
     background: rgb(20, 20, 20);
 
@@ -612,6 +630,7 @@ main{
 }
 
 .dropdown-toggle {
+    display: flex;
     width: 400px;
     height: 31px;
 
@@ -630,19 +649,23 @@ main{
 
 .dropdown-content {
     display: none;
-    position: absolute;
+    grid-template-columns: 1fr 1fr;
+    /* position: absolute; */
 
     width: 400px;
     /* max-height: 250px; */
-    max-height: 50vh;
+    /* max-height: 50vh; */
 
     overflow-y: auto;
 
     z-index: 1000;
 
-    margin-top: 25px;
+    /* margin-top: 35px; */
 
     --pseudo-dropdown-content-scrollbar-color: rgb(50, 50, 50);
+
+    background: none;
+    border: none;
 }
 
 .dropdown-content-linear-gr {
@@ -678,7 +701,7 @@ main{
 
 .checkbox-item {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     column-gap: 3px;
 
     text-align: center;
@@ -687,7 +710,9 @@ main{
     padding: 8px 12px;
     cursor: pointer;
 
-    background: var(--pseudo-bg-color,  rgb(30, 30, 30));
+    border-radius: 5px;
+
+    /* background: var(--pseudo-bg-color,  rgb(30, 30, 30)); */
 }
 
 .checkbox-item:hover {
@@ -716,10 +741,15 @@ input[type="checkbox"]:checked {
 .arrow {
     display: block;
 
-    position: absolute;
+    /* margin-top: -35px; */
+    margin-top: 8px;
+    width: 10px;
+    height: 10px;
 
-    right: 5px;
-    top: 30%; 
+    /* position: absolute; */
+
+    /* right: 5px; */
+    /* top: 30%; */
 
     margin-left: auto; 
 
@@ -728,6 +758,10 @@ input[type="checkbox"]:checked {
 
     /* transition: transform 0.2s ease-in-out !important;
     transform-origin: center center;  */
+}
+
+.arrow2 {
+    transform: rotate(180deg);
 }
 
 /* Отображение выбранных элементов в кнопке */
@@ -1402,9 +1436,10 @@ input[type="checkbox"]:checked {
     padding: 0 10px !important;
     text-align: center;
 
-    border: 1px solid rgb(80, 80, 80);
+    border: 1px solid var(--pseudo-list-dropdown-selected);
     border-radius: 10px;
-    background-color: rgb(30, 30, 30);
+    background-color: var(--choices__list__single__background__fix);
+    color: var(choices__list__single__color__fix);
 }
 
 .choices__list--dropdown {
@@ -2202,7 +2237,8 @@ input[type="checkbox"]:checked {
     width: 120px;
 
     padding: 15px;
-    margin: 0 0 0 25px;
+    margin-top: -10px;
+    /* margin: 0 0 0 25px; */
 
     border: 1px solid rgb(60, 60, 60);
     border-radius: 20px;

@@ -113,7 +113,12 @@
                                 <h8> {{ element.category }} / {{ element.season.year }}</h8>
 
                                 <div class="prod_element_rating">
-                                    <div class="prod_element_rating_block"> {{ element.rating }} </div>
+                                    <div class="prod_element_rating_block" style="
+                                    background:
+                                        {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                        {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
+                                        {% else %} red {% endif %};
+                                    "> {{ element.rating }} </div>
                                     <div class="prod_element_rating_block_dop_main">
                                         <div class="prod_element_rating_block_dop"></div>
                                     </div>
@@ -143,7 +148,13 @@
                             <img src="{{ element.alter_pic.url }}" style="width: 100%">
                         {% endif %}     -->
                         <div class="prod_element_rating">
-                            <div class="prod_element_rating_block"> {{ element.product_rating|floatformat:1 }} </div>
+                            <div class="prod_element_rating_block" style="
+                                background:
+                                    {% if element.product_rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                    {% elif element.product_rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
+                                    {% else %} red {% endif %};
+                                "> {{ element.product_rating|floatformat:1 }}
+                            </div>
                             <div class="prod_element_rating_block_dop_main">
                                 <div class="prod_element_rating_block_dop"></div>
                             </div>

@@ -86,6 +86,19 @@ function ChangeTheme(username){
         choices__list = document.querySelectorAll('.choices__list--dropdown');
     }
 
+    let choices__list__single = null;
+    if (document.querySelectorAll('.choices__list--single').length !== 0){
+        choices__list__single = document.querySelectorAll('.choices__list--single');
+    } else {
+        if (courent_theme == 'black') {
+            document.documentElement.style.setProperty('--choices__list__single__background__fix', 'rgb(30, 30, 30)');
+            document.documentElement.style.setProperty('--choices__list__single__color__fix', 'rgb(230, 230, 230)');
+        } else {
+            document.documentElement.style.setProperty('--choices__list__single__background__fix', 'rgb(255, 255, 255)');
+            document.documentElement.style.setProperty('--choices__list__single__color__fix', 'rgb(30, 30, 30)');
+        }
+    }
+
     let select_sort = null;
     if (document.querySelectorAll('.choices__list')){
         select_sort = document.querySelectorAll('.choices__list');
@@ -246,7 +259,7 @@ function ChangeTheme(username){
         }
 
         for (const element of filterList_tags_checkBoxes) {
-            element.style.setProperty('--pseudo-bg-checkbox-color', 'rgb(220, 220, 220)');
+            element.style.setProperty('--pseudo-bg-checkbox-color', 'rgb(250, 250, 250)');
             element.style.setProperty('--pseudo-bg-checked-color', 'rgb(30, 30, 30)');
         }
 
@@ -323,6 +336,13 @@ function ChangeTheme(username){
 
         if (choices__list != null){
             for (const element of choices__list) {
+                element.style.backgroundColor = 'rgb(255, 255, 255)';
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (choices__list__single != null){
+            for (const element of choices__list__single) {
                 element.style.backgroundColor = 'rgb(255, 255, 255)';
                 element.style.color = 'rgb(30, 30, 30)';
             }
@@ -573,6 +593,13 @@ function ChangeTheme(username){
             for (const element of choices__list) {
                 element.style.backgroundColor = 'rgb(255, 255, 255)';
                 element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (choices__list__single != null){
+            for (const element of choices__list__single) {
+                element.style.backgroundColor = 'rgb(30, 30, 30)';
+                element.style.color = 'rgb(230, 230, 230)';
             }
         }
 
