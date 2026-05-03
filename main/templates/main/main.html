@@ -38,7 +38,7 @@
                     <!-- <br> -->
                 
                     <label for="category"> Категории:</label> 
-                    <select class="filter_category_filter main_items_background" name="category" id="category"> <!-- choices__list -->
+                    <select class="filter_category_filter main_items_background" name="category" id="category">
                         <option value="" class="font16 main_items_background"> Все категории </option>
                         {% for element in categories %}
                             <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
@@ -107,8 +107,8 @@
                                 <div class="prod_element_rating">
                                     <div class="prod_element_rating_block" style="
                                         background:
-                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(60,100,60))
-                                            {% elif element.rating > 6 %} linear-gradient(rgb(200,200,50), rgb(150,150,30))
+                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                            {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
                                             {% else %} red {% endif %};
                                         "> {{ element.rating }} </div>
                                     <!-- <div class="prod_element_rating_block_dop_main">
@@ -126,10 +126,12 @@
                 </div>
             </div>
 
-            <h4 class="new_products_h4" style="text-align: start; padding-left: 0;"> Поиск: </h4>
-            <form id="filter-form-text" method="GET" action="{% url 'filtered-items' %}">
-                <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
-            </form>
+            <div class="find_by_name2_container">
+                <h4 class="new_products_h4" style="text-align: start; padding-left: 0;"> Поиск: </h4>
+                <form id="filter-form-text" class="filter-form-text" method="GET" action="{% url 'filtered-items' %}">
+                    <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
+                </form>
+            </div>
 
             <div class="catalog main_items_background">
                 <div id="products_catalog" class="products_catalog">    

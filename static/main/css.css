@@ -199,7 +199,6 @@ main{
 }
 
 .catalog{
-    margin: 25px 0;
     margin-right: auto;
     padding: 3px 0;
 
@@ -214,6 +213,10 @@ main{
     height: 100%;
 
     color: rgb(200, 200, 200);
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
 }
 
 .nice_info{
@@ -470,13 +473,34 @@ main{
 
 .find_by_name2{
     margin-top: 20px;
-    width: 100%;
+    width: calc(100% + 2px);
+    margin-left: -1px;
     height: 31px;
 
     padding: 3px 8px 1px 8px;
 
     outline: none;
     --text-color: rgb(200, 200, 200);
+
+    cursor: text;
+}
+
+.find_by_name2_container{
+    position: sticky;
+    top: 2px;
+    /* top: 50px; */
+
+    padding-bottom: 20px;
+
+    background: rgb(20, 20, 20);
+
+    z-index: 5;
+    border-bottom: 1px solid rgb(60, 60, 60);
+}
+
+.filter-form-text{
+    /* position: sticky;
+    top: 50px; */
 }
 
 .find_by_name::placeholder{
@@ -609,7 +633,8 @@ main{
     position: absolute;
 
     width: 400px;
-    max-height: 250px;
+    /* max-height: 250px; */
+    max-height: 50vh;
 
     overflow-y: auto;
 
@@ -693,7 +718,7 @@ input[type="checkbox"]:checked {
 
     position: absolute;
 
-    right: 21px;
+    right: 5px;
     top: 30%; 
 
     margin-left: auto; 
@@ -1334,13 +1359,19 @@ input[type="checkbox"]:checked {
 
 .text_fix{
     width: auto;
+
     border: none;
-    background: none; 
-    text-align: center;
-    color: rgb(200, 200, 200);
-    cursor: pointer;
-    padding: 3px 3px;
     border-radius: 10px;
+    
+    background: none; 
+
+    text-align: center;
+
+    color: rgb(200, 200, 200);
+
+    cursor: pointer;
+
+    padding: 3px 3px;
 }
 
 /* -------- Choises.js (выпадающий список) -------------- */
@@ -1368,15 +1399,22 @@ input[type="checkbox"]:checked {
 }
 
 .choices__list--single {
-    padding: 0 !important;
+    padding: 0 10px !important;
     text-align: center;
+
+    border: 1px solid rgb(80, 80, 80);
+    border-radius: 10px;
+    background-color: rgb(30, 30, 30);
 }
 
 .choices__list--dropdown {
     background: var(--pseudo-list-dropdown-bg) !important;
     border-radius: 12px !important;
+
     margin-top: 5px !important;
-    margin-left: -15px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
     overflow: hidden;
 
     display: none;

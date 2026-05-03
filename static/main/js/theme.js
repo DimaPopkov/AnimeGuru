@@ -23,6 +23,26 @@ function ChangeTheme(username){
        find_by_name = document.querySelector('.find_by_name');
     }
 
+    let find_by_name2 = null;
+    if(document.querySelector('.find_by_name2')){
+       find_by_name2 = document.querySelector('.find_by_name2');
+    }
+
+    let find_by_name2_container = null;
+    if(document.querySelector('.find_by_name2_container')){
+       find_by_name2_container = document.querySelector('.find_by_name2_container');
+    }
+    
+    let catalog = null;
+    if(document.querySelector('.catalog')){
+       catalog = document.querySelector('.catalog');
+    }
+
+    let new_products_h4 = null;
+    if(document.querySelectorAll('.new_products_h4')){
+       new_products_h4 = document.querySelectorAll('.new_products_h4');
+    }
+
     let filter = null;
     if (document.querySelector('.filter')){
         filter = document.querySelector('.filter');
@@ -182,10 +202,30 @@ function ChangeTheme(username){
             element.style.border =  "1px solid rgb(150, 150, 150)";
         }
         
-        if (filter != null || find_by_name != null){
+        if (filter != null){
             filter.style.background = "none";
             filter.style.border = "none";
+        }
+
+        if (find_by_name != null){
             find_by_name.style.setProperty('--text-color', 'black');
+        }
+
+        if (find_by_name2 != null){
+            find_by_name2.style.setProperty('--text-color', 'black');
+        }
+
+        if (find_by_name2_container != null){
+            find_by_name2_container.style.backgroundColor = 'rgb(220, 220, 220)';
+            find_by_name2_container.style.borderBottom = '1px solid rgb(150, 150, 150)'
+        }
+
+        if (catalog != null){
+            catalog.style.borderTop = 'none';
+        }
+
+        for (const element of new_products_h4){
+            element.style.color = "black";
         }
 
         for (const element of font1) {
@@ -432,10 +472,30 @@ function ChangeTheme(username){
             element.style.setProperty('--pseudo-bg-checkbox-color', 'rgb(0, 0, 0)');
             element.style.setProperty('--pseudo-bg-checked-color', 'rgb(200, 200, 200)');
         }
-        if (filter != null || find_by_name != null){
+        if (filter != null){
             filter.style.background = "none";
             filter.style.border = "none";
+        }
+
+        if (find_by_name != null){
             find_by_name.style.setProperty('--text-color', 'rgb(200, 200, 200)');
+        }
+
+        if (find_by_name2 != null){
+            find_by_name2.style.setProperty('--text-color', 'rgb(200, 200, 200)');
+        }
+
+        if (find_by_name2_container != null){
+            find_by_name2_container.style.backgroundColor = 'rgb(20, 20, 20)';
+            find_by_name2_container.style.borderBottom = '1px solid rgb(60, 60, 60)'
+        }
+
+        if (catalog != null){
+            catalog.style.borderTop = 'none';
+        }
+
+        for (const element of new_products_h4){
+            element.style.color = "rgb(200, 200, 200)";
         }
 
         btn_logo.style.color = "rgb(255, 255, 255)";
