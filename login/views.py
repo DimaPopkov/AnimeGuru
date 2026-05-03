@@ -110,6 +110,7 @@ def create_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        email = request.POST.get('email')
         password_confirmation = request.POST.get('password_confirmation')
 
         if password != password_confirmation:
@@ -122,7 +123,12 @@ def create_user(request):
                messages.error(request, 'Пользователь с таким именем уже существует.')
                return render(request, 'login/signup.html', context)
             
-            user = User.objects.create_user(username, "", password)
+            user = User.objects.filter(email=email).exists()
+            if user:
+               messages.error(request, 'Пользователь с такой почтой уже существует.')
+               return render(request, 'login/signup.html', context)
+            
+            user = User.objects.create_user(username, email, password)
             user = authenticate(request, username=username, password=password)
             if user:
                 login(request, user)

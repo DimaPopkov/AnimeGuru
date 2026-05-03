@@ -192,6 +192,7 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <img data-name="{{ element.name }}" data-id="{{ element.id }}" class="basket" src="{% static 'img/basket.webp' %}">
                     </div>
                 {% endfor %}
             </div>
@@ -200,7 +201,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
-        let cropper = null; // Хранит экземпляр Cropper.js
+        const baskets = document.querySelectorAll('.basket');
+
+        let cropper = null;
         const avatarElement = document.getElementById('avatar');
         const changeAvatarBtn = document.getElementById('changeAvatarBtn');
         const avatarModalOverlay = document.getElementById('avatarModalOverlay');
@@ -328,14 +331,24 @@
         // Кнопка "Отмена"
         cancelAvatarBtn.addEventListener('click', closeAvatarModal);
 
-        // Обработка закрытия модального окна по клику вне его содержимого (опционально)
-        /*
-        avatarModalOverlay.addEventListener('click', function(event) {
-            // Проверяем, был ли клик непосредственно по оверлею, а не по содержимому модального окна
-            if (event.target === avatarModalOverlay) {
-                closeAvatarModal();
-            }
-        });
-        */
+        baskets.forEach(basket => {
+            basket.addEventListener('click', () => {
+                fetch('/delete_comments/' + basket.dataset.name + '/' + basket.dataset.id + '/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken = getCookie('csrftoken'),
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        console.error('Ошибка:', response.status);
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+            })
+        })
     </script>
 {% endblock %}

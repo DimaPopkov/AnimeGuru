@@ -409,7 +409,7 @@
                             </div>
                             <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.user_comment }}</textarea>
                             <div style="display: flex; column-gap: 10px">
-                                <a class="you_container_button_delete"  href="{% url 'delete_comments' product_name=product.name %}"> Удалить </a>
+                                <a class="you_container_button_delete"  href="{% url 'delete_comments' product_name=product.name id=your_comment.id %}"> Удалить </a>
                                 <button class="you_container_button"> Изменить </button>
                             </div>                              
                         </form>

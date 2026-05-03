@@ -86,6 +86,11 @@ function ChangeTheme(username){
         choices__list = document.querySelectorAll('.choices__list--dropdown');
     }
 
+    let basket = null;
+    if (document.querySelectorAll('.basket')){
+        basket = document.querySelectorAll('.basket');
+    }
+
     let choices__list__single = null;
     if (document.querySelectorAll('.choices__list--single').length !== 0){
         choices__list__single = document.querySelectorAll('.choices__list--single');
@@ -446,7 +451,12 @@ function ChangeTheme(username){
                 element.style.setProperty('--pseudo-dropdown-content-scrollbar-color', 'rgb(150, 150, 150)');
             }
         }
-        
+
+        if (basket != null){
+            for (const element of basket) {
+                element.style.filter = 'invert(0)';
+            }
+        }
 
         body.style.background = "rgb(220, 220, 220)";
 
@@ -699,6 +709,12 @@ function ChangeTheme(username){
         if (dropdown_content != null){
             for (const element of dropdown_content) {
                 element.style.setProperty('--pseudo-dropdown-content-scrollbar-color', 'rgb(50, 50, 50)');
+            }
+        }
+        
+        if (basket != null){
+            for (const element of basket) {
+                element.style.filter = 'invert(0.8)';
             }
         }
 

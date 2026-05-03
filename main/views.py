@@ -536,12 +536,11 @@ def edit_comments(request, product_name):
     url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
     return redirect(url_to_redirect_to)
 
-def delete_comments(request, product_name):
-    
+def delete_comments(request, product_name, id):
     user_name = request.user.username
 
     try:
-        existing_comment = Comments.objects.get(name=product_name, user_name=user_name)
+        existing_comment = Comments.objects.get(id=id, name=product_name, user_name=user_name)
     except Comments.DoesNotExist:
         url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
         return redirect(url_to_redirect_to)
@@ -549,8 +548,8 @@ def delete_comments(request, product_name):
     existing_comment.delete()
     print("Комментарий успешно удалён!")
     
-    url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
-    return redirect(url_to_redirect_to)
+    # url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def update_comment_state(request, comment_id):
     if request.method != 'POST':
