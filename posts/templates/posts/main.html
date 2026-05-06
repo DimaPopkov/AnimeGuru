@@ -24,7 +24,7 @@
                 <div class="new_posts_list">
                     {% if new_posts %}
                         {% for element in new_posts %}
-                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
@@ -90,7 +90,7 @@
 
                     <div class="popular_posts">
                         {% for element in popular_posts %}
-                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
@@ -154,7 +154,7 @@
                 <div class="posts_list">
                     {% if posts %}
                         {% for element in posts %}
-                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
