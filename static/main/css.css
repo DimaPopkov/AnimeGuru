@@ -147,8 +147,12 @@ main{
     color: white;
     align-content: center;
     
-    /* margin-right: 100px; */
+    margin-right: 25px;
     font-size: 180%;
+}
+
+.header_redirect{
+    font-size: 120%;
 }
 
 .header_change_style_button{
@@ -158,7 +162,7 @@ main{
 
     width: 50px;
 
-    padding-right: 5px;
+    /* padding-right: 5px; */
 
     /* border: 1px solid white; */
 }
@@ -187,6 +191,25 @@ main{
 
     display: flex;
     flex-direction: column;
+
+    justify-content: center;
+
+    text-align: center;
+
+    width: 100%;
+    height: 100%;
+
+    color: rgb(200, 200, 200);
+}
+
+.container_f{
+    margin: 25px;
+    padding: 3px 0;
+
+    display: flex;
+    flex-direction: column;
+    
+    row-gap: 20px;
 
     justify-content: center;
 
@@ -297,6 +320,17 @@ main{
 }
 
 .new_products_title{
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 20px 0 20px;
+
+    cursor: pointer;
+}
+
+.new_products_title_alt{
     display: flex;
     justify-content: space-between;
 
@@ -1854,6 +1888,7 @@ input[type="checkbox"]:checked {
 
     width: 90%;
     max-width: 600px;
+    max-height: 80vh;
 
     text-align: center;
 }
@@ -1862,6 +1897,10 @@ input[type="checkbox"]:checked {
 }
 .avatar-modal img {
     max-width: 100%;
+    max-height: 60vh;
+
+    /* overflow-y: scroll; */
+
     display: block; /* Убирает лишние отступы под изображением */
     margin: 0 auto; /* Центрирование изображения */
 }
@@ -2368,4 +2407,185 @@ input[type="checkbox"]:checked {
         opacity: 1; 
         transform: translateY(0); 
     }
+}
+
+/* ---- Posts ---- */
+
+.post_h2{
+    color: rgb(200, 200, 200) !important;
+}
+
+.posts_h2_none{
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.post_p{
+    color: rgb(200, 200, 200) !important;
+    font-size: 16px;
+    font-weight: 300;
+
+    padding-top: 6px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.new_posts{
+    display: flex;
+    flex-direction: column;
+
+    text-align: left;
+    user-select: none; 
+    
+    /* height: 400px; */
+
+    /* z-index: -1; */
+
+    /* max-height: 400px; */
+}
+
+.new_posts_element{
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    text-align: left;
+
+    background: none;
+
+    width: 100%;
+    height: 100%;
+}
+
+.new_posts_title{
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 20px 0 20px;
+}
+
+.new_posts_title_alt{
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 20px 0 0;
+}
+
+.new_posts_h4{
+    margin-bottom: 20px;
+}
+
+.new_posts_list{
+    overflow: hidden;
+    align-content: start;
+
+    display: grid;
+
+    /* row-gap: 15px; */
+    column-gap: 15px;
+
+    grid-auto-rows: 0;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+
+    /* padding: 30px 20px 20px 20px; */
+    margin: 20px;
+
+    pointer-events: all;
+
+    overflow: hidden;
+}
+
+.posts_list{
+    overflow: hidden;
+    align-content: start;
+
+    display: grid;
+
+    /* row-gap: 15px; */
+    column-gap: 15px;
+
+    row-gap: 15px;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    grid-auto-rows: 250px; 
+
+    /* padding: 30px 20px 20px 20px; */
+    margin: 20px;
+
+    pointer-events: all;
+
+    overflow: hidden;
+}
+
+.new_posts_list_product{
+    padding: 15px 20px 20px 20px;
+
+    border: 1px solid rgb(50,50,50);
+    border-radius: 10px;
+
+    background-color: rgb(50,50,50);
+
+    height: 250px;
+}
+
+.new_posts_list_product:nth-child(n+8){
+    display: none;
+}
+
+.popular_posts{
+    display: grid;
+
+    max-height: 400px;
+
+    column-gap: 10px;
+
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+    grid-auto-rows: 0;
+    grid-template-rows: 1fr; /* Только одна строка */
+
+    overflow: hidden;
+}
+
+.posts_filter{
+    display: flex;
+
+    justify-content: space-between;
+
+    column-gap: 10px;
+}
+
+.posts_create{
+    display: flex;
+    flex-direction: column;
+
+    margin: 20px;
+}
+
+.posts_create_alt{
+    display: flex;
+    flex-direction: row;
+
+    margin: 20px;
+
+    column-gap: 10px;
+}
+
+.posts_create_input{
+    margin-top: 10px;
+    height: 40px;
+    font-size: 20px;
 }

@@ -41,17 +41,18 @@
     </div>
 
     <header class = "main_items_background header">
-        <!-- не могу нормальное название придумать :( )-->
         <div style="display:flex; align-items: center; column-gap: 10px;">
-            <a id="btn_logo" class="btn_logo" href="{% url 'main' %}"> AnimeGuru </a>
-            
             <div class="header_change_style_button" onclick="ChangeTheme('{{ request.user.username }}')">
                 <img id="img" src="{% static 'img/moon.png' %}" width="22px" data-sun="{% static 'img/sun.png' %}" data-moon="{% static 'img/moon.png' %}" style="cursor: pointer;">
                 <input id="theme_input" type="checkbox" style="width: 12px; height: 12px; display: none;">
             </div> 
-           
+
+            <a id="btn_logo" class="btn_logo" href="{% url 'main' %}"> AnimeGuru </a>
+
+            <div style="display:flex; align-items: center; column-gap: 10px;">
+                <a id="posts" class="btn_logo header_redirect" href="{% url 'posts' %}"> Публикации </a>
+            </div>
         </div>
-        <!-- <a class="btn btn-danger btn-auto" href="{% url 'about' %}"> О нас </a> -->
         
         {% if request.user.is_authenticated %}
             <div class="login_status_bar">

@@ -1,0 +1,347 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% load static %}
+{% block content %}
+    <div class="container_d">
+        <div class="container_f">
+            <div class="posts_filter">
+                <div class="posts_filter_block">
+                    <!-- <a class="btn btn-secondary btn-auto" href=""> Фильтр </a> -->
+                </div>
+                <a class="btn btn-success btn-auto" href="{% url 'create' %}"> + </a>
+            </div>
+            
+            <div class="new_posts main_items_background">
+                <div class="new_products_title">
+                    <h4 class="new_products_h4"> Новые публикации: </h4>
+                    <img class="arrow arrow2" id="arrow2" src="{% static '/img/arrow.png' %}" width="10px">
+                </div>
+
+                <div class="new_posts_list">
+                    {% if new_posts %}
+                        {% for element in new_posts %}
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="new_posts_element">
+                                    <h2 class="post_h2"> {{ element.title }} </h2>
+                                    <p class="post_p"> {{ element.text }} </p>
+
+                                    <div style="display: flex; height: 30px;">
+                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
+                                            {% if element.net_likes > 0 %} green 
+                                            {% elif element.net_likes < 0 %} red 
+                                            {% else %} white 
+                                            {% endif %};">
+                                                {{ element.net_likes }} 
+                                            </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
+                                            {% if element.my_state == 2 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% endif %}
+
+                                            {% if element.my_state == 1 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>   
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <h2 class="posts_h2_none"> Пока нет публикаций </h2>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if popular_posts %}
+            <br>
+            <hr>
+                <div class="new_posts">
+                    <div class="new_posts_title_alt">
+                        <h4 class="new_posts_h4"> Популярные публикации: </h4>
+                    </div>
+
+                    <div class="popular_posts">
+                        {% for element in popular_posts %}
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="new_posts_element">
+                                    <div>
+                                        <h4 class="post_h2"> {{ element.title }} </h4>
+                                        <p class="post_p"> {{ element.text }} </p>
+                                    </div>  
+
+                                    <div style="display: flex; height: 30px;">
+                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
+                                            {% if element.net_likes > 0 %} green 
+                                            {% elif element.net_likes < 0 %} red 
+                                            {% else %} white 
+                                            {% endif %};">
+                                                {{ element.net_likes }} 
+                                            </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
+                                            {% if element.my_state == 2 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% endif %}
+
+                                            {% if element.my_state == 1 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>   
+                            </div>
+                        {% endfor %}                    
+                    </div>
+                </div>
+                <br><br>
+            {% endif %}
+
+            <div class="new_posts main_items_background">
+                <div class="new_products_title">
+                    <h4 class="new_products_h4"> Все публикации: </h4>
+                </div>
+                <div class="posts_list">
+                    {% if posts %}
+                        {% for element in posts %}
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="new_posts_element">
+                                    <div>
+                                        <h4 class="post_h2"> {{ element.title }} </h4>
+                                        <p class="post_p"> {{ element.text }} </p>
+                                    </div>
+
+                                    <div style="display: flex; height: 30px;">
+                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
+                                            {% if element.net_likes > 0 %} green 
+                                            {% elif element.net_likes < 0 %} red 
+                                            {% else %} white 
+                                            {% endif %};">
+                                                {{ element.net_likes }} 
+                                            </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
+                                            {% if element.my_state == 2 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% endif %}
+
+                                            {% if element.my_state == 1 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>   
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <h2 class="posts_h2_none"> Пока нет публикаций </h2>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const container_f = document.querySelector('.container_f');
+            
+            const dropdown_new = document.querySelector('.new_products_title');
+            const arrow2 = document.getElementById('arrow2');
+
+            dropdown_new.addEventListener('click', function(e) {
+                const dropdownContent = this.nextElementSibling;
+                const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
+                dropdownContent.style.display = isOpen ? 'none' : 'grid';
+                
+                if (dropdownContent.style.display == 'grid'){
+                    dropdown_new.style.paddingBottom = '0';
+
+                    const currentValue = getComputedStyle(container_f).getPropertyValue('--pseudo-filter-height').trim();
+                    container_f.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+
+                    arrow2.style.transform = "rotate(180deg)";
+                } else {
+                    dropdownContent.style.display = 'none';
+                    dropdown_new.style.padding = '20px';
+
+                    const currentValue = getComputedStyle(container_f).getPropertyValue('--pseudo-filter-height').trim();
+                    container_f.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+
+                    arrow2.style.transform = "rotate(0deg)";
+                }
+            });
+
+            // Добавляем обработчики событий на каждый элемент фильтра
+            // NameSelect.addEventListener('input', updateProducts);
+            // categorySelect.addEventListener('change', updateProducts);
+            // activeTags.addEventListener('change', updateProducts);
+            // activeStatus.addEventListener('change', updateProducts);
+            // sort.addEventListener('change', updateProducts);
+
+            console.log('Event listeners attached.'); // <-- Логирование
+
+            const commentButtons = document.querySelectorAll('.comment_buttons_button');
+
+            commentButtons.forEach(button => 
+            {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Останавливаем отправку формы!
+
+                    const btn = this;
+                    const postId = btn.getAttribute('data-post-id'); // Проверьте, что в HTML есть этот атрибут
+                    const action = btn.getAttribute('data-action');
+                    const filterForm = document.getElementById(`post-${postId}`);
+                    
+                    if (!filterForm) {
+                        console.error("Не найдена форма для ID:", postId);
+                        return;
+                    }
+
+                    const url = filterForm.action;
+                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    const formData = new URLSearchParams();
+                    formData.append('post_id', postId);
+                    formData.append('action_ty', action);
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            const netLikes = Number(data.net_likes);
+                            const color = netLikes > 0 ? "green" : (netLikes < 0 ? "red" : "white");
+
+                            // Обновляем все счетчики
+                            document.querySelectorAll(`.like-count-${postId}`).forEach(span => {
+                                span.innerText = netLikes;
+                                span.style.color = color;
+                            });
+
+                            // Обновляем все кнопки лайков
+                            document.querySelectorAll(`[data-post-id="${postId}"][data-action="like"]`).forEach(img => {
+                                img.src = (data.existing_action === "like") ? "/static/img/active_like.png" : "/static/img/like.png";
+                            });
+
+                            // Обновляем все кнопки дизлайков
+                            document.querySelectorAll(`[data-post-id="${postId}"][data-action="dislike"]`).forEach(img => {
+                                img.src = (data.existing_action === "dislike") ? "/static/img/active_dislike.png" : "/static/img/dislike.png";
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Ошибка:', error));
+                });
+            });
+        });
+
+        function submitform(element)
+        {
+            console.log(element)
+            const form = element.closest('form');
+
+            if (form)
+            {
+                form.submit()
+            }
+
+            else{  
+                console.log("Форма не найдена")
+            } 
+        }
+    </script>
+{% endblock %}

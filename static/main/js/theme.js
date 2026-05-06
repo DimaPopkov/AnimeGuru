@@ -48,7 +48,7 @@ function ChangeTheme(username){
         filter = document.querySelector('.filter');
     }
 
-    let btn_logo = document.getElementById('btn_logo');
+    let btn_logo = document.querySelectorAll('.btn_logo');
     if (username){
         let nickname = document.getElementById('nickname');
     }
@@ -268,7 +268,10 @@ function ChangeTheme(username){
             element.style.setProperty('--pseudo-bg-checked-color', 'rgb(30, 30, 30)');
         }
 
-        btn_logo.style.color = "rgb(0, 0, 0)";
+        for (const element of btn_logo) {
+            element.style.color = "rgb(0, 0, 0)";
+        }
+        
         if (username){
             nickname.style.color = "rgb(0, 0, 0)";
         }
@@ -528,7 +531,10 @@ function ChangeTheme(username){
             element.style.color = "rgb(200, 200, 200)";
         }
 
-        btn_logo.style.color = "rgb(255, 255, 255)";
+        for (const element of btn_logo) {
+            element.style.color = "rgb(255, 255, 255)";
+        }
+
         if (username){
             nickname.style.color = "rgb(255, 255, 255)";
         }

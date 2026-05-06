@@ -90,7 +90,7 @@
                                     {% else %}
                                         /login/    
                                     {% endif %}                
-                                    " method="GET" class="new_products_list_product fade-in">
+                                    " method="POST" class="new_products_list_product fade-in">
                             {% csrf_token %}
                             <input type="hidden" name="product_name" value="{{ element }}">
 
@@ -149,7 +149,7 @@
                                         {% else %}
                                             /login/    
                                         {% endif %}                
-                                        " method="GET" class="fade-in">
+                                        " method="POST" class="fade-in">
                                 {% csrf_token %}
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
@@ -241,12 +241,10 @@
                 let html = '';
 
                 products.forEach(element => {
-                    // Логика цвета рейтинга (как в вашем Django шаблоне)
                     let ratingStyle = 'red';
                     if (element.rating > 8) ratingStyle = 'linear-gradient(rgb(50,200,50), rgb(80,150,80))';
                     else if (element.rating > 6) ratingStyle = 'linear-gradient(rgb(220,220,30), rgb(150,150,30))';
 
-                    // Собираем карточку (ваша структура)
                     html += `
                         <form class="fade-in" action="/card/${encodeURIComponent(element.name)}/" method="GET">
                             <input type="hidden" name="product_name" value="${element.name}">

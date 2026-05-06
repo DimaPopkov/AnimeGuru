@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     
     'main',
     'login',
+    'posts',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -132,6 +133,18 @@ UNFOLD = {
                         "title": _("Comments"),
                         "icon": "comment",
                         "link": reverse_lazy("admin:main_comments_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Posts"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Posts"),
+                        "icon": "folder",
+                        "link": reverse_lazy("admin:posts_posts_changelist"),
                     },
                 ],
             },

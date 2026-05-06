@@ -25,4 +25,5 @@ urlpatterns = [
     path('user/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
     path('AI/chat', views.AIchat, name='AIchat'),
     path('AI/history', views.AIhistory, name='AIhistory'),
+    path('posts/', include('posts.urls'), name='posts'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
