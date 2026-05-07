@@ -20,6 +20,7 @@
                         <path d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"></path>
                     </svg>
                 </div>
+
                 <div class="filter_main">
                     <h4 for="category">Фильтр:</h4><br>
 
@@ -74,6 +75,11 @@
                     </div><br>
                 </div>
             </form>
+        </div>
+
+        <div class="filter_buttons_hide_show">
+            <img class="hide_filter" src="{% static '/img/AI_sendMessage.webp' %}" width="50px" onclick="hideFilter()">
+            <img class="show_filter" src="{% static '/img/AI_sendMessage.webp' %}" width="50px" onclick="showFilter()">
         </div>
 
         <div class="container_e">
@@ -468,6 +474,32 @@
             else{  
                 console.log("Форма не найдена")
             } 
+        }
+
+        const filter = document.querySelector('.filter');
+
+        const filter_buttons_hide_show = document.querySelector('.filter_buttons_hide_show');
+        const showBtn = document.querySelector('.show_filter');
+        const hideBtn = document.querySelector('.hide_filter');
+
+        const container_e = document.querySelector('.container_e');
+
+        function hideFilter(){
+            filter.style.display = 'none';
+
+            showBtn.style.display = 'block';
+            hideBtn.style.display = 'none';
+
+            filter_buttons_hide_show.style.position = 'relative';
+        }
+
+        function showFilter(){
+            filter.style.display = 'flex';
+
+            showBtn.style.display = 'none';
+            hideBtn.style.display = 'block';
+
+            filter_buttons_hide_show.style.position = 'absolute';
         }
     </script>
 {% endblock %}

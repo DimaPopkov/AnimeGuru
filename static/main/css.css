@@ -10,6 +10,11 @@ h8{
     font-size: 0.85rem;
 }
 
+br{
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 body {
     --pseudo-list-dropdown-bg: rgb(255, 255, 255);
     --pseudo-list-dropdown-selected: rgb(200, 200, 200);
@@ -160,7 +165,8 @@ main{
     align-items: center;
     justify-content: center;
 
-    width: 50px;
+    /* width: 50px; */
+    margin-right: 10px;
 
     /* padding-right: 5px; */
 
@@ -179,13 +185,13 @@ main{
 
     column-gap: 20px;
 
-    max-width: 1500px;
+    max-width: 1700px;
 
     margin: 0 auto;
 }
 
 .container_e{
-    margin: 25px 0;
+    margin: 25px 0 25px 25px;
     margin-right: auto;
     padding: 3px 0;
 
@@ -275,6 +281,41 @@ main{
     /* position: fixed; */
     /* top: 75px; */
     /* position: sticky; */
+}
+
+.filter_buttons_hide_show{
+    position: absolute;
+
+    margin-top: 25px;
+    margin-right: 55px;
+
+    --hide-deg: 90deg;
+    --show-deg: -90deg;
+}
+
+.hide_filter{
+    position: absolute;
+    cursor: pointer;
+
+    /* margin-top: 25px; */
+    /* padding: 5px; */
+
+    rotate: var(--hide-deg);
+    z-index: 9999;
+}
+
+.show_filter{
+    display: none;
+
+    position: fixed;
+    cursor: pointer;
+
+    /* margin-top: 25px; */
+    /* margin-right: -55px; */
+    /* padding: 5px; */
+
+    rotate: var(--show-deg);
+    z-index: 9999;
 }
 
 .filter_form{
@@ -2153,6 +2194,9 @@ input[type="checkbox"]:checked {
 
     padding-left: 10px;
     margin-bottom: 10px;
+    
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .comment_buttons_button{
@@ -2440,7 +2484,7 @@ input[type="checkbox"]:checked {
     flex-direction: column;
 
     text-align: left;
-    user-select: none; 
+    /* user-select: none;  */
     
     /* height: 400px; */
 

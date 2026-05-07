@@ -2,12 +2,17 @@
     .container{
         max-width: 1300px;
     }
+    .container_d{
+        column-gap: 0;
+    }
     .container_e {
-        margin: 25px auto 25px 25px;
-        margin-right: auto;
+        margin: 25px;
     }
     .new_products_list_product:nth-child(n+7){
         display: none;
+    }
+    .show_filter{
+        margin-right: -25px;
     }
 }
 
@@ -114,6 +119,11 @@
 @media screen and (max-width: 900px){
     .filter{
         height: auto;
+        position: fixed;
+
+        z-index: 9002;
+        background: rgb(20, 20, 20);
+        margin-top: 65px;
     }
     .filter_form{
         margin-top: 0;
@@ -121,11 +131,17 @@
     }
     .container_d{
         flex-direction: column;
+        align-items: end;
     }
-    .container_e{
+    .container_e {
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+
         align-items: center;
-        width: auto;
-        margin: 15px;
+
+        margin: 0;
+        /* margin-top: 400px; */
     }
     .products_catalog {
         width: 100%;
@@ -170,12 +186,6 @@
     .main_characters_img_block_fade {
         margin-left: 170px;
     }
-    .container_e {
-        width: 100%;
-        margin: 0;
-        border: 0;
-        border-radius: 0;
-    }
     .catalog{
         border: 0;
         border-radius: 0;
@@ -193,11 +203,61 @@
         border: 0;
     }
     .find_by_name2{
-        width: 100%;
+        width: calc(100% - 50px);
+        margin-right: 50px;
     }
     .find_by_name2_container{
         width: 100%;
         padding: 20px;
+    }
+    .filter_buttons_hide_show{
+        --hide-deg: 0deg;
+        --show-deg: 180deg;
+        left: calc(93%);
+        margin-top: 10px;
+        z-index: 9999;
+    }
+    .hide_filter{
+        position: fixed;
+    }
+    .show_filter{
+        position: fixed;
+    }
+    .filter_buttons_hide_show{
+        position: fixed !important;
+    }
+}
+
+@media screen and (max-width: 830px){
+    .header{
+        flex-direction: column;
+        height: 100px;
+
+        align-items: start;
+        padding-left: 20px;
+    }
+    .header div{
+        padding-left: 10px;
+    }
+    .filter{
+        margin-top: 115px;
+        align-items: center;
+    }
+    .filter_buttons_hide_show{
+        margin-top: -25px;
+        left: calc(90%);
+        z-index: 9001;
+
+        position: fixed !important;
+    }
+    .btn_logo {
+        width: auto;
+    }
+    .container_e{
+        margin-top: 70px;
+    }
+    .find_by_name2_container{
+        top: 52px;
     }
 }
 
@@ -210,10 +270,6 @@
     } */
     .card_container_body_frames_list {
         height: auto;
-    }
-    .btn_logo {
-        margin-right: 0;
-        width: auto;
     }
     .card_info_list_font {
         font-weight: 400;
@@ -279,25 +335,8 @@
     h1{
         font-size: calc(1rem + 1.5vw);;
     }
-    .btn_logo{
-        font-size: 150%;
-    }
 }
 @media screen and (max-width: 650px){
-    .header{
-        flex-direction: column;
-        height: 100px;
-
-        align-items: start;
-        padding-left: 20px;
-    }
-    .header div{
-        padding-left: 10px;
-    }
-    .filter{
-        margin-top: 100px;
-        align-items: center;
-    }
     .login_button{
         height: 50px;
     }
@@ -344,9 +383,6 @@
     .prod_element_pic_lock{
         min-width: 100px;
     }
-    .find_by_name2_container{
-        top: 52px;
-    }
 }
 
 @media screen and (max-width: 550px){
@@ -390,6 +426,15 @@
         justify-content: center;
         row-gap: 5px;
     }
+    .filter_buttons_hide_show{
+        margin-top: -20px;
+    }
+    .hide_filter{
+        width: 40px;
+    }
+    .show_filter{
+        width: 40px;
+    }
 }
 
 @media screen and (max-width: 500px){
@@ -401,6 +446,9 @@
     .header {
         flex-direction: column;
         justify-content: center;
+    }
+    .header div {
+        padding-left: 0;
     }
     /* .products_catalog {
         grid-template-columns: 150px 150px !important;
@@ -608,5 +656,17 @@
     }
     .find_by_name2_container{
         top: 32px;
+    }
+    .filter_buttons_hide_show{
+        margin-top: -25px;
+    }
+    .hide_filter{
+        width: 25px;
+    }
+    .show_filter{
+        width: 25px;
+    }
+    .header {
+        padding-left: 5px;
     }
 }
