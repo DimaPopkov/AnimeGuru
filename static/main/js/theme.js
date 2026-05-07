@@ -204,6 +204,11 @@ function ChangeTheme(username){
         hr = document.querySelectorAll('hr');
     }
 
+    let new_posts_h4 = null;
+    if (document.querySelectorAll('.new_posts_h4')){
+        new_posts_h4 = document.querySelectorAll('.new_posts_h4');
+    }
+
     if (input.checked != true){ 
         // Светлая тема
         img.src = img.dataset.sun;
@@ -459,6 +464,10 @@ function ChangeTheme(username){
             for (const element of basket) {
                 element.style.filter = 'invert(0)';
             }
+        }
+
+        for (const element of new_posts_h4) {
+            element.style.color = "rgb(50, 50, 50)";
         }
 
         body.style.background = "rgb(220, 220, 220)";
@@ -722,6 +731,10 @@ function ChangeTheme(username){
             for (const element of basket) {
                 element.style.filter = 'invert(0.8)';
             }
+        }
+
+        for (const element of new_posts_h4) {
+            element.style.color = "inherit";
         }
 
         body.style.background = "rgb(20, 20, 20)";

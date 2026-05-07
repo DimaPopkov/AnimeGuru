@@ -346,51 +346,16 @@
                 <hr>
             </div>
             
-            <div class="you_container">
-                <div class="you_container_dop">
-                    <h4> Ваш комментарий: </h4>
+            {% if request.user.is_authenticated %}
+                <div class="you_container">
+                    <div class="you_container_dop">
+                        <h4> Ваш комментарий: </h4>
 
-                    {% if your_comment == None %}
-                        <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
-                            {% csrf_token %}
-                            <div style="display: flex; align-content: center; padding-bottom: 2px">
-                                <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
-                                <div class="star-rating">
-                                    <span class="star" data-value="1">&#9733;</span>
-                                    <span class="star" data-value="2">&#9733;</span>
-                                    <span class="star" data-value="3">&#9733;</span>
-                                    <span class="star" data-value="4">&#9733;</span>
-                                    <span class="star" data-value="5">&#9733;</span>
-                                    <span class="star" data-value="6">&#9733;</span>
-                                    <span class="star" data-value="7">&#9733;</span>
-                                    <span class="star" data-value="8">&#9733;</span>
-                                    <span class="star" data-value="9">&#9733;</span>
-                                    <span class="star" data-value="10">&#9733;</span>
-                                </div>
-                                <!-- Скрытое поле для сохранения выбранного значения -->
-                                <input type="hidden" name="rating" id="rating-input">
-                            </div>
-                            <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
-                            <button class="you_container_button"> Добавить </button>
-                        </form>
-                    {% else %}
-                        <form id="you_container_form" method="POST" action="{% url 'edit_comments' product_name=product.name %}">
-                            {% csrf_token %}
-                            <div style="display: flex; flex-direction: column; align-content: center; padding-bottom: 2px">
-                                <div style="display: flex;">
-                                    <h5 style="margin-bottom: 0; padding-right: 10px"> Старая оценка: </h5>                
-                                    <div style="display: flex; margin-top: -12px">
-                                        {% for current_number in star_list %}
-                                            {% if current_number <= your_comment.user_rating %}
-                                                <span class="star-icon" style="color: #ff9900;">&#9733;</span>
-                                            {% else %}
-                                                <span class="star-icon" style="color: gray;">&#9733;</span>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>  
-                                </div>
-                                <div style="display: flex;">
-                                    <h5 style="margin-bottom: 0; padding-right: 10px"> Новая оценка: </h5>              
+                        {% if your_comment == None %}
+                            <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
+                                {% csrf_token %}
+                                <div style="display: flex; align-content: center; padding-bottom: 2px">
+                                    <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
                                     <div class="star-rating">
                                         <span class="star" data-value="1">&#9733;</span>
                                         <span class="star" data-value="2">&#9733;</span>
@@ -402,62 +367,99 @@
                                         <span class="star" data-value="8">&#9733;</span>
                                         <span class="star" data-value="9">&#9733;</span>
                                         <span class="star" data-value="10">&#9733;</span>
-                                    </div>            
+                                    </div>
                                     <!-- Скрытое поле для сохранения выбранного значения -->
                                     <input type="hidden" name="rating" id="rating-input">
                                 </div>
-                            </div>
-                            <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.user_comment }}</textarea>
-                            <div style="display: flex; column-gap: 10px">
-                                <a class="you_container_button_delete"  href="{% url 'delete_comments' product_name=product.name id=your_comment.id %}"> Удалить </a>
-                                <button class="you_container_button"> Изменить </button>
-                            </div>                              
-                        </form>
-                    {% endif %}
-                    
-                </div>
-
-                <div class="you_container_dop">
-                    <h4> Самый популярный комментарий: </h4>
-                    
-                    {% if most_popular_comment != 0 and most_popular_comment.user_rating != None %}
-                        <div class="you_container_dop_block">
-                            <div class="you_container_dop_block_header">
-                                <div style="display: flex; column-gap: 15px;">
-                                    {% if most_popular_comment.user_image != "avatars/null_avatar.png" %}
-                                        <img src={{ most_popular_comment.user_image }} style="width: 35px; height: 35px; border-radius: 100px;">
-                                    {% else %}
-                                        <img src={{ most_popular_comment.user_image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
-                                    {% endif %}
-                                    <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> {{ most_popular_comment.user_name }} </h5>
-                                </div>
-
-                                <div style="display:flex; text-align: center">
-                                    <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
-
-                                    <div class="star-display">
-                                        <!-- Здесь будут динамически генерироваться звезды -->
+                                <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text"></textarea>
+                                <button class="you_container_button"> Добавить </button>
+                            </form>
+                        {% else %}
+                            <form id="you_container_form" method="POST" action="{% url 'edit_comments' product_name=product.name %}">
+                                {% csrf_token %}
+                                <div style="display: flex; flex-direction: column; align-content: center; padding-bottom: 2px">
+                                    <div style="display: flex;">
+                                        <h5 style="margin-bottom: 0; padding-right: 10px"> Старая оценка: </h5>                
+                                        <div style="display: flex; margin-top: -12px">
+                                            {% for current_number in star_list %}
+                                                {% if current_number <= your_comment.user_rating %}
+                                                    <span class="star-icon" style="color: #ff9900;">&#9733;</span>
+                                                {% else %}
+                                                    <span class="star-icon" style="color: gray;">&#9733;</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>  
+                                    </div>
+                                    <div style="display: flex;">
+                                        <h5 style="margin-bottom: 0; padding-right: 10px"> Новая оценка: </h5>              
+                                        <div class="star-rating">
+                                            <span class="star" data-value="1">&#9733;</span>
+                                            <span class="star" data-value="2">&#9733;</span>
+                                            <span class="star" data-value="3">&#9733;</span>
+                                            <span class="star" data-value="4">&#9733;</span>
+                                            <span class="star" data-value="5">&#9733;</span>
+                                            <span class="star" data-value="6">&#9733;</span>
+                                            <span class="star" data-value="7">&#9733;</span>
+                                            <span class="star" data-value="8">&#9733;</span>
+                                            <span class="star" data-value="9">&#9733;</span>
+                                            <span class="star" data-value="10">&#9733;</span>
+                                        </div>            
+                                        <!-- Скрытое поле для сохранения выбранного значения -->
+                                        <input type="hidden" name="rating" id="rating-input">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="you_container_dop_block_text">
-                                {{ most_popular_comment.user_comment }}
-                            </div>
-                        </div>
-                    {% else %}
-                        <div style="width:100%; height: 100%; align-content: center;">
-                            <h3 style="text-align: center"> Пока-что нет популярного комментария </h3>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
+                                <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.user_comment }}</textarea>
+                                <div style="display: flex; column-gap: 10px">
+                                    <a class="you_container_button_delete"  href="{% url 'delete_comments' product_name=product.name id=your_comment.id %}"> Удалить </a>
+                                    <button class="you_container_button"> Изменить </button>
+                                </div>                              
+                            </form>
+                        {% endif %}
+                        
+                    </div>
 
-            <div style="display: flex;">
-                <h3> Все Комментарии </h3>
-                <!-- <button onclick="ApiGenerate('{{ product.name }}')"> Нейронка, сгенери говно мне! </button>
-                <textarea id="AItextblock" style="width: 100%;"></textarea> -->
-            </div>
-            <hr>
+                    <div class="you_container_dop">
+                        <h4> Самый популярный комментарий: </h4>
+                        
+                        {% if most_popular_comment != 0 and most_popular_comment.user_rating != None %}
+                            <div class="you_container_dop_block">
+                                <div class="you_container_dop_block_header">
+                                    <div style="display: flex; column-gap: 15px;">
+                                        {% if most_popular_comment.user_image != "avatars/null_avatar.png" %}
+                                            <img src={{ most_popular_comment.user_image }} style="width: 35px; height: 35px; border-radius: 100px;">
+                                        {% else %}
+                                            <img src={{ most_popular_comment.user_image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
+                                        {% endif %}
+                                        <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> {{ most_popular_comment.user_name }} </h5>
+                                    </div>
+
+                                    <div style="display:flex; text-align: center">
+                                        <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
+
+                                        <div class="star-display">
+                                            <!-- Здесь будут динамически генерироваться звезды -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="you_container_dop_block_text">
+                                    {{ most_popular_comment.user_comment }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div style="width:100%; height: 100%; align-content: center;">
+                                <h3 style="text-align: center"> Пока-что нет популярного комментария </h3>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <div style="display: flex;">
+                    <h3> Все Комментарии </h3>
+                    <!-- <button onclick="ApiGenerate('{{ product.name }}')"> Нейронка, сгенери говно мне! </button>
+                    <textarea id="AItextblock" style="width: 100%;"></textarea> -->
+                </div>
+                <hr>
+            {% endif %}
             
             {% if comments and comments != None %}
                 <div class="all_comments_container">

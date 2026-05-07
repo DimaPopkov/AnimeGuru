@@ -90,13 +90,7 @@
                 </div>
                 <div class="new_products_list">
                     {% for element in new_products %}
-                        <form action="
-                                    {% if request.user.is_authenticated %} 
-                                        {% url 'card' product_name=element.name %}
-                                    {% else %}
-                                        /login/    
-                                    {% endif %}                
-                                    " method="POST" class="new_products_list_product fade-in">
+                        <form action="{% url 'card' product_name=element.name %}" method="POST" class="new_products_list_product fade-in">
                             {% csrf_token %}
                             <input type="hidden" name="product_name" value="{{ element }}">
 
@@ -149,13 +143,7 @@
                         </div>          -->
                                     
                         {% for element in products %}                 
-                            <form action="
-                                        {% if request.user.is_authenticated %} 
-                                            {% url 'card' product_name=element.name %}
-                                        {% else %}
-                                            /login/    
-                                        {% endif %}                
-                                        " method="POST" class="fade-in">
+                            <form action="{% url 'card' product_name=element.name %}" method="POST" class="fade-in">
                                 {% csrf_token %}
                                 <input type="hidden" name="product_name" value="{{ element }}">
 

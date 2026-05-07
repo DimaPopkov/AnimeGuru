@@ -12,7 +12,7 @@
                 <div class="new_products_title">
                     <h2 class="new_products_h4" style="margin: 0 auto;"> Добавление публикации </h2>
                 </div>
-                <form method="POST" action="{% url 'confirm' %}" enctype="multipart/form-data">
+                <form id="form" method="POST" action="{% url 'confirm' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="cropped_data" id="cropped_data">
                     <div class="posts_create">
@@ -36,6 +36,10 @@
                             </div>
                         </div>
                     </div>
+                    <label class="posts_create_alt">
+                        <h5 for="avatar_none"> Без обложки </h5>
+                        <input id="avatar_none" name="avatar_none" class="main_items_background" type="checkbox" style="margin-top: -5px; appearance: auto;">
+                    </label>
                     <div class="posts_create">
                         <h3 for="title"> Заголовок </h3>
                         <input id="title" name="title" class="main_items_background find_by_name2 posts_create_input" type="text" placeholder='Например: Обьяснение вселенной "Блич"'>
@@ -50,7 +54,7 @@
                         <button type="submit" class="btn btn-success btn-auto">Опубликовать</button>
                     </div>
                     {% if error %}
-                        <div class="alert alert-danger">
+                        <div class="alert alert-danger" style="margin: 20px 20px;">
                             {{ error }}
                         </div>
                     {% endif %}
@@ -61,6 +65,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
         let cropper = null;
+        const form = document.getElementById('form');
         const avatarElement = document.getElementById('avatar');
         const changeAvatarBtn = document.getElementById('changeAvatarBtn');
         const avatarModalOverlay = document.getElementById('avatarModalOverlay');
@@ -68,6 +73,14 @@
         const editableAvatar = document.getElementById('editableAvatar');
         const saveAvatarBtn = document.getElementById('saveAvatarBtn');
         const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+        const avatar_none = document.getElementById('avatar_none');
+        const hiddenInput = document.getElementById('cropped_data');
+
+        form.addEventListener('submit', (e) => {
+            if (avatar_none.checked) {
+                hiddenInput.value = 'none';
+            }
+        });
 
         // --- Функция открытия модального окна ---
         function openAvatarModal() {
@@ -121,10 +134,10 @@
                 formData.append('image', croppedImageUrl);
                 formData.append('user_id', '{{ request.user.username }}');
 
-                const hiddenInput = document.getElementById('cropped_data');
                 if (hiddenInput) {
                     hiddenInput.value = croppedImageUrl;
                 }
+
                 // fetch('/user/change-avatar', {
                 //     method: 'POST',
                 //     headers: {

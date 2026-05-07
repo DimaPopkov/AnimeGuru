@@ -343,12 +343,14 @@ def card(request, product_name):
 
     # Смотрим, если есть комментарии которые мы лайкали\дизлайкали, то меняем им иконки
     allComments = Comments.objects.filter(name=products.name)
-    print("\n------------------------\n", 
-        allComments)
+    # print("\n------------------------\n", 
+    #     allComments)
     
-    allComments_state = CommentAction.objects.filter(user=request.user)
-    print("\n------------------------\n",
-        allComments_state, "\n")
+    allComments_state = []
+    if request.user.is_authenticated:
+        allComments_state = CommentAction.objects.filter(user=request.user)
+        # print("\n------------------------\n",
+        #     allComments_state, "\n")
 
     focus_comment_state = []
 

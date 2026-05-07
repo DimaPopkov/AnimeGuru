@@ -12,7 +12,13 @@
                 <div class="posts_filter_block">
                     <!-- <a class="btn btn-secondary btn-auto" href=""> Фильтр </a> -->
                 </div>
-                <a class="btn btn-success btn-auto" href="{% url 'create' %}"> + </a>
+                <a class="btn btn-success btn-auto" href="
+                    {% if request.user.is_authenticated %}
+                        {% url 'create' %}
+                    {% else %}
+                        /login/
+                    {% endif %}
+                "> + </a>
             </div>
             
             <div class="new_posts main_items_background">
@@ -81,8 +87,6 @@
             </div>
 
             {% if popular_posts %}
-            <br>
-            <hr>
                 <div class="new_posts">
                     <div class="new_posts_title_alt">
                         <h4 class="new_posts_h4"> Популярные публикации: </h4>
@@ -94,10 +98,8 @@
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
-                                    <div>
-                                        <h4 class="post_h2"> {{ element.title }} </h4>
-                                        <p class="post_p"> {{ element.text }} </p>
-                                    </div>  
+                                    <h4 class="post_h2"> {{ element.title }} </h4>
+                                    <p class="post_p"> {{ element.text }} </p>
 
                                     <div style="display: flex; height: 30px;">
                                         <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
@@ -144,7 +146,7 @@
                         {% endfor %}                    
                     </div>
                 </div>
-                <br><br>
+                <br>
             {% endif %}
 
             <div class="new_posts main_items_background">
@@ -158,10 +160,8 @@
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
-                                    <div>
-                                        <h4 class="post_h2"> {{ element.title }} </h4>
-                                        <p class="post_p"> {{ element.text }} </p>
-                                    </div>
+                                    <h4 class="post_h2"> {{ element.title }} </h4>
+                                    <p class="post_p"> {{ element.text }} </p>
 
                                     <div style="display: flex; height: 30px;">
                                         <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
@@ -274,57 +274,61 @@
             commentButtons.forEach(button => 
             {
                 button.addEventListener('click', function(event) {
-                    event.preventDefault(); // Останавливаем отправку формы!
+                    if('{{ request.user.is_authenticated }}' == 'True'){
+                        event.preventDefault(); // Останавливаем отправку формы!
 
-                    const btn = this;
-                    const postId = btn.getAttribute('data-post-id'); // Проверьте, что в HTML есть этот атрибут
-                    const action = btn.getAttribute('data-action');
-                    const filterForm = document.getElementById(`post-${postId}`);
-                    
-                    if (!filterForm) {
-                        console.error("Не найдена форма для ID:", postId);
-                        return;
-                    }
-
-                    const url = filterForm.action;
-                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                    const formData = new URLSearchParams();
-                    formData.append('post_id', postId);
-                    formData.append('action_ty', action);
-
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-CSRFToken': csrftoken,
-                        },
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === "success") {
-                            const netLikes = Number(data.net_likes);
-                            const color = netLikes > 0 ? "green" : (netLikes < 0 ? "red" : "white");
-
-                            // Обновляем все счетчики
-                            document.querySelectorAll(`.like-count-${postId}`).forEach(span => {
-                                span.innerText = netLikes;
-                                span.style.color = color;
-                            });
-
-                            // Обновляем все кнопки лайков
-                            document.querySelectorAll(`[data-post-id="${postId}"][data-action="like"]`).forEach(img => {
-                                img.src = (data.existing_action === "like") ? "/static/img/active_like.png" : "/static/img/like.png";
-                            });
-
-                            // Обновляем все кнопки дизлайков
-                            document.querySelectorAll(`[data-post-id="${postId}"][data-action="dislike"]`).forEach(img => {
-                                img.src = (data.existing_action === "dislike") ? "/static/img/active_dislike.png" : "/static/img/dislike.png";
-                            });
+                        const btn = this;
+                        const postId = btn.getAttribute('data-post-id'); // Проверьте, что в HTML есть этот атрибут
+                        const action = btn.getAttribute('data-action');
+                        const filterForm = document.getElementById(`post-${postId}`);
+                        
+                        if (!filterForm) {
+                            console.error("Не найдена форма для ID:", postId);
+                            return;
                         }
-                    })
-                    .catch(error => console.error('Ошибка:', error));
+
+                        const url = filterForm.action;
+                        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                        const formData = new URLSearchParams();
+                        formData.append('post_id', postId);
+                        formData.append('action_ty', action);
+
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'X-CSRFToken': csrftoken,
+                            },
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                const netLikes = Number(data.net_likes);
+                                const color = netLikes > 0 ? "green" : (netLikes < 0 ? "red" : "white");
+
+                                // Обновляем все счетчики
+                                document.querySelectorAll(`.like-count-${postId}`).forEach(span => {
+                                    span.innerText = netLikes;
+                                    span.style.color = color;
+                                });
+
+                                // Обновляем все кнопки лайков
+                                document.querySelectorAll(`[data-post-id="${postId}"][data-action="like"]`).forEach(img => {
+                                    img.src = (data.existing_action === "like") ? "/static/img/active_like.png" : "/static/img/like.png";
+                                });
+
+                                // Обновляем все кнопки дизлайков
+                                document.querySelectorAll(`[data-post-id="${postId}"][data-action="dislike"]`).forEach(img => {
+                                    img.src = (data.existing_action === "dislike") ? "/static/img/active_dislike.png" : "/static/img/dislike.png";
+                                });
+                            }
+                        })
+                        .catch(error => console.error('Ошибка:', error));
+                    } else {
+                        window.location.href = '/login';
+                    }
                 });
             });
         });
