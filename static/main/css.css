@@ -23,9 +23,11 @@ br{
 }
 
 body {
+    --pseudo-list-dropdown-border: rgb(150, 150, 150);
+    --pseudo-list-dropdown-bg-dark: rgb(255, 255, 255);
     --pseudo-list-dropdown-bg: rgb(255, 255, 255);
     --pseudo-list-dropdown-selected: rgb(200, 200, 200);
-    --pseudo-list-dropdown-is-highlighted: rgb(200, 200, 200);
+    --pseudo-list-dropdown-is-highlighted: rgb(74, 0, 126);
     --pseudo-list-dropdown-choices-item-color: rgb(30, 30, 30);
     
     --scroll-track: rgb(240, 240, 240);
@@ -35,6 +37,8 @@ body {
 }
 
 body.dark-theme {
+    --pseudo-list-dropdown-border: rgb(60, 60, 60);
+    --pseudo-list-dropdown-bg-dark: rgb(30, 30, 30);
     --pseudo-list-dropdown-bg: rgb(50, 50, 50);
     --pseudo-list-dropdown-selected: rgb(100, 100, 100);
     --pseudo-list-dropdown-is-highlighted: rgb(100, 100, 100);
@@ -314,24 +318,23 @@ main{
 
 .filter_toggle_btn {
     position: absolute !important;
-    right: 0 !important;  /* Выравниваем по правому краю */
+    right: 0 !important;
     width: 38px;
     height: 38px;
-    background: rgb(40, 40, 40);
-    border: 1px solid rgb(60, 60, 60);
+    background: var(--pseudo-list-dropdown-bg-dark);
+    border: 1px solid var(--pseudo-list-dropdown-border);
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    z-index: 1000 !important; /* Кнопка всегда поверх всех линий */
+    z-index: 1000 !important;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter_toggle_btn:hover {
-    border-color: rgb(80, 80, 85);
-    background: rgb(45, 45, 50);
+    border-color: color-mix(in srgb, var(--color-accent-hover) 40%, transparent);
 }
 
 .filter_toggle_svg {
@@ -342,7 +345,7 @@ main{
 }
 
 .filter_toggle_btn:hover .filter_toggle_svg {
-    fill: #ffffff;
+    fill: var(--color-accent);
 }
 
 /* Плавный поворот стрелки на 90 градусов при скрытии */
@@ -1719,6 +1722,12 @@ input[type="checkbox"]:checked::after {
     width: 100% !important;
     margin: 0 !important;
     position: relative !important;
+
+    --pseudo-list-dropdown-bg: inherit;
+    --pseudo-list-dropdown-selected: inherit;
+    --pseudo-list-dropdown-is-highlighted: inherit;
+    --pseudo-list-dropdown-choices-item-color: inherit;
+    --pseudo-list-dropdown-border: inherit;
 }
 
 /* Внутренняя кнопка-плашка Choices.js (Приводим к общей высоте 38px) */
@@ -1729,8 +1738,9 @@ input[type="checkbox"]:checked::after {
     height: 38px !important;
     padding: 0 36px 0 12px !important; /* Оставляем 36px справа для иконки стрелочки */
     
-    background-color: rgb(30, 30, 30) !important;
-    border: 1px solid rgb(60, 60, 60) !important;
+    color: var(--pseudo-list-dropdown-choices-item-color);
+    background-color: var(--pseudo-list-dropdown-bg-dark);
+    border: 1px solid var(--pseudo-list-dropdown-border);
     border-radius: 8px !important;
     box-sizing: border-box !important;
     
@@ -1741,7 +1751,6 @@ input[type="checkbox"]:checked::after {
 .sort-wrapper .choices__list--single {
     padding: 0 !important;
     margin: 0 !important;
-    color: rgb(200, 200, 200) !important;
     font-size: 14px;
     background: none !important;
     border: none !important;
@@ -1803,7 +1812,7 @@ input[type="checkbox"]:checked::after {
     box-sizing: border-box !important;
     max-height: 250px !important;
     
-    background: #1e1e22 !important;
+    background: var(--pseudo-list-dropdown-bg) !important;
     border: 1px solid #2d2d34 !important;
     border-radius: 8px !important; /* Ровное скругление со всех сторон */
     box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
@@ -1840,20 +1849,20 @@ input[type="checkbox"]:checked::after {
 /* Элементы внутри выпадающего списка */
 .sort-wrapper .choices__list--dropdown .choices__item {
     padding: 10px 14px !important;
-    color: rgb(200, 200, 205) !important;
+    color: var(--pseudo-list-dropdown-choices-item-color) !important;
     font-size: 14px;
     transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 /* Подсветка элементов списка при наведении */
 .sort-wrapper .choices__list--dropdown .choices__item--selectable.is-highlighted {
-    background-color: rgba(255, 255, 255, 0.04) !important;
+    background-color: var(--color-accent) !important;
     color: #ffffff !important;
 }
 
 /* Стиль уже выбранного элемента внутри списка */
 .sort-wrapper .choices__list--dropdown .choices__item.is-selected {
-    background-color: rgba(112, 66, 244, 0.15) !important; /* Фиолетовая приглушенная подложка */
+    background-color: var(--pseudo-list-dropdown-is-highlighted) !important; /* Фиолетовая приглушенная подложка */
     color: #ffffff !important;
     font-weight: 600;
 }
@@ -2692,7 +2701,7 @@ input[type="checkbox"]:checked::after {
     width: 38px;
     height: 38px;
     padding: 8px;
-    background: rgb(38, 38, 43);
+    background: var(--pseudo-list-dropdown-bg-dark);
     border: 1px solid rgb(60, 60, 60);
     border-radius: 8px;
     cursor: pointer;
@@ -2702,14 +2711,18 @@ input[type="checkbox"]:checked::after {
 
 .grid_buttons.active{
     fill: var(--fill-active);
-    filter: brightness(0) brightness(55%) contrast(50%);
 }
 
 .filter_blocks_grid .grid_buttons:hover,
 .filter_blocks_grid .grid_buttons.active {
-    background: rgba(112, 66, 244, 0.1) !important;
+    background: var(--pseudo-list-dropdown-bg-dark) !important;
     border-color: var(--color-accent) !important;
     fill: var(--color-accent) !important;
+}
+
+.grid_buttons:hover{
+    background: color-mix(in srgb, var(--color-accent-hover) 40%, transparent) !important;
+    fill: color-mix(in srgb, var(--color-accent) 40%, transparent) !important;
 }
 
 
