@@ -541,19 +541,21 @@
                                         {% endif %}
                                     </form>
 
-                                    <div class="comment_answer">
-                                        <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                        <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
-                                            {% csrf_token %}
-                                            <div class="comment_textarea_otvet_header">
-                                                <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                                <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                            </div>
-                                            <input type="hidden" name="parentId" value="{{ element.id }}"></input>
-                                            <input type="hidden" name="rating" value="0"></input>
-                                            <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                        </form> 
-                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                        <div class="comment_answer">
+                                            <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
+                                            <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+                                                {% csrf_token %}
+                                                <div class="comment_textarea_otvet_header">
+                                                    <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
+                                                    <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+                                                </div>
+                                                <input type="hidden" name="parentId" value="{{ element.id }}"></input>
+                                                <input type="hidden" name="rating" value="0"></input>
+                                                <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
+                                            </form> 
+                                        </div>
+                                    {% endif %}
                                 </div>
         
                                 {% for element2 in comments %}
@@ -614,19 +616,21 @@
                                                         {% endif %}
                                                     </form>
 
-                                                    <div class="comment_answer">
-                                                        <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                                        <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
-                                                            {% csrf_token %}
-                                                            <div class="comment_textarea_otvet_header">
-                                                                <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                                                <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                                            </div>
-                                                            <input type="hidden" name="parentId" value="{{ element2.id }}"></input>
-                                                            <input type="hidden" name="rating" value="0"></input>
-                                                            <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                                        </form> 
-                                                    </div>
+                                                    {% if request.user.is_authenticated %}
+                                                        <div class="comment_answer">
+                                                            <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
+                                                            <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+                                                                {% csrf_token %}
+                                                                <div class="comment_textarea_otvet_header">
+                                                                    <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
+                                                                    <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+                                                                </div>
+                                                                <input type="hidden" name="parentId" value="{{ element2.id }}"></input>
+                                                                <input type="hidden" name="rating" value="0"></input>
+                                                                <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
+                                                            </form> 
+                                                        </div>
+                                                    {% endif %}
                                                 </div>
                                                 
 
@@ -897,74 +901,77 @@
             commentButtons.forEach(button => 
             {
                 button.addEventListener('click', function() {
+                    if('{{request.user.is_authenticated}}' == 'True'){
+                        const commentId = this.dataset.commentId;
+                        const action = this.dataset.action;
+                        const product_name = "{{product.name}}";
 
-                    const commentId = this.dataset.commentId;
-                    const action = this.dataset.action;
-                    const product_name = "{{product.name}}";
+                        // const likeCountSpan = document.getElementById(`like_count_${commentId}`);
+                        // const likeButton = document.getElementById(`like_button_${commentId}`);
+                        // const dislikeButton = document.getElementById(`dislike_button_${commentId}`);
 
-                    // const likeCountSpan = document.getElementById(`like_count_${commentId}`);
-                    // const likeButton = document.getElementById(`like_button_${commentId}`);
-                    // const dislikeButton = document.getElementById(`dislike_button_${commentId}`);
-
-                    const container = this.closest('.comment_buttons');
-                    const likeCountSpan = document.getElementById(`like_count_${commentId}`);
-                    const likeButton = container.querySelector('[data-action="like"]');
-                    const dislikeButton = container.querySelector('[data-action="dislike"]');
+                        const container = this.closest('.comment_buttons');
+                        const likeCountSpan = document.getElementById(`like_count_${commentId}`);
+                        const likeButton = container.querySelector('[data-action="like"]');
+                        const dislikeButton = container.querySelector('[data-action="dislike"]');
 
 
-                    const filterForm = document.getElementById(`comment-${commentId}`);
-                    const csrftoken = getCookie('csrftoken');
-                   
-                    const formData = new URLSearchParams();
-                    formData.append('comment_id', commentId);
-                    formData.append('action_ty', action);
-                    formData.append('product_name', product_name);
+                        const filterForm = document.getElementById(`comment-${commentId}`);
+                        const csrftoken = getCookie('csrftoken');
+                    
+                        const formData = new URLSearchParams();
+                        formData.append('comment_id', commentId);
+                        formData.append('action_ty', action);
+                        formData.append('product_name', product_name);
 
-                    const url = filterForm.action
-                    // Отправляем AJAX-запрос
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-CSRFToken': csrftoken,
-                        },
-                        body: formData
-                    })
-                    .then(responce => responce.json())
-                    .then(data => {
-                        if (data.status == "success") {
-                            if (likeCountSpan) {
-                                likeCountSpan.innerText = data.net_likes;
+                        const url = filterForm.action
+                        // Отправляем AJAX-запрос
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'X-CSRFToken': csrftoken,
+                            },
+                            body: formData
+                        })
+                        .then(responce => responce.json())
+                        .then(data => {
+                            if (data.status == "success") {
+                                if (likeCountSpan) {
+                                    likeCountSpan.innerText = data.net_likes;
 
-                                if (likeCountSpan.innerText < 0) {
-                                    likeCountSpan.style.color = "red";
-                                    likeCountSpan.style.display = "block";
-                                } else if (likeCountSpan.innerText > 0) {
-                                    likeCountSpan.style.color = "green";
-                                    likeCountSpan.style.display = "block";
-                                } else {
-                                    likeCountSpan.style.color = "white";
-                                    likeCountSpan.style.display = "block";
+                                    if (likeCountSpan.innerText < 0) {
+                                        likeCountSpan.style.color = "red";
+                                        likeCountSpan.style.display = "block";
+                                    } else if (likeCountSpan.innerText > 0) {
+                                        likeCountSpan.style.color = "green";
+                                        likeCountSpan.style.display = "block";
+                                    } else {
+                                        likeCountSpan.style.color = "white";
+                                        likeCountSpan.style.display = "block";
+                                    }
+
+                                    if (data.existing_action == "like"){
+                                        likeButton.src = "/static/img/active_like.png";
+                                        dislikeButton.src = "/static/img/dislike.png";
+                                    } else if (data.existing_action  == "dislike") {
+                                        likeButton.src = "/static/img/like.png";
+                                        dislikeButton.src = "/static/img/active_dislike.png";
+                                    } else {
+                                        likeButton.src = "/static/img/like.png";
+                                        dislikeButton.src = "/static/img/dislike.png";
+                                    }
                                 }
-
-                                if (data.existing_action == "like"){
-                                    likeButton.src = "/static/img/active_like.png";
-                                    dislikeButton.src = "/static/img/dislike.png";
-                                } else if (data.existing_action  == "dislike") {
-                                    likeButton.src = "/static/img/like.png";
-                                    dislikeButton.src = "/static/img/active_dislike.png";
-                                } else {
-                                    likeButton.src = "/static/img/like.png";
-                                    dislikeButton.src = "/static/img/dislike.png";
-                                }
+                            } else {
+                                alert(data.message || 'An error occurred.');
                             }
-                        } else {
-                            alert(data.message || 'An error occurred.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    } else {
+                        window.location.href = '/login'
+                    }
                 });
             });
         });

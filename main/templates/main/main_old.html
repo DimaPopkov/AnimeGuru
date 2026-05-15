@@ -7,13 +7,7 @@
 {% load static %}
 {% block content %}
     <div class="container_d">
-        <div class="filter main_items_background">
-            <button type="button" class="filter_toggle_btn" onclick="toggleFilterLayout()" aria-label="Свернуть фильтр">
-                <svg xmlns="http://w3.org" viewBox="0 0 448 512" class="filter_toggle_svg">
-                    <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
-                </svg>
-            </button>
-
+        <div class="filter main_items_background">            
             <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
                 <div class="filter_blocks_grid">
                     <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
@@ -31,7 +25,7 @@
                     <h4 for="category">Фильтр:</h4><br>
 
                     <div class="sort-wrapper">
-                        <label> Сортировать по:</label>
+                        <label for="sort"> Сортировать по:</label>
                         <select class="font16 text_fix choices__list" name="sort" id="sort">
                             {% for element in sort %}
                                 <option value="{{ element.id }}" {% if filter_data.3 == element.id|stringformat:"s" %} selected {% endif %}>{{ element.name }}</option>
@@ -83,6 +77,11 @@
             </form>
         </div>
 
+        <div class="filter_buttons_hide_show">
+            <img class="hide_filter" src="{% static '/img/AI_sendMessage.webp' %}" width="50px" onclick="hideFilter()">
+            <img class="show_filter" src="{% static '/img/AI_sendMessage.webp' %}" width="50px" onclick="showFilter()">
+        </div>
+
         <div class="container_e">
             <div class="new_products main_items_background">
                 <div class="new_products_title">
@@ -109,11 +108,9 @@
                                 <div class="prod_element_rating">
                                     <div class="prod_element_rating_block" style="
                                         background:
-                                                {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
-                                                {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
-                                                {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
-                                            color: #ffffff;
-                                            box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
+                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                            {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
+                                            {% else %} red {% endif %};
                                         "> {{ element.rating }} </div>
                                     <!-- <div class="prod_element_rating_block_dop_main">
                                         <div class="prod_element_rating_block_dop"></div>
@@ -162,12 +159,10 @@
                                     {% endif %}
                                     <div class="prod_element_rating">
                                         <div class="prod_element_rating_block" style="
-                                            background:
-                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
-                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
-                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
-                                                color: #ffffff;
-                                                box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
+                                        background:
+                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                            {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
+                                            {% else %} red {% endif %};
                                         "> {{ element.rating }} </div>
                                         <!-- <div class="prod_element_rating_block_dop_main">
                                             <div class="prod_element_rating_block_dop"></div>
@@ -238,15 +233,9 @@
                 let html = '';
 
                 products.forEach(element => {
-                    let ratingStyle = 'linear-gradient(135deg, #3a3a44, #26262b)';
-                    let ratingShadow = '0 4px 10px rgba(0, 0, 0, 0.5)';
-
-                    if (element.rating >= 8) {
-                        ratingStyle = 'linear-gradient(135deg, #a176ff, #6225ff)';
-                        ratingShadow = '0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0, 0, 0, 0.5)';
-                    } else if (element.rating >= 6) {
-                        ratingStyle = 'linear-gradient(135deg, #bdc3c7, #4e5d6c)';
-                    }
+                    let ratingStyle = 'red';
+                    if (element.rating > 8) ratingStyle = 'linear-gradient(rgb(50,200,50), rgb(80,150,80))';
+                    else if (element.rating > 6) ratingStyle = 'linear-gradient(rgb(220,220,30), rgb(150,150,30))';
 
                     html += `
                         <form class="fade-in" action="/card/${encodeURIComponent(element.name)}/" method="GET">
@@ -481,21 +470,22 @@
 
         const container_e = document.querySelector('.container_e');
 
-        function toggleFilterLayout() {
-            const filter = document.querySelector('.filter');
-            const toggleBtn = document.querySelector('.filter_toggle_btn');
+        function hideFilter(){
+            filter.style.display = 'none';
 
-            if (!filter || !toggleBtn) return;
+            showBtn.style.display = 'block';
+            hideBtn.style.display = 'none';
 
-            // Жестко удаляем любые инлайновые стили display, если они застряли в памяти браузера
-            const filterForm = filter.querySelector('.filter_form');
-            if (filterForm) {
-                filterForm.style.removeProperty('display');
-            }
+            filter_buttons_hide_show.style.position = 'relative';
+        }
 
-            // Теперь ТОЛЬКО переключаем классы. Никаких .style.display = 'none'!
-            filter.classList.toggle('filter-hidden');
-            toggleBtn.classList.toggle('rotated');
+        function showFilter(){
+            filter.style.display = 'flex';
+
+            showBtn.style.display = 'none';
+            hideBtn.style.display = 'block';
+
+            filter_buttons_hide_show.style.position = 'absolute';
         }
     </script>
 {% endblock %}

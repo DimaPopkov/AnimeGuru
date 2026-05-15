@@ -1,10 +1,3 @@
-:root {
-    /* Новый акцентный цвет - Неоновый индиго */
-    --color-accent: #7042f4;
-    --color-accent-hover: #5b30dc;
-    --color-accent-glow: rgba(112, 66, 244, 0.35);
-}
-
 html {
   /* scrollbar-width: none; */
   /* -ms-overflow-style: none; */
@@ -186,18 +179,15 @@ main{
     height: 100%;
 }
 
-.container_d {
-    display: flex !important;
+.container_d{
+    display: flex;
     flex-direction: row-reverse;
+
     column-gap: 20px;
+
     max-width: 1700px;
+
     margin: 0 auto;
-    
-    /* ИСПРАВЛЕНИЕ: Убираем маргин и компенсируем его внутренним отступом сверху */
-    margin-top: 0 !important;
-    
-    box-sizing: border-box;
-    align-items: start;
 }
 
 .container_e{
@@ -216,10 +206,6 @@ main{
     height: 100%;
 
     color: rgb(200, 200, 200);
-
-    flex: 1 !important;            /* Заставляет блок работать как пружина */
-    min-width: 0 !important;       /* Защита от вылетов внутренних сеток */
-    margin-right: 0 !important;    /* Убираем старый маргин, блокировавший расширение */
 }
 
 .container_f{
@@ -243,6 +229,7 @@ main{
 
 .catalog{
     margin-right: auto;
+    padding: 3px 0;
 
     display: flex;
     flex-direction: column;
@@ -272,119 +259,73 @@ main{
     border-radius: 3px;
 }
 
-.filter {
-    --pseudo-filter-height: auto; /* Высота теперь адаптивная и зависит от контента */
+.filter{
+    --pseudo-filter-height: 940px;
+
     margin-top: 25px;
+
     display: flex;
     flex-direction: column;
-    text-align: left; /* Выравнивание текста по левому краю для аккуратности */
-    width: 320px; /* Оптимальная фиксированная ширина боковой панели */
-    min-width: 320px;
+
+    text-align: center;
+
+    width: 450px;
+    /* height: 100%; */
     height: var(--pseudo-filter-height);
+
     color: rgb(200, 200, 200);
+    
     background: none;
     border: none;
-    position: sticky !important;
+
+    /* position: fixed; */
+    /* top: 75px; */
+    /* position: sticky; */
+}
+
+.filter_buttons_hide_show{
+    position: absolute;
+
+    margin-top: 25px;
+    margin-right: 55px;
+
+    --hide-deg: 90deg;
+    --show-deg: -90deg;
+}
+
+.hide_filter{
+    position: absolute;
+    cursor: pointer;
+
+    /* margin-top: 25px; */
+    /* padding: 5px; */
+
+    rotate: var(--hide-deg);
+    z-index: 8999;
+}
+
+.show_filter{
+    display: none;
+
+    position: fixed;
+    cursor: pointer;
+
+    /* margin-top: 25px; */
+    /* margin-right: -55px; */
+    /* padding: 5px; */
+
+    rotate: var(--show-deg);
+    z-index: 8999;
+}
+
+.filter_form{
+    padding: 10px 10px ;
+
+    border-radius: 3px;
+    height: 500px;
+
+    /* position: sticky; */
     top: 75px;
-}
-
-.filter_buttons_hide_show {
-    position: absolute !important;
-    top: 20px; /* Отступ от верхнего края формы */
-    right: 20px; /* Отступ от правого края формы */
-    margin: 0 !important;
-    z-index: 100 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px !important;
-    height: 32px !important;
-}
-
-.hide_filter, .show_filter {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    cursor: pointer;
-    object-fit: contain;
-}
-
-.filter_toggle_btn {
-    position: absolute !important;
-    right: 0 !important;  /* Выравниваем по правому краю */
-    width: 38px;
-    height: 38px;
-    background: rgb(40, 40, 40);
-    border: 1px solid rgb(60, 60, 60);
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    z-index: 1000 !important; /* Кнопка всегда поверх всех линий */
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.filter_toggle_btn:hover {
-    border-color: rgb(80, 80, 85);
-    background: rgb(45, 45, 50);
-}
-
-.filter_toggle_svg {
-    width: 14px;
-    height: 14px;
-    fill: rgb(150, 150, 155);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), fill 0.25s ease;
-}
-
-.filter_toggle_btn:hover .filter_toggle_svg {
-    fill: #ffffff;
-}
-
-/* Плавный поворот стрелки на 90 градусов при скрытии */
-.filter_toggle_btn.rotated .filter_toggle_svg {
-    transform: rotate(-90deg);
-    fill: var(--color-accent) !important;
-}
-
-/* Скрытие внутренностей формы */
-.filter.filter-hidden .filter_form {
-    display: none !important;
-}
-
-/* Ограничиваем высоту панели в скрытом состоянии, чтобы она не растягивала страницу */
-.filter.filter-hidden {
-    width: 38px !important;        /* Сжимаем ширину точно до размера кнопки */
-    min-width: 38px !important;
-    max-width: 38px !important;
-    height: 38px !important;       /* Уменьшаем высоту */
-    background-color: transparent !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-    margin-top: 25px !important;
-}
-
-.filter.filter-hidden .filter_toggle_btn {
-    right: 0 !important;
-    top: 0 !important;
-}
-
-
-.filter_form {
-    box-sizing: border-box;
-    width: 100%;
-    
-    /* Важно для анимации: задаем заведомо большую высоту с запасом и разрешаем анимацию */
-    opacity: 1;
-    
-    /* Плавность: 0.35 секунды с мягким ускорением и замедлением */
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease,
-                padding 0.35s ease !important;
 }
 
 .products_catalog{
@@ -505,44 +446,32 @@ main{
     cursor: pointer;
 }
 
-.prod_element_rating {
-    position: absolute !important;
-    top: 2px !important;
-    left: 2px !important;
-    z-index: 10 !important;
-    width: auto !important;
-    height: auto !important;
+.prod_element_rating{
+    position: absolute;
+ 
+    width: 45px;
+    height: 25px;
 }
 
-.prod_element_rating_block {
-    /* Увеличиваем шрифт с 12px до крупных и четких 14px */
-    font-size: 14px !important; 
-    
-    /* Делаем начертание максимально жирным для высокой читаемости */
-    font-weight: 400 !important; 
-    
-    /* 
-       Просторные внутренние отступы: 
-       5px сверху/снизу и 10px слева/справа, чтобы плашка сохраняла форму
-    */
-    padding: 5px 10px !important; 
-    
-    /* Идеальное скругление углов под новый размер */
-    border-radius: 6px !important;
-    
-    /* Гарантируем белый цвет текста */
-    color: #ffffff !important;
-    
-    /* Выравнивание цифр строго по центру плашки */
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    
-    /* Фиксируем межстрочный интервал, чтобы текст не прыгал */
-    line-height: 1 !important; 
-    letter-spacing: 0.5px;
-}
+.prod_element_rating_block{
+    margin-top: 3px;
+    margin-left: -5px;
 
+    width: 100%;
+    height: 100%;
+
+    /* background-color: rgb(255, 217, 0); */
+
+    color: black;
+    padding-left: 11px;
+    font-weight: 600;
+
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+
+    border: 1px solid black;
+    border-radius: 10px;
+}
 .prod_element_rating_block_dop{    
     width: 10px;
     height: 10px;   
@@ -606,100 +535,24 @@ main{
 
 /* Filter */
 
-.filter_main {
+.filter_main{
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Элементы растягиваются на всю ширину панели */
-    width: 100%;
+
+    align-items: center;
 }
 
-.filter_main h4 {
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: rgb(140, 140, 145);
-    margin-bottom: 0 !important; /* Обнуляем нижний отступ */
-    padding-bottom: 0 !important;
-}
+.filter_category_filter{
+    width: 400px;
 
+    padding: 3px 3px;
 
-.filter_main label {
-    display: block;
-    font-size: 13px;
-    color: rgb(140, 140, 145);
-    margin: 2px 0 !important; /* Фиксированный одинаковый шаг для всех блоков */
-    text-align: left;
-}
-
-.filter_category_filter {
-    width: 100%;
-    height: 38px !important; /* Синхронизируем высоту с Choices.js */
-    padding: 9px 12px;
-    font-size: 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid rgb(60, 60, 60);
+
     color: rgb(200, 200, 200);
-    box-sizing: border-box;
-    outline: none;
+
     cursor: pointer;
-}
-
-.filter_category_filter:focus,
-.posts_create_input:focus,
-.auth_form_input:focus {
-    border-color: var(--color-accent) !important;
-}
-
-.auth_button, .you_container_button {
-    background: var(--color-accent) !important;
-    border:var(--color-accent-glow) !important ;
-}
-.auth_button:hover, .you_container_button:hover {
-    background: var(--color-accent-hover) !important;
-}
-
-.read_more {
-    color: var(--color-accent) !important;
-}
-
-/* Ссылка на похожие товары */
-.related_product_link:hover {
-    color: var(--color-accent) !important;
-}
-
-/* Лайки и активная кнопка лайка */
-.likes-positive {
-    color: #4da3ff; /* Заменили зеленый на приятный небесно-голубой */
-}
-.activebtn {
-    /* CSS-фильтр для перекрашивания SVG-иконки лайка в фиолетовый цвет (#7042f4) */
-    filter: brightness(0) saturate(100%) invert(31%) sepia(85%) saturate(3477%) hue-rotate(244deg) brightness(97%) contrast(97%) !important;
-}
-
-/* Прелоадер сайта */
-.svg-loader .path {
-    stroke: var(--color-accent) !important;
-}
-
-/* Высокий рейтинг (8+) — Контрастный неоновый фиолетовый */
-.rating-high, .rating_high_fix {
-    background: linear-gradient(135deg, #a176ff, #6225ff) !important;
-    color: #ffffff !important; /* Белый текст для идеальной читаемости */
-    /* Добавляем легкое фиолетовое свечение, чтобы плашка выделялась на темном постере */
-    box-shadow: 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0, 0, 0, 0.5) !important;
-}
-
-/* Средний рейтинг (6-8) — Оставляем благородный стальной серебристый */
-.rating-medium, .rating_medium_fix {
-    background: linear-gradient(135deg, #bdc3c7, #4e5d6c) !important;
-    color: #ffffff !important;
-}
-
-/* Низкий рейтинг (<6) — Нейтральный приглушенный угольный */
-.rating-low, .rating_low_fix {
-    background: linear-gradient(135deg, #3a3a44, #26262b) !important;
-    color: #a0a0a5 !important;
 }
 
 .find_by_name{
@@ -845,22 +698,24 @@ main{
 .custom-dropdown {
     position: relative;
     width: 100%;
+
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
 }
 
 .dropdown-toggle {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 38px !important; /* Синхронизируем высоту */
-    padding: 0 12px;
-    box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid rgb(60, 60, 60);
-    color: rgb(200, 200, 200);
+    width: 400px;
+    height: 31px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    outline: none;
 }
 
 .dropdown-toggle::after{
@@ -868,29 +723,41 @@ main{
 }
 
 .dropdown-content {
-    display: none; 
-    /* Переводим в одну колонку, чтобы длинный текст больше никогда не вылетал наружу */
-    grid-template-columns: 1fr !important; 
-    gap: 4px; 
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    width: 100%;
-    box-sizing: border-box !important;
-    max-height: 35vh;
-    overflow-y: auto !important;
-    overflow-x: hidden !important; /* Жесткая блокировка горизонтального скролла */
-    /* background: #1e1e22 !important;  */
-    /* border: 1px solid #2d2d34 !important; */
-    border-radius: 10px; 
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5); 
-    z-index: 1000 !important;
-    padding: 8px;
-    margin-top: -1px; 
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    /* position: absolute; */
+
+    width: 400px;
+    /* max-height: 250px; */
+    /* max-height: 50vh; */
+
+    overflow-y: auto;
+
+    z-index: 1000;
+
+    margin-top: 5px;
+
+    --pseudo-dropdown-content-scrollbar-color: rgb(50, 50, 50);
+
+    background: none;
+    border: none;
 }
 
 .dropdown-content-linear-gr {
-    display: none; /* Отключен, так как мешал кликам по верхним чекбоксам */
+    --pseudo-dropdown-content-linear-gr-background: linear-gradient(to bottom, rgba(30, 30, 30, 100%), rgba(30, 30, 30, 0));
+
+    content: "";
+    position: fixed;
+    margin-top: -1px;
+
+    width: calc(400px - 2px);
+
+    height: 20px;
+
+    background: var(--pseudo-dropdown-content-linear-gr-background);
+    
+    z-index: 2;
+    pointer-events: none;
 }
 
 .dropdown-content::-webkit-scrollbar {
@@ -908,118 +775,42 @@ main{
 }
 
 .checkbox-item {
-    display: flex !important;
-    flex-direction: row !important; 
-    align-items: center !important; 
-    justify-content: flex-start !important;
-    gap: 10px !important; 
-    padding: 6px 8px !important; 
-    margin: 0 !important;
+    display: flex;
+    /* justify-content: center; */
+    column-gap: 3px;
+
+    text-align: center;
+    align-items: center;
+
+    padding: 8px 12px;
     cursor: pointer;
-    box-sizing: border-box !important;
-    width: 100%;
 
-    border-radius: 10px;
-    background-color: transparent !important; 
+    border-radius: 5px;
+
+    /* background: var(--pseudo-bg-color,  rgb(30, 30, 30)); */
 }
 
-/* Эффект подсветки при наведении мыши на строку жанра */
 .checkbox-item:hover {
-    background-color: rgb(42, 42, 48) !important;
-}
-
-/* Микро-эффект нажатия на тег */
-.checkbox-item:active {
-    transform: scale(0.98);
-}
-
-.checkbox-item:hover .checkbox-item-text {
-    color: #ffffff !important;
-}
-
-.checkbox-item-text {
-    font-size: 14px;
-    font-weight: 400;
-    color: rgb(180, 180, 185) !important;
-    margin: 0 !important; 
-    padding: 0 !important;
-    line-height: 1 !important; 
-    user-select: none;
-    text-align: left;
-    transition: color 0.15s ease;
-}
-
-.checkbox-item:hover .checkbox-item-text {
-    color: #ffffff !important;
+    background: var(--pseudo-bg-hover-color,  rgb(35, 35, 35));
 }
 
 input[type="checkbox"] {
     appearance: none;
-    -webkit-appearance: none;
-    
-    /* Увеличиваем размер до комфортных 16px */
-    width: 16px;
-    height: 16px;
-    
-    background: rgb(24, 24, 28);
-    border: 1px solid rgb(65, 65, 75);
-    border-radius: 4px;
+    width: 10px;
+    height: 10px;
+    background: var(--pseudo-bg-checkbox-color, rgb(0, 0, 0));
+    background-origin: border-box;
+    border: 2px solid #444;
+    border-radius: 1px;
     cursor: pointer;
-    position: relative;
-    outline: none;
-    
-    /* Исключаем сжатие галочки при длинных текстах */
-    flex-shrink: 0; 
-    
-    /* Плавный переход для всех состояний */
-    transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                box-shadow 0.2s ease;
 }
 
-/* Ховер-эффект наведения на сам чекбокс */
-input[type="checkbox"]:hover {
-    border-color: rgb(90, 90, 100);
-    background: rgb(30, 30, 35);
-}
-
-/* Состояние, когда чекбокс выбран */
 input[type="checkbox"]:checked {
-    background: var(--color-accent) !important;
-    border-color: var(--color-accent) !important;
-    box-shadow: 0 0 8px var(--color-accent-glow) !important;
+    background: var(--pseudo-bg-checked-color, rgb(200, 200, 200));
+    border-color: rgb(30, 30, 30);
 }
 
-/* 
-   Создаем идеальную графическую галочку внутри.
-   Она скрыта по умолчанию и плавно проявляется при клике.
-*/
-input[type="checkbox"]::after {
-    content: '';
-    position: absolute;
-    
-    /* Идеальное центрирование внутри квадрата 16х16 */
-    left: 5px;
-    top: 2px;
-    width: 4px;
-    height: 8px;
-    
-    /* Рисуем две стороны прямоугольника, образующие угол */
-    border: solid #ffffff;
-    border-width: 0 2px 2px 0;
-    
-    /* Поворачиваем на 45 градусов, превращая в галочку */
-    transform: rotate(45deg) scale(0);
-    
-    opacity: 0;
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s ease;
-}
 
-/* Анимация проявления галочки при активации */
-input[type="checkbox"]:checked::after {
-    transform: rotate(45deg) scale(1);
-    opacity: 1;
-}
 
 /* Иконка стрелки */
 .arrow {
@@ -1694,204 +1485,36 @@ input[type="checkbox"]:checked::after {
 
 /* -------- Choises.js (выпадающий список) -------------- */
 
-.sort-wrapper {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
+.sort-wrapper{
+    display: flex;
+
+    column-gap: 10px;
 }
 
-/* Лейбл "Сортировать по:" сверху */
-.sort-wrapper label {
-    display: block !important;
-    margin: 12px 0 0 0 !important;
-    padding: 0 !important;
-    font-size: 13px;
-    color: rgb(140, 140, 145);
-    text-align: left;
-    line-height: 1 !important;
-}
-
-/* Базовый класс контейнера Choices.js */
-.sort-wrapper .choices {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    position: relative !important;
-}
-
-/* Внутренняя кнопка-плашка Choices.js (Приводим к общей высоте 38px) */
-.sort-wrapper .choices__inner {
-    display: flex !important;
-    align-items: center !important;
-    width: 100% !important;
-    height: 38px !important;
-    padding: 0 36px 0 12px !important; /* Оставляем 36px справа для иконки стрелочки */
-    
-    background-color: rgb(30, 30, 30) !important;
-    border: 1px solid rgb(60, 60, 60) !important;
-    border-radius: 8px !important;
-    box-sizing: border-box !important;
-    
-    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-/* Элемент с текстом внутри кнопки */
-.sort-wrapper .choices__list--single {
-    padding: 0 !important;
-    margin: 0 !important;
-    color: rgb(200, 200, 200) !important;
-    font-size: 14px;
-    background: none !important;
-    border: none !important;
-    white-space: nowrap;
-}
-
-/* === ДОБАВЛЕНИЕ ЛАКОНИЧНОЙ SVG СТРЕЛОЧКИ ЧЕРЕЗ ПСЕВДОЭЛЕМЕНТ === */
-.sort-wrapper .choices::after {
-    content: "" !important;
-    position: absolute !important;
-    right: 14px !important;
-    top: 50% !important;
-    width: 12px !important;
-    height: 12px !important;
-    
-    /* Красивая тонкая векторная стрелочка в тон сайта */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 448 512'%3E%3Cpath fill='rgb(150, 150, 155)' d='M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z'/%3E%3C/svg%3E") !important;
-    background-size: contain !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    
-    transform: translateY(-50%) !important;
-    pointer-events: none !important;
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* === ИНТЕРАКТИВНОЕ СОСТОЯНИЕ ПРИ ОТКРЫТИИ === */
-
-/* Ховер наведения на селект */
-.sort-wrapper .choices:hover .choices__inner {
-    border-color: rgb(80, 80, 85) !important;
-}
-
-/* Когда Choices.js открывает выпадающее меню, класс .is-open активирует подсветку */
-.sort-wrapper .choices.is-open .choices__inner {
-    border-color: #7042f4 !important; /* Твой фирменный фиолетовый */
-    box-shadow: 0 0 8px rgba(112, 66, 244, 0.2) !important;
-}
-
-/* Плавно разворачиваем и подсвечиваем стрелочку вверх */
-.sort-wrapper .choices.is-open::after {
-    transform: translateY(-50%) rotate(180deg) !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 448 512'%3E%3Cpath fill='rgb(112, 66, 244)' d='M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z'/%3E%3C/svg%3E") !important;
-}
-
-/* === ОФОРМЛЕНИЕ ВСПЛЫВАЮЩЕГО СПИСКА ВАРИАНТОВ === */
-.sort-wrapper .choices__list--dropdown {
-    display: none;
-    position: absolute !important;
-    
-    /* 
-       Жестко прижимаем верхний край выпадающего меню 
-       к нижнему краю кнопки (100%) плюс отступ в 5 пикселей 
-    */
-    top: calc(100% + 5px) !important; 
-    left: 0 !important;
-    
-    width: 100% !important;
-    box-sizing: border-box !important;
-    max-height: 250px !important;
-    
-    background: #1e1e22 !important;
-    border: 1px solid #2d2d34 !important;
-    border-radius: 8px !important; /* Ровное скругление со всех сторон */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
-    z-index: 1000 !important;
-    overflow: hidden !important;
-}
-
-.sort-wrapper .choices__list--dropdown.is-active {
-    display: block !important;
-    top: calc(100% + 5px) !important;
-}
-
-.sort-wrapper .choices:focus,
-.sort-wrapper .choices__inner:focus,
-.sort-wrapper .choices__list--single:focus,
-.sort-wrapper .choices.is-focused .choices__inner {
-    outline: none !important;
-    border-color: #7042f4 !important; /* Вместо белой обводки оставляем только твой аккуратный фиолетовый бордюр */
-    box-shadow: 0 0 8px rgba(112, 66, 244, 0.2) !important;
-}
-
-/* Фикс для внутренней обертки Choices.js, которая тоже может генерировать рамку */
-.sort-wrapper .choices[data-type="select-one"]::after,
-.sort-wrapper .choices[data-type="select-one"]:focus {
-    outline: none !important;
-}
-
-/* Убираем возможный outline с самого раскрывающегося списка */
-.sort-wrapper .choices__list--dropdown:focus,
-.sort-wrapper .choices__item:focus {
-    outline: none !important;
-}
-
-/* Элементы внутри выпадающего списка */
-.sort-wrapper .choices__list--dropdown .choices__item {
-    padding: 10px 14px !important;
-    color: rgb(200, 200, 205) !important;
-    font-size: 14px;
-    transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-/* Подсветка элементов списка при наведении */
-.sort-wrapper .choices__list--dropdown .choices__item--selectable.is-highlighted {
-    background-color: rgba(255, 255, 255, 0.04) !important;
-    color: #ffffff !important;
-}
-
-/* Стиль уже выбранного элемента внутри списка */
-.sort-wrapper .choices__list--dropdown .choices__item.is-selected {
-    background-color: rgba(112, 66, 244, 0.15) !important; /* Фиолетовая приглушенная подложка */
-    color: #ffffff !important;
-    font-weight: 600;
-}
-
-/* .choices {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.choices {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+    user-select: none;         /* Standard */
     cursor: pointer;
-
-    display: inline-block !important;
-    width: auto !important;
-    vertical-align: middle;
 }
 
 .choices__inner {
-    display: inline-block !important;
-    width: auto !important;
-    background-color: transparent !important;
+    background-color: transparent;
     border: none !important;
     padding: 0 !important;
     min-height: auto !important;
+    display: inline-block;
 }
 
 .choices__list--single {
-    padding: 9px 12px !important;
-    text-align: left;
-    border: 1px solid rgb(60, 60, 60) !important;
-    border-radius: 8px !important;
-    background-color: rgba(30, 30, 30);
-    color: rgb(200, 200, 200) !important;
-    font-size: 14px;
-    box-sizing: border-box !important;
-    width: 100% !important;
-    height: 38px !important;
-    display: flex !important;
-    align-items: center;
+    padding: 0 10px !important;
+    text-align: center;
+
+    border: 1px solid var(--pseudo-list-dropdown-selected);
+    border-radius: 10px;
+    background-color: var(--choices__list__single__background__fix);
+    color: var(choices__list__single__color__fix);
 }
 
 .choices__list--dropdown {
@@ -1940,7 +1563,7 @@ input[type="checkbox"]:checked::after {
 
 .choices__list--dropdown .choices__item--selectable:hover {
     background-color: var(--pseudo-list-dropdown-is-highlighted) !important;
-} */
+}
 
 /* ---------------------------- */
 
@@ -2672,32 +2295,14 @@ input[type="checkbox"]:checked::after {
     filter: brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(0%) hue-rotate(218deg) brightness(97%) contrast(92%);
 }
 
+.grid_buttons{
+    fill: var(--fill-active);
+    width: 20px;
+    height: 20px;
 
-.filter_blocks_grid {
-    display: flex;
-    justify-content: flex-start;
-    gap: 8px; /* Аккуратный отступ между кнопками */
-    position: relative; /* Убран absolute, ломавший верстку на скриншоте */
-    width: 100%;
-    padding: 0 0 16px 0;
-    margin-top: 0;
-    margin-bottom: 16px;
-    border: none !important;
-    border-bottom: 1px solid rgb(60, 60, 60); /* Тонкая разделительная линия */
-    background-color: transparent !important;
-}
-
-.grid_buttons {
-    box-sizing: border-box;
-    width: 38px;
-    height: 38px;
-    padding: 8px;
-    background: rgb(38, 38, 43);
-    border: 1px solid rgb(60, 60, 60);
-    border-radius: 8px;
     cursor: pointer;
-    fill: rgb(150, 150, 155);
-    transition: all 0.2s ease;
+
+    --fill-active: rgb(150, 150, 150);
 }
 
 .grid_buttons.active{
@@ -2705,13 +2310,24 @@ input[type="checkbox"]:checked::after {
     filter: brightness(0) brightness(55%) contrast(50%);
 }
 
-.filter_blocks_grid .grid_buttons:hover,
-.filter_blocks_grid .grid_buttons.active {
-    background: rgba(112, 66, 244, 0.1) !important;
-    border-color: var(--color-accent) !important;
-    fill: var(--color-accent) !important;
-}
+.filter_blocks_grid{
+    display: flex;
+    justify-content: space-between;
 
+    /* position: relative; */
+    position: absolute;
+
+    width: 120px;
+
+    padding: 15px;
+    margin-top: -10px;
+    /* margin: 0 0 0 25px; */
+
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: 20px;
+
+    background-color: rgb(30, 30, 30);
+}
 
 .hidden_description{
     width: auto;

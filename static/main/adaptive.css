@@ -278,6 +278,9 @@
     .find_by_name2_container{
         top: 52px;
     }
+    .login_button{
+        height: 50px;
+    }
 }
 
 @media screen and (max-width: 730px){
