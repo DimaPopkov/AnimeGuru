@@ -508,6 +508,30 @@ main{
     cursor: pointer;
 }
 
+/* 
+   Когда мы наводим мышь на ЛЮБУЮ часть .prod_element (даже на текст названия снизу),
+   картинка плавно увеличивается и затемняется, уходя в глубокий блэр-эффект
+*/
+.prod_element:hover .prod_element_pic_lock img,
+.prod_element2:hover .prod_element_pic_lock2 img {
+    transform: scale(1.05);
+    filter: brightness(0.55) contrast(1.1);
+}
+
+/* При ховере на весь блок лупа плавно "вырастает" из центра обложки */
+.prod_element:hover .prod_element_pic_lock::after,
+.prod_element2:hover .prod_element_pic_lock::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* Опционально: подсвечиваем название аниме фиолетовым акцентом при наведении на карточку */
+.prod_element:hover .prod_element_info h5,
+.prod_element2:hover .prod_element_info h5 {
+    color: color-mix(in srgb, var(--color-accent) 100%, transparent) !important;
+    transition: color 0.2s ease;
+}
+
 .prod_element_rating {
     position: absolute !important;
     top: 2px !important;
@@ -565,7 +589,8 @@ main{
     overflow: hidden;
 }
 
-.prod_element_pic_lock{
+.prod_element_pic_lock, 
+.prod_element_pic_lock2 {
     min-width: 130px;
 
     /* height: 245px; */
@@ -584,27 +609,73 @@ main{
 
     display: flex;
     justify-content: center;
+
+    position: relative !important;
 }
 
-.prod_element_pic_lock2{
-    min-width: 130px;
+.prod_element_pic_lock img,
+.prod_element_pic_lock2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                filter 0.3s ease !important;
 
-    /* height: 245px; */
-    /* min-height: 90px; */
-    max-height: 350px;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important; 
 
-    aspect-ratio: 11 / 16;
+    position: relative !important;
+    z-index: 1 !important;
+}
 
-    overflow: hidden;
+.prod_element_pic_lock::before, 
+.prod_element_pic_lock2::before {
+    content: none !important;
+    display: none !important;
+}
 
-    align-content: center;
+.prod_element_pic_lock::after, 
+.prod_element_pic_lock2::after {
+    content: "" !important;
+    position: absolute !important;
+    
+    /* 1. Жестко привязываем геометрический центр элемента к центру обложки аниме */
+    top: 50% !important;
+    left: 50% !important;
+    
+    /* 2. Задаем крупные, сочные размеры для твоей иконки */
+    width: calc(100% - 70%) !important; 
+    height: calc(100% - 70%) !important;
+    
+    /* 3. ПОДКЛЮЧАЕМ ТВОЮ SVG-ЛУПУ (укажи правильный путь к файлу) */
+    background-image: url("../img/лупа.svg") !important;
+    
+    filter: invert(1);
 
-    overflow: hidden;
+    /* 
+       4. ВАЖНО ДЛЯ ВЫРАВНИВАНИЯ:
+       Заставляем иконку встать строго по центру своего бокса 
+       и запрещаем ей растягиваться или дублироваться.
+    */
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    
+    /* 5. Базовое скрытое состояние: плавное появление из абсолютного нуля */
+    transform: translate(-50%, -50%) scale(0) !important;
+    opacity: 0 !important;
+    z-index: 99 !important;
+    
+    /* Красивый эффект пружины при появлении */
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.2s ease !important;
+}
 
-    border-radius: 5px;
-
-    display: flex;
-    justify-content: center;
+.prod_element:hover .prod_element_pic_lock::after,
+.prod_element2:hover .prod_element_pic_lock2::after {
+    transform: translate(-50%, -50%) scale(1) !important;
+    opacity: 1 !important;
 }
 
 /* Filter */
@@ -2836,16 +2907,17 @@ input[type="checkbox"]:checked::after {
 
 .fade-in {
     opacity: 0;
-    animation: fadeIn 0.4s ease-out forwards;
+
+    animation: fadeInUpSmooth 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInUpSmooth {
     from { 
         opacity: 0; 
-        transform: translateY(10px); 
+        transform: translateY(15px); 
     }
     to { 
-        opacity: 1; 
+        opacity: 1;
         transform: translateY(0); 
     }
 }
