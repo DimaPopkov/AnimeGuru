@@ -38,13 +38,9 @@
                                     <p class="post_p"> {{ element.text }} </p>
 
                                     <div style="display: flex; height: 30px;">
-                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
-                                            {% if element.net_likes > 0 %} green 
-                                            {% elif element.net_likes < 0 %} red 
-                                            {% else %} white 
-                                            {% endif %};">
-                                                {{ element.net_likes }} 
-                                            </span>
+                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: green">
+                                            {{ element.like_count }} 
+                                        </span>
 
                                         <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
                                             {% csrf_token %}
@@ -61,7 +57,14 @@
                                                     data-post-id="{{ element.id }}"
                                                     data-action="like">
                                             {% endif %}
+                                        </form>
 
+                                        <span class="dislike-count-{{ element.id }}" style="padding-right: 5px; color: red">
+                                            {{ element.dislike_count }} 
+                                        </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
                                             {% if element.my_state == 1 %}
                                                 <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
                                                     value="{{ element.dislike_count }}"
@@ -102,13 +105,9 @@
                                     <p class="post_p"> {{ element.text }} </p>
 
                                     <div style="display: flex; height: 30px;">
-                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
-                                            {% if element.net_likes > 0 %} green 
-                                            {% elif element.net_likes < 0 %} red 
-                                            {% else %} white 
-                                            {% endif %};">
-                                                {{ element.net_likes }} 
-                                            </span>
+                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: green">
+                                            {{ element.like_count }} 
+                                        </span>
 
                                         <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
                                             {% csrf_token %}
@@ -125,7 +124,14 @@
                                                     data-post-id="{{ element.id }}"
                                                     data-action="like">
                                             {% endif %}
+                                        </form>
 
+                                        <span class="dislike-count-{{ element.id }}" style="padding-right: 5px; color: red">
+                                            {{ element.dislike_count }} 
+                                        </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
                                             {% if element.my_state == 1 %}
                                                 <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
                                                     value="{{ element.dislike_count }}"
@@ -164,13 +170,9 @@
                                     <p class="post_p"> {{ element.text }} </p>
 
                                     <div style="display: flex; height: 30px;">
-                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: 
-                                            {% if element.net_likes > 0 %} green 
-                                            {% elif element.net_likes < 0 %} red 
-                                            {% else %} white 
-                                            {% endif %};">
-                                                {{ element.net_likes }} 
-                                            </span>
+                                        <span class="like-count-{{ element.id }}" style="padding-right: 5px; color: green">
+                                            {{ element.like_count }} 
+                                        </span>
 
                                         <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
                                             {% csrf_token %}
@@ -187,7 +189,14 @@
                                                     data-post-id="{{ element.id }}"
                                                     data-action="like">
                                             {% endif %}
+                                        </form>
 
+                                        <span class="dislike-count-{{ element.id }}" style="padding-right: 5px; color: red">
+                                            {{ element.dislike_count }} 
+                                        </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
                                             {% if element.my_state == 1 %}
                                                 <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
                                                     value="{{ element.dislike_count }}"
@@ -306,12 +315,16 @@
                         .then(data => {
                             if (data.status === "success") {
                                 const netLikes = Number(data.net_likes);
-                                const color = netLikes > 0 ? "green" : (netLikes < 0 ? "red" : "white");
+                                const likes = Number(data.like_count);
+                                const dislikes = Number(data.dislike_count);
 
                                 // Обновляем все счетчики
                                 document.querySelectorAll(`.like-count-${postId}`).forEach(span => {
-                                    span.innerText = netLikes;
-                                    span.style.color = color;
+                                    span.innerText = likes;
+                                });
+
+                                document.querySelectorAll(`.dislike-count-${postId}`).forEach(span => {
+                                    span.innerText = dislikes;
                                 });
 
                                 // Обновляем все кнопки лайков

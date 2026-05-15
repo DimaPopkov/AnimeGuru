@@ -283,13 +283,13 @@ main{
     flex-direction: column;
     text-align: left; /* Выравнивание текста по левому краю для аккуратности */
     width: 320px; /* Оптимальная фиксированная ширина боковой панели */
-    min-width: 320px;
+    min-width: 250px;
     height: var(--pseudo-filter-height);
     color: rgb(200, 200, 200);
     background: none;
     border: none;
     position: sticky !important;
-    top: 75px;
+    top: 78px;
 }
 
 .filter_buttons_hide_show {

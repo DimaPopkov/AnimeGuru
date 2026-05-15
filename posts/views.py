@@ -117,6 +117,8 @@ def update_post_state(request, post_id):
             return JsonResponse({
                 'status': 'success',
                 'net_likes': current_net_likes,
+                'like_count': post.like_count,
+                'dislike_count': post.dislike_count,
                 'existing_action': existing_action.action_type
             })
 

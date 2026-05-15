@@ -523,6 +523,12 @@
     .dropdown-toggle{
         width: 250px;
     }
+    /* .sort-wrapper .choices__inner{
+        width: 250px !important;
+    } */
+    .filter{
+        width: 250px;
+    }
 }
 
 @media screen and (max-width: 400px){
