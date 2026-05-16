@@ -2,9 +2,6 @@
     .container{
         max-width: 1300px;
     }
-    .container_d{
-        column-gap: 0;
-    }
     .container_e {
         margin: 25px;
     }
@@ -67,7 +64,7 @@
     }
     .filter {
         position: initial;
-        margin: 0 auto;
+        margin: 0 15px 0 auto;
         margin-top: 25px;
     }
     .filter_blocks_grid{
@@ -123,6 +120,7 @@
 
         z-index: 9002;
         background: rgb(20, 20, 20);
+        margin: 0 auto;
         margin-top: 65px;
     }
     .filter_form{
@@ -132,6 +130,8 @@
     .container_d{
         flex-direction: column;
         align-items: center;
+
+        column-gap: 0;
     }
     .container_e {
         width: 100%;

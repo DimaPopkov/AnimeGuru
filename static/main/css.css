@@ -277,7 +277,8 @@ main{
 }
 
 .filter {
-    --pseudo-filter-height: auto; /* Высота теперь адаптивная и зависит от контента */
+    --pseudo-filter-height: auto;
+    margin-right: 20px;
     margin-top: 25px;
     display: flex;
     flex-direction: column;
@@ -653,11 +654,6 @@ main{
     
     filter: invert(1);
 
-    /* 
-       4. ВАЖНО ДЛЯ ВЫРАВНИВАНИЯ:
-       Заставляем иконку встать строго по центру своего бокса 
-       и запрещаем ей растягиваться или дублироваться.
-    */
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
@@ -668,8 +664,7 @@ main{
     z-index: 99 !important;
     
     /* Красивый эффект пружины при появлении */
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                opacity 0.2s ease !important;
+    transition: opacity 0.5s ease !important;
 }
 
 .prod_element:hover .prod_element_pic_lock::after,
