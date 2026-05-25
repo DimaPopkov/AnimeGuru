@@ -290,7 +290,9 @@ main{
     background: none;
     border: none;
     position: sticky !important;
-    top: 78px;
+    top: 70px;
+
+    transition: 0.1s;
 }
 
 .filter_buttons_hide_show {
@@ -358,6 +360,9 @@ main{
 /* Скрытие внутренностей формы */
 .filter.filter-hidden .filter_form {
     display: none !important;
+
+    margin-top: 0;
+    margin-right: 0;
 }
 
 /* Ограничиваем высоту панели в скрытом состоянии, чтобы она не растягивала страницу */
@@ -704,8 +709,8 @@ main{
 .filter_category_filter {
     width: 100%;
     height: 38px !important; /* Синхронизируем высоту с Choices.js */
-    padding: 9px 12px;
-    font-size: 14px;
+    padding: 0 8px;
+    font-size: 16px;
     border-radius: 8px;
     border: 1px solid rgb(60, 60, 60);
     color: rgb(200, 200, 200);
@@ -1817,7 +1822,7 @@ input[type="checkbox"]:checked::after {
 .sort-wrapper .choices__list--single {
     padding: 0 !important;
     margin: 0 !important;
-    font-size: 14px;
+    font-size: 16px;
     background: none !important;
     border: none !important;
     white-space: nowrap;
