@@ -22,9 +22,10 @@
             <h4>{{ post.text }}</h2>
         </div>
         <div class="post_card_text_block">
+            <hr>
             <div class="post_card_comment_block fade-in">
                 <h6 class="dark_gray_font"> Все комментарии </h6>
-                <h2> Комментарии </h2>
+                <h2> Ваш комментарий </h2>
             </div>
 
             {% if your_comment == None %}
@@ -38,7 +39,7 @@
                 <form id="you_container_form" method="POST" action="{% url 'edit_comment' post_id=post.id %}">
                     {% csrf_token %}
 
-                    <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.user_comment }}</textarea>
+                    <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.text }}</textarea>
                     <div style="display: flex; column-gap: 10px">
                         <a class="you_container_button_delete"  href="{% url 'delete_comment' post_id=post.id id=your_comment.id %}"> Удалить </a>
                         <button class="you_container_button"> Изменить </button>
@@ -50,7 +51,7 @@
                 <div class="all_comments_container">
                     {% for element in comments %}
                         {% if element.locateZ == 0 %}
-                            <div class="all_comments_container_block">
+                            <div id="{{ element.id }}" class="all_comments_container_block">
                                 <div class="all_comments_container_block_header">
                                     <div class="all_comments_container_block_header_block">
                                         {% if element.user.profile.image and element.user.profile.image != 'avatars/null_avatar.png' %}

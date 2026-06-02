@@ -507,7 +507,8 @@ def edit_comments(request, product_name):
     print("\n\n------------- Edited_Comment ----------------\n", existing_comment)
 
     url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
-    return redirect(url_to_redirect_to)
+    url_with_anchor = f"{url_to_redirect_to}#comment-{existing_comment.id}"
+    return redirect(url_with_anchor)
 
 def delete_comments(request, product_name, id):
     user_name = request.user.username

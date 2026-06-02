@@ -553,7 +553,7 @@
                                     {% if request.user.is_authenticated %}
                                         <div class="comment_answer">
                                             <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                            <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+                                            <!-- <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
                                                 {% csrf_token %}
                                                 <div class="comment_textarea_otvet_header">
                                                     <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
@@ -562,7 +562,7 @@
                                                 <input type="hidden" name="parentId" value="{{ element.id }}"></input>
                                                 <input type="hidden" name="rating" value="0"></input>
                                                 <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                            </form> 
+                                            </form>  -->
                                         </div>
                                     {% endif %}
                                 </div>
@@ -628,16 +628,6 @@
                                                     {% if request.user.is_authenticated %}
                                                         <div class="comment_answer">
                                                             <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                                            <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
-                                                                {% csrf_token %}
-                                                                <div class="comment_textarea_otvet_header">
-                                                                    <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                                                    <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                                                </div>
-                                                                <input type="hidden" name="parentId" value="{{ element2.id }}"></input>
-                                                                <input type="hidden" name="rating" value="0"></input>
-                                                                <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                                            </form> 
                                                         </div>
                                                     {% endif %}
                                                 </div>
@@ -737,6 +727,16 @@
         </div>
     </div>  
 
+    <form id="form" class="comment_textarea_otvet otvet_2 fade-in" method='POST' action="{% url 'add_comments' product_name=product.name %}">
+        {% csrf_token %}
+        <div class="comment_textarea_otvet_header">
+            <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+            <button id="cancel-reply-btn" type="button" class="comment_textarea_otvet_header_button"> Отмена </button>
+        </div>
+
+        <textarea name="text" class="comment_textarea_otvet_textarea textarea_2"></textarea>
+    </form> 
+
     <script>
         window.addEventListener('load', () => {
             try {
@@ -799,6 +799,20 @@
 
         /* Реализация кнопки "Читать далее" у текста карточек главных героев */
         document.addEventListener('DOMContentLoaded', function() {
+            const cancelBtn = document.getElementById('cancel-reply-btn');
+            const replyForm = document.querySelector('.otvet_2'); 
+
+            cancelBtn.addEventListener('click', () => {
+                replyForm.style.top = '100dvh';
+            });
+
+            const commentButtons = document.querySelectorAll('.comment_buttons_button');
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating-input');
+
+            let currentRating = 0;
+            let tempRating = 0;
+
             const readMoreElements = document.querySelectorAll('.read_more');
             
             readMoreElements.forEach(readMoreBtn => {
@@ -839,73 +853,6 @@
                     }
                 });
             });
-        });
-        /* Конец реализации */
-
-        /* Реализация осмотра превью-картинок для тайтла */
-        const card_prew_pic = document.querySelectorAll('.card_prew_pics');
-
-        const overlay = document.createElement('div');
-        overlay.className = 'lightbox-overlay';
-        document.body.appendChild(overlay); 
-
-        /* ----------   2. Функция открытия   ---------- */
-        function openLightbox(src) {
-            overlay.innerHTML = '';                          // чистим от старого
-            const img = document.createElement('img');
-            img.src = src;
-            overlay.appendChild(img);
-
-            overlay.classList.add('active');                 // активируем
-        }
-
-        /* ----------   3. Функция закрытия   ---------- */
-        function closeLightbox() {
-            overlay.classList.remove('active');              // скрываем
-            overlay.innerHTML = '';                          // убираем изображение
-        }
-
-        /* ----------   4. Действие on Клик по любой картинке  ---------- */
-        const gallery = document.getElementById('card_prew_pics_list');   // или любой родитель
-
-        if(gallery != null)
-        {
-            gallery.addEventListener('click', ev => {
-                const targetImg = ev.target.closest('.card_prew_pics');
-                if (!targetImg) return;                          // клик не по картинке
-
-                openLightbox(targetImg.src);                     // открываем
-            });
-        }
-        /* ----------   5. Клик не по изображению → закрыть  ---------- */
-        overlay.addEventListener('click', ev => {
-            // Если клик пришёл не на саму картинку, закрываем
-            if (!ev.target.matches('img')) closeLightbox();
-        });
-
-        /* ----------   6. Клавиша Esc → закрыть  ---------- */
-        document.addEventListener('keydown', ev => {
-            if (ev.key === 'Escape') closeLightbox();
-        });
-        /* Конец реализации */
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const commentButtons = document.querySelectorAll('.comment_buttons_button');
 
             commentButtons.forEach(button => 
             {
@@ -983,14 +930,6 @@
                     }
                 });
             });
-        });
-
-        /* --------- Реализация строки выбора звезд для твоего комментария --------- */
-        document.addEventListener('DOMContentLoaded', function() {
-            const stars = document.querySelectorAll('.star');
-            const ratingInput = document.getElementById('rating-input');
-            let currentRating = 0;
-            let tempRating = 0;
 
             stars.forEach(star => {
                 // Событие при наведении курсора на звезду
@@ -1046,6 +985,73 @@
                     });
                 });
             });
+        });
+        /* Конец реализации */
+
+        /* Реализация осмотра превью-картинок для тайтла */
+        const card_prew_pic = document.querySelectorAll('.card_prew_pics');
+
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        document.body.appendChild(overlay); 
+
+        /* ----------   2. Функция открытия   ---------- */
+        function openLightbox(src) {
+            overlay.innerHTML = '';                          // чистим от старого
+            const img = document.createElement('img');
+            img.src = src;
+            overlay.appendChild(img);
+
+            overlay.classList.add('active');                 // активируем
+        }
+
+        /* ----------   3. Функция закрытия   ---------- */
+        function closeLightbox() {
+            overlay.classList.remove('active');              // скрываем
+            overlay.innerHTML = '';                          // убираем изображение
+        }
+
+        /* ----------   4. Действие on Клик по любой картинке  ---------- */
+        const gallery = document.getElementById('card_prew_pics_list');   // или любой родитель
+
+        if(gallery != null)
+        {
+            gallery.addEventListener('click', ev => {
+                const targetImg = ev.target.closest('.card_prew_pics');
+                if (!targetImg) return;                          // клик не по картинке
+
+                openLightbox(targetImg.src);                     // открываем
+            });
+        }
+        /* ----------   5. Клик не по изображению → закрыть  ---------- */
+        overlay.addEventListener('click', ev => {
+            // Если клик пришёл не на саму картинку, закрываем
+            if (!ev.target.matches('img')) closeLightbox();
+        });
+
+        /* ----------   6. Клавиша Esc → закрыть  ---------- */
+        document.addEventListener('keydown', ev => {
+            if (ev.key === 'Escape') closeLightbox();
+        });
+        /* Конец реализации */
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
         });
 
 
@@ -1224,7 +1230,7 @@
                     if (commentContainer) {
                         const targetForm = commentContainer.querySelector('#form');
 
-                        toggleAnswerBlock(event.target, targetForm);
+                        toggleAnswerBlock(event.target, answerBlock);
                     }
                 }
             })
@@ -1233,18 +1239,17 @@
         }
 
         function toggleAnswerBlock(buttonElement, FormElement) {
-            if (FormElement.style.display == "block") {
-                buttonElement.textContent = 'Ответить';
-                FormElement.style.display = "none";
-                comment_buttons.style.marginBottom = "10px";
+            if (FormElement.style.top == "85dvh") {
+                // buttonElement.textContent = 'Ответить';
+                FormElement.style.top = "100dvh";
+                // comment_buttons.style.marginBottom = "10px";
             } else {
-                buttonElement.textContent = 'Отмена';
-                FormElement.style.display = "block";
+                // buttonElement.textContent = 'Отмена';
+                FormElement.style.top = "85dvh";
                 // comment_buttons.style.marginBottom = "130px";
             }
         }
 
-        
         function SendCommentAnswer(element, elementId){
             const api_url = "http://127.0.0.1:8000/add_comments/";
             const csrftoken = getCookie('csrftoken');
@@ -1272,6 +1277,48 @@
             block.classList.add('is-revealed');
             
             block.style.maxHeight = "100%"; 
+        }
+
+        const block = document.getElementById("seasonBlock");
+        let shineInterval = null;
+
+        if (block) {
+            block.addEventListener("mouseenter", () => {
+                // ПРОВЕРКА: Если спойлер УЖЕ открыт — ничего не делаем и выходим из функции
+                // (Замените '.is-open' или 'active' на тот класс, который добавляется вашему блоку при открытии)
+                if (block.classList.contains("is-open") || block.classList.contains("active")) {
+                    return; 
+                }
+
+                const runShine = () => {
+                    // Дополнительная проверка перед каждым повторным витком цикла
+                    if (block.classList.contains("is-revealed")) {
+                        clearInterval(shineInterval);
+                        block.classList.remove("active-shine");
+                        return; // прерываем выполнение функции
+                    }
+
+                    // Иначе продолжаем гонять блик
+                    block.classList.add("active-shine");
+                    
+                    setTimeout(() => {
+                        block.style.setProperty("transition", "none", "important");
+                        block.classList.remove("active-shine");
+                        
+                        setTimeout(() => {
+                            block.style.removeProperty("transition");
+                        }, 50);
+                    }, 600);
+                };
+
+                runShine(); 
+                shineInterval = setInterval(runShine, 2500); 
+            });
+
+            block.addEventListener("mouseleave", () => {
+                clearInterval(shineInterval);
+                block.classList.remove("active-shine");
+            });
         }
     </script>
 {% endblock %}

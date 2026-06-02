@@ -207,10 +207,43 @@ def add_comment(request, post_id):
     new_comment.save()
 
     url_to_redirect_to = reverse('post', kwargs={'post_id': post.id})
-    return redirect(f"{url_to_redirect_to}#comment-{new_comment.id}")
+    url_with_anchor = f"{url_to_redirect_to}#comment-{new_comment.id}"
+    return redirect(url_with_anchor)
 
-def edit_comment(request):
-    return 0
+def edit_comment(request, post_id):
+    post = Posts.objects.get(id=post_id)
 
-def delete_comment(request):
-    return 0
+    try:
+        existing_comment = PostComment.objects.get(post=post, user=request.user)
+    except Posts.DoesNotExist:
+        url_to_redirect_to = reverse('post', kwargs={'post_id': post_id})
+        return redirect(url_to_redirect_to)
+
+    new_comment_text = request.POST.get('text')
+
+    existing_comment.text = new_comment_text
+
+    existing_comment.save()
+
+    print("\n\n------------- Edited_Comment ----------------\n", existing_comment)
+
+    url_to_redirect_to = reverse('post', kwargs={'post_id': post_id})
+    url_with_anchor = f"{url_to_redirect_to}#comment-{existing_comment.id}"
+    return redirect(url_with_anchor)
+
+def delete_comment(request, post_id):
+    user_name = request.user.username
+
+    post = Posts.objects.get(id=post_id)
+
+    try:
+        existing_comment = PostComment.objects.get(post=post, user=request.user)
+    except PostComment.DoesNotExist:
+        url_to_redirect_to = reverse('card', kwargs={'post_id': post_id})
+        return redirect(url_to_redirect_to)
+    
+    existing_comment.delete()
+    print("Комментарий успешно удалён!")
+    
+    # url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
+    return redirect(request.META.get('HTTP_REFERER', '/'))

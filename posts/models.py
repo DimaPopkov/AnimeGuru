@@ -14,6 +14,7 @@ User = get_user_model()
 # Create your models here.
 class Posts(models.Model):
     title = models.TextField('Заголовок поста')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField('Текст поста')
     media = models.ImageField('Медиа-файлы поста', null=True, blank=True)
     like_count = models.IntegerField('Кол-во лайков под постом', default=0, blank=True)
