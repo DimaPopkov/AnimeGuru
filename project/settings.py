@@ -145,6 +145,14 @@ UNFOLD = {
                         "title": _("Posts"),
                         "icon": "folder",
                         "link": reverse_lazy("admin:posts_posts_changelist"),
+                    },{
+                        "title": _("Posts Comments"),
+                        "icon": "folder",
+                        "link": reverse_lazy("admin:posts_postcomment_changelist"),
+                    },{
+                        "title": _("Posts Action"),
+                        "icon": "link",
+                        "link": reverse_lazy("admin:posts_postsaction_changelist"),
                     },
                 ],
             },

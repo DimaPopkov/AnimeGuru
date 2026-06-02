@@ -17,7 +17,7 @@ from django.db.models.functions import TruncDay
 from datetime import timedelta
 
 from django.contrib import admin
-from .models import Posts, PostsAction
+from .models import Posts, PostsAction, PostComment
 
 @admin.register(Posts)
 class PostsAdmin(ModelAdmin):
@@ -25,4 +25,8 @@ class PostsAdmin(ModelAdmin):
 
 @admin.register(PostsAction)
 class PostsActionAdmin(ModelAdmin):
+    pass
+
+@admin.register(PostComment)
+class PostsCommentAdmin(ModelAdmin):
     pass

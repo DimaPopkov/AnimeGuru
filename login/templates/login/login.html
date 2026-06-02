@@ -12,12 +12,12 @@
         {% csrf_token %}
         <div class="login_form_row">
             <label class = "font" for="username"> Имя пользователя:</label>
-            <input class="auth_form_input" type="text" id="username" name="username">
+            <input class="auth_form_input" type="text" id="username" name="username" placeholder="Пример: user">
         </div>
 
         <div class="login_form_row">
             <label class = "font" for="password">Пароль:</label>
-            <input class="auth_form_input" type="password" id="password" name="password">
+            <input class="auth_form_input" type="password" id="password" name="password" placeholder="Пример: password">
         </div>
 
         <button class="auth_button font" type="submit">Войти</button> 

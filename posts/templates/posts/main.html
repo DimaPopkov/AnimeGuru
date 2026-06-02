@@ -12,7 +12,7 @@
                 <div class="posts_filter_block">
                     <!-- <a class="btn btn-secondary btn-auto" href=""> Фильтр </a> -->
                 </div>
-                <a class="btn btn-success btn-auto" href="
+                <a name="add_publication" class="btn btn-success btn-auto" href="
                     {% if request.user.is_authenticated %}
                         {% url 'create' %}
                     {% else %}
@@ -34,6 +34,8 @@
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
+                                    <a href="{% url 'post' post_id=element.id %}" class="post_a"></a>
+
                                     <h2 class="post_h2"> {{ element.title }} </h2>
                                     <p class="post_p"> {{ element.text }} </p>
 
@@ -101,6 +103,8 @@
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
+                                    <a href="{% url 'post' post_id=element.id %}" class="post_a"></a>
+
                                     <h4 class="post_h2"> {{ element.title }} </h4>
                                     <p class="post_p"> {{ element.text }} </p>
 
@@ -166,6 +170,8 @@
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="new_posts_element">
+                                    <a href="{% url 'post' post_id=element.id %}" class="post_a"></a>
+                                    
                                     <h4 class="post_h2"> {{ element.title }} </h4>
                                     <p class="post_p"> {{ element.text }} </p>
 

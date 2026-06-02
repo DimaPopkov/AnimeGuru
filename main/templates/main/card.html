@@ -133,7 +133,16 @@
 
                     <div class="card_info_list_block">
                         <p class="card_info_list_font gray_font"> Возрастной рейтинг </p>
-                        <div class="card_info_list_age_rating_block"> {{ product.age_rating }}+ </div>
+                        <div class="card_info_list_age_rating_block" style="background:
+                                {% if product.age_rating >= 18 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                {% elif product.age_rating >= 16 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                color: #ffffff;
+                                border: none;
+                                box-shadow: {% if product.age_rating >= 18 %} 0 4px 10px rgba(0,0,0,0.5)
+                                            {% else %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.2) {% endif %};"> 
+                            {{ product.age_rating }}+ 
+                        </div>
                     </div>
                 </list>
             </div>
@@ -434,7 +443,7 @@
                                     </div>
 
                                     <div style="display:flex; text-align: center">
-                                        <h6 style="align-content: center; padding-right:  5px">Оценка: </h6>
+                                        <h6 style="align-content: center; padding-right: 5px">Оценка: </h6>
 
                                         <div class="star-display">
                                             <!-- Здесь будут динамически генерироваться звезды -->

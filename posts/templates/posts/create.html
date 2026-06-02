@@ -16,8 +16,14 @@
                     {% csrf_token %}
                     <input type="hidden" name="cropped_data" id="cropped_data">
                     <div class="posts_create">
-                        <h3 for="media"> Обложка публикации </h3>
-                        <img src="{{ post.media }}" id="avatar" alt="Обложка" style="width:320px; height: 180px; margin-bottom: 20px; border: 1px solid rgb(100, 100, 100);">
+                        <h3 for="media"> Обложка </h3>
+
+                        <img class="hidden" src="{{ post.media }}" id="avatar" style="width:320px; height: 180px; margin-bottom: 20px; border: 1px solid rgb(100, 100, 100);">
+
+                        <div id="avatar_none" style="width:320px; height: 180px; margin-bottom: 20px; border: 1px solid rgb(100, 100, 100); align-content: center; text-align: center;"> 
+                            <h4> Не выбрана </h4> 
+                        </div>
+
                         <button type="button" id="changeAvatarBtn" style="width: 200px; border-radius: 5px; border: 1px solid rgb(30, 30, 30); background: rgb(120, 120, 120); color: rgb(10, 10, 10)">Изменить обложку</button> 
                         <div class="avatar-modal-overlay" id="avatarModalOverlay">
                             <div class="avatar-modal">
@@ -63,6 +69,7 @@
         let cropper = null;
         const form = document.getElementById('form');
         const avatarElement = document.getElementById('avatar');
+        const avatarNone = document.getElementById('avatar_none');
         const changeAvatarBtn = document.getElementById('changeAvatarBtn');
         const avatarModalOverlay = document.getElementById('avatarModalOverlay');
         const avatarFileInput = document.getElementById('avatarFileInput');
@@ -117,6 +124,7 @@
         // --- Функция для сохранения отредактированного аватара ---
         function saveAvatar() {
             if (cropper) {
+
                 // Получаем изображение в формате Canvas
                 const canvas = cropper.getCroppedCanvas();
                 // Преобразуем Canvas в Data URL (base64 строку)
@@ -125,6 +133,10 @@
                 const csrftoken = getCookie('csrftoken');
                 // Устанавливаем отредактированное изображение как src для основного аватара
                 avatarElement.src = croppedImageUrl;
+                if(avatarElement.classList.item('hidden')){    
+                    avatarElement.classList.remove('hidden');
+                }
+                avatarNone.classList.add('hidden');
 
                 const formData = new URLSearchParams();
                 formData.append('image', croppedImageUrl);

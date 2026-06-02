@@ -12,7 +12,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Posts, PostsAction
+from .models import Posts, PostsAction, PostComment
 import re, json, requests, Levenshtein
 
 # Create your views here.
@@ -50,8 +50,20 @@ def posts(request):
 def card(request, post_id):
     post = get_object_or_404(Posts, id=post_id)
 
+    comments = PostComment.objects.filter(post=post)
+
+    CurrentComment = None
+
+    for comment in comments:
+        if comment.user.username == request.user.username:
+            if(comment.locateZ == 0):
+                CurrentComment = comment
+
     data = {
         'title': post.title,
+        'post': post,
+        'comments': comments,
+        'your_comment': CurrentComment,
     }
         
     return render(request, 'posts/post.html', data)
@@ -162,3 +174,43 @@ def create(request):
                 error_message = f"Ошибка при обработке изображения: {e}"
 
     return render(request, 'posts/create.html', {'error': error_message})
+
+def add_comment(request, post_id):
+    try:
+        post = get_object_or_404(Posts, id=post_id)   
+    except:
+        post = None
+
+    try:
+        text = request.POST.get('text')
+    except:
+        text = None 
+
+    try:
+        parentId = request.POST.get('parentId')
+        parentComment = PostComment.objects.get(id=parentId)
+        locateZ_find = int(parentComment.locateZ) + 1    
+    except:
+        parentId = None
+        locateZ_find = 0
+
+    new_comment = PostComment(
+        post = post,
+        user = request.user,
+        text = text,
+        like_count = 0,
+        dislike_count = 0,
+        parentId = parentId,
+        locateZ = locateZ_find,
+    )
+
+    new_comment.save()
+
+    url_to_redirect_to = reverse('post', kwargs={'post_id': post.id})
+    return redirect(f"{url_to_redirect_to}#comment-{new_comment.id}")
+
+def edit_comment(request):
+    return 0
+
+def delete_comment(request):
+    return 0

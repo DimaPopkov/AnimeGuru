@@ -316,9 +316,7 @@ def card(request, product_name):
 
     season_final = f"{season} {year}"
 
-    # Получаем все тайтлы
     all_products = Product.objects.all()
-    # Получаем имя выбранного тайтла
     target_product_name = selected_product.name
     
     for p in all_products:
@@ -343,31 +341,10 @@ def card(request, product_name):
 
     # Смотрим, если есть комментарии которые мы лайкали\дизлайкали, то меняем им иконки
     allComments = Comments.objects.filter(name=products.name)
-    # print("\n------------------------\n", 
-    #     allComments)
-    
+
     allComments_state = []
     if request.user.is_authenticated:
         allComments_state = CommentAction.objects.filter(user=request.user)
-        # print("\n------------------------\n",
-        #     allComments_state, "\n")
-
-    focus_comment_state = []
-
-    # for comment in allComments:
-    #     for comment_action in allComments_state:
-    #         # print(comment_action.comment.name, "\n", comment.name)
-    #         if comment_action.comment.name == comment.name:
-    #             # print(comment_action.comment, "\n", comment)
-    #             if comment_action.action_type == "like":
-    #                 focus_comment_state.append(2)
-    #             elif comment_action.action_type == "dislike": 
-    #                 focus_comment_state.append(1)
-    #             else:
-    #                 focus_comment_state.append(0)
-    #     if focus_comment_state == []:
-    #         for element in allComments:
-    #             focus_comment_state.append(0)
 
     for comment in allComments:
         comment.net_likes = comment.like_count - comment.dislike_count
@@ -381,9 +358,6 @@ def card(request, product_name):
                     comment.my_state = 1
                 break
 
-    # zipped_items = list(zip(comments, focus_comment_state))
-    # print(zipped_items)
-
     context = {
         'title' : selected_product.name,
         'product': selected_product,
@@ -396,9 +370,6 @@ def card(request, product_name):
         'main_characters': MainCharacters,
         'characters': other_characters,
         'comments': allComments,
-        # 'zipped_items': zipped_items,
-        # 'zipped_items2': zipped_items,
-        # 'zipped_items3': zipped_items,
         'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,
