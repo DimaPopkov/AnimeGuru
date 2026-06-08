@@ -153,7 +153,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
     rank = models.IntegerField('Ранг пользователя', default=0)
     color = models.TextField('Цвет пользователя', default='white')
-    favourites = models.ManyToManyField(Product, null=True, blank=True)
+    favourites = models.ManyToManyField(Product)
     
     def __str__(self):
         return self.user.username

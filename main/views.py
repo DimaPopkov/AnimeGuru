@@ -433,7 +433,7 @@ def profile(request):
         'title' : 'Личный кабинет',
         'your_comments': allComents,
         'star_list': star_list,
-        'favourites': None,
+        'favourites': request.user.profile.favourites.all(),
     }
 
     return render(request, 'main/profile.html', context)
@@ -715,3 +715,15 @@ def AIhistory(request):
 #         'response': ai_response,
 #         'message_id': massages.id
 #     })
+
+def favourites_add(request, product_name):
+    product = get_object_or_404(Product, name=product_name)
+    
+    user = request.user.profile
+    
+    if user.favourites.filter(name=product.name).exists():
+        user.favourites.remove(product)
+    else:
+        user.favourites.add(product)
+        
+    return redirect(request.META.get('HTTP_REFERER', 'home'))

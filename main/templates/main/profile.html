@@ -63,7 +63,6 @@
 
                             <div class="prod_element" onclick="submitform(this)">
                                 <div class="prod_element_pic_lock">
-                                    <!-- <img src="{{ element.image }}" style="width: 100%"> -->
                                     {% if element.image %}
                                         {% if element.image.name %}
                                             <img src="{{ element.image.url }}" style="width: 100%">
@@ -97,7 +96,7 @@
 
         <div class="profile_container_comments">
             <h3> Ваши комментарии </h3><hr>
-            <div class="profile_container_favourites_block">
+            <div class="profile_container_comments_block">
                 {% for element in your_comments %}                 
                     <div class="profile_container_favourites_block_comment">
                         {% if element.product_image %}

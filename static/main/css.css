@@ -1379,6 +1379,11 @@ input[type="checkbox"]:checked::after {
     padding: 10px 25px;
 }
 
+.card_info_title{
+    display: flex;
+    justify-content: space-between;
+}
+
 .card_info_rating{
     display: flex;
     font-weight: 400;
@@ -2404,6 +2409,40 @@ input[type="checkbox"]:checked::after {
 
 /* ------- PROFILE -------- */
 
+form button[type="submit"], .like-button {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    cursor: pointer;
+    outline: none !important;
+    display: inline-block;
+}
+
+.favorites_add_button{
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Рамка всегда красная */
+.heart-icon .heart-outline {
+    fill: #e51c1c;
+}
+
+/* Центр прозрачный по умолчанию */
+.heart-icon .heart-center {
+    fill: transparent;
+    transition: fill 0.2s ease;
+}
+
+/* Закрашиваем центр при наведении ИЛИ если у SVG есть класс active */
+.heart-icon:hover .heart-center,
+.heart-icon.active .heart-center {
+    fill: #e51c1c;
+}
+
 .profile_container {
     padding: 20px 30px;
     color: rgb(200, 200, 200)
@@ -2525,6 +2564,15 @@ input[type="checkbox"]:checked::after {
 }
 
 .profile_container_favourites_block{
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+    row-gap: 10px;
+    column-gap: 10px;
+}
+
+.profile_container_comments_block{
     display: flex;
     flex-direction: column;
 

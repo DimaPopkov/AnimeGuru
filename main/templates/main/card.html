@@ -78,11 +78,23 @@
 
             <div class="card_info">
                 <div>
-                    <h3 class="card_info_rating">   
-                        <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> 
-                        {{ product.rating }} 
-                        <p class="card_info_rating_10"> \10 </p>
-                    </h3>
+                    <div class="card_info_title">
+                        <h3 class="card_info_rating">   
+                            <img src="{% static '/img/star.png' %}" style="width: 35px; height: 30px;"> 
+                            {{ product.rating }} 
+                            <p class="card_info_rating_10"> \10 </p>
+                        </h3>
+                        
+                        <form action="{% url 'favourites_add' product_name=product.name %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="favorites_add_button_container">
+                                <svg class="favorites_add_button heart-icon {% if product in request.user.profile.favourites.all %}active{% endif %}" viewBox="0 0 512 512" width="30" height="30">
+                                    <path class="heart-center" d="M256 422.4l-26.4-24C135.2 312.8 72 255.2 72 184 72 126.4 116.8 82 173.6 82c32 0 62.4 15.2 82.4 38.4 20-23.2 50.4-38.4 82.4-38.4 56.8 0 101.6 44.4 101.6 102 0 71.2-63.2 128.8-157.6 214.4l-26.4 24z"/>
+                                    <path class="heart-outline" d="M256 448l-29.2-26.4C122.8 327.2 56 266.4 56 191.2 56 128.8 104.8 80 167.2 80c35.2 0 68.8 16.4 90.8 42.4 22-26 55.6-42.4 90.8-42.4 62.4 0 111.2 48.8 111.2 111.2 0 75.2-66.8 136-170.8 230.4L256 448zM167.2 112C122.4 112 86 148.4 86 193.2c0 58.8 54 107.6 140.8 186.4L256 406.4l29.2-26.8C372 300.8 426 252 426 193.2 426 148.4 389.6 112 344.8 112c-30.8 0-60.4 20-70.8 47.6h-36C227.6 132 198 112 167.2 112z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
                     <h1 style="padding-bottom: 10px" id="name"> {{ product.name }} </h1>
                 </div>
 
