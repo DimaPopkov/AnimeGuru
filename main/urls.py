@@ -19,11 +19,12 @@ urlpatterns = [
     path('edit_comments/<str:product_name>/', views.edit_comments, name='edit_comments'),
     path('delete_comments/<str:product_name>/<str:id>/', views.delete_comments, name='delete_comments'),
     path('card/<str:product_name>/', views.card, name="card"),
-    path('login/', include('login.urls'), name="login"),
+    path('login/', include('login.urls')),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('main')), name='logout'),
     path('user/', views.profile, name='profile'),
     path('user/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
     path('AI/chat', views.AIchat, name='AIchat'),
     path('AI/history', views.AIhistory, name='AIhistory'),
     path('posts/', include('posts.urls'), name='posts'),
+    path('copyright/', views.copyright, name='copyright'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

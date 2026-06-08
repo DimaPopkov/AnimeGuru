@@ -552,7 +552,7 @@
 
                                     {% if request.user.is_authenticated %}
                                         <div class="comment_answer">
-                                            <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
+                                            <button class="comment_buttons_button_otvet" value="{{ element.id }}"> Ответить </button>
                                             <!-- <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comments' product_name=product.name %}">
                                                 {% csrf_token %}
                                                 <div class="comment_textarea_otvet_header">
@@ -627,7 +627,7 @@
 
                                                     {% if request.user.is_authenticated %}
                                                         <div class="comment_answer">
-                                                            <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
+                                                            <button class="comment_buttons_button_otvet" value="{{ element2.id }}"> Ответить </button>
                                                         </div>
                                                     {% endif %}
                                                 </div>
@@ -727,8 +727,12 @@
         </div>
     </div>  
 
+    {% include "main/footer.html" %}
+
     <form id="form" class="comment_textarea_otvet otvet_2 fade-in" method='POST' action="{% url 'add_comments' product_name=product.name %}">
         {% csrf_token %}
+        <input type="hidden" name="parentId" value="">
+        
         <div class="comment_textarea_otvet_header">
             <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
             <button id="cancel-reply-btn" type="button" class="comment_textarea_otvet_header_button"> Отмена </button>
@@ -1219,23 +1223,52 @@
         let openAnswerBlockButton = document.querySelector('.comment_buttons_button_otvet');
         let answerBlock = document.querySelector('.comment_textarea_otvet');
 
-        try{
-            let all_comments_container = document.querySelector('.all_comments_container');
+        // try{
+        //     let all_comments_container = document.querySelector('.all_comments_container');
 
-            all_comments_container.addEventListener('click', function(event) {
-                if (event.target.classList.contains('comment_buttons_button_otvet')) {
-                    const commentContainer = event.target.closest('.comment_answer');
-                    comment_buttons = event.target.closest('.comment_buttons');
+        //     all_comments_container.addEventListener('click', function(event) {
+        //         if (event.target.classList.contains('comment_buttons_button_otvet')) {
+        //             const commentContainer = event.target.closest('.comment_answer');
+        //             comment_buttons = event.target.closest('.comment_buttons');
 
-                    if (commentContainer) {
-                        const targetForm = commentContainer.querySelector('#form');
+        //             if (commentContainer) {
+        //                 const targetForm = commentContainer.querySelector('#form');
 
-                        toggleAnswerBlock(event.target, answerBlock);
+        //                 toggleAnswerBlock(event.target, answerBlock);
+        //             }
+        //         }
+        //     })
+        // } catch {
+        //     let all_comments_container = null;
+        // }
+
+
+        try {
+            const all_comments_container = document.querySelector('.all_comments_container');
+            const globalAnswerBlock = document.querySelector('.comment_textarea_otvet');
+
+            if (all_comments_container && globalAnswerBlock) {
+                all_comments_container.addEventListener('click', function(event) {
+                    
+                    if (event.target.classList.contains('comment_buttons_button_otvet')) {
+                        const clickedButton = event.target;
+
+                        const parentCommentId = clickedButton.value;
+
+                        const parentInput = globalAnswerBlock.querySelector('input[name="parentId"]');
+                        
+                        if (parentInput) {
+                            parentInput.value = parentCommentId;
+                        } else {
+                            console.error('Ошибка: В HTML-форме не найден <input name="parentId">');
+                        }
+
+                        toggleAnswerBlock(clickedButton, globalAnswerBlock);
                     }
-                }
-            })
-        } catch {
-            let all_comments_container = null;
+                });
+            }
+        } catch (error) {
+            console.error('Ошибка при обработке данных комментария:', error);
         }
 
         function toggleAnswerBlock(buttonElement, FormElement) {

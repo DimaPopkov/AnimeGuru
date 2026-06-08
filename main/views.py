@@ -13,6 +13,14 @@ from .forms import ProductForm
 import re, json, requests, Levenshtein
 
 # Create your views here.
+
+def copyright(request):
+    data = {
+        'title' : 'Copyright Policy',
+    }
+        
+    return render(request, 'main/copyright.html', data)
+
 def main(request):
     try:
         theme = request.session['courent_theme']

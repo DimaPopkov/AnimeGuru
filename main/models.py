@@ -151,7 +151,9 @@ class CommentAction(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
-    favourites = models.ManyToManyField(Product)
+    rank = models.IntegerField('Ранг пользователя', default=0)
+    color = models.TextField('Цвет пользователя', default='white')
+    favourites = models.ManyToManyField(Product, null=True, blank=True)
     
     def __str__(self):
         return self.user.username

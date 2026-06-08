@@ -13,6 +13,7 @@
 
     <link id="favicon" rel="icon" href="{% static 'favicon2.ico' %}" type="image/x-icon">
 
+    <link rel="stylesheet" href="{% static './main/nickname.css' %}">
     <link rel="stylesheet" href="{% static './main/css.css' %}">
     <link rel="stylesheet" href="{% static './main/adaptive.css' %}">
 
@@ -25,7 +26,19 @@
     <script src="{% static 'main/js/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'main/js/choices.min.js' %}"></script>
 </head>
-<body id="products-list-container" class="body">
+<body id="products-list-container" class="body" style="--rank-color: 
+    {% if request.user.profile.rank >= 10 %}
+        rgb(255, 215, 0)
+    {% elif request.user.profile.rank >= 5 %}
+        rgb(220, 20, 60)
+    {% elif request.user.profile.rank >= 3 %}
+        rgb(255, 69, 0)
+    {% elif request.user.profile.rank == 1 %}
+        rgb(240, 230, 140)
+    {% elif request.user.profile.rank == 0 %}
+        rgb(100, 100, 100)
+    {% endif %}">
+    
     <div id="preloader">
         <!-- <div class="loader-content"> -->
             <!-- <h1 id="btn_logo" class="btn_logo" href="{% url 'main' %}" style="font-family: 'Playwrite DE SAS', cursive;"> AnimeGuru </h1> -->
@@ -62,7 +75,14 @@
                     {% else %}
                         <img src={{ request.user.profile.image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
                     {% endif %}
-                    <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
+
+                    {% if request.user.profile.rank >= 3 %}
+                        <span class="animated-nickname" style="--user-color: {{ request.user.profile.color }};">
+                            <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
+                        </span>
+                    {% else %}
+                        <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
+                    {% endif %}
                 </div>
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}

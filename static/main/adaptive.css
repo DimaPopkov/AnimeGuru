@@ -377,6 +377,13 @@
     h1{
         font-size: calc(1rem + 1.5vw);;
     }
+    .profile_container{    
+        padding: 10px 15px;
+    }
+    .profile_container_header_block_info_flex_vis img{
+        width: 150px;
+        height: 150px;
+    }
 }
 @media screen and (max-width: 650px){
     .login_button{

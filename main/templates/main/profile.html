@@ -6,15 +6,15 @@
 
 {% load static %}
 {% block content %}
-    <div class="card_container_main" style="padding: 20px 30px; color: rgb(200, 200, 200)"> 
+    <div class="card_container_main profile_container"> 
         <div class="profile_container_header">
             <div class="profile_container_header_block">
                 <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
-                    <div class="profile_container_header_block_info_flex_vis" style="">
+                    <div class="profile_container_header_block_info_flex_vis">
                         {% if request.user.profile.image != "avatars/null_avatar.png" %}
-                            <img src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px; border: 2px solid rgb(30, 30, 30)">
+                            <img class="" src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px; border: 2px solid rgb(30, 30, 30)">
                         {% else %}
-                            <img src="{{ request.user.profile.image.url }}" id="avatar" alt="Default Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px;">
+                            <img class="" src="{{ request.user.profile.image.url }}" id="avatar" alt="Default Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px;">
                         {% endif %}      
 
                         <button id="changeAvatarBtn" style="width: 200px; border-radius: 5px; border: 1px solid rgb(30, 30, 30); background: rgb(120, 120, 120); color: rgb(10, 10, 10)">Изменить аватар</button>   
@@ -36,48 +36,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="profile_container_header_block_info_flex">
-                    <p> Логин : </p>
-                    <h5 style="padding-left: 10px"> {{ request.user.username }} </h5>
-                </div>
-                <div class="profile_container_header_block_info_flex">
-                    <p style="padding-top: 2px"> Пароль : </p>
-                    <button style="margin-left: 10px" class="btn btn-secondary profile_button_change_password"> Сменить пароль </button>
-                </div>
             </div>
 
             <div class="profile_container_header_block">
                 <div class="profile_container_header_block_info_flex">
-                    <p> Имя : </p>
-
-                    {% if request.user.first_name %}
-                        <h5 style="padding-left: 10px"> {{ request.user.first_name }} </h5>
-                    {% else %}
-                        <h5 style="padding-left: 10px"> Нет данных </h5>
-                    {% endif %}
+                    <p class="profile_p_level_title"> Уровень аккаунта: </p>
+                    <p class="profile_p_level"> {{ request.user.profile.rank }} </p>
                 </div>
-                <div class="profile_container_header_block_info_flex">
-                    <p> Фамилия : </p>
-
-                    {% if request.user.first_name %}
-                        <h5 style="padding-left: 10px"> {{ request.user.last_name }} </h5>
-                    {% else %}
-                        <h5 style="padding-left: 10px"> Нет данных </h5>
-                    {% endif %}
-                </div>
-                <div class="profile_container_header_block_info_flex">
-                    <p> Почта : </p>
-
-                    {% if request.user.email %}
-                        <h5 style="padding-left: 10px"> {{ request.user.email }} </h5>
-                    {% else %}
-                        <h5 style="padding-left: 10px"> Нет данных </h5>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="profile_container_header_block change_button">
-
             </div>
         </div>
 

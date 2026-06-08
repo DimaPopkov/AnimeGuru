@@ -111,6 +111,37 @@ body{
     height: auto;
 }
 
+footer{
+    width: 100%;
+    height: 200px;
+
+    background-color: rgba(100, 100, 100, 0.1);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    color: rgb(200, 200, 200);
+}
+
+footer a{
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.footer-container{
+    width: 60%;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer-container ul{
+    padding-left: 0;
+}
+
 select:focus {
     outline: none;
 }
@@ -2371,9 +2402,17 @@ input[type="checkbox"]:checked::after {
 
 
 /* ------- PROFILE -------- */
+
+.profile_container {
+    padding: 20px 30px;
+    color: rgb(200, 200, 200)
+}
+
 .profile_container_header{
     display: flex;
     flex-direction: row;
+
+    column-gap: 15px;
 
     background-color: #1e1e1e;
     
@@ -2386,19 +2425,47 @@ input[type="checkbox"]:checked::after {
 .profile_container_header_block{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    /* width: 50%; */
 
     font-size: 20px;
     font-weight: 400;
 }
 
-.change_button{}
-
 .profile_container_header_block_info_flex{
     display: flex;
     flex-direction: row;
+}
+
+.profile_p_level_title{
+    margin-right: 10px;
+    margin-bottom: 2px;
+
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+.profile_p_level{
+    width: 45px;
+    height: 45px;
+
+    border-radius: 100%;
+
+    border: 3px solid var(--rank-color);
+
+    color: var(--rank-color);
+
+    font-weight: 600;
+    font-size: 24px;
 
     align-items: center;
+    text-align: center;
+    align-content: center;
+
+    background-color: color-mix(in srgb, var(--rank-color) 10%, rgba(255, 255, 255, 0.05));
+
+    margin-bottom: 0;
+    padding: 0 1px 2px 0;
 }
 
 .profile_container_header_block_info_flex_vis{
@@ -2807,7 +2874,7 @@ input[type="checkbox"]:checked::after {
 
     transition: 0.3s;
 
-    background: rgba(20, 20, 20, 0.75);
+    background: rgba(20, 20, 20, 0.98);
     background-blend-mode: multiply;
 }
 
