@@ -301,6 +301,11 @@
     .login_button{
         height: 50px;
     }
+    .profile_container{    
+        margin-top: 50px;
+        width: 100%;
+        padding: 10px 15px;
+    }
 }
 
 @media screen and (max-width: 730px){
@@ -376,9 +381,6 @@
     }
     h1{
         font-size: calc(1rem + 1.5vw);;
-    }
-    .profile_container{    
-        padding: 10px 15px;
     }
     .profile_container_header_block_info_flex_vis img{
         width: 150px;
@@ -484,6 +486,24 @@
     .show_filter{
         width: 40px;
     }
+    .profile_container_favourites_block_comment_img{
+        width: 100px;
+    }
+    .comments_container{
+        padding: 5px;
+    }
+    .profile_container_header_block_info_flex_vis_button{
+        width: 150px;
+    }
+    .star-icon{
+        font-size: 18px;
+    }
+    .profile_p_level{
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        padding: 0 1px 1px 0;
+    }
 }
 
 @media screen and (max-width: 500px){
@@ -552,6 +572,45 @@
     } */
     .container_e {
         margin-top: 0;
+    }
+    .profile_p_level_title{
+        font-size: 18px;
+    }
+    .profile_container_favourites_block_comment{
+        column-gap: 10px;
+    }
+    .basket{
+        position: absolute;
+        left: 87%;
+    }
+    .profile_container_header{
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 450px){
+    .profile_container{
+        padding: 5px;
+    }
+    .profile_container_header_block_info_flex_vis img{
+        width: 120px;
+        height: 120px;
+    }
+    .profile_container_header_block_info_flex_vis_button{
+        width: 120px;
+    }
+    .basket{
+        left: 90%;
+    }
+    .profile_container_favourites_block_comment{
+        min-width: 250px;
+    }
+    .profile_comment_title{
+        font-size: 20px;
+    }
+    .comments_container{
+        padding: 2px;
+        font-size: 16px;
     }
 }
 
@@ -740,5 +799,30 @@
     }
     .container_f{
         margin-top: 40px;
+    }
+    .profile_container{
+        margin-top: 20px;
+    }
+    .profile_container_header_block_info_flex{
+        flex-direction: column;
+    }
+    .profile_comment_star_rating{
+        flex-direction: column;
+    }
+    .star-icon{
+        font-size: 14px;
+    }
+    .profile_container_favourites_block_comment{
+        column-gap: 5px;  
+        padding: 5px;
+    }
+    .profile_container_favourites_block_comment_img{
+        width: 85px;
+    }
+    .basket{
+        left: 88%;
+    }
+    .profile_comment_title{
+        font-size: 20px;
     }
 }

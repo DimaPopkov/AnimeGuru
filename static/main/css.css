@@ -1149,7 +1149,8 @@ input[type="checkbox"]:checked::after {
     /* right: 5px; */
     /* top: 30%; */
 
-    margin-left: auto; 
+    margin-right: 2px;
+    /* margin-left: auto;  */
 
     /* padding-top: 5px; */
     filter: var(--arrow-filter);
@@ -2434,6 +2435,8 @@ input[type="checkbox"]:checked::after {
 .profile_container_header_block_info_flex{
     display: flex;
     flex-direction: row;
+
+    align-items: center;
 }
 
 .profile_p_level_title{
@@ -2446,8 +2449,8 @@ input[type="checkbox"]:checked::after {
 }
 
 .profile_p_level{
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
 
     border-radius: 100%;
 
@@ -2456,7 +2459,7 @@ input[type="checkbox"]:checked::after {
     color: var(--rank-color);
 
     font-weight: 600;
-    font-size: 24px;
+    font-size: 22px;
 
     align-items: center;
     text-align: center;
@@ -2481,13 +2484,39 @@ input[type="checkbox"]:checked::after {
     margin-bottom: 15px
 }
 
-.profile_button_change_password{
-    width: 160px;
-    height: 35px;
+.profile_container_header_block_info_flex_vis_img{
+    width:200px;
+    height: 200px;
+    
+    margin-bottom: 20px;
+    
+    border-radius:100px;
+    border: 2px solid rgb(30, 30, 30)
+}
 
-    padding-top: 2px;
+.profile_container_header_block_info_flex_vis_button{
+    width: 200px;
 
-    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid rgb(30, 30, 30);
+    
+    background: rgb(120, 120, 120);
+    
+    color: rgb(10, 10, 10);
+}
+
+.profile_comment_title{
+    font-weight: 500;
+    line-height: 1.2;
+    font-size:24px;
+    
+    text-decoration: none;
+
+    color: rgb(200, 200, 200);
+}
+
+.profile_comment_star_rating{
+    display:flex;
 }
 
 .profile_container_favourites{
@@ -2516,6 +2545,15 @@ input[type="checkbox"]:checked::after {
     border: 1px solid rgb(60, 60, 60);
     border-radius: 10px;
 }
+
+.profile_container_favourites_block_comment_img{
+    width: 150px;
+    height: 100%;
+    
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
 
 /* ------ AVATAR CROP -------- */
 .avatar-modal-overlay {

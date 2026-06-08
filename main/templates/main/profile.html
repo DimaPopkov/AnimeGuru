@@ -12,12 +12,12 @@
                 <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
                     <div class="profile_container_header_block_info_flex_vis">
                         {% if request.user.profile.image != "avatars/null_avatar.png" %}
-                            <img class="" src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px; border: 2px solid rgb(30, 30, 30)">
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar">
                         {% else %}
-                            <img class="" src="{{ request.user.profile.image.url }}" id="avatar" alt="Default Avatar" style="width:200px; height: 200px; margin-bottom: 20px; border-radius:100px;">
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image.url }}" id="avatar" alt="Default Avatar">
                         {% endif %}      
 
-                        <button id="changeAvatarBtn" style="width: 200px; border-radius: 5px; border: 1px solid rgb(30, 30, 30); background: rgb(120, 120, 120); color: rgb(10, 10, 10)">Изменить аватар</button>   
+                        <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>   
                     </div>
                     <div class="avatar-modal-overlay" id="avatarModalOverlay">
                         <div class="avatar-modal">
@@ -101,17 +101,8 @@
                 {% for element in your_comments %}                 
                     <div class="profile_container_favourites_block_comment">
                         {% if element.product_image %}
-                            <img src="/media/{{ element.product_image }}" alt="Product Image" style="width: 150px; border: 1px solid gray; border-radius: 5px; height: 100%;"/>
+                            <img class="profile_container_favourites_block_comment_img" src="/media/{{ element.product_image }}" alt="Product Image"/>
                         {% endif %}
-                        <!-- {% if element.image %}
-                            {% if element.image.name %}
-                                <img src="{{ element.image.url }}" style="width: 100%">
-                            {% else %}
-                                <img src="{{ element.image }}" style="width: 100%">
-                            {% endif %}
-                        {% elif element.alter_pic %}
-                            <img src="{{ element.alter_pic.url }}" style="width: 100%">
-                        {% endif %}     -->
                         <div class="prod_element_rating">
                             <div class="prod_element_rating_block" style="
                                 background:
@@ -125,18 +116,20 @@
                             </div>
                         </div>
                         <div>
-                            <h3 style="font-weight: 500; line-height: 1.2; font-size:24px; text-decoration: none; color: rgb(200, 200, 200)" href="{% url 'card' product_name=element.name %}">{{ element.name }}</h3>
+                            <h3 class="profile_comment_title" href="{% url 'card' product_name=element.name %}">{{ element.name }}</h3>
                             <p style="padding-top: 5px;">{{ element.product_category }} / {{ element.product_season.year }}</p>
-                            <div style="display:flex; column-gap: 10px; column-gap: 25px; padding:5px 5px;">                 
-                                <div style="display:flex; text-align: center">
+                            <div style="display:flex; column-gap: 10px; column-gap: 25px;">                 
+                                <div class="profile_comment_star_rating">
                                     <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
-                                    {% for current_number in star_list %}
-                                        {% if current_number <= element.user_rating %}
-                                            <span class="star-icon" style="color: #ff9900;">&#9733;</span>
-                                        {% else %}
-                                            <span class="star-icon" style="color: gray;">&#9733;</span>
-                                        {% endif %}
-                                    {% endfor %}
+                                    <div>
+                                        {% for current_number in star_list %}
+                                            {% if current_number <= element.user_rating %}
+                                                <span class="star-icon" style="color: #ff9900;">&#9733;</span>
+                                            {% else %}
+                                                <span class="star-icon" style="color: gray;">&#9733;</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                             <div class="comments_container">
