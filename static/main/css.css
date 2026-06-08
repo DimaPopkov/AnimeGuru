@@ -667,6 +667,8 @@ main{
 
     position: relative !important;
     z-index: 1 !important;
+
+    pointer-events: none; 
 }
 
 .prod_element_pic_lock::before, 
@@ -2424,6 +2426,9 @@ form button[type="submit"], .like-button {
     padding: 0;
     cursor: pointer;
     outline: none;
+
+    width: 40px;
+    height: 40px;
 }
 
 /* Рамка всегда красная */
@@ -2565,11 +2570,27 @@ form button[type="submit"], .like-button {
 
 .profile_container_favourites_block{
     display: grid;
-
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    
+    grid-auto-flow: column; 
+    /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
+    grid-auto-columns: minmax(150px, 1fr); 
 
     row-gap: 10px;
     column-gap: 10px;
+
+    overflow-y: hidden;
+    overflow-x: scroll;
+
+    cursor: grab;
+    user-select: none;
+}
+
+.profile_container_favourites_block:active {
+    cursor: grabbing;
+}
+
+.profile_container_favourites_block img {
+    pointer-events: none; 
 }
 
 .profile_container_comments_block{
