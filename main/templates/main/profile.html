@@ -44,6 +44,59 @@
                     <p class="profile_p_level"> {{ request.user.profile.rank }} </p>
                 </div>
             </div>
+
+            <div class="profile-stats-wrapper-container">   
+                <h3> Статистика по аккаунту</h3>
+                <div class="profile-stats-wrapper">
+                    <div class="chart-wrapper">
+                        <h5> Общая статистика </h5>
+                        <div class="chart-container-alt">
+                            <div class="chart-container-block">
+                                <h5> Всего комментариев: </h5>
+                                <div class="chart-container-block-text"> 
+                                    <img src="{% static 'img/envelope.png' %}" style="filter: invert(1);"> 
+                                    <span>{{ user_comments_count }}</span>
+                                </div>
+                            </div>
+
+                            <div class="chart-container-block">
+                                <h5>Всего лайков:</h5>
+                                <div class="chart-container-block-text"> 
+                                    <img src="{% static 'img/like.png' %}" style="filter: invert(1);"> 
+                                    <span>{{ user_likes_count }}</span>
+                                </div>
+                            </div>
+
+                            <div class="chart-container-block">
+                                <h5>Всего дизлайков</h5>
+                                <div class="chart-container-block-text"> 
+                                    <img src="{% static 'img/dislike.png' %}" style="filter: invert(1);"> 
+                                    <span>{{ user_dislikes_count }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h5> Статистика по жанрам и тегам </h5>
+                        <div class="chart-container">
+                            {% for item in chart_data %}
+                                <form method="GET" action="{% url 'filtered-items' %}" style="height: 100%;">
+                                    <input type="hidden" name="tags" value="{{ item.id }}">
+                                    <div class="chart-column-wrapper" style="cursor: pointer;">
+                                        <div class="chart-column-field">
+                                            <div class="chart-bar" style="height: {{ item.height|floatformat:'0' }}%;" title="Просмотров: {{ item.views }}" onclick="this.closest('form').submit();"></div>
+                                        </div>
+                                        <span class="chart-value">{{ item.views }}</span>
+                                        <span class="chart-label">{{ item.name }}</span>
+                                    </div>
+                                </form>
+                            {% empty %}
+                                <p style="color: #aaa; text-align: center; width: 100%;">Нет данных для отображения статистики</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {% if favourites or favourites != None %}
@@ -320,5 +373,31 @@
                 console.log("Форма не найдена")
             } 
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const tagLabels = JSON.parse(document.getElementById('labels-data').textContent);
+            const tagData = JSON.parse(document.getElementById('views-data').textContent);
+
+            console.log("Проверка данных:", tagLabels, tagData);
+
+            const ctx = document.getElementById('tagsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: tagLabels,
+                    datasets: [{
+                        label: 'Количество просмотров',
+                        data: tagData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        });
     </script>
 {% endblock %}

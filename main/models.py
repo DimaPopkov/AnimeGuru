@@ -157,6 +157,25 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+class ProfileStats(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tag_stats')
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
+    views_count = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        unique_together = ('user', 'tag')
+    
+    def __str__(self):
+        return f"{self.user.username} {self.tag.name} = {self.views_count}"
+    
+class RecentView(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recent_views')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    viewed_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-viewed_at']
 
 class PublicPublication(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

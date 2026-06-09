@@ -3,12 +3,12 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
-from django.db.models import OuterRef, Subquery, FileField, F
+from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count
 from django.core.cache import cache
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort
+from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats
 from .forms import ProductForm
 import re, json, requests, Levenshtein
 
@@ -47,7 +47,7 @@ def main(request):
         'status': Allstatus,
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
-        'new_products': new_products
+        'new_products': new_products,
     }
         
     return render(request, 'main/main.html', data)
@@ -366,6 +366,32 @@ def card(request, product_name):
                     comment.my_state = 1
                 break
 
+    if request.user.is_authenticated:
+        user = request.user
+        
+        RecentView.objects.update_or_create(
+            user=user, 
+            product=selected_product
+        )
+        
+        keep_ids = RecentView.objects.filter(user=user).values_list('id', flat=True)[:20]
+        RecentView.objects.filter(user=user).exclude(id__in=list(keep_ids)).delete()
+
+        title_tag_ids = selected_product.tags.values_list('id', flat=True)
+        print(title_tag_ids)
+
+        for tag_id in title_tag_ids:
+            stat_obj, created = ProfileStats.objects.get_or_create(
+                user=user,
+                tag_id=tag_id,
+                defaults={'views_count': 1}
+            )
+            # Если строка в базе уже существовала, то просто делаем +1
+            if not created:
+                stat_obj.views_count = F('views_count') + 1
+                stat_obj.save()
+    
+
     context = {
         'title' : selected_product.name,
         'product': selected_product,
@@ -385,8 +411,6 @@ def card(request, product_name):
         'theme': request.session.get('courent_theme', 'black'),
         #'AI_models': {"gemma3:4b", "gemma3:12b"},
     }
-    print("\n\n", request, "\n Метод POST \n")
-    print("Сохранено:", target_product_name, "\n")
 
     return render(request, 'main/card.html', context)
 
@@ -429,11 +453,40 @@ def profile(request):
     
     star_list = list(range(1, 11))
 
+    stats = ProfileStats.objects.filter(user=request.user).select_related('tag').order_by('-views_count')
+
+    max_views = max([item.views_count for item in stats]) if stats else 0
+
+    chart_data = []
+    for item in stats:
+        # Рассчитываем высоту столбца в процентах
+        if max_views > 0:
+            height_percent = (item.views_count / max_views) * 100
+        else:
+            height_percent = 0
+
+        chart_data.append({
+            'name': item.tag.name,
+            'id': item.tag.id,
+            'views': item.views_count,
+            'height': height_percent
+        })
+
+    activity = Comments.objects.filter(user_name=request.user.username).aggregate(
+        total_comments=Count('id'),                 # Считаем количество написанных комментариев
+        total_likes=Sum('like_count'),              # Суммируем все лайки, которые получили его комменты
+        total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
+    )
+
     context = {
         'title' : 'Личный кабинет',
         'your_comments': allComents,
         'star_list': star_list,
         'favourites': request.user.profile.favourites.all(),
+        'chart_data': chart_data,
+        'user_comments_count': activity['total_comments'] or 0,
+        'user_likes_count': activity['total_likes'] or 0,
+        'user_dislikes_count': activity['total_dislikes'] or 0,
     }
 
     return render(request, 'main/profile.html', context)

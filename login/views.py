@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 from django.contrib import messages
 
+from main.models import Tags, ProfileStats
+
 from django.http import JsonResponse
 
     #  id:
@@ -70,21 +72,21 @@ def Login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        print("Введённый логин:", username,"\nВведённый пароль:", password)
+        # print("Введённый логин:", username,"\nВведённый пароль:", password)
 
         #user = authenticate(request, username=username, password=password)
         user = User.objects.filter(username=username).exists()
 
         if user:
             password_cor = authenticate(request, username=username, password=password)
-            print("Correct Password: ", password_cor)
+            # print("Correct Password: ", password_cor)
 
             if password_cor:
                 if password_cor is not False:
-                    print("User Login: ", username)
+                    # print("User Login: ", username)
 
                     login(request, password_cor)
-                    print("\n\nВход в аккаунт по логину ", username, " выполнен успешно!\n\n")
+                    # print("\n\nВход в аккаунт по логину ", username, " выполнен успешно!\n\n")
                     return redirect('../')
                 
                 else:
@@ -130,7 +132,15 @@ def create_user(request):
             
             user = User.objects.create_user(username, email, password)
             user = authenticate(request, username=username, password=password)
+
             if user:
+                all_tags = Tags.objects.all()
+                stats_to_create = [
+                    ProfileStats(user=user, tag=tag, views_count=0)
+                    for tag in all_tags
+                ]
+                ProfileStats.objects.bulk_create(stats_to_create)
+
                 login(request, user)
                 return redirect('/')
             else:
