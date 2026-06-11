@@ -655,7 +655,7 @@ def update_comment_state(request, comment_id):
 def profile_change_avatar(request):
     if request.method == 'POST':
         username = request.POST.get('user_id')
-        image_file = request.POST.get('image')
+        image_file = request.FILES.get('image')
         print(image_file)
 
         if not username or not image_file:
@@ -681,7 +681,23 @@ def profile_change_avatar(request):
             print(f"Произошла ошибка при обновлении аватара: {e}")
             return JsonResponse({'error': 'Произошла внутренняя ошибка сервера.'}, status=500)
 
-    # Если запрос не POST, возвращаем ошибку или пустой ответ
+    return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
+
+def profile_delete_avatar(request):
+    if request.method == 'POST':
+        user = request.user
+        image = request.user.profile.image
+
+        if not user or not image:
+            return JsonResponse({'error': 'Недостаточно данных для обновления аватара.'}, status=400)
+
+        image = 'img/null_avatar.png'
+        user.profile.save()
+
+        print(f"Аватар успешно удален для пользователя: {user.username}")
+
+        return redirect('profile')
+
     return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
 
 def AIchat(request):

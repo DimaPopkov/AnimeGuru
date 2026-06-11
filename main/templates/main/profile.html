@@ -12,18 +12,21 @@
                 <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
                     <div class="profile_container_header_block_info_flex_vis">
                         {% if request.user.profile.image != "avatars/null_avatar.png" %}
-                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image }}" id="avatar" alt="User Avatar">
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image.url }}" id="avatar" alt="User Avatar">
                         {% else %}
-                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image.url }}" id="avatar" alt="Default Avatar">
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image }}" id="avatar" alt="Default Avatar">
                         {% endif %}      
 
-                        <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>   
+                        <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>
+                        <form id="deleteAvatarBtn" method="POST" action="{% url 'profile_delete_avatar' %}">
+                            {% csrf_token %}
+                            <button class="profile_container_header_block_info_flex_vis_button" type="submit"> Удалить аватар </button>
+                        </form>
                     </div>
                     <div class="avatar-modal-overlay" id="avatarModalOverlay">
                         <div class="avatar-modal">
                             <h2>Редактирование аватара</h2>
                             <div class="image-container">
-                                <!-- Здесь будет отображаться изображение для редактирования -->
                                 <img id="editableAvatar" alt="Изображение для редактирования">
                             </div>
                             <div class="modal-controls">
@@ -54,7 +57,7 @@
                             <div class="chart-container-block">
                                 <h5> Всего комментариев: </h5>
                                 <div class="chart-container-block-text"> 
-                                    <img src="{% static 'img/envelope.png' %}" style="filter: invert(1);"> 
+                                    <!-- <img src="{% static 'img/envelope.png' %}" style="filter: invert(1);">  -->
                                     <span>{{ user_comments_count }}</span>
                                 </div>
                             </div>
@@ -62,7 +65,7 @@
                             <div class="chart-container-block">
                                 <h5>Всего лайков:</h5>
                                 <div class="chart-container-block-text"> 
-                                    <img src="{% static 'img/like.png' %}" style="filter: invert(1);"> 
+                                    <!-- <img src="{% static 'img/like.png' %}">  -->
                                     <span>{{ user_likes_count }}</span>
                                 </div>
                             </div>
@@ -70,7 +73,7 @@
                             <div class="chart-container-block">
                                 <h5>Всего дизлайков</h5>
                                 <div class="chart-container-block-text"> 
-                                    <img src="{% static 'img/dislike.png' %}" style="filter: invert(1);"> 
+                                    <!-- <img src="{% static 'img/dislike.png' %}">  -->
                                     <span>{{ user_dislikes_count }}</span>
                                 </div>
                             </div>
@@ -166,7 +169,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="profile_comment_title" href="{% url 'card' product_name=element.name %}">{{ element.name }}</h3>
+                            <a class="profile_comment_title" href="{% url 'card' product_name=element.name %}">{{ element.name }}</a>
                             <p style="padding-top: 5px;">{{ element.product_category }} / {{ element.product_season.year }}</p>
                             <div style="display:flex; column-gap: 10px; column-gap: 25px;">                 
                                 <div class="profile_comment_star_rating">
@@ -214,6 +217,7 @@
         let cropper = null;
         const avatarElement = document.getElementById('avatar');
         const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+        const deleteAvatarBtn = document.getElementById('deleteAvatarBtn');
         const avatarModalOverlay = document.getElementById('avatarModalOverlay');
         const avatarFileInput = document.getElementById('avatarFileInput');
         const editableAvatar = document.getElementById('editableAvatar');
@@ -258,31 +262,73 @@
 
         // --- Функция для сохранения отредактированного аватара ---
         function saveAvatar() {
+            // if (cropper) {
+            //     // Получаем изображение в формате Canvas
+            //     const canvas = cropper.getCroppedCanvas();
+            //     // Преобразуем Canvas в Data URL (base64 строку)
+            //     const croppedImageUrl = canvas.toDataURL('image/jpeg');
+
+            //     const csrftoken = getCookie('csrftoken');
+            //     // Устанавливаем отредактированное изображение как src для основного аватара
+            //     avatarElement.src = croppedImageUrl;
+
+            //     const formData = new URLSearchParams();
+            //     formData.append('image', croppedImageUrl);
+            //     formData.append('user_id', '{{ request.user.username }}');
+
+            //     fetch('/user/change-avatar', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/x-www-form-urlencoded',
+            //             'X-CSRFToken': csrftoken,
+            //         },
+            //         body: formData
+            //     })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //        console.log('Аватар сохранен на сервере:', data);
+            //     })
+            //     .catch(error => console.error('Ошибка сохранения аватара:', error));
+
+            //     closeAvatarModal();
+            // } else {
+            //     alert('Изображение не было отредактировано.');
+            // }
+
             if (cropper) {
-                // Получаем изображение в формате Canvas
-                const canvas = cropper.getCroppedCanvas();
-                // Преобразуем Canvas в Data URL (base64 строку)
-                const croppedImageUrl = canvas.toDataURL('image/jpeg');
+                // 1. Получаем координаты кропа от Cropper.js
+                const cropData = cropper.getData();
+
+                // 2. Берем оригинальный файл из инпута выбора файлов
+                const avatarInput = document.getElementById('avatarFileInput');
+                const file = avatarInput.files[0];
+
+                // 3. Используем FormData вместо URLSearchParams для отправки файлов
+                const formData = new FormData();
+                formData.append('image', file); // Оригинальный GIF-файл целиком
+                formData.append('user_id', '{{ request.user.username }}');
+                
+                // Передаем координаты для обрезки на сервере
+                formData.append('x', cropData.x);
+                formData.append('y', cropData.y);
+                formData.append('width', cropData.width);
+                formData.append('height', cropData.height);
 
                 const csrftoken = getCookie('csrftoken');
-                // Устанавливаем отредактированное изображение как src для основного аватара
-                avatarElement.src = croppedImageUrl;
 
-                const formData = new URLSearchParams();
-                formData.append('image', croppedImageUrl);
-                formData.append('user_id', '{{ request.user.username }}');
-
-                fetch('/user/change-avatar', {
+                // Важно: для FormData НЕ нужно вручную указывать Content-Type header!
+                fetch('/profile/change-avatar', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
                         'X-CSRFToken': csrftoken,
                     },
                     body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
-                   console.log('Аватар сохранен на сервере:', data);
+                    console.log('Аватар сохранен на сервере:', data);
+                    // Для обновления превью на клиенте:
+                    avatarElement.src = URL.createObjectURL(file); 
                 })
                 .catch(error => console.error('Ошибка сохранения аватара:', error));
 
@@ -307,12 +353,9 @@
             return cookieValue;
         }
 
-        // --- Основная функция add_avatar ---
         function add_avatar() {
-            openAvatarModal(); // Открываем модальное окно
+            openAvatarModal();
         }
-
-        // --- Обработчики событий ---
 
         // Кнопка "Изменить аватар"
         changeAvatarBtn.addEventListener('click', add_avatar);

@@ -71,9 +71,9 @@
             <div class="login_status_bar">
                 <div style="display: flex;" class="login_status_bar_block">
                     {% if request.user.profile.image != "avatars/null_avatar.png" %}
-                        <img src={{ request.user.profile.image }} style="width: 35px; height: 35px; border-radius: 100px;">
-                    {% else %}
                         <img src={{ request.user.profile.image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
+                    {% else %}
+                        <img src={{ request.user.profile.image }} style="width: 35px; height: 35px; border-radius: 100px;">
                     {% endif %}
 
                     {% if request.user.profile.rank >= 3 %}

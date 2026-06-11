@@ -189,6 +189,21 @@ function ChangeTheme(username){
         profile_container_header_block_info_flex_vis = document.querySelectorAll('.profile_container_header_block_info_flex_vis');
     }
 
+    let prod_element_info = null;
+    if (document.querySelectorAll('.prod_element_info')){
+        prod_element_info = document.querySelectorAll('.prod_element_info');
+    }
+
+    let profile_stats_wrapper_container = null;
+    if (document.querySelectorAll('.profile-stats-wrapper-container')){
+        profile_stats_wrapper_container = document.querySelectorAll('.profile-stats-wrapper-container');
+    }
+
+    let chart_column_wrapper = null;
+    if (document.querySelectorAll('.chart-column-wrapper')){
+        chart_column_wrapper = document.querySelectorAll('.chart-column-wrapper');
+    }
+
     let changeAvatarBtn = null;
     if (document.getElementById('changeAvatarBtn')){
         changeAvatarBtn = document.getElementById('changeAvatarBtn');
@@ -222,7 +237,7 @@ function ChangeTheme(username){
         for (const element of main_items_background) {
             element.style.backgroundColor = "white";
             element.style.color = "black";
-            element.style.border =  "1px solid rgb(150, 150, 150)";
+            element.style.border =  "1px solid rgbaa(150, 150, 150, 0.25)";
         }
         
         if (filter != null){
@@ -240,7 +255,6 @@ function ChangeTheme(username){
 
         if (find_by_name2_container != null){
             find_by_name2_container.style.backgroundColor = 'rgb(220, 220, 220)';
-            find_by_name2_container.style.borderBottom = '1px solid rgb(150, 150, 150)'
         }
 
         if (catalog != null){
@@ -410,8 +424,8 @@ function ChangeTheme(username){
 
         if (header != null){
             for (const element of header) {
-                element.style.border = 'none';
-                element.style.borderBottom = '1px solid rgb(150, 150, 150)';
+                element.style.border = '0px';
+                element.style.borderBottom = '1px solid rgba(150, 150, 150, 0.25)';
             }
         }
 
@@ -427,6 +441,25 @@ function ChangeTheme(username){
             for (const element of profile_container_header_block_info_flex_vis) {
                 element.style.backgroundColor = 'rgb(230, 230, 230)';
                 element.style.border = '1px solid rgb(150, 150, 150)';
+            }
+        }
+
+        if (prod_element_info != null){
+            for (const element of prod_element_info) {
+                element.style.color = 'rgb(20, 20, 20)';
+            }
+        }
+
+        if (profile_stats_wrapper_container != null){
+            for (const element of profile_stats_wrapper_container) {
+                element.style.background = 'rgba(200, 200, 200, 0.3)';
+                element.style.color = 'rgb(30, 30, 30)';
+            }
+        }
+
+        if (chart_column_wrapper != null){
+            for (const element of chart_column_wrapper) {
+                element.style.color = 'rgb(30, 30, 30)';
             }
         }
 
@@ -490,7 +523,7 @@ function ChangeTheme(username){
         for (const element of main_items_background) {
             element.style.backgroundColor = "rgba(30, 30, 30)";
             element.style.color = "rgb(200, 200, 200)";
-            element.style.border =  "1px solid rgb(60, 60, 60)";
+            element.style.border =  "1px solid rgba(60, 60, 60, 0.25)";
         }
 
         for (const element of font1) {
@@ -529,7 +562,6 @@ function ChangeTheme(username){
 
         if (find_by_name2_container != null){
             find_by_name2_container.style.backgroundColor = 'rgb(20, 20, 20)';
-            find_by_name2_container.style.borderBottom = '1px solid rgb(60, 60, 60)'
         }
 
         if (catalog != null){
@@ -677,8 +709,8 @@ function ChangeTheme(username){
 
         if (header != null){
             for (const element of header) {
-                element.style.border = 'none';
-                element.style.borderBottom = '1px solid rgb(60, 60, 60)';
+                element.style.border = '0px';
+                element.style.borderBottom = '1px solid rgba(60, 60, 60, 0.25)';
             }
         }
 
@@ -694,6 +726,25 @@ function ChangeTheme(username){
             for (const element of profile_container_header_block_info_flex_vis) {
                 element.style.backgroundColor = 'rgb(60, 60, 60)';
                 element.style.border = '1px solid rgb(100, 100, 100)';
+            }
+        }
+
+        if (prod_element_info != null){
+            for (const element of prod_element_info) {
+                element.style.color = 'inherit';
+            }
+        }
+
+        if (profile_stats_wrapper_container != null){
+            for (const element of profile_stats_wrapper_container) {
+                element.style.background = '#1e1e1e';
+                element.style.color = '';
+            }
+        }
+
+        if (chart_column_wrapper != null){
+            for (const element of chart_column_wrapper) {
+                element.style.color = 'inherit';
             }
         }
 
