@@ -12,7 +12,7 @@ urlpatterns = [
     path('about/', views.about, name="about"),
     path('theme/get/', views.courent_theme), 
     path('theme/set/', views.save_theme),
-    path('create/', views.create, name="create"),
+    path('create/', views.create, name="create_product"),
     path('filtered-items/', views.filter, name='filtered-items'),
     path('card/<str:product_name>/favourites_add/', views.favourites_add, name='favourites_add'),
     path('comment/<int:comment_id>/state/', views.update_comment_state, name='comment'),

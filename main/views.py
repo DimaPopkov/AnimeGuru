@@ -1,16 +1,19 @@
+import re, json, requests, Levenshtein, io
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
 from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count
+from django.core.files.base import ContentFile
 from django.core.cache import cache
+from PIL import Image, ImageSequence
 
 from django.contrib.auth.models import User
 
 from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats
 from .forms import ProductForm
-import re, json, requests, Levenshtein
+
 
 # Create your views here.
 
@@ -491,6 +494,99 @@ def profile(request):
 
     return render(request, 'main/profile.html', context)
 
+def profile_change_avatar(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        image_file = request.FILES.get('image')
+
+        if not username or not image_file:
+            return JsonResponse({'error': 'Недостаточно данных для обновления аватара.'}, status=400)
+
+        try:  
+            user = User.objects.get(username=username)
+
+            try:
+                x = int(float(request.POST.get('x', 0)))
+                y = int(float(request.POST.get('y', 0)))
+                width = int(float(request.POST.get('width', 0)))
+                height = int(float(request.POST.get('height', 0)))
+                crop_box = (x, y, x + width, y + height)
+            except (ValueError, TypeError):
+                return JsonResponse({'error': 'Некорректные координаты обрезки.'}, status=400)
+            
+            img = Image.open(image_file)
+            buffer = io.BytesIO()
+            file_name = f"avatar_{username}.webp"
+
+            if img.format == 'GIF':
+                frames = []
+                durations = []
+
+                for frame in ImageSequence.Iterator(img):
+                    durations.append(frame.info.get('duration', 100))
+                    
+                    # Обрезаем конкретный кадр по координатам кропера
+                    cropped_frame = frame.crop(crop_box)
+                    frames.append(cropped_frame.copy())
+
+                frames[0].save(
+                    buffer, 
+                    format='WEBP', 
+                    save_all=True,              
+                    append_images=frames[1:],   
+                    quality=75,
+                    method=4,                   
+                    loop=img.info.get('loop', 0), 
+                    duration=durations,
+                    minimize_size=True,
+                    disposal=2
+                )
+
+            else:
+                if img.mode in ('RGBA', 'LA') or (img.format == 'PNG' and 'transparency' in img.info):
+                    img = img.convert('RGBA')
+                else:
+                    img = img.convert('RGB')
+
+                img.save(buffer, format='WEBP', quality=80, optimize=True)
+
+            content_file = ContentFile(buffer.getvalue(), name=file_name)
+
+            if user.profile.image:
+                user.profile.image.delete(save=False)
+
+            user.profile.image.save(file_name, content_file, save=True)
+
+            print(f"Аватар успешно обновлен для пользователя: {username}")
+
+            return JsonResponse({
+                'image_url': user.profile.image.url if user.profile.image else None,
+                'status': 'success'
+            })
+
+        except User.DoesNotExist:
+            return JsonResponse({'error': f'Пользователь с именем "{username}" не найден.'}, status=404)
+        except Exception as e:
+            print(f"Произошла ошибка при обновлении аватара: {e}")
+            return JsonResponse({'error': 'Произошла внутренняя ошибка сервера.'}, status=500)
+
+    return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
+
+def profile_delete_avatar(request):
+    if request.method == 'POST':
+
+        if not request.user or not request.user.profile.image:
+            return JsonResponse({'error': 'Недостаточно данных для обновления аватара.'}, status=400)
+
+        request.user.profile.image.delete(save=True)
+        request.user.profile.save()
+
+        print(f"Аватар успешно удален для пользователя: {request.user.username}")
+
+        return redirect('profile')
+
+    return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
+
 def add_comments(request, product_name):
 
     product = get_object_or_404(Product, name=product_name)
@@ -651,54 +747,6 @@ def update_comment_state(request, comment_id):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-    
-def profile_change_avatar(request):
-    if request.method == 'POST':
-        username = request.POST.get('user_id')
-        image_file = request.FILES.get('image')
-        print(image_file)
-
-        if not username or not image_file:
-            return JsonResponse({'error': 'Недостаточно данных для обновления аватара.'}, status=400)
-
-        try:
-            # Получаем конкретного пользователя
-            user = User.objects.get(username=username)
-
-            # Присваиваем файл изображению в профиле
-            user.profile.image = image_file
-            user.profile.save()
-
-            print(f"Аватар успешно обновлен для пользователя: {username}")
-
-            return JsonResponse({
-                'image_url': user.profile.image.url if user.profile.image else None,
-            })
-
-        except User.DoesNotExist:
-            return JsonResponse({'error': f'Пользователь с именем "{username}" не найден.'}, status=404)
-        except Exception as e:
-            print(f"Произошла ошибка при обновлении аватара: {e}")
-            return JsonResponse({'error': 'Произошла внутренняя ошибка сервера.'}, status=500)
-
-    return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
-
-def profile_delete_avatar(request):
-    if request.method == 'POST':
-        user = request.user
-        image = request.user.profile.image
-
-        if not user or not image:
-            return JsonResponse({'error': 'Недостаточно данных для обновления аватара.'}, status=400)
-
-        image = 'img/null_avatar.png'
-        user.profile.save()
-
-        print(f"Аватар успешно удален для пользователя: {user.username}")
-
-        return redirect('profile')
-
-    return JsonResponse({'error': 'Метод запроса не поддерживается.'}, status=405)
 
 def AIchat(request):
     json_data = json.loads(request.body)

@@ -11,17 +11,20 @@
             <div class="profile_container_header_block">
                 <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
                     <div class="profile_container_header_block_info_flex_vis">
-                        {% if request.user.profile.image != "avatars/null_avatar.png" %}
-                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image.url }}" id="avatar" alt="User Avatar">
-                        {% else %}
-                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image }}" id="avatar" alt="Default Avatar">
-                        {% endif %}      
+                        {% if request.user.profile.image != "avatars/null_avatar.png" and request.user.profile.image %}
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image.url }}" id="avatar" alt="User Avatar">               
 
-                        <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>
-                        <form id="deleteAvatarBtn" method="POST" action="{% url 'profile_delete_avatar' %}">
-                            {% csrf_token %}
-                            <button class="profile_container_header_block_info_flex_vis_button" type="submit"> Удалить аватар </button>
-                        </form>
+                            <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>
+
+                            <form id="deleteAvatarBtn" method="POST" action="{% url 'profile_delete_avatar' %}">
+                                {% csrf_token %}
+                                <button class="profile_container_header_block_info_flex_vis_button" type="submit"> Удалить аватар </button>
+                            </form>
+                        {% else %}
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{% static 'img/null_avatar.png' %}" id="avatar" alt="Default Avatar">
+
+                            <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Добавить аватар</button>
+                        {% endif %}
                     </div>
                     <div class="avatar-modal-overlay" id="avatarModalOverlay">
                         <div class="avatar-modal">
@@ -34,6 +37,7 @@
                                 <div style="display: flex; justify-content: center;">                                   
                                     <button id="cancelAvatarBtn">Отмена</button>
                                     <button id="saveAvatarBtn">Сохранить</button>
+                                    <div id="saveAvatarSpinner" class="btn-spinner" style="display: none;"></div>
                                 </div>
                             </div>
                         </div>
@@ -42,9 +46,11 @@
             </div>
 
             <div class="profile_container_header_block">
-                <div class="profile_container_header_block_info_flex">
-                    <p class="profile_p_level_title"> Уровень аккаунта: </p>
-                    <p class="profile_p_level"> {{ request.user.profile.rank }} </p>
+                <div class="profile_container_header_block_info_flex_alt">
+                    <div class="profile_container_header_block_info_flex_alt_block">
+                        <p class="profile_p_level_title"> Уровень аккаунта: </p>
+                        <p class="profile_p_level"> {{ request.user.profile.rank }} </p>
+                    </div>
                 </div>
             </div>
 
@@ -223,6 +229,7 @@
         const editableAvatar = document.getElementById('editableAvatar');
         const saveAvatarBtn = document.getElementById('saveAvatarBtn');
         const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+        const btnSpinner = document.getElementById('saveAvatarSpinner');
 
         // --- Функция открытия модального окна ---
         function openAvatarModal() {
@@ -246,6 +253,10 @@
 
         // --- Функция для инициализации Cropper.js ---
         function initializeCropper(imageSrc) {
+            if (cropper && typeof cropper.destroy === 'function') {
+                cropper.destroy();
+            }
+
             editableAvatar.src = imageSrc; // Устанавливаем изображение для редактирования
 
             // Ждем, пока изображение загрузится, чтобы Cropper.js смог его инициализировать
@@ -296,43 +307,84 @@
             // }
 
             if (cropper) {
-                // 1. Получаем координаты кропа от Cropper.js
                 const cropData = cropper.getData();
 
-                // 2. Берем оригинальный файл из инпута выбора файлов
+                const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+                const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+                const btnSpinner = document.getElementById('saveAvatarSpinner');
+
+                if (saveAvatarBtn) saveAvatarBtn.disabled = true;
+                if (btnSpinner) btnSpinner.style.display = 'inline-block';
+
                 const avatarInput = document.getElementById('avatarFileInput');
-                const file = avatarInput.files[0];
+                const originalFile = avatarInput.files[0];
 
-                // 3. Используем FormData вместо URLSearchParams для отправки файлов
+                if (!originalFile) {
+                    alert('Файл не найден.');
+                    return;
+                }
+
                 const formData = new FormData();
-                formData.append('image', file); // Оригинальный GIF-файл целиком
-                formData.append('user_id', '{{ request.user.username }}');
-                
-                // Передаем координаты для обрезки на сервере
-                formData.append('x', cropData.x);
-                formData.append('y', cropData.y);
-                formData.append('width', cropData.width);
-                formData.append('height', cropData.height);
+                formData.append('username', '{{ request.user.username }}');
 
-                const csrftoken = getCookie('csrftoken');
+                // Функция для отправки данных на сервер
+                const sendData = (fileToSend, isBlob = false) => {
+                    formData.append('image', fileToSend);
 
-                // Важно: для FormData НЕ нужно вручную указывать Content-Type header!
-                fetch('/profile/change-avatar', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrftoken,
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Аватар сохранен на сервере:', data);
-                    // Для обновления превью на клиенте:
-                    avatarElement.src = URL.createObjectURL(file); 
-                })
-                .catch(error => console.error('Ошибка сохранения аватара:', error));
+                    formData.append('x', cropData.x);
+                    formData.append('y', cropData.y);
+                    formData.append('width', cropData.width);
+                    formData.append('height', cropData.height);
 
-                closeAvatarModal();
+                    const csrftoken = getCookie('csrftoken');
+
+                    fetch('/profile/change-avatar', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Аватар успешно сохранен:', data);
+                        if (data.image_url) {
+                            avatarElement.src = data.image_url; 
+                        } 
+                        closeAvatarModal();
+                        location.reload(); 
+                    })
+                    .catch(error => console.error('Ошибка отправки:', error));
+
+                    function resetSaveButton() {
+                        if (saveAvatarBtn) saveAvatarBtn.disabled = false;
+                        if (btnSpinner) btnSpinner.style.display = 'none';
+                    }
+                };
+
+                // ЕСЛИ ЭТО GIF: отправляем оригинал, так как Canvas ломает анимацию
+                if (originalFile.type === 'image/gif') {
+                    sendData(originalFile);
+                } else {
+                    const canvas = cropper.getCroppedCanvas({
+                        width: 400,
+                        height: 400,
+                        imageSmoothingEnabled: true,
+                        imageSmoothingQuality: 'high',
+                    });
+
+                    // Превращаем Canvas в готовый файл (Blob) для отправки
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            const croppedFile = new File([blob], `avatar_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                            sendData(croppedFile);
+                        } else {
+                            alert('Не удалось обработать изображение.');
+                            resetSaveButton();
+                        }
+                    }, 'image/jpeg', 0.9);
+                }
+
             } else {
                 alert('Изображение не было отредактировано.');
             }
@@ -416,31 +468,5 @@
                 console.log("Форма не найдена")
             } 
         }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const tagLabels = JSON.parse(document.getElementById('labels-data').textContent);
-            const tagData = JSON.parse(document.getElementById('views-data').textContent);
-
-            console.log("Проверка данных:", tagLabels, tagData);
-
-            const ctx = document.getElementById('tagsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: tagLabels,
-                    datasets: [{
-                        label: 'Количество просмотров',
-                        data: tagData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-        });
     </script>
 {% endblock %}
