@@ -113,18 +113,25 @@ def filter(request):
     similarity_threshold = 0.3
 
     if titlename:
-        for product in products:
-            array = product.name.split(" ")
-            if array.__len__() == 1:
-                similarity_threshold_final = calculate_char_similarity(product.name, titlename)
-                if similarity_threshold_final >= similarity_threshold_char:
-                    final_products.append(product)
+        # for product in products:
+        #     array = product.name.split(" ")
+        #     if array.__len__() == 1:
+        #         similarity_threshold_final = calculate_char_similarity(product.name, titlename)
+        #         if similarity_threshold_final >= similarity_threshold_char:
+        #             final_products.append(product)
 
-            else:
-                similarity_threshold_final = calculate_similarity(product.name, titlename)
-                if similarity_threshold_final >= similarity_threshold:
-                    final_products.append(product)
+        #     else:
+        #         similarity_threshold_final = calculate_similarity(product.name, titlename)
+        #         if similarity_threshold_final >= similarity_threshold:
+        #             final_products.append(product)
 
+        words = titlename.strip().split()
+    
+        query = products
+        for word in words:
+            query = query.filter(name__icontains=word)
+
+        final_products = list(query)
     else:
         final_products = list(products)
 

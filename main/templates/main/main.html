@@ -89,51 +89,53 @@
                     <h4 class="new_products_h4"> Новое: </h4>
                     <img class="arrow arrow2" id="arrow2" src="{% static '/img/arrow.png' %}" width="10px">
                 </div>
-                <div class="new_products_list">
-                    {% for element in new_products %}
-                        <form action="{% url 'card' product_name=element.name %}" method="GET" class="new_products_list_product fade-in">
-                            <input type="hidden" name="product_name" value="{{ element }}">
+                <div class="new_products_list_container">
+                    <div class="new_products_list">
+                        {% for element in new_products %}
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="new_products_list_product fade-in">
+                                <input type="hidden" name="product_name" value="{{ element }}">
 
-                            <div class="prod_element2" onclick="submitform(this)">
-                                {% if element.image %}
-                                    {% if element.image.name %}
-                                        <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                    {% elif element.image %}
-                                        <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                    {% else %}
-                                        <div class="prod_element_pic_lock2"><img src="{{ element.image }}" style="width: 100%"></div>
+                                <div class="prod_element2" onclick="submitform(this)">
+                                    {% if element.image %}
+                                        {% if element.image.name %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                        {% elif element.image %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
+                                        {% else %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.image }}" style="width: 100%"></div>
+                                        {% endif %}
+                                    {% elif element.alter_pic %}
+                                        <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
                                     {% endif %}
-                                {% elif element.alter_pic %}
-                                    <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
-                                {% endif %}
-                                <div class="prod_element_rating">
-                                    <div class="prod_element_rating_block" style="
-                                        background:
-                                                {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
-                                                {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
-                                                {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
-                                            color: #ffffff;
-                                            box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
-                                        "> {{ element.rating }} </div>
-                                    <!-- <div class="prod_element_rating_block_dop_main">
-                                        <div class="prod_element_rating_block_dop"></div>
-                                    </div> -->
+                                    <div class="prod_element_rating">
+                                        <div class="prod_element_rating_block" style="
+                                            background:
+                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                color: #ffffff;
+                                                box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
+                                            "> {{ element.rating }} </div>
+                                        <!-- <div class="prod_element_rating_block_dop_main">
+                                            <div class="prod_element_rating_block_dop"></div>
+                                        </div> -->
+                                    </div>
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                        <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                        <br><br>
+                                    </div>
                                 </div>
-                                <div class="prod_element_info">
-                                    <h5 style="padding-top: 5px"> {{ element.name }} </h5>
-                                    <h8> {{ element.category }} / {{ element.season.year }}</h8>
-                                    <br><br>
-                                </div>
-                            </div>
-                        </form>
-                    {% endfor %}
+                            </form>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
             <div class="find_by_name2_container">
                 <h4 class="new_products_h4" style="text-align: start; padding-left: 0;"> Поиск: </h4>
                 <form id="filter-form-text" class="filter-form-text" method="GET" action="{% url 'filtered-items' %}">
-                    <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
+                    <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Введите название" name="titlename" id="titlename">
                 </form>
             </div>
 
@@ -333,23 +335,62 @@
 
 
             dropdown_new.addEventListener('click', function(e) {
-                const dropdownContent = this.nextElementSibling;
-                const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
-                dropdownContent.style.display = isOpen ? 'none' : 'grid';
+                // const dropdownContent = this.nextElementSibling;
+                // const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
+                // dropdownContent.style.display = isOpen ? 'none' : 'grid';
                 
-                if (dropdownContent.style.display == 'grid'){
-                    dropdown_new.style.paddingBottom = '0';
+                // if (dropdownContent.style.display == 'grid'){
+                //     dropdown_new.style.paddingBottom = '0';
 
+                //     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                //     filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+
+                //     arrow2.style.transform = "rotate(180deg)";
+                // } else {
+                //     dropdownContent.style.display = 'none';
+                //     dropdown_new.style.padding = '20px';
+
+                //     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                //     filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+
+                //     arrow2.style.transform = "rotate(0deg)";
+                // }
+
+                const dropdownContent = this.nextElementSibling;
+                const contentHeight = dropdownContent.scrollHeight; 
+                
+                const currentHeight = window.getComputedStyle(dropdownContent).height;
+                const isOpen = parseFloat(currentHeight) > 50;
+
+                const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                const currentFloatValue = parseFloat(currentValue) || 0;
+
+                if (!isOpen) {
+                    // Устанавливаем высоту (например, 350px или scrollHeight для авто-высоты)
+
+                    dropdown_new.style.paddingBottom = '0';
+                    dropdownContent.style.height = contentHeight + 'px';
+                    dropdownContent.style.opacity = '1';
+
+                    // Изменение CSS-переменной родительского фильтра
                     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
-                    filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+                    filter.style.setProperty('--pseudo-filter-height', `${currentFloatValue + contentHeight}px`);
 
                     arrow2.style.transform = "rotate(180deg)";
                 } else {
-                    dropdownContent.style.display = 'none';
-                    dropdown_new.style.padding = '20px';
+                    const closingHeight = dropdownContent.offsetHeight;
+                    dropdownContent.style.height = closingHeight + 'px';
 
-                    const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
-                    filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+                    dropdownContent.offsetHeight;
+                    
+                    dropdownContent.style.height = '0px';
+                    dropdownContent.style.opacity = '0';
+                    dropdown_new.style.paddingBottom = '20px';
+
+                    const contentHeight = dropdownContent.scrollHeight;
+                    
+                    // Уменьшение CSS-переменной обратно
+                    filter.style.setProperty('--pseudo-filter-height', `${currentFloatValue - closingHeight}px`);
 
                     arrow2.style.transform = "rotate(0deg)";
                 }

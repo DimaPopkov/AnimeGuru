@@ -454,8 +454,7 @@ main{
     flex-direction: column;
 
     text-align: left;
-    user-select: none; 
-    
+    user-select: none;    
     /* height: 400px; */
 
     /* z-index: -1; */
@@ -487,6 +486,10 @@ main{
 
 .new_products_h4{
     margin-bottom: 0;
+}
+
+.new_products_list_container{
+    transition: 0.2s;
 }
 
 .new_products_list{
@@ -843,6 +846,8 @@ main{
     --text-color: rgb(200, 200, 200);
 
     cursor: text;
+
+    font-size: 18px;
 }
 
 .find_by_name2_container{
