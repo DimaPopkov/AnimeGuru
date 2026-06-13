@@ -389,6 +389,27 @@ def card(request, product_name):
                     comment.my_state = 1
                 break
 
+    author_names = {c.user_name for c in allComments if c.user_name}
+
+    users = User.objects.filter(username__in=author_names).select_related('profile')
+
+    users_dict = {u.username: u for u in users}
+
+    for item in allComments:
+        if item.user_name in users_dict:
+            item.current_user = users_dict[item.user_name]
+        else:
+            item.current_user = None
+
+        if item.parentId:
+            parent_comment = next((c for c in allComments if c.id == item.parentId), None)
+            if parent_comment and parent_comment.user_name in users_dict:
+                item.parent_user = users_dict[parent_comment.user_name]
+            else:
+                item.parent_user = None
+        else:
+            item.parent_user = None
+            
     if request.user.is_authenticated:
         user = request.user
         
@@ -409,7 +430,6 @@ def card(request, product_name):
                 tag_id=tag_id,
                 defaults={'views_count': 1}
             )
-            # Если строка в базе уже существовала, то просто делаем +1
             if not created:
                 stat_obj.views_count = F('views_count') + 1
                 stat_obj.save()

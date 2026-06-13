@@ -142,7 +142,7 @@ class CommentAction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'comment') # Гарантирует, что у пользователя будет только одно действие на комментарий
+        unique_together = ('user', 'comment')
 
     def __str__(self):
         return f"{self.user.username} {self.action_type}d on {self.comment.id}"

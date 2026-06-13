@@ -35,15 +35,27 @@ class PostsAction(models.Model):
     def __str__(self):
         return f"{self.user.username} {self.action_type}d on {self.post.id}"
     
-class PostComment(models.Model):
-    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField('Текст комментария')
-    like_count = models.IntegerField('Кол-во лайков под постом', default=0, blank=True)
-    dislike_count = models.IntegerField('Кол-во дизлайков под постом', default=0, blank=True)
-    state = models.BooleanField('True - like, False - dislike, None - not yet', null=True)
-    parentId = models.IntegerField('ID родительского коммента (если нет - null/none)', null=True)
-    locateZ = models.IntegerField('Z-index комментария относительно тайтла (0 уровень)', null=True)
+class PostComments(models.Model):
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user_comment = models.TextField('Комментарий пользователя:', null=True, blank=True)
+    like_count = models.IntegerField('Кол-во лайков под постом')
+    dislike_count = models.IntegerField('Кол-во дизлайков под постом')
+    state = models.BooleanField('True - like, False - dislike, None - not yet', null=True, blank=True)
+    parentId = models.IntegerField('ID родительского коммента (если нет - null/none)', null=True, blank=True)
+    locateZ = models.IntegerField('Z-index комментария относительно тайтла (0 уровень)', null=True, blank=True)
 
     def __str__(self):
-        return self.text
+        return f"'{self.post.title}' by {self.user.username}"
+    
+class PostCommentsAction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(PostComments, on_delete=models.CASCADE)
+    action_type = models.CharField(max_length=10, choices=[('like', 'Like'), ('dislike', 'Dislike'), ('none', 'None')])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'comment')
+
+    def __str__(self):
+        return f"{self.user.username} {self.action_type}d on {self.comment.id}"

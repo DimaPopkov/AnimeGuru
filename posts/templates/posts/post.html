@@ -22,7 +22,6 @@
             <h4>{{ post.text }}</h2>
         </div>
         <div class="post_card_text_block">
-            <hr>
             <div class="post_card_comment_block fade-in">
                 <h6 class="dark_gray_font"> Все комментарии </h6>
                 <h2> Ваш комментарий </h2>
@@ -39,7 +38,7 @@
                 <form id="you_container_form" method="POST" action="{% url 'edit_comment' post_id=post.id %}">
                     {% csrf_token %}
 
-                    <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.text }}</textarea>
+                    <textarea class="you_container_text_container" type="text" placeholder="Добавьте комментарий" name="text">{{ your_comment.user_comment }}</textarea>
                     <div style="display: flex; column-gap: 10px">
                         <a class="you_container_button_delete"  href="{% url 'delete_comment' post_id=post.id id=your_comment.id %}"> Удалить </a>
                         <button class="you_container_button"> Изменить </button>
@@ -51,19 +50,23 @@
                 <div class="all_comments_container">
                     {% for element in comments %}
                         {% if element.locateZ == 0 %}
-                            <div id="{{ element.id }}" class="all_comments_container_block">
+                            <div class="all_comments_container_block">
                                 <div class="all_comments_container_block_header">
                                     <div class="all_comments_container_block_header_block">
-                                        {% if element.user.profile.image and element.user.profile.image != 'avatars/null_avatar.png' %}
-                                            <img src="{{ element.user.profile.image }}" class="comment_user_image">
+                                        {% if element.user.profile.image.url and element.user.profile.image.url != 'avatars/null_avatar.png' %}
+                                            <img src="{{ element.user.profile.image.url }}" class="comment_user_image">
                                         {% else %}
                                             <img src="{% static "/img/null_avatar.png" %}" class="comment_user_image">
                                         {% endif %}
                                     </div>
-                                    <p class="all_comments_container_block_header_username"> {{ element.user.username }} </p>
+                                    <p class="all_comments_container_block_header_username"> 
+                                        <span class="animated-nickname" style="--user-color: {{ element.user.profile.color }}; margin-top: 0;">
+                                            <a id="nickname" class="login_status_bar_text" style=" padding: 0;"> {{ element.user.username }} </a>
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="comments_container">
-                                    {{ element.text }}
+                                    {{ element.user_comment }}
                                 </div>
                                 <div class="comment_buttons"> 
                                     <span id="like_count_{{ element.id }}" style="padding-right: 5px; color: 
@@ -74,7 +77,7 @@
                                         {{ element.net_likes }} 
                                     </span>
 
-                                    <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element.id %}" method="POST">
+                                    <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_comment_state' post_id=post.id comment_id=element.id %}" method="POST">
                                         {% csrf_token %}
                                         {% if element.my_state == 2 %}
                                             <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
@@ -107,22 +110,165 @@
 
                                     {% if request.user.is_authenticated %}
                                         <div class="comment_answer">
-                                            <button class="comment_buttons_button_otvet" value="{{ element2 }}"> Ответить </button>
-                                            <form id="form" class="comment_textarea_otvet" method='POST' action="{% url 'add_comment' post_id=post.id %}">
-                                                {% csrf_token %}
-                                                <div class="comment_textarea_otvet_header">
-                                                    <h4 class="font18" style="margin-bottom: 0;">Комментарий</h4>
-                                                    <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
-                                                </div>
-                                                <input type="hidden" name="parentId" value="{{ element.id }}"></input>
-                                                <input type="hidden" name="rating" value="0"></input>
-                                                <textarea name="text" class="comment_textarea_otvet_textarea"></textarea>
-                                            </form> 
+                                            <button class="comment_buttons_button_otvet" value="{{ element.id }}"> Ответить </button>
                                         </div>
                                     {% endif %}
                                 </div>
         
-                               
+                                {% for element2 in comments %}
+                                    {% if element2.locateZ != "0" and element2.parentId == element.id %}
+                                        <div style="width: 100%; display: flex;" class="answer">
+                                            <div class="all_comments_dop_line"></div>
+                                            <div class="all_comments_container_block" style="width: 100%;">
+                                                <div class="all_comments_container_block_header">
+                                                    <div class="all_comments_container_block_header_block">
+                                                        {% if element2.user.profile.image.url and element2.user.profile.image.url != 'avatars/null_avatar.png' %}
+                                                            <img src="{{ element2.user.profile.image.url }}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                        {% else %}
+                                                            <img src="{% static "/img/null_avatar.png" %}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                        {% endif %}                      
+                                                        <p class="all_comments_container_block_header_username"> 
+                                                            <span class="animated-nickname" style="--user-color: {{ element2.user.profile.color }}; margin-top: 0;">
+                                                                <a id="nickname" class="login_status_bar_text" style=" padding: 0;"> {{ element2.user.username }} </a>
+                                                            </span>
+                                                        </p>
+                                                    </div>                              
+                                                </div>
+                                                <div class="comments_container">
+                                                    {% if element2.parentId != element2.id %}
+                                                        <span class="animated-nickname" style="--user-color: {{ element2.parent_user.profile.color }}; margin-top: 0;">
+                                                            <a id="nickname" class="login_status_bar_text" style="font-size: inherit; padding: 0;"> @{{ element2.parent_user.username }} </a>
+                                                        </span>
+                                                    {% endif %}
+                                                    <p style="margin-bottom: 0; padding-left: 5px;">{{ element2.user_comment }}</p>
+                                                </div>
+                                                <div class="comment_buttons">
+                                                    <span id="like_count_{{ element2.id }}" style="padding-right: 5px; color: 
+                                                    {% if element2.net_likes > 0 %} green 
+                                                    {% elif element2.net_likes < 0 %} red 
+                                                    {% else %} white 
+                                                    {% endif %};">
+                                                        {{ element2.net_likes }} 
+                                                    </span>
+
+                                                    <form class="comment_buttons" id="comment-{{ element2.id }}" style="padding-left: 0;" action="{% url 'update_comment_state' post_id=post.id comment_id=element2.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        {% if element2.my_state == 2 %}
+                                                            <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                                value="{{ element2.like_count }}" 
+                                                                id="like_button_{{ element2.id }}"
+                                                                data-comment-id="{{ element2.id }}"
+                                                                data-action="like">
+                                                        {% else %}
+                                                            <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                                value="{{ element2.like_count }}" 
+                                                                id="like_button_{{ element2.id }}"
+                                                                data-comment-id="{{ element2.id }}"
+                                                                data-action="like">
+                                                        {% endif %}
+
+                                                        {% if element2.my_state == 1 %}
+                                                            <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                                value="{{ element2.dislike_count }}"
+                                                                id="dislike_button_{{ element2.id }}"
+                                                                data-comment-id="{{ element2.id }}"
+                                                                data-action="dislike">
+                                                        {% else %}
+                                                            <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                                value="{{ element2.dislike_count }}"
+                                                                id="dislike_button_{{ element2.id }}"
+                                                                data-comment-id="{{ element2.id }}"
+                                                                data-action="dislike">
+                                                        {% endif %}
+                                                    </form>
+
+                                                    {% if request.user.is_authenticated %}
+                                                        <div class="comment_answer">
+                                                            <button class="comment_buttons_button_otvet" value="{{ element2.id }}"> Ответить </button>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                {% for element3 in comments %}
+                                                    {% if element3.locateZ != 0 and element3.locateZ != 1 %}
+                                                        <div style="width: 100%; display: flex;" class="answer">
+                                                            <div class="all_comments_dop_line"></div>
+                                                            <div class="all_comments_container_block" style="width: 100%;">
+                                                                <div class="all_comments_container_block_header">
+                                                                    <div class="all_comments_container_block_header_block">
+                                                                        {% if element3.user.profile.image.url and element3.user.profile.image.url != 'avatars/null_avatar.png' %}
+                                                                            <img src="{{ element3.user.profile.image.url}}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                                        {% else %}
+                                                                            <img src="{% static "/img/null_avatar.png" %}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                                                        {% endif %}    
+                                                                        <p class="all_comments_container_block_header_username"> 
+                                                                            <span class="animated-nickname" style="--user-color: {{ element3.user.profile.color }}; margin-top: 0;">
+                                                                                <a id="nickname" class="login_status_bar_text" style=" padding: 0;"> {{ element3.user.username }} </a>
+                                                                            </span>
+                                                                        </p>
+                                                                    </div>                              
+                                                                </div>
+                                                                <div class="comments_container">
+                                                                    {% if element3.parentId != element2.id %}
+                                                                        <span class="animated-nickname" style="--user-color: {{ element3.parent_user.profile.color }}; margin-top: 0;">
+                                                                            <a id="nickname" class="login_status_bar_text" style="font-size: inherit; padding: 0;"> @{{ element3.parent_user.username }} </a>
+                                                                        </span>
+                                                                    {% endif %}
+                                                                    <p style="margin-bottom: 0; padding-left: 5px;">{{ element3.user_comment }}</p>
+                                                                </div>
+                                                                <div class="comment_buttons">
+                                                                    <span id="like_count_{{ element3.id }}" style="padding-right: 5px; color: 
+                                                                    {% if element3.net_likes > 0 %} green 
+                                                                    {% elif element3.net_likes < 0 %} red 
+                                                                    {% else %} white 
+                                                                    {% endif %};">
+                                                                        {{ element3.net_likes }} 
+                                                                    </span>
+
+                                                                    <form class="comment_buttons" id="comment-{{ element3.id }}" style="padding-left: 0;" action="{% url 'update_comment_state' post_id=post.id comment_id=element3.id %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        {% if element3.my_state == 2 %}
+                                                                            <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                                                value="{{ element3.like_count }}" 
+                                                                                id="like_button_{{ element3.id }}"
+                                                                                data-comment-id="{{ element3.id }}"
+                                                                                data-action="like">
+                                                                        {% else %}
+                                                                            <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                                                value="{{ element3.like_count }}" 
+                                                                                id="like_button_{{ element3.id }}"
+                                                                                data-comment-id="{{ element3.id }}"
+                                                                                data-action="like">
+                                                                        {% endif %}
+
+                                                                        {% if element3.my_state == 1 %}
+                                                                            <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                                                value="{{ element3.dislike_count }}"
+                                                                                id="dislike_button_{{ element3.id }}"
+                                                                                data-comment-id="{{ element3.id }}"
+                                                                                data-action="dislike">
+                                                                        {% else %}
+                                                                            <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                                                value="{{ element3.dislike_count }}"
+                                                                                id="dislike_button_{{ element3.id }}"
+                                                                                data-comment-id="{{ element3.id }}"
+                                                                                data-action="dislike">
+                                                                        {% endif %}
+                                                                    </form>
+                                                                    
+                                                                    {% if request.user.is_authenticated %}
+                                                                        <div class="comment_answer">
+                                                                            <button class="comment_buttons_button_otvet" value="{{ element3.id }}"> Ответить </button>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -134,4 +280,194 @@
             {% endif %}
         </div> 
     </div>
+
+    <form id="form" class="comment_textarea_otvet otvet_2 fade-in" method='POST' action="{% url 'add_comment' post_id=post.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="parentId" value="">
+        
+        <div class="comment_textarea_otvet_header">
+            <button type="submit" class="comment_textarea_otvet_header_button"> Отправить </button>
+            <button id="cancel-reply-btn" type="button" class="comment_textarea_otvet_header_button"> Отмена </button>
+        </div>
+
+        <textarea name="text" class="comment_textarea_otvet_textarea textarea_2"></textarea>
+    </form> 
+
+    <script>
+        const cancelBtn = document.getElementById('cancel-reply-btn');
+        const replyForm = document.querySelector('.otvet_2'); 
+
+        cancelBtn.addEventListener('click', () => {
+            replyForm.style.top = '100dvh';
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    
+        let comment_buttons = null;
+        let openAnswerBlockButton = document.querySelector('.comment_buttons_button_otvet');
+        let answerBlock = document.querySelector('.comment_textarea_otvet');
+
+        try {
+            const all_comments_container = document.querySelector('.all_comments_container');
+            const globalAnswerBlock = document.querySelector('.comment_textarea_otvet');
+
+            if (all_comments_container && globalAnswerBlock) {
+                all_comments_container.addEventListener('click', function(event) {
+                    
+                    if (event.target.classList.contains('comment_buttons_button_otvet')) {
+                        const clickedButton = event.target;
+
+                        const parentCommentId = clickedButton.value;
+
+                        const parentInput = globalAnswerBlock.querySelector('input[name="parentId"]');
+                        
+                        if (parentInput) {
+                            parentInput.value = parentCommentId;
+                        } else {
+                            console.error('Ошибка: В HTML-форме не найден <input name="parentId">');
+                        }
+
+                        toggleAnswerBlock(clickedButton, globalAnswerBlock);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Ошибка при обработке данных комментария:', error);
+        }
+
+        function toggleAnswerBlock(buttonElement, FormElement) {
+            if (FormElement.style.top == "85dvh") {
+                // buttonElement.textContent = 'Ответить';
+                FormElement.style.top = "100dvh";
+                // comment_buttons.style.marginBottom = "10px";
+            } else {
+                // buttonElement.textContent = 'Отмена';
+                FormElement.style.top = "85dvh";
+                // comment_buttons.style.marginBottom = "130px";
+            }
+        }
+
+        function SendCommentAnswer(element, elementId){
+            const api_url = "http://127.0.0.1:8000/add_comments/";
+            const csrftoken = getCookie('csrftoken');
+
+            const formData = new URLSearchParams();
+            formData.append('product_name', element);
+            formData.append('parentId', elementId);
+
+
+            console.log(element);
+            fetch(api_url + element + "/", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: formData,
+            })
+        }
+        const commentButtons = document.querySelectorAll('.comment_buttons_button');
+        commentButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // На всякий случай предотвращаем любые стандартные действия
+                e.preventDefault();
+
+                // Проверка авторизации на стороне клиента через Django-шаблон
+                if ('{{ request.user.is_authenticated }}' === 'True') {
+                    const commentId = this.dataset.commentId;
+                    const action = this.dataset.action; // 'like' или 'dislike'
+
+                    const container = this.closest('div.comment_buttons');
+                    if (!container) return;
+
+                    // Находим элементы интерфейса для обновления
+                    const likeCountSpan = container.querySelector('span'); 
+                    const likeButton = container.querySelector('[data-action="like"]');
+                    const dislikeButton = container.querySelector('[data-action="dislike"]');
+
+                    const filterForm = document.getElementById(`comment-${commentId}`);
+                    if (!filterForm) {
+                        console.error(`Форма с id "comment-${commentId}" не найдена.`);
+                        return;
+                    }
+                    
+                    const url = filterForm.action;
+                    const csrftoken = getCookie('csrftoken');
+                
+                    // Используем FormData — это самый надежный способ передачи POST-данных в Django
+                    const formData = new FormData();
+                    formData.append('comment_id', commentId);
+                    formData.append('action_ty', action); // Передаем ровно то, что ждет views.py
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'X-Requested-With': 'XMLHttpRequest' // Помогает Django понять, что это AJAX
+                        },
+                        body: formData // Передаем объект FormData напрямую (заголовок Content-Type выставится автоматически)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Сервер вернул ошибку ${response.status}. Проверьте URL и views.py.`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        debugger;
+                        if (data.status === "success") {
+                            // 1. Обновляем счетчик лайков
+                            if (likeCountSpan) {
+                                likeCountSpan.innerText = data.net_likes;
+
+                                const netLikes = parseInt(data.net_likes) || 0;
+                                if (netLikes < 0) {
+                                    likeCountSpan.style.color = "red";
+                                } else if (netLikes > 0) {
+                                    likeCountSpan.style.color = "green";
+                                } else {
+                                    likeCountSpan.style.color = "white";
+                                }
+                            }
+
+                            // 2. Меняем картинки на основе ответа бэкенда (используем относительные пути вашего проекта)
+                            if (likeButton && dislikeButton) {
+                                if (data.existing_action === "like") {
+                                    likeButton.src = "{% static '/img/active_like.png' %}";
+                                    dislikeButton.src = "{% static '/img/dislike.png' %}";
+                                } else if (data.existing_action === "dislike") {
+                                    likeButton.src = "{% static '/img/like.png' %}";
+                                    dislikeButton.src = "{% static '/img/active_dislike.png' %}";
+                                } else {
+                                    likeButton.src = "{% static '/img/like.png' %}";
+                                    dislikeButton.src = "{% static '/img/dislike.png' %}";
+                                }
+                            }
+                        } else {
+                            alert(data.error || 'Произошла ошибка.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Ошибка при отправке запроса. Проверьте консоль (F12) -> вкладка Network/Сеть.');
+                    });
+                } else {
+                    window.location.href = '/login';
+                }
+            });
+        });
+    </script>
 {% endblock %}

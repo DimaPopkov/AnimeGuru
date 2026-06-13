@@ -107,38 +107,36 @@
             </div>
         </div>
 
-        {% if favourites or favourites != None %}
+        {% if favourites and favourites != None %}
             <div class="profile_container_favourites">
                 <h3> Избранное </h3><hr>
                 <div class="profile_container_favourites_block">
-                    {% for element in favourites %}                 
-                        <form action="{% url 'card' product_name=element.name %}" method="GET" class="fade-in">
+                    {% if favourites %}
+                        {% for element in favourites %}                 
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="catalog_form fade-in">
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="prod_element" onclick="submitform(this)">
-                                    {% if element.image %}
-                                        {% if element.image.name %}
-                                            <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                        {% elif element.image %}
-                                            <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                        {% else %}
-                                            <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                    <div class="prod_element_pic_lock">
+                                        {% if element.image %}
+                                            {% if element.image.url %}
+                                                <img src="{{ element.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
                                         {% endif %}
-                                    {% elif element.alter_pic %}
-                                        <div class="prod_element_pic_lock"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
-                                    {% endif %}
-                                    <div class="prod_element_rating">
-                                        <div class="prod_element_rating_block" style="
-                                            background:
-                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
-                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
-                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
-                                                color: #ffffff;
-                                                box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
-                                        "> {{ element.rating }} </div>
-                                        <!-- <div class="prod_element_rating_block_dop_main">
-                                            <div class="prod_element_rating_block_dop"></div>
-                                        </div> -->
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                    color: #ffffff;
+                                                    box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
+                                                "> {{ element.rating }} </div>
+                                        </div>
                                     </div>
                                     <div class="prod_element_info">
                                         <h5 style="padding-top: 5px"> {{ element.name }} </h5>
@@ -148,71 +146,74 @@
                                     </div>
                                 </div>
                             </form>
-                    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
 
-        <div class="profile_container_comments">
-            <h3> Ваши комментарии </h3><hr>
-            <div class="profile_container_comments_block">
-                {% for element in your_comments %}                 
-                    <div class="profile_container_favourites_block_comment">
-                        {% if element.product_image %}
-                            <img class="profile_container_favourites_block_comment_img" src="/media/{{ element.product_image }}" alt="Product Image"/>
-                        {% endif %}
-                        <div class="prod_element_rating">
-                            <div class="prod_element_rating_block" style="
-                                background:
-                                    {% if element.product_rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
-                                    {% elif element.product_rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
-                                    {% else %} red {% endif %};
-                                "> {{ element.product_rating|floatformat:1 }}
-                            </div>
-                            <div class="prod_element_rating_block_dop_main">
-                                <div class="prod_element_rating_block_dop"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <a class="profile_comment_title" href="{% url 'card' product_name=element.name %}">{{ element.name }}</a>
-                            <p style="padding-top: 5px;">{{ element.product_category }} / {{ element.product_season.year }}</p>
-                            <div style="display:flex; column-gap: 10px; column-gap: 25px;">                 
-                                <div class="profile_comment_star_rating">
-                                    <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
-                                    <div>
-                                        {% for current_number in star_list %}
-                                            {% if current_number <= element.user_rating %}
-                                                <span class="star-icon" style="color: #ff9900;">&#9733;</span>
-                                            {% else %}
-                                                <span class="star-icon" style="color: gray;">&#9733;</span>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
+        {% if your_comments and your_comments != None %}
+            <div class="profile_container_comments">
+                <h3> Ваши комментарии </h3><hr>
+                <div class="profile_container_comments_block">
+                    {% for element in your_comments %}                 
+                        <div class="profile_container_favourites_block_comment">
+                            {% if element.product_image %}
+                                <img class="profile_container_favourites_block_comment_img" src="/media/{{ element.product_image }}" alt="Product Image"/>
+                            {% endif %}
+                            <div class="prod_element_rating">
+                                <div class="prod_element_rating_block" style="
+                                    background:
+                                        {% if element.product_rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
+                                        {% elif element.product_rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
+                                        {% else %} red {% endif %};
+                                    "> {{ element.product_rating|floatformat:1 }}
+                                </div>
+                                <div class="prod_element_rating_block_dop_main">
+                                    <div class="prod_element_rating_block_dop"></div>
                                 </div>
                             </div>
-                            <div class="comments_container">
-                                {{ element.user_comment }}
+                            <div>
+                                <a class="profile_comment_title" href="{% url 'card' product_name=element.name %}">{{ element.name }}</a>
+                                <p style="padding-top: 5px;">{{ element.product_category }} / {{ element.product_season.year }}</p>
+                                <div style="display:flex; column-gap: 10px; column-gap: 25px;">                 
+                                    <div class="profile_comment_star_rating">
+                                        <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
+                                        <div>
+                                            {% for current_number in star_list %}
+                                                {% if current_number <= element.user_rating %}
+                                                    <span class="star-icon" style="color: #ff9900;">&#9733;</span>
+                                                {% else %}
+                                                    <span class="star-icon" style="color: gray;">&#9733;</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comments_container">
+                                    {{ element.user_comment }}
+                                </div>
+                                
+                                <div style="display: flex;">
+                                    {% if element.net_likes > 0 %}           
+                                        <h5 style="color: green;">{{ element.net_likes }}</h5>
+                                        <img src="{% static '/img/like.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">        
+                                    {% elif element.net_likes < 0 %}
+                                        <h5 style="color: red;">{{ element.net_likes }}</h5>
+                                        <img src="{% static '/img/dislike.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">        
+                                    {% else %}
+                                        <h5 style="color: grey;">{{ element.net_likes }}</h5>
+                                        <img src="{% static '/img/like.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">   
+                                        <img src="{% static '/img/dislike.png' %}" style="width: 33px; height: 23px;">       
+                                    {% endif %}
+                                </div>
                             </div>
-                            
-                            <div style="display: flex;">
-                                {% if element.net_likes > 0 %}           
-                                    <h5 style="color: green;">{{ element.net_likes }}</h5>
-                                    <img src="{% static '/img/like.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">        
-                                {% elif element.net_likes < 0 %}
-                                    <h5 style="color: red;">{{ element.net_likes }}</h5>
-                                    <img src="{% static '/img/dislike.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">        
-                                {% else %}
-                                    <h5 style="color: grey;">{{ element.net_likes }}</h5>
-                                    <img src="{% static '/img/like.png' %}" style="width: 33px; height: 23px; padding-left: 5px;">   
-                                    <img src="{% static '/img/dislike.png' %}" style="width: 33px; height: 23px;">       
-                                {% endif %}
-                            </div>
+                            <img data-name="{{ element.name }}" data-id="{{ element.id }}" class="basket" src="{% static 'img/basket2.webp' %}">
                         </div>
-                        <img data-name="{{ element.name }}" data-id="{{ element.id }}" class="basket" src="{% static 'img/basket2.webp' %}">
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>

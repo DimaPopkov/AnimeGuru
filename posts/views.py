@@ -12,7 +12,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Posts, PostsAction, PostComment
+from .models import Posts, PostsAction, PostComments, PostCommentsAction
 import re, json, requests, Levenshtein
 
 # Create your views here.
@@ -48,24 +48,44 @@ def posts(request):
     return render(request, 'posts/main.html', data)
 
 def card(request, post_id):
-    post = get_object_or_404(Posts, id=post_id)
+    post = Posts.objects.get(id=post_id)
+    allComments = PostComments.objects.filter(post=post)
 
-    comments = PostComment.objects.filter(post=post)
+    allComments_state = []
+    if request.user.is_authenticated:
+        allComments_state = PostCommentsAction.objects.filter(user=request.user)
+
+    for comment in allComments:
+        comment.net_likes = comment.like_count - comment.dislike_count
+        comment.my_state = 0
+
+        for action in allComments_state:
+            if action.comment_id == comment.id:
+                if action.action_type == "like":
+                    comment.my_state = 2
+                elif action.action_type == "dislike":
+                    comment.my_state = 1
+                break
 
     CurrentComment = None
+    if request.user.is_authenticated:
+        CurrentComment = allComments.filter(user=request.user, locateZ=0).first()
 
-    for comment in comments:
-        if comment.user.username == request.user.username:
-            if(comment.locateZ == 0):
-                CurrentComment = comment
+    comments_dict = {c.id: c.user for c in allComments}
+
+    for item in allComments:
+        if item.parentId and item.parentId in comments_dict:
+            item.parent_user = comments_dict[item.parentId]
+        else:
+            item.parent_user = None
 
     data = {
         'title': post.title,
         'post': post,
-        'comments': comments,
+        'comments': allComments,
         'your_comment': CurrentComment,
     }
-        
+
     return render(request, 'posts/post.html', data)
 
 def update_post_state(request, post_id):
@@ -175,53 +195,57 @@ def create(request):
 
     return render(request, 'posts/create.html', {'error': error_message})
 
-def add_comment(request, post_id):
-    try:
-        post = get_object_or_404(Posts, id=post_id)   
-    except:
-        post = None
+def add_comments(request, post_id):
+
+    post = get_object_or_404(Posts, id=post_id)
+
+    #Comments.objects.all().delete() # Очистка таблицы
 
     try:
-        text = request.POST.get('text')
+        User_comment = request.POST.get('text')
     except:
-        text = None 
+        User_comment = None
 
     try:
         parentId = request.POST.get('parentId')
-        parentComment = PostComment.objects.get(id=parentId)
-        locateZ_find = int(parentComment.locateZ) + 1    
+        parentComment = PostComments.objects.get(id=parentId)
+        locateZ_find = int(parentComment.locateZ) + 1
     except:
         parentId = None
         locateZ_find = 0
 
-    new_comment = PostComment(
+    new_comment = PostComments(
         post = post,
         user = request.user,
-        text = text,
+        user_comment = User_comment,
         like_count = 0,
         dislike_count = 0,
         parentId = parentId,
-        locateZ = locateZ_find,
+        locateZ = locateZ_find
     )
 
     new_comment.save()
 
     url_to_redirect_to = reverse('post', kwargs={'post_id': post.id})
-    url_with_anchor = f"{url_to_redirect_to}#comment-{new_comment.id}"
-    return redirect(url_with_anchor)
+    return redirect(f"{url_to_redirect_to}#comment-{new_comment.id}")
 
-def edit_comment(request, post_id):
-    post = Posts.objects.get(id=post_id)
+def edit_comments(request, post_id):
 
     try:
-        existing_comment = PostComment.objects.get(post=post, user=request.user)
-    except Posts.DoesNotExist:
+        existing_comment = PostComments.objects.get(post=Posts.objects.get(id=post_id), user=request.user, parentId=None, locateZ = 0)
+    except PostComments.DoesNotExist:
         url_to_redirect_to = reverse('post', kwargs={'post_id': post_id})
         return redirect(url_to_redirect_to)
 
+    new_rating = request.POST.get('rating')
+
+    if ((new_rating == None) or (new_rating == '')):
+        new_rating = 0
+
     new_comment_text = request.POST.get('text')
 
-    existing_comment.text = new_comment_text
+    # Обновляем поля существующего комментария
+    existing_comment.user_comment = new_comment_text
 
     existing_comment.save()
 
@@ -231,15 +255,11 @@ def edit_comment(request, post_id):
     url_with_anchor = f"{url_to_redirect_to}#comment-{existing_comment.id}"
     return redirect(url_with_anchor)
 
-def delete_comment(request, post_id):
-    user_name = request.user.username
-
-    post = Posts.objects.get(id=post_id)
-
+def delete_comments(request, post_id, id):
     try:
-        existing_comment = PostComment.objects.get(post=post, user=request.user)
-    except PostComment.DoesNotExist:
-        url_to_redirect_to = reverse('card', kwargs={'post_id': post_id})
+        existing_comment = PostComments.objects.get(post=Posts.objects.get(id=post_id), user=request.user, parentId=None, locateZ = 0)
+    except PostComments.DoesNotExist:
+        url_to_redirect_to = reverse('post', kwargs={'post_id': post_id})
         return redirect(url_to_redirect_to)
     
     existing_comment.delete()
@@ -247,3 +267,69 @@ def delete_comment(request, post_id):
     
     # url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def update_comment_state(request, post_id, comment_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
+    
+    try:
+        action = request.POST.get("action_ty")
+        # Получаем комментарий один раз (без аннотации пока)
+        comment = get_object_or_404(PostComments, id=comment_id)
+        
+        # Получаем или создаем действие пользователя
+        existing_action, created = PostCommentsAction.objects.get_or_create(
+            user=request.user, 
+            comment=comment,
+            defaults={'action_type': 'none'}
+        )
+
+        old_type = existing_action.action_type
+        new_type = action # 'like' или 'dislike'
+
+        if action == "like":
+            if old_type == "like":
+                # Отмена лайка
+                existing_action.action_type = "none"
+                comment.like_count = F('like_count') - 1
+            elif old_type == "dislike":
+                # Переключение с дизлайка на лайк
+                existing_action.action_type = "like"
+                comment.dislike_count = F('dislike_count') - 1
+                comment.like_count = F('like_count') + 1
+            else:
+                # Новый лайк
+                existing_action.action_type = "like"
+                comment.like_count = F('like_count') + 1
+
+        elif action == "dislike":
+            if old_type == "dislike":
+                # Отмена дизлайка
+                existing_action.action_type = "none"
+                comment.dislike_count = F('dislike_count') - 1
+            elif old_type == "like":
+                # Переключение с лайка на дизлайк
+                existing_action.action_type = "dislike"
+                comment.like_count = F('like_count') - 1
+                comment.dislike_count = F('dislike_count') + 1
+            else:
+                # Новый дизлайк
+                existing_action.action_type = "dislike"
+                comment.dislike_count = F('dislike_count') + 1
+
+        # Сохраняем изменения в базе
+        existing_action.save()
+        comment.save()
+
+        # Теперь ОДИН РАЗ обновляем объект, чтобы получить актуальные числа и net_likes
+        comment.refresh_from_db()
+        current_net_likes = comment.like_count - comment.dislike_count
+
+        return JsonResponse({
+            'status': 'success',
+            'net_likes': current_net_likes,
+            'existing_action': existing_action.action_type
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

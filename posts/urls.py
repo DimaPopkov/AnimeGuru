@@ -13,8 +13,9 @@ urlpatterns = (
     path('create/', views.create_form, name="create"),
     path('create/confirm', views.create, name="confirm"),
     path('<str:post_id>/', views.card, name="post"),
-    path('<str:post_id>/add_comment', views.add_comment, name="add_comment"),
-    path('<str:post_id>/edit_comment', views.edit_comment, name="edit_comment"),
-    path('<str:post_id>/comment/<str:id>/delete_comment', views.delete_comment, name="delete_comment"),
+    path('<str:post_id>/add_comment', views.add_comments, name="add_comment"),
+    path('<str:post_id>/edit_comment', views.edit_comments, name="edit_comment"),
     path('<str:post_id>/update_state', views.update_post_state, name="update_post_state"),
+    path('<str:post_id>/comment/<str:id>/delete_comment', views.delete_comments, name="delete_comment"),
+    path('<str:post_id>/comment/<str:comment_id>/update_state', views.update_comment_state, name="update_comment_state"),
 )
