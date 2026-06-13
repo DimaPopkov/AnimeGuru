@@ -286,9 +286,9 @@ function ChangeTheme(username){
             element.style.color = "rgb(0, 0, 0)";
         }
         
-        if (username){
-            nickname.style.color = "rgb(0, 0, 0)";
-        }
+        // if (username){
+        //     nickname.style.color = "rgb(0, 0, 0)";
+        // }
         if (fonts != null){
             for (const element of fonts) {
                 element.style.color = 'black';
@@ -563,9 +563,9 @@ function ChangeTheme(username){
             element.style.color = "rgb(255, 255, 255)";
         }
 
-        if (username){
-            nickname.style.color = "rgb(255, 255, 255)";
-        }
+        // if (username){
+        //     nickname.style.color = "rgb(255, 255, 255)";
+        // }
         if (fonts != null){
             for (const element of fonts) {
                 element.style.color = 'rgb(200, 200, 200)';
