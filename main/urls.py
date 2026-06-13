@@ -8,8 +8,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.main, name="main"),
+    path('posts/', include('posts.urls'), name='posts'),
     path('admin/', admin.site.urls),
     path('about/', views.about, name="about"),
+    path('copyright/', views.copyright, name='copyright'),
     path('theme/get/', views.courent_theme), 
     path('theme/set/', views.save_theme),
     path('create/', views.create, name="create_product"),
@@ -25,8 +27,8 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
     path('profile/delete-avatar', views.profile_delete_avatar, name='profile_delete_avatar'),
+    path('<str:tags>/', views.catalog_filtered, name='catalog_filtered'),
     path('AI/chat', views.AIchat, name='AIchat'),
     path('AI/history', views.AIhistory, name='AIhistory'),
-    path('posts/', include('posts.urls'), name='posts'),
-    path('copyright/', views.copyright, name='copyright'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

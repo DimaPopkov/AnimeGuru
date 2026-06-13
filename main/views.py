@@ -172,6 +172,19 @@ def filter(request):
     
     return render(request, 'main/main.html', context)
 
+def catalog_filtered(request, tags):
+    tags_name = Tags.objects.filter(name=f'{tags}')
+
+    products = Product.objects.filter(tags__name=tags)
+
+    context = {
+        'title' : 'Все произведения по фильтру: ' + f'{tags}',
+        'tag': tags,
+        'products': products,
+    }
+    return render(request, 'main/catalog_filtered.html', context)
+
+
 def normalize_name(name):
     """
     Приводит название к нижнему регистру, удаляет пунктуацию и разбивает на слова.

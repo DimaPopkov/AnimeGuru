@@ -121,16 +121,16 @@ class Characters(models.Model):
         return self.first_name
     
 class Comments(models.Model):
-    name = models.TextField('Имя тайтла', null=True)
-    user_image = models.ImageField('Image:', null=True)
+    name = models.TextField('Имя тайтла', null=True, blank=True)
+    user_image = models.ImageField('Image:', null=True, blank=True)
     user_name = models.TextField('Логин пользователя:')
-    user_rating = models.IntegerField('Оценка пользователя:', null=True)
-    user_comment = models.TextField('Комментарий пользователя:', null=True)
+    user_rating = models.IntegerField('Оценка пользователя:', null=True, blank=True)
+    user_comment = models.TextField('Комментарий пользователя:', null=True, blank=True)
     like_count = models.IntegerField('Кол-во лайков под постом')
     dislike_count = models.IntegerField('Кол-во дизлайков под постом')
-    state = models.BooleanField('True - like, False - dislike, None - not yet', null=True)
-    parentId = models.IntegerField('ID родительского коммента (если нет - null/none)', null=True)
-    locateZ = models.IntegerField('Z-index комментария относительно тайтла (0 уровень)', null=True)
+    state = models.BooleanField('True - like, False - dislike, None - not yet', null=True, blank=True)
+    parentId = models.IntegerField('ID родительского коммента (если нет - null/none)', null=True, blank=True)
+    locateZ = models.IntegerField('Z-index комментария относительно тайтла (0 уровень)', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -153,7 +153,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
     rank = models.IntegerField('Ранг пользователя', default=0)
     color = models.TextField('Цвет пользователя', default='white')
-    favourites = models.ManyToManyField(Product)
+    favourites = models.ManyToManyField(Product, blank=True)
     
     def __str__(self):
         return self.user.username

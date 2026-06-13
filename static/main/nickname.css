@@ -23,14 +23,14 @@
     
     -webkit-text-fill-color: transparent;
 
-    animation: shine-inside 6s infinite linear;
+    animation: shine-inside 3s infinite linear;
 }
 
 @keyframes shine-inside {
     0% {
         background-position: 100% 0;
     }
-    90% {
+    70% {
         background-position: 100% 0;
     }
     100% {

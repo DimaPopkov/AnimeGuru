@@ -447,10 +447,10 @@
                             <div class="you_container_dop_block">
                                 <div class="you_container_dop_block_header">
                                     <div style="display: flex; column-gap: 15px;">
-                                        {% if most_popular_comment.user_image != "avatars/null_avatar.png" %}
+                                        {% if most_popular_comment.user_image and most_popular_comment.user_image != "avatars/null_avatar.png" %}
                                             <img src={{ most_popular_comment.user_image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
                                         {% else %}
-                                            <img src={{ most_popular_comment.user_image }} style="width: 35px; height: 35px; border-radius: 100px;">
+                                            <img src={% static "/img/null_avatar.png" %} style="width: 35px; height: 35px; border-radius: 100px;">
                                         {% endif %}
                                         <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> {{ most_popular_comment.user_name }} </h5>
                                     </div>
@@ -739,8 +739,6 @@
             {% endif %}
         </div>
     </div>  
-
-    {% include "main/footer.html" %}
 
     <form id="form" class="comment_textarea_otvet otvet_2 fade-in" method='POST' action="{% url 'add_comments' product_name=product.name %}">
         {% csrf_token %}
