@@ -1398,7 +1398,6 @@ input[type="checkbox"]:checked::after {
     height: 100%;
     font-size: 14px;
 
-    align-content: end;
     color: rgb(150, 150, 150);
 }
 
@@ -2967,7 +2966,7 @@ button:disabled {
 
     width: 50%;
 
-    border: 1px solid rgb(80, 80, 80);
+    border: 1px solid rgba(80, 80, 80, 0.25);
     border-radius: 10px;
     padding: 10px 10px;
     background-color: rgb(50, 50, 50);
@@ -2987,8 +2986,8 @@ button:disabled {
     padding: 3px 10px;
     margin-top: 5px;
 
-    border: 1px solid rgb(120, 120, 120);
-    border-radius: 3px;
+    border: 1px solid rgba(120, 120, 120, 0.25);
+    border-radius: 10px;
 
     background-color: rgb(80, 80, 80);
 
@@ -3013,7 +3012,7 @@ button:disabled {
     min-height: 100px;
     max-height: 300px;
 
-    border: 1px solid rgb(120, 120, 120);
+    border: 1px solid rgba(120, 120, 120, 0.25);
     border-radius: 5px;
 
     background-color: rgb(80, 80, 80);
@@ -3150,7 +3149,7 @@ button:disabled {
     height: auto;
 
     border: 1px solid rgba(120, 120, 120, 0.25);
-    border-radius: 3px;
+    border-radius: 10px;
     border-bottom-left-radius: 0;
 
     background-color: rgb(80, 80, 80);
