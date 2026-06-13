@@ -212,7 +212,9 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <img data-name="{{ element.name }}" data-id="{{ element.id }}" class="basket" src="{% static 'img/basket2.webp' %}">
+                            {% if request.user == user %}
+                                <img data-name="{{ element.name }}" data-id="{{ element.id }}" class="basket" src="{% static 'img/basket2.webp' %}">
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
