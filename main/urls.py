@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('main')), name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('user/<str:id>', views.user_profile, name='user_profile'),
     path('profile/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
     path('profile/delete-avatar', views.profile_delete_avatar, name='profile_delete_avatar'),
     path('<str:tags>/', views.catalog_filtered, name='catalog_filtered'),

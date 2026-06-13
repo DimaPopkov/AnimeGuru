@@ -26,18 +26,7 @@
     <script src="{% static 'main/js/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'main/js/choices.min.js' %}"></script>
 </head>
-<body id="products-list-container" class="body" style="--rank-color: 
-    {% if request.user.profile.rank >= 10 %}
-        rgb(255, 215, 0)
-    {% elif request.user.profile.rank >= 5 %}
-        rgb(220, 20, 60)
-    {% elif request.user.profile.rank >= 3 %}
-        rgb(255, 69, 0)
-    {% elif request.user.profile.rank == 1 %}
-        rgb(240, 230, 140)
-    {% elif request.user.profile.rank == 0 %}
-        rgb(100, 100, 100)
-    {% endif %}">
+<body id="products-list-container" class="body">
     
     <div id="preloader">
         <!-- <div class="loader-content"> -->

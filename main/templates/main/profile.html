@@ -11,19 +11,23 @@
             <div class="profile_container_header_block">
                 <div class="profile_container_header_block_info_flex" style="display: flex; flex-direction: column; align-items: start;">   
                     <div class="profile_container_header_block_info_flex_vis">
-                        {% if request.user.profile.image != "avatars/null_avatar.png" and request.user.profile.image %}
-                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ request.user.profile.image.url }}" id="avatar" alt="User Avatar">               
+                        {% if user.profile.image != "avatars/null_avatar.png" and user.profile.image %}
+                            <img class="profile_container_header_block_info_flex_vis_img" src="{{ user.profile.image.url }}" id="avatar" alt="User Avatar">
 
-                            <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>
+                            {% if request.user == user %}
+                                <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>
 
-                            <form id="deleteAvatarBtn" method="POST" action="{% url 'profile_delete_avatar' %}">
-                                {% csrf_token %}
-                                <button class="profile_container_header_block_info_flex_vis_button" type="submit"> Удалить аватар </button>
-                            </form>
+                                <form id="deleteAvatarBtn" method="POST" action="{% url 'profile_delete_avatar' %}">
+                                    {% csrf_token %}
+                                    <button class="profile_container_header_block_info_flex_vis_button" type="submit"> Удалить аватар </button>
+                                </form>
+                            {% endif %}
                         {% else %}
                             <img class="profile_container_header_block_info_flex_vis_img" src="{% static 'img/null_avatar.png' %}" id="avatar" alt="Default Avatar">
 
-                            <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Добавить аватар</button>
+                            {% if request.user == user %}
+                                <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Добавить аватар</button>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="avatar-modal-overlay" id="avatarModalOverlay">
@@ -47,9 +51,9 @@
 
             <div class="profile_container_header_block">
                 <div class="profile_container_header_block_info_flex_alt">
-                    <div class="profile_container_header_block_info_flex_alt_block">
+                    <div class="profile_container_header_block_info_flex_alt_block" style="--rank-color: {{ user.profile.color }}">
                         <p class="profile_p_level_title"> Уровень аккаунта: </p>
-                        <p class="profile_p_level"> {{ request.user.profile.rank }} </p>
+                        <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
                 </div>
             </div>
@@ -325,7 +329,7 @@
                 }
 
                 const formData = new FormData();
-                formData.append('username', '{{ request.user.username }}');
+                formData.append('username', '{{ user.username }}');
 
                 // Функция для отправки данных на сервер
                 const sendData = (fileToSend, isBlob = false) => {

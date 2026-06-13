@@ -452,7 +452,15 @@
                                         {% else %}
                                             <img src={% static "/img/null_avatar.png" %} style="width: 35px; height: 35px; border-radius: 100px;">
                                         {% endif %}
-                                        <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> {{ most_popular_comment.user_name }} </h5>
+                                        <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> 
+                                        {% if most_popular_comment.current_user.profile.rank >= 3 %}
+                                            <span class="animated-nickname" style="--user-color: {{ most_popular_comment.current_user.profile.color }}; margin-top: 0;">
+                                                <a id="nickname" href="{% url 'user_profile' id=most_popular_comment.current_user.id %}" class="login_status_bar_text_alt"> {{  most_popular_comment.user_name }} </a>
+                                            </span>
+                                        {% else %}
+                                            {{  most_popular_comment.user_name }}
+                                        {% endif %}
+                                        </h5>
                                     </div>
 
                                     <div style="display:flex; text-align: center">
@@ -501,10 +509,10 @@
                                 <p class="all_comments_container_block_header_username"> 
                                     {% if element.current_user.profile.rank >= 3 %}
                                         <span class="animated-nickname" style="--user-color: {{ element.current_user.profile.color }}; margin-top: 0;">
-                                            <a id="nickname" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
+                                            <a id="nickname" href="{% url 'user_profile' id=element.current_user.id %}" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
                                         </span>
                                     {% else %}
-                                        <a id="nickname" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
+                                        <a id="nickname" href="{% url 'user_profile' id=element.current_user.id %}" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
                                     {% endif %}
                                 </p>
                                 
@@ -593,10 +601,10 @@
                                             <p class="all_comments_container_block_header_username">
                                                 {% if element3.current_user.profile.rank >= 3 %}
                                                     <span class="animated-nickname" style="--user-color: {{ element3.current_user.profile.color }}; margin-top: 0;">
-                                                        <a id="nickname" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
+                                                        <a id="nickname" href="{% url 'user_profile' id=element3.current_user.id %}" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
                                                     </span>
                                                 {% else %}
-                                                    <a id="nickname" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
+                                                    <a id="nickname" href="{% url 'user_profile' id=element3.current_user.id %}" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
                                                 {% endif %}
                                             </p>
                                         </div>                              

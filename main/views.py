@@ -266,13 +266,6 @@ def card(request, product_name):
                 CurrentComment = comment
 
     star_list = list(range(1, 11))
-    most_popular_comment = 0
-
-    for element in comments:
-        if most_popular_comment != 0 and element.net_likes > most_popular_comment.net_likes:
-            most_popular_comment = element
-        elif most_popular_comment == 0:
-            most_popular_comment = element
 
     selected_product = Product.objects.get(name=products)
 
@@ -413,6 +406,16 @@ def card(request, product_name):
     # Сортируем ответы по порядку (по ID) и упаковываем внутрь корня
     for root in root_comments:
         root.sub_comments = sorted(replies_dict[root.id], key=lambda x: x.id)
+
+
+    most_popular_comment = 0
+
+    for element in allComments:
+        if most_popular_comment != 0 and element.net_likes > most_popular_comment.net_likes:
+            most_popular_comment = element
+        elif most_popular_comment == 0:
+            most_popular_comment = element
+
     # ---------------------------------------------------------------------
 
     if request.user.is_authenticated:
@@ -740,6 +743,76 @@ def profile(request):
         'user_dislikes_count': activity['total_dislikes'] or 0,
     }
 
+    return render(request, 'main/profile.html', context)
+
+def user_profile(request, id):
+    user = User.objects.get(id=id)
+
+    product_image_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('image')
+    )
+
+    product_category_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('category__name')
+    )
+
+    product_rating_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('rating')
+    )
+
+    product_season_subquery = Subquery(
+        Product.objects.filter(name=OuterRef('name')).values('season')
+    )
+
+    allComents = Comments.objects.filter(user_name=user.username).annotate(
+        product_image = product_image_subquery,
+        product_category = product_category_subquery,
+        product_rating = product_rating_subquery,
+        net_likes = models.F('like_count') - models.F('dislike_count'),
+        product_season=product_season_subquery,
+    )
+    
+    star_list = list(range(1, 11))
+
+    stats = ProfileStats.objects.filter(user=user).select_related('tag').order_by('-views_count')
+
+    max_views = max([item.views_count for item in stats]) if stats else 0
+
+    chart_data = []
+    for item in stats:
+        if max_views > 0:
+            height_percent = (item.views_count / max_views) * 100
+        else:
+            height_percent = 0
+
+        chart_data.append({
+            'name': item.tag.name,
+            'id': item.tag.id,
+            'views': item.views_count,
+            'height': height_percent
+        })
+
+    activity = Comments.objects.filter(user_name=user.username).aggregate(
+        total_comments=Count('id'),                 # Считаем количество написанных комментариев
+        total_likes=Sum('like_count'),              # Суммируем все лайки, которые получили его комменты
+        total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
+    )
+
+
+    context = {
+        'title' : 'Личный кабинет',
+        'user': user,
+        'your_comments': allComents,
+        'star_list': star_list,
+        'favourites': user.profile.favourites.all(),
+        'chart_data': chart_data,
+        'user_comments_count': activity['total_comments'] or 0,
+        'user_likes_count': activity['total_likes'] or 0,
+        'user_dislikes_count': activity['total_dislikes'] or 0,
+    }
+    
+    if request.user == user:
+        return redirect('profile')
     return render(request, 'main/profile.html', context)
 
 def profile_change_avatar(request):
