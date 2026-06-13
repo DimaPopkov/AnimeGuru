@@ -145,6 +145,7 @@ footer a{
 
 .footer-container ul{
     padding-left: 0;
+    color: var(--pseudo-list-dropdown-choices-item-color);
 }
 
 select:focus {
