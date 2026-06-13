@@ -484,7 +484,190 @@
             {% endif %}
             
             {% if comments and comments != None %}
-                <div class="all_comments_container">
+            <div class="all_comments_container">
+                <!-- СЛОЙ 1: Цикл только по главным (корневым) комментариям -->
+                {% for element in comments %}
+                    <div class="all_comments_container_block">
+                        <!-- Шапка главного комментария (Аватарка, Рейтинг, Звезды) -->
+                        <div class="all_comments_container_block_header">
+                            <div class="all_comments_container_block_header_block">
+                                {% if element.user_image and element.user_image != 'avatars/null_avatar.png' %}
+                                    <img src="{{ element.user_image.url }}" class="comment_user_image">
+                                {% else %}
+                                    <img src="{% static '/img/null_avatar.png' %}" class="comment_user_image">
+                                {% endif %}
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <p class="all_comments_container_block_header_username"> 
+                                    {% if element.current_user.profile.rank >= 3 %}
+                                        <span class="animated-nickname" style="--user-color: {{ element.current_user.profile.color }}; margin-top: 0;">
+                                            <a id="nickname" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
+                                        </span>
+                                    {% else %}
+                                        <a id="nickname" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
+                                    {% endif %}
+                                </p>
+                                
+                                <div style="display: flex;">
+                                    <h6 style="align-content: center; padding-right: 5px; margin-bottom: 0;">Оценка: </h6>
+                                    <div style="display: flex;" class="star_list_block">
+                                        {% for current_number in star_list %}
+                                            {% if current_number <= element.user_rating %}
+                                                <span class="star-icon" style="color: #ff9900; font-size: 20px;">★</span>
+                                            {% else %}
+                                                <span class="star-icon" style="color: gray; font-size: 20px;">★</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="star_list_block_number">
+                                        <h5 class="font"> {{ element.user_rating }} / 10 </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Текст главного комментария -->
+                        <div class="comments_container">
+                            {{ element.user_comment }}
+                        </div>
+
+                        <!-- Кнопки лайков / Ответить для главного комментария -->
+                        <div class="comment_buttons"> 
+                            <span id="like_count_{{ element.id }}" style="padding-right: 5px; color: {% if element.net_likes > 0 %} green {% elif element.net_likes < 0 %} red {% else %} white {% endif %};">
+                                {{ element.net_likes }} 
+                            </span>
+
+                            <form class="comment_buttons" id="comment-{{ element.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element.id %}" method="POST">
+                                {% csrf_token %}
+                                
+                                {% if element.my_state == 2 %}
+                                    <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                        value="{{ element.like_count }}" 
+                                        id="like_button_{{ element.id }}"
+                                        data-comment-id="{{ element.id }}"
+                                        data-action="like">
+                                {% else %}
+                                    <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                        value="{{ element.like_count }}" 
+                                        id="like_button_{{ element.id }}"
+                                        data-comment-id="{{ element.id }}"
+                                        data-action="like">
+                                {% endif %}
+                                
+                                {% if element.my_state == 1 %}
+                                    <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                        value="{{ element.dislike_count }}"
+                                        id="dislike_button_{{ element.id }}"
+                                        data-comment-id="{{ element.id }}"
+                                        data-action="dislike">
+                                {% else %}
+                                    <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                        value="{{ element.dislike_count }}"
+                                        id="dislike_button_{{ element.id }}"
+                                        data-comment-id="{{ element.id }}"
+                                        data-action="dislike">
+                                {% endif %}
+                            </form>
+
+                            {% if request.user.is_authenticated %}
+                                <div class="comment_answer">
+                                    <button class="comment_buttons_button_otvet" value="{{ element.id }}"> Ответить </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- СЛОЙ 2: ОДИН универсальный цикл по ВСЕМ ответам этой ветки -->
+                        {% for element3 in element.sub_comments %}
+                            <div style="width: 100%; display: flex;" class="answer">
+                                <div class="all_comments_dop_line"></div>
+                                <div class="all_comments_container_block" style="width: 100%;">
+                                    
+                                    <!-- Шапка ответа (element3) -->
+                                    <div class="all_comments_container_block_header">
+                                        <div class="all_comments_container_block_header_block">
+                                            {% if element3.current_user.profile.image %}
+                                                <img src="{{ element3.current_user.profile.image.url }}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                            {% else %}
+                                                <img src="{% static '/img/null_avatar.png' %}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                            {% endif %}    
+                                            <p class="all_comments_container_block_header_username">
+                                                {% if element3.current_user.profile.rank >= 3 %}
+                                                    <span class="animated-nickname" style="--user-color: {{ element3.current_user.profile.color }}; margin-top: 0;">
+                                                        <a id="nickname" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
+                                                    </span>
+                                                {% else %}
+                                                    <a id="nickname" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
+                                                {% endif %}
+                                            </p>
+                                        </div>                              
+                                    </div>
+
+                                    <!-- Текст ответа с умной склейкой @упоминания (если это ответ на другой ответ) -->
+                                    <div class="comments_container" style="display: flex; flex-wrap: wrap; align-items: baseline;">
+                                        {% if element3.parentId != element.id %}
+                                            {% if element3.parent_user %}
+                                                <span class="animated-nickname" style="--user-color: {{ element3.parent_user.profile.color }}; padding-right: 5px;">
+                                                    <a id="nickname" class="login_status_bar_text" style="font-size: inherit; padding: 0;">@{{ element3.parent_user.username }}</a>
+                                                </span>
+                                            {% endif %}
+                                        {% endif %}
+                                        <span style="margin-bottom: 0;">{{ element3.user_comment }}</span>
+                                    </div>
+
+                                    <!-- Кнопки лайков и ответа для element3 -->
+                                    <div class="comment_buttons">
+                                        <span id="like_count_{{ element3.id }}" style="padding-right: 5px; color: {% if element3.net_likes > 0 %} green {% elif element3.net_likes < 0 %} red {% else %} white {% endif %};">
+                                            {{ element3.net_likes }} 
+                                        </span>
+
+                                        <form class="comment_buttons" id="comment-{{ element3.id }}" style="padding-left: 0;" action="{% url 'comment' comment_id=element3.id %}" method="POST">
+                                            {% csrf_token %}
+                                            
+                                            {% if element3.my_state == 2 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                    value="{{ element3.like_count }}" 
+                                                    id="like_button_{{ element3.id }}"
+                                                    data-comment-id="{{ element3.id }}"
+                                                    data-action="like">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                    value="{{ element3.like_count }}" 
+                                                    id="like_button_{{ element3.id }}"
+                                                    data-comment-id="{{ element3.id }}"
+                                                    data-action="like">
+                                            {% endif %}
+
+                                            {% if element3.my_state == 1 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                    value="{{ element3.dislike_count }}"
+                                                    id="dislike_button_{{ element3.id }}"
+                                                    data-comment-id="{{ element3.id }}"
+                                                    data-action="dislike">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                    value="{{ element3.dislike_count }}"
+                                                    id="dislike_button_{{ element3.id }}"
+                                                    data-comment-id="{{ element3.id }}"
+                                                    data-action="dislike">
+                                            {% endif %}
+                                        </form>
+
+                                        {% if request.user.is_authenticated %}
+                                            <div class="comment_answer">
+                                                <button class="comment_buttons_button_otvet" value="{{ element3.id }}"> Ответить </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- <div class="all_comments_container">
                     {% for element in comments %}
                         {% if element.locateZ == 0 %}
                             <div class="all_comments_container_block">
@@ -598,7 +781,12 @@
                                                     </div>                              
                                                 </div>
                                                 <div class="comments_container">
-                                                    {{ element2.user_comment }}
+                                                    {% if element2.parentId != element.id %}
+                                                        <span class="animated-nickname" style="--user-color: {{ element2.parent_user.profile.color }}; margin-top: 0;">
+                                                            <a id="nickname" class="login_status_bar_text" style="font-size: inherit; padding: 0;"> @{{ element2.parent_user.username }} </a>
+                                                        </span>
+                                                    {% endif %}
+                                                    <p style="margin-bottom: 0; padding-left: 5px;">{{ element2.user_comment }}</p>
                                                 </div>
                                                 <div class="comment_buttons">
                                                     <span id="like_count_{{ element2.id }}" style="padding-right: 5px; color: 
@@ -673,7 +861,9 @@
                                                                 </div>
                                                                 <div class="comments_container">
                                                                     {% if element3.parentId != element2.id %}
-                                                                        <span style="color: var(--pseudo-commentParent-color); font-weight: bold; text-shadow: 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0, 0, 0, 0.5);">@{{ element3.parent_user.username }} </span> 
+                                                                        <span class="animated-nickname" style="--user-color: {{ element3.parent_user.profile.color }}; margin-top: 0;">
+                                                                            <a id="nickname" class="login_status_bar_text" style="font-size: inherit; padding: 0;"> @{{ element3.parent_user.username }} </a>
+                                                                        </span>
                                                                     {% endif %}
                                                                     <p style="margin-bottom: 0; padding-left: 5px;">{{ element3.user_comment }}</p>
                                                                 </div>
@@ -734,7 +924,7 @@
                             </div>
                         {% endif %}
                     {% endfor %}
-                </div>
+                </div> -->
             {% else %}
                 <div style="width: 100%; height: 300px; text-align: center; align-content: center;">
                     <h3> Пока нет комментариев </h3>

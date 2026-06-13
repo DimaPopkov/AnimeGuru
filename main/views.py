@@ -252,22 +252,20 @@ def calculate_char_similarity(name1, name2):
 def card(request, product_name):
     products = get_object_or_404(Product, name=product_name)
 
-    comments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+    # Использована переменная comments с аннотацией net_likes для корректной работы логики популярного комментария
+    comments = Comments.objects.filter(name=product_name).annotate(
+        net_likes=models.F('like_count') - models.F('dislike_count')
+    )
 
     CurrentUserName = request.user.username
-    print(CurrentUserName)
-
     CurrentComment = None
 
     for comment in comments:
         if comment.user_name == CurrentUserName:
-            if(comment.locateZ == 0):
+            if comment.locateZ == 0:
                 CurrentComment = comment
-                print("CurrentComment: ", CurrentComment.user_comment)
 
     star_list = list(range(1, 11))
-    print(star_list)
-
     most_popular_comment = 0
 
     for element in comments:
@@ -276,39 +274,26 @@ def card(request, product_name):
         elif most_popular_comment == 0:
             most_popular_comment = element
 
-    print(products)
     selected_product = Product.objects.get(name=products)
 
     if selected_product.eng_name:
         product_link_name = selected_product.eng_name.lower().split(',')
-    else: product_link_name = "null"
-
-    print(product_link_name)
-    #translator = Translator(from_lang="ru", to_lang="en")
-    #English_product_name = translator.translate(product_link_name)
-    #print(English_product_name)
+    else:
+        product_link_name = "null"
 
     MainCharacters_desc = []
-
     MainCharacters = products.main_characters.all()
-    print(products.main_characters.all())
 
     for element in MainCharacters:
         try:
-            # ищем запись в Characters, у которой совпадает first_name
             character = Characters.objects.get(first_name=element.first_name)
         except Characters.DoesNotExist:
-            # если подобного персонажа нет – пропускаем
             continue
-
-        # добавляем описание в список
         MainCharacters_desc.append(character.description)
 
     other_characters = products.characters.exclude(
         id__in=products.main_characters.values_list('id', flat=True)
     )
-
-    print("Главные герои: ", products.main_characters.all(), "\n", "Другие герои: ", other_characters)
 
     FinalAlbumPics = Album_Pics.objects.all().order_by('name')
 
@@ -320,19 +305,15 @@ def card(request, product_name):
     
     product_tags = selected_product.tags.all()
     product_links = selected_product.links.all()
-    print(product_links)
 
-    #Собираем строку "tag_names" со всеми тэгами
     tag_namesArray = [tags.name for tags in product_tags]
     tag_names = ", ".join(tag_namesArray)
 
-    #Собираем строку "season_final" с описанием сезона по типу "Осень 2006"
     product_date = selected_product.season
     if not product_date:
         return JsonResponse({'success': False, 'error': f"У продукта '{selected_product.name}' не указана дата сезона."}, status=400)
 
     year = product_date.year
-
     month = product_date.month
     season = ""
 
@@ -349,6 +330,7 @@ def card(request, product_name):
 
     all_products = Product.objects.all()
     target_product_name = selected_product.name
+    target_product_instance = None
     
     for p in all_products:
         if p.name.lower() == target_product_name.lower():
@@ -359,24 +341,20 @@ def card(request, product_name):
     similarity_threshold = 0.7 
 
     for product in all_products:
-        # Пропускаем сам целевой продукт
         if target_product_instance and product.name == target_product_instance.name:
             continue
-
-        # Рассчитываем степень схожести
         similarity = calculate_similarity(target_product_name, product.name)
-
-        # Если схожесть выше порога, добавляем продукт
         if similarity >= similarity_threshold:
             related_products.append(product)
 
-    # Смотрим, если есть комментарии которые мы лайкали\дизлайкали, то меняем им иконки
-    allComments = Comments.objects.filter(name=products.name)
+    # Работа с комментариями (Используем list, чтобы Django не сбрасывал динамические свойства объектов)
+    allComments = list(Comments.objects.filter(name=products.name))
 
     allComments_state = []
     if request.user.is_authenticated:
-        allComments_state = CommentAction.objects.filter(user=request.user)
+        allComments_state = list(CommentAction.objects.filter(user=request.user))
 
+    # Вычисляем лайки и состояния
     for comment in allComments:
         comment.net_likes = comment.like_count - comment.dislike_count
         comment.my_state = 0
@@ -389,11 +367,11 @@ def card(request, product_name):
                     comment.my_state = 1
                 break
 
+    # Привязываем пользователей
     author_names = {c.user_name for c in allComments if c.user_name}
-
     users = User.objects.filter(username__in=author_names).select_related('profile')
-
     users_dict = {u.username: u for u in users}
+    all_comments_dict = {c.id: c for c in allComments}
 
     for item in allComments:
         if item.user_name in users_dict:
@@ -401,28 +379,52 @@ def card(request, product_name):
         else:
             item.current_user = None
 
-        if item.parentId:
-            parent_comment = next((c for c in allComments if c.id == item.parentId), None)
-            if parent_comment and parent_comment.user_name in users_dict:
+        if item.parentId and item.parentId in all_comments_dict:
+            parent_comment = all_comments_dict[item.parentId]
+            if parent_comment.user_name in users_dict:
                 item.parent_user = users_dict[parent_comment.user_name]
-            else:
-                item.parent_user = None
         else:
             item.parent_user = None
+
+    # --- ИСПРАВЛЕНИЕ ДУБЛИРОВАНИЯ: СТРУКТУРИРОВАНИЕ ДЕРЕВА КОММЕНТАРИЕВ ---
+    root_comments = []
+    replies_dict = {}
+
+    # Выделяем только корневые комментарии
+    for c in allComments:
+        if c.locateZ == 0:
+            root_comments.append(c)
+            replies_dict[c.id] = []
+
+    # Распределяем вложенные ответы по их корневым веткам
+    for c in allComments:
+        if c.locateZ != 0:
+            current = c
+            loop_guard = 0
+            # Поднимаемся по цепочке parentId до самого верха ветки
+            while current.parentId and current.parentId in all_comments_dict and loop_guard < 12:
+                current = all_comments_dict[current.parentId]
+                loop_guard += 1
             
+            # Добавляем ответ в список соответствующего корня
+            if current.id in replies_dict:
+                replies_dict[current.id].append(c)
+
+    # Сортируем ответы по порядку (по ID) и упаковываем внутрь корня
+    for root in root_comments:
+        root.sub_comments = sorted(replies_dict[root.id], key=lambda x: x.id)
+    # ---------------------------------------------------------------------
+
     if request.user.is_authenticated:
         user = request.user
-        
         RecentView.objects.update_or_create(
             user=user, 
             product=selected_product
         )
-        
         keep_ids = RecentView.objects.filter(user=user).values_list('id', flat=True)[:20]
         RecentView.objects.filter(user=user).exclude(id__in=list(keep_ids)).delete()
 
         title_tag_ids = selected_product.tags.values_list('id', flat=True)
-        print(title_tag_ids)
 
         for tag_id in title_tag_ids:
             stat_obj, created = ProfileStats.objects.get_or_create(
@@ -433,7 +435,6 @@ def card(request, product_name):
             if not created:
                 stat_obj.views_count = F('views_count') + 1
                 stat_obj.save()
-    
 
     context = {
         'title' : selected_product.name,
@@ -446,16 +447,223 @@ def card(request, product_name):
         'link_name': product_link_name,
         'main_characters': MainCharacters,
         'characters': other_characters,
-        'comments': allComments,
+        'comments': root_comments,  # <-- Передаем ТУТ исключительно КОРНЕВЫЕ комментарии!
         'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,
         'AI_models': ["gemma3:12b", "deepseek-r1:14b", "qwen:0.5b"],
         'theme': request.session.get('courent_theme', 'black'),
-        #'AI_models': {"gemma3:4b", "gemma3:12b"},
     }
 
     return render(request, 'main/card.html', context)
+
+# def card(request, product_name):
+#     products = get_object_or_404(Product, name=product_name)
+
+#     comments = Comments.objects.filter(name=product_name).annotate(net_likes=models.F('like_count') - models.F('dislike_count'))
+
+#     CurrentUserName = request.user.username
+#     print(CurrentUserName)
+
+#     CurrentComment = None
+
+#     for comment in comments:
+#         if comment.user_name == CurrentUserName:
+#             if(comment.locateZ == 0):
+#                 CurrentComment = comment
+#                 print("CurrentComment: ", CurrentComment.user_comment)
+
+#     star_list = list(range(1, 11))
+#     print(star_list)
+
+#     most_popular_comment = 0
+
+#     for element in comments:
+#         if most_popular_comment != 0 and element.net_likes > most_popular_comment.net_likes:
+#             most_popular_comment = element
+#         elif most_popular_comment == 0:
+#             most_popular_comment = element
+
+#     print(products)
+#     selected_product = Product.objects.get(name=products)
+
+#     if selected_product.eng_name:
+#         product_link_name = selected_product.eng_name.lower().split(',')
+#     else: product_link_name = "null"
+
+#     print(product_link_name)
+#     #translator = Translator(from_lang="ru", to_lang="en")
+#     #English_product_name = translator.translate(product_link_name)
+#     #print(English_product_name)
+
+#     MainCharacters_desc = []
+
+#     MainCharacters = products.main_characters.all()
+#     print(products.main_characters.all())
+
+#     for element in MainCharacters:
+#         try:
+#             # ищем запись в Characters, у которой совпадает first_name
+#             character = Characters.objects.get(first_name=element.first_name)
+#         except Characters.DoesNotExist:
+#             # если подобного персонажа нет – пропускаем
+#             continue
+
+#         # добавляем описание в список
+#         MainCharacters_desc.append(character.description)
+
+#     other_characters = products.characters.exclude(
+#         id__in=products.main_characters.values_list('id', flat=True)
+#     )
+
+#     print("Главные герои: ", products.main_characters.all(), "\n", "Другие герои: ", other_characters)
+
+#     FinalAlbumPics = Album_Pics.objects.all().order_by('name')
+
+#     try:
+#         All_Albums_pic = FinalAlbumPics.get(name=products)
+#         all_pics = All_Albums_pic.image.all()
+#     except:
+#         all_pics = "none"
+    
+#     product_tags = selected_product.tags.all()
+#     product_links = selected_product.links.all()
+#     print(product_links)
+
+#     #Собираем строку "tag_names" со всеми тэгами
+#     tag_namesArray = [tags.name for tags in product_tags]
+#     tag_names = ", ".join(tag_namesArray)
+
+#     #Собираем строку "season_final" с описанием сезона по типу "Осень 2006"
+#     product_date = selected_product.season
+#     if not product_date:
+#         return JsonResponse({'success': False, 'error': f"У продукта '{selected_product.name}' не указана дата сезона."}, status=400)
+
+#     year = product_date.year
+
+#     month = product_date.month
+#     season = ""
+
+#     if 3 <= month <= 5:
+#         season = "Весна"
+#     elif 6 <= month <= 8:
+#         season = "Лето"
+#     elif 9 <= month <= 11:
+#         season = "Осень"
+#     else:
+#         season = "Зима"
+
+#     season_final = f"{season} {year}"
+
+#     all_products = Product.objects.all()
+#     target_product_name = selected_product.name
+    
+#     for p in all_products:
+#         if p.name.lower() == target_product_name.lower():
+#             target_product_instance = p
+#             break
+
+#     related_products = []
+#     similarity_threshold = 0.7 
+
+#     for product in all_products:
+#         # Пропускаем сам целевой продукт
+#         if target_product_instance and product.name == target_product_instance.name:
+#             continue
+
+#         # Рассчитываем степень схожести
+#         similarity = calculate_similarity(target_product_name, product.name)
+
+#         # Если схожесть выше порога, добавляем продукт
+#         if similarity >= similarity_threshold:
+#             related_products.append(product)
+
+#     # Смотрим, если есть комментарии которые мы лайкали\дизлайкали, то меняем им иконки
+#     allComments = Comments.objects.filter(name=products.name)
+
+#     allComments_state = []
+#     if request.user.is_authenticated:
+#         allComments_state = CommentAction.objects.filter(user=request.user)
+
+#     for comment in allComments:
+#         comment.net_likes = comment.like_count - comment.dislike_count
+#         comment.my_state = 0
+    
+#         for action in allComments_state:
+#             if action.comment_id == comment.id: 
+#                 if action.action_type == "like":
+#                     comment.my_state = 2
+#                 elif action.action_type == "dislike":
+#                     comment.my_state = 1
+#                 break
+
+#     author_names = {c.user_name for c in allComments if c.user_name}
+
+#     users = User.objects.filter(username__in=author_names).select_related('profile')
+
+#     users_dict = {u.username: u for u in users}
+
+#     for item in allComments:
+#         if item.user_name in users_dict:
+#             item.current_user = users_dict[item.user_name]
+#         else:
+#             item.current_user = None
+
+#         if item.parentId:
+#             parent_comment = next((c for c in allComments if c.id == item.parentId), None)
+#             if parent_comment and parent_comment.user_name in users_dict:
+#                 item.parent_user = users_dict[parent_comment.user_name]
+#             else:
+#                 item.parent_user = None
+#         else:
+#             item.parent_user = None
+
+#     if request.user.is_authenticated:
+#         user = request.user
+        
+#         RecentView.objects.update_or_create(
+#             user=user, 
+#             product=selected_product
+#         )
+        
+#         keep_ids = RecentView.objects.filter(user=user).values_list('id', flat=True)[:20]
+#         RecentView.objects.filter(user=user).exclude(id__in=list(keep_ids)).delete()
+
+#         title_tag_ids = selected_product.tags.values_list('id', flat=True)
+#         print(title_tag_ids)
+
+#         for tag_id in title_tag_ids:
+#             stat_obj, created = ProfileStats.objects.get_or_create(
+#                 user=user,
+#                 tag_id=tag_id,
+#                 defaults={'views_count': 1}
+#             )
+#             if not created:
+#                 stat_obj.views_count = F('views_count') + 1
+#                 stat_obj.save()
+    
+
+#     context = {
+#         'title' : selected_product.name,
+#         'product': selected_product,
+#         'product_tags': tag_names,
+#         'season': season_final,
+#         'pics': all_pics,
+#         'related_products': related_products,
+#         'links': product_links,
+#         'link_name': product_link_name,
+#         'main_characters': MainCharacters,
+#         'characters': other_characters,
+#         'comments': allComments,
+#         'your_comment': CurrentComment,
+#         'star_list': star_list,
+#         'most_popular_comment': most_popular_comment,
+#         'AI_models': ["gemma3:12b", "deepseek-r1:14b", "qwen:0.5b"],
+#         'theme': request.session.get('courent_theme', 'black'),
+#         #'AI_models': {"gemma3:4b", "gemma3:12b"},
+#     }
+
+#     return render(request, 'main/card.html', context)
 
 def check_url(url):
     try:
