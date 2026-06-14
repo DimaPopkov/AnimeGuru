@@ -1924,6 +1924,8 @@ input[type="checkbox"]:checked::after {
     --pseudo-list-dropdown-is-highlighted: inherit;
     --pseudo-list-dropdown-choices-item-color: inherit;
     --pseudo-list-dropdown-border: inherit;
+
+    cursor: pointer;
 }
 
 /* Внутренняя кнопка-плашка Choices.js (Приводим к общей высоте 38px) */
