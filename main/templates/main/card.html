@@ -85,6 +85,7 @@
                             <p class="card_info_rating_10"> \10 </p>
                         </h3>
                         
+                        {% if request.user.is_authenticated %}
                         <form action="{% url 'favourites_add' product_name=product.name %}" method="POST" style="display: flex; align-items: center; column-gap: 5px;">
                             {% csrf_token %}
                             <h4 style="margin-bottom: 0;">Нравится: </h4>
@@ -95,6 +96,7 @@
                                 </svg>
                             </button>
                         </form>
+                        {% endif %}
                     </div>
                     <h1 style="padding-bottom: 10px" id="name"> {{ product.name }} </h1>
                 </div>
