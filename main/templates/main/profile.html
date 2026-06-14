@@ -53,7 +53,13 @@
                 <div class="profile_container_header_block_info_flex_alt">
                     <div class="profile_container_header_block_info_flex_alt_block" style="--rank-color: {{ user.profile.color }}">
                         <p class="profile_p_level_title"> Никнейм: </p>
-                        <p class="profile_p_level_title"> {{ user.username }} </p>
+                        {% if user.profile.rank >= 3 %}
+                            <span class="animated-nickname" style="--user-color: {{ user.profile.color }}; margin-top: 0; align-content: center;">
+                                <p class="profile_p_level_title"> {{ user.username }} </p>
+                            </span>
+                        {% else %}
+                            <p class="profile_p_level_title"> {{ user.username }} </p>
+                        {% endif %}
                     </div>
                     <div class="profile_container_header_block_info_flex_alt_block" style="--rank-color: {{ user.profile.color }}">
                         <p class="profile_p_level_title"> Уровень аккаунта: </p>
