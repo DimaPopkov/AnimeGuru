@@ -24,12 +24,40 @@ def copyright(request):
         
     return render(request, 'main/copyright.html', data)
 
-def main(request):
+def base(request):
     try:
         theme = request.session['courent_theme']
     except:
         theme = request.session.get('courent_theme', 'black')
         request.session['courent_theme'] = 'black'
+
+    Allstatus = []
+
+    for element in Product.objects.all():
+        if element.status not in Allstatus:
+            Allstatus.append(element.status)
+
+    new_products = sorted(Product.objects.all(), key=lambda x: x.season, reverse=True)[:10]
+
+    data = {
+        'title' : 'Главная страница',
+        'categories' : Category.objects.all().order_by('-name'),
+        'products' : Product.objects.all().order_by('-id'),
+        'tags': Tags.objects.all().order_by('name'),
+        'status': Allstatus,
+        'theme': theme,
+        'sort': Sort.objects.all().order_by('name'),
+        'new_products': new_products,
+    }
+        
+    return render(request, 'main/main.html', data)
+
+def main(request):
+    # try:
+    theme = request.session['courent_theme']
+    # except:
+    #     theme = request.session.get('courent_theme', 'black')
+    #     request.session['courent_theme'] = 'black'
 
     # print('Текущая тема: ', request.session.get('courent_theme', 'black'))
     allProducts = Product.objects.all()
@@ -53,7 +81,7 @@ def main(request):
         'new_products': new_products,
     }
         
-    return render(request, 'main/main.html', data)
+    return render(request, 'main/catalog.html', data)
 
 def about(request):
     data = {
@@ -170,7 +198,7 @@ def filter(request):
         'selected_sort': selected_sort,
     }
     
-    return render(request, 'main/main.html', context)
+    return render(request, 'main/catalog.html', context)
 
 def catalog_filtered(request, tags):
     tags_name = Tags.objects.filter(name=f'{tags}')

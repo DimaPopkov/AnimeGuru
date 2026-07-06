@@ -7,8 +7,16 @@
 {% load static %}
 {% block content %}
     <div class="container_d">
-        <div class="filter main_items_background">            
+        <div class="filter main_items_background">
+            <button type="button" class="filter_toggle_btn" onclick="toggleFilterLayout()" aria-label="Свернуть фильтр">
+                <svg xmlns="http://w3.org" viewBox="0 0 448 512" class="filter_toggle_svg">
+                    <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                </svg>
+            </button>
+
             <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
+                <h4 for="category" style="margin-bottom: 0;">Фильтр:</h4>
+                <!-- <br> -->
                 <div class="filter_blocks_grid">
                     <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
                         <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"></path>
@@ -22,10 +30,8 @@
                 </div>
 
                 <div class="filter_main">
-                    <h4 for="category">Фильтр:</h4><br>
-
                     <div class="sort-wrapper">
-                        <label for="sort"> Сортировать по:</label>
+                        <label> Сортировать по:</label>
                         <select class="font16 text_fix choices__list" name="sort" id="sort">
                             {% for element in sort %}
                                 <option value="{{ element.id }}" {% if filter_data.3 == element.id|stringformat:"s" %} selected {% endif %}>{{ element.name }}</option>
@@ -72,65 +78,71 @@
                                 </label>
                             {% endfor %}
                         </div>
-                    </div><br>
+                    </div>
                 </div>
             </form>
         </div>
 
-        <div class="filter_buttons_hide_show">
-            <img class="hide_filter" src="{% static '/img/AI_sendMessage.webp' %}" width="50px" onclick="hideFilter()">
-            <img class="show_filter" src="{% static '/img/AI_sendMessage.webp' %}" width="50px" onclick="showFilter()">
-        </div>
-
         <div class="container_e">
-            <div class="new_products main_items_background">
+            <!-- Блок "Новое" - СКРЫТ -->
+            <div class="new_products main_items_background" style="display: none;">
                 <div class="new_products_title">
                     <h4 class="new_products_h4"> Новое: </h4>
                     <img class="arrow arrow2" id="arrow2" src="{% static '/img/arrow.png' %}" width="10px">
                 </div>
-                <div class="new_products_list">
-                    {% for element in new_products %}
-                        <form action="{% url 'card' product_name=element.name %}" method="GET" class="new_products_list_product fade-in">
-                            <input type="hidden" name="product_name" value="{{ element }}">
+                <div class="new_products_list_container">
+                    <div class="new_products_list">
+                        {% for element in new_products %}
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="new_products_list_product fade-in">
+                                <input type="hidden" name="product_name" value="{{ element }}">
 
-                            <div class="prod_element2" onclick="submitform(this)">
-                                {% if element.image %}
-                                    {% if element.image.name %}
-                                        <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                    {% elif element.image %}
-                                        <div class="prod_element_pic_lock2"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                    {% else %}
-                                        <div class="prod_element_pic_lock2"><img src="{{ element.image }}" style="width: 100%"></div>
-                                    {% endif %}
-                                {% elif element.alter_pic %}
-                                    <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
-                                {% endif %}
-                                <div class="prod_element_rating">
-                                    <div class="prod_element_rating_block" style="
-                                        background:
-                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
-                                            {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
-                                            {% else %} red {% endif %};
-                                        "> {{ element.rating }} </div>
-                                    <!-- <div class="prod_element_rating_block_dop_main">
-                                        <div class="prod_element_rating_block_dop"></div>
-                                    </div> -->
+                                <div class="prod_element2" onclick="submitform(this)">
+                                    <div class="prod_element_pic_lock2">
+                                        {% if element.image %}
+                                            {% if element.image.url %}
+                                                <img src="{{ element.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                        {% endif %}
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                        {% if element.rating >= 8.0 %} rgba(116, 73, 210, 1)
+                                                        {% elif element.rating >= 6.0 %} rgba(78, 93, 108, 1)
+                                                        {% else %} linear-gradient(135deg, rgb(58, 58, 68), rgb(38, 38, 43)) {% endif %};
+                                                color: #ffffff;
+                                                "> 
+                                                <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="13px" height="13px">
+                                                    <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                            fill="white" 
+                                                            stroke="white" 
+                                                            stroke-width="6" 
+                                                            stroke-linejoin="round" />
+                                                </svg>
+                                                {{ element.rating }} 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                        <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                        <br><br>
+                                    </div>
                                 </div>
-                                <div class="prod_element_info">
-                                    <h5 style="padding-top: 5px"> {{ element.name }} </h5>
-                                    <h8> {{ element.category }} / {{ element.season.year }}</h8>
-                                    <br><br>
-                                </div>
-                            </div>
-                        </form>
-                    {% endfor %}
+                            </form>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
             <div class="find_by_name2_container">
                 <h4 class="new_products_h4" style="text-align: start; padding-left: 0;"> Поиск: </h4>
                 <form id="filter-form-text" class="filter-form-text" method="GET" action="{% url 'filtered-items' %}">
-                    <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Название тайтла" name="titlename" id="titlename">
+                    <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Введите название" name="titlename" id="titlename">
                 </form>
             </div>
 
@@ -142,31 +154,38 @@
                         </div>          -->
                                     
                         {% for element in products %}                 
-                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="fade-in">
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="catalog_form fade-in">
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="prod_element" onclick="submitform(this)">
-                                    {% if element.image %}
-                                        {% if element.image.name %}
-                                            <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                        {% elif element.image %}
-                                            <div class="prod_element_pic_lock"><img src="{{ element.image.url }}" style="width: 100%"></div>
-                                        {% else %}
-                                            <div class="prod_element_pic_lock"><img src="{{ element.image }}" style="width: 100%"></div>
+                                    <div class="prod_element_pic_lock">
+                                        {% if element.image %}
+                                            {% if element.image.url %}
+                                                <img src="{{ element.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
                                         {% endif %}
-                                    {% elif element.alter_pic %}
-                                        <div class="prod_element_pic_lock"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
-                                    {% endif %}
-                                    <div class="prod_element_rating">
-                                        <div class="prod_element_rating_block" style="
-                                        background:
-                                            {% if element.rating > 8 %} linear-gradient(rgb(50,200,50), rgb(80,150,80))
-                                            {% elif element.rating > 6 %} linear-gradient(rgb(220,220,30), rgb(150,150,30))
-                                            {% else %} red {% endif %};
-                                        "> {{ element.rating }} </div>
-                                        <!-- <div class="prod_element_rating_block_dop_main">
-                                            <div class="prod_element_rating_block_dop"></div>
-                                        </div> -->
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                color: #ffffff;
+                                                "> 
+                                                <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                                    <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                            fill="white" 
+                                                            stroke="white" 
+                                                            stroke-width="6" 
+                                                            stroke-linejoin="round" />
+                                                </svg>
+                                                {{ element.rating }} 
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="prod_element_info">
                                         <h5 style="padding-top: 5px"> {{ element.name }} </h5>
@@ -178,7 +197,7 @@
                             </form>
                         {% endfor %}
                     {% else %}
-                        <h4 style="margin-bottom: 0;"> Ничего не найдено </h4>
+                        <h4 style="margin-bottom: 0; padding: 100px 0;"> Ничего не найдено </h4>
                     {% endif %}
                 </div>
             </div>
@@ -233,9 +252,15 @@
                 let html = '';
 
                 products.forEach(element => {
-                    let ratingStyle = 'red';
-                    if (element.rating > 8) ratingStyle = 'linear-gradient(rgb(50,200,50), rgb(80,150,80))';
-                    else if (element.rating > 6) ratingStyle = 'linear-gradient(rgb(220,220,30), rgb(150,150,30))';
+                    let ratingStyle = 'linear-gradient(135deg, #3a3a44, #26262b)';
+                    let ratingShadow = '0 4px 10px rgba(0, 0, 0, 0.5)';
+
+                    if (element.rating >= 8) {
+                        ratingStyle = 'linear-gradient(135deg, #a176ff, #6225ff)';
+                        ratingShadow = '0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0, 0, 0, 0.5)';
+                    } else if (element.rating >= 6) {
+                        ratingStyle = 'linear-gradient(135deg, #bdc3c7, #4e5d6c)';
+                    }
 
                     html += `
                         <form class="fade-in" action="/card/${encodeURIComponent(element.name)}/" method="GET">
@@ -320,23 +345,62 @@
 
 
             dropdown_new.addEventListener('click', function(e) {
-                const dropdownContent = this.nextElementSibling;
-                const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
-                dropdownContent.style.display = isOpen ? 'none' : 'grid';
+                // const dropdownContent = this.nextElementSibling;
+                // const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
+                // dropdownContent.style.display = isOpen ? 'none' : 'grid';
                 
-                if (dropdownContent.style.display == 'grid'){
-                    dropdown_new.style.paddingBottom = '0';
+                // if (dropdownContent.style.display == 'grid'){
+                //     dropdown_new.style.paddingBottom = '0';
 
+                //     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                //     filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+
+                //     arrow2.style.transform = "rotate(180deg)";
+                // } else {
+                //     dropdownContent.style.display = 'none';
+                //     dropdown_new.style.padding = '20px';
+
+                //     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                //     filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+
+                //     arrow2.style.transform = "rotate(0deg)";
+                // }
+
+                const dropdownContent = this.nextElementSibling;
+                const contentHeight = dropdownContent.scrollHeight; 
+                
+                const currentHeight = window.getComputedStyle(dropdownContent).height;
+                const isOpen = parseFloat(currentHeight) > 50;
+
+                const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                const currentFloatValue = parseFloat(currentValue) || 0;
+
+                if (!isOpen) {
+                    // Устанавливаем высоту (например, 350px или scrollHeight для авто-высоты)
+
+                    dropdown_new.style.paddingBottom = '0';
+                    dropdownContent.style.height = contentHeight + 'px';
+                    dropdownContent.style.opacity = '1';
+
+                    // Изменение CSS-переменной родительского фильтра
                     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
-                    filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+                    filter.style.setProperty('--pseudo-filter-height', `${currentFloatValue + contentHeight}px`);
 
                     arrow2.style.transform = "rotate(180deg)";
                 } else {
-                    dropdownContent.style.display = 'none';
-                    dropdown_new.style.padding = '20px';
+                    const closingHeight = dropdownContent.offsetHeight;
+                    dropdownContent.style.height = closingHeight + 'px';
 
-                    const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
-                    filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+                    dropdownContent.offsetHeight;
+                    
+                    dropdownContent.style.height = '0px';
+                    dropdownContent.style.opacity = '0';
+                    dropdown_new.style.paddingBottom = '20px';
+
+                    const contentHeight = dropdownContent.scrollHeight;
+                    
+                    // Уменьшение CSS-переменной обратно
+                    filter.style.setProperty('--pseudo-filter-height', `${currentFloatValue - closingHeight}px`);
 
                     arrow2.style.transform = "rotate(0deg)";
                 }
@@ -470,22 +534,21 @@
 
         const container_e = document.querySelector('.container_e');
 
-        function hideFilter(){
-            filter.style.display = 'none';
+        function toggleFilterLayout() {
+            const filter = document.querySelector('.filter');
+            const toggleBtn = document.querySelector('.filter_toggle_btn');
 
-            showBtn.style.display = 'block';
-            hideBtn.style.display = 'none';
+            if (!filter || !toggleBtn) return;
 
-            filter_buttons_hide_show.style.position = 'relative';
-        }
+            // Жестко удаляем любые инлайновые стили display, если они застряли в памяти браузера
+            const filterForm = filter.querySelector('.filter_form');
+            if (filterForm) {
+                filterForm.style.removeProperty('display');
+            }
 
-        function showFilter(){
-            filter.style.display = 'flex';
-
-            showBtn.style.display = 'none';
-            hideBtn.style.display = 'block';
-
-            filter_buttons_hide_show.style.position = 'absolute';
+            // Теперь ТОЛЬКО переключаем классы. Никаких .style.display = 'none'!
+            filter.classList.toggle('filter-hidden');
+            toggleBtn.classList.toggle('rotated');
         }
     </script>
 {% endblock %}

@@ -1,0 +1,537 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% load static %}
+{% block content %}
+    <div class="container_d">
+        <div class="filter main_items_background">
+            <button type="button" class="filter_toggle_btn" onclick="toggleFilterLayout()" aria-label="Свернуть фильтр">
+                <svg xmlns="http://w3.org" viewBox="0 0 448 512" class="filter_toggle_svg">
+                    <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                </svg>
+            </button>
+
+            <form id="filter-form" method="GET" action="{% url 'filtered-items' %}" class="filter_form">
+                <div class="filter_blocks_grid">
+                    <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
+                        <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"></path>
+                    </svg>
+                    <svg onclick="ChangeGrid('big_block')" id='big_block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
+                        <path d="M224 80c0-26.5-21.5-48-48-48H80C53.5 32 32 53.5 32 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80zm0 256c0-26.5-21.5-48-48-48H80c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336zM288 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z"></path>
+                    </svg>
+                    <svg onclick="ChangeGrid('line')" id='line' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="grid_buttons">
+                        <path d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"></path>
+                    </svg>
+                </div>
+
+                <div class="filter_main">
+                    <h4 for="category">Фильтр:</h4><br>
+
+                    <div class="sort-wrapper">
+                        <label> Сортировать по:</label>
+                        <select class="font16 text_fix choices__list" name="sort" id="sort">
+                            {% for element in sort %}
+                                <option value="{{ element.id }}" {% if filter_data.3 == element.id|stringformat:"s" %} selected {% endif %}>{{ element.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div><br>
+
+                    <!-- <label for="name"> Поиск по названию:</label>  -->
+                    <!-- <input class="filter_category_filter main_items_background find_by_name" type="text" placeholder="Название тайтла" name="titlename" id="titlename"> -->
+                    <!-- <br> -->
+                
+                    <label for="category"> Категории:</label> 
+                    <select class="filter_category_filter main_items_background" name="category" id="category">
+                        <option value="" class="font16 main_items_background"> Все категории </option>
+                        {% for element in categories %}
+                            <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.0 == element.id|stringformat:"s" %}selected{% endif %}>{{ element.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+                    <label for="status"> Статус:</label> 
+                    <select class="filter_category_filter main_items_background" name="activeStatus" id="activeStatus">
+                        <option value="" class="font16 main_items_background"> Все </option>
+                        {% for element in status %}
+                            <option value="{{ element.id }}" class="font16 main_items_background" {% if filter_data.2 == element.id|stringformat:"s" %}selected{% endif %}>{{ element }}</option>
+                        {% endfor %}        
+                    </select><br>
+
+                    <label for="tags"> Поиск по тегам:</label>
+                    <div class="custom-dropdown">
+                        <!-- Кнопка для открытия/закрытия списка -->
+                        <button class="dropdown-toggle main_items_background" type="button">
+                            <span class="selected-tags">Выберите теги</span>                     
+                            <img class="arrow" id="arrow" src="{% static '/img/arrow.png' %}" width="10px">
+                        </button>
+
+                        <!-- Скрытый контейнер с чекбоксами -->
+                        <div class="dropdown-content" id="tags"> <!-- main_items_background -->
+                            <!-- <div class="dropdown-content-linear-gr"></div> -->
+                            {% for tag in tags %}
+                                <label class="checkbox-item">
+                                    <input class="checkbox-item-checkbox" type="checkbox" name="tags" value="{{ tag.id }}">
+                                    <p class="checkbox-item-text">{{ tag.name }} </p>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="container_e">
+            <div class="new_products main_items_background">
+                <div class="new_products_title">
+                    <h4 class="new_products_h4"> Новое: </h4>
+                    <img class="arrow arrow2" id="arrow2" src="{% static '/img/arrow.png' %}" width="10px">
+                </div>
+                <div class="new_products_list_container">
+                    <div class="new_products_list">
+                        {% for element in new_products %}
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="new_products_list_product fade-in">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="prod_element2" onclick="submitform(this)">
+                                    <div class="prod_element_pic_lock2">
+                                        {% if element.image %}
+                                            {% if element.image.url %}
+                                                <img src="{{ element.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                        {% endif %}
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                    color: #ffffff;
+                                                    box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
+                                                "> {{ element.rating }} </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                        <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                        <br><br>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="find_by_name2_container">
+                <h4 class="new_products_h4" style="text-align: start; padding-left: 0;"> Поиск: </h4>
+                <form id="filter-form-text" class="filter-form-text" method="GET" action="{% url 'filtered-items' %}">
+                    <input class="filter_category_filter main_items_background find_by_name2" type="text" placeholder="Введите название" name="titlename" id="titlename">
+                </form>
+            </div>
+
+            <div class="catalog main_items_background">
+                <div id="products_catalog" class="products_catalog">    
+                    {% if products %}
+                        <!-- <div class="nice_info">
+                            <h class="nice_info_piece"> Всего: {{ products|length }} </h>
+                        </div>          -->
+                                    
+                        {% for element in products %}                 
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="catalog_form fade-in">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="prod_element" onclick="submitform(this)">
+                                    <div class="prod_element_pic_lock">
+                                        {% if element.image %}
+                                            {% if element.image.url %}
+                                                <img src="{{ element.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                        {% endif %}
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                    color: #ffffff;
+                                                    box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
+                                                "> {{ element.rating }} </div>
+                                        </div>
+                                    </div>
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                        <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                        <br><br>
+                                        <p class="hidden_description hidden"> {{ element.description|safe }} </p>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    {% else %}
+                        <h4 style="margin-bottom: 0; padding: 100px 0;"> Ничего не найдено </h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>    
+        document.addEventListener('DOMContentLoaded', function() {
+            const filter = document.querySelector('.filter');
+            const filterForm = document.getElementById('filter-form');
+            const filterFormText = document.getElementById('filter-form-text');
+            const NameSelect = document.getElementById('titlename');
+            const categorySelect = document.getElementById('category');
+            const productsListContainer = document.getElementById('products_catalog');
+            const activeTags = document.getElementById('tags');
+            const activeStatus = document.getElementById('activeStatus');
+            const sort = document.getElementById('sort');
+            
+            const dropdown_new = document.querySelector('.new_products_title');
+            const arrow2 = document.getElementById('arrow2');
+
+            // console.log(activeStatus);
+
+            const choice1 = document.querySelector('#sort');
+            // const choice2 = document.querySelector('#category');
+
+            const choices = new Choices(choice1, {
+                searchEnabled: false,
+                itemSelectText: '',
+                shouldSort: false,
+                renderSelectedChoices: 'always',
+                position: 'bottom',
+            });
+
+            const container = choice1.closest('.choices');
+            if (container) {
+                container.classList.add('theme-fix');
+            }
+
+            // const choices2 = new Choices(choice2, {
+            //     searchEnabled: false,
+            //     itemSelectText: '',
+            //     shouldSort: false,
+            //     renderSelectedChoices: 'always',
+            //     position: 'bottom',
+            // });
+
+            let skeletonTimer;
+
+            function renderProducts(containerSelector, products) {
+                const container = document.querySelector(containerSelector);
+                let html = '';
+
+                products.forEach(element => {
+                    let ratingStyle = 'linear-gradient(135deg, #3a3a44, #26262b)';
+                    let ratingShadow = '0 4px 10px rgba(0, 0, 0, 0.5)';
+
+                    if (element.rating >= 8) {
+                        ratingStyle = 'linear-gradient(135deg, #a176ff, #6225ff)';
+                        ratingShadow = '0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0, 0, 0, 0.5)';
+                    } else if (element.rating >= 6) {
+                        ratingStyle = 'linear-gradient(135deg, #bdc3c7, #4e5d6c)';
+                    }
+
+                    html += `
+                        <form class="fade-in" action="/card/${encodeURIComponent(element.name)}/" method="GET">
+                            <input type="hidden" name="product_name" value="${element.name}">
+                            <div class="prod_element" onclick="submitform(this)">
+                                <div class="prod_element_pic_lock">
+                                    <img src="${element.image_url}" style="width: 100%">
+                                </div>
+                                <div class="prod_element_rating">
+                                    <div class="prod_element_rating_block" style="background: ${ratingStyle}">
+                                        ${element.rating}
+                                    </div>
+                                </div>
+                                <div class="prod_element_info">
+                                    <h5 style="padding-top: 5px">${element.name}</h5>
+                                    <h8>${element.category} / ${element.year}</h8>
+                                    <br><br>
+                                    <p class="hidden_description hidden">${element.description || ''}</p>
+                                </div>
+                            </div>
+                        </form>
+                    `;
+                });
+
+                container.innerHTML = html;
+            }
+
+            function showSkeletons(containerSelector, count) {
+                const container = document.querySelector(containerSelector);
+                let skeletonHTML = '';
+
+                for (let i = 0; i < count; i++) {
+                    skeletonHTML += `
+                        <div class="skeleton-item">
+                            <div class="skel-pic shimmer-block"></div>
+                            <div class="skel-title shimmer-block"></div>
+                            <div class="skel-subtitle shimmer-block"></div>
+                        </div>
+                    `;
+                }
+                container.innerHTML = skeletonHTML;
+            }
+
+            // Функция для отправки AJAX запроса и обновления списка товаров
+            function updateProducts() {
+                showSkeletons('.products_catalog', 14);
+
+                // Формируем URL для AJAX запроса, используя action формы
+                let url = null;
+
+                url = filterForm.action + '?' + new URLSearchParams(new FormData(filterForm)).toString() + '&' + new URLSearchParams(new FormData(filterFormText)).toString();
+            
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.text(); // Получаем HTML ответ
+                    })
+                    .then(html => {
+                        const fullHtml = document.createElement('div');
+                        fullHtml.innerHTML = html;
+                        //console.log(fullHtml)
+
+                        const new_filter = fullHtml.querySelector('#products_catalog')
+                        
+                        if (new_filter) {
+                            // Обновляем содержимое контейнера с товарами
+                            const desiredHtmlContent = new_filter.innerHTML;
+                            //console.log(desiredHtmlContent)
+
+                            productsListContainer.innerHTML = new_filter.innerHTML;          
+                            UpdateGrid();
+                        }                     
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                        // Можно добавить обработку ошибки для пользователя
+                        productsListContainer.innerHTML = '<p>Не удалось загрузить товары.</p>';
+                    });
+            }
+
+
+            dropdown_new.addEventListener('click', function(e) {
+                // const dropdownContent = this.nextElementSibling;
+                // const isOpen = window.getComputedStyle(dropdownContent).display === 'grid';
+                // dropdownContent.style.display = isOpen ? 'none' : 'grid';
+                
+                // if (dropdownContent.style.display == 'grid'){
+                //     dropdown_new.style.paddingBottom = '0';
+
+                //     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                //     filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) + 350}px`);
+
+                //     arrow2.style.transform = "rotate(180deg)";
+                // } else {
+                //     dropdownContent.style.display = 'none';
+                //     dropdown_new.style.padding = '20px';
+
+                //     const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                //     filter.style.setProperty('--pseudo-filter-height', `${parseFloat(currentValue) - 330}px`);
+
+                //     arrow2.style.transform = "rotate(0deg)";
+                // }
+
+                const dropdownContent = this.nextElementSibling;
+                const contentHeight = dropdownContent.scrollHeight; 
+                
+                const currentHeight = window.getComputedStyle(dropdownContent).height;
+                const isOpen = parseFloat(currentHeight) > 50;
+
+                const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                const currentFloatValue = parseFloat(currentValue) || 0;
+
+                if (!isOpen) {
+                    // Устанавливаем высоту (например, 350px или scrollHeight для авто-высоты)
+
+                    dropdown_new.style.paddingBottom = '0';
+                    dropdownContent.style.height = contentHeight + 'px';
+                    dropdownContent.style.opacity = '1';
+
+                    // Изменение CSS-переменной родительского фильтра
+                    const currentValue = getComputedStyle(filter).getPropertyValue('--pseudo-filter-height').trim();
+                    filter.style.setProperty('--pseudo-filter-height', `${currentFloatValue + contentHeight}px`);
+
+                    arrow2.style.transform = "rotate(180deg)";
+                } else {
+                    const closingHeight = dropdownContent.offsetHeight;
+                    dropdownContent.style.height = closingHeight + 'px';
+
+                    dropdownContent.offsetHeight;
+                    
+                    dropdownContent.style.height = '0px';
+                    dropdownContent.style.opacity = '0';
+                    dropdown_new.style.paddingBottom = '20px';
+
+                    const contentHeight = dropdownContent.scrollHeight;
+                    
+                    // Уменьшение CSS-переменной обратно
+                    filter.style.setProperty('--pseudo-filter-height', `${currentFloatValue - closingHeight}px`);
+
+                    arrow2.style.transform = "rotate(0deg)";
+                }
+            });
+
+            // Добавляем обработчики событий на каждый элемент фильтра
+            NameSelect.addEventListener('input', updateProducts);
+            categorySelect.addEventListener('change', updateProducts);
+            activeTags.addEventListener('change', updateProducts);
+            activeStatus.addEventListener('change', updateProducts);
+            sort.addEventListener('change', updateProducts);
+
+            console.log('Event listeners attached.'); // <-- Логирование
+        });
+
+        let ActiveTags = null;
+        let hi = null;
+
+        if(hi != ActiveTags)
+            updateProducts()
+
+            const dropdown_toggle = document.querySelectorAll('.dropdown-toggle');
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const arrow = document.getElementById('arrow');
+
+                dropdown_toggle.forEach(button => {
+                    // Открытие/закрытие списка
+                    button.addEventListener('click', function(e) {
+                        const dropdownContent = this.nextElementSibling;
+                        const isOpen = dropdownContent.style.display === 'grid';
+                        dropdownContent.style.display = isOpen ? 'none' : 'grid';
+                        
+                        if (dropdownContent.style.display == 'grid'){
+                            dropdownContent.style.ChangeGrid = '';
+                            // dropdownContent.style.borderRadius = '0 0 10px 10px';
+                            // dropdownContent.style.borderTop = 'none';
+
+                            // this.style.borderRadius = '10px 10px 0 0';
+                            // this.style.borderBottom = this.style.borderTop;
+                
+                            arrow.style.transform = "rotate(180deg)";
+                        } else {
+                            // this.style.borderRadius = '10px';
+                            // this.style.borderBottom = this.style.borderTop;
+
+                            arrow.style.transform = "rotate(0deg)";
+                        }
+                    });
+                });
+
+                // Закрытие списка при клике вне области
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.custom-dropdown')) {
+                        document.querySelectorAll('.dropdown-content').forEach(menu => {
+                            menu.style.display = 'none';
+
+                            dropdown_toggle.forEach(button => {
+                                button.style.borderRadius = '10px';
+                                button.style.borderBottom = button.style.borderTop;
+                            })
+
+                            arrow.style.transform = "rotate(0deg)";
+                        });
+                    }
+                });
+
+                // Обновление текста кнопки при выборе чекбоксов           
+                document.querySelectorAll('.dropdown-content input').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const dropdownContent = this.closest('.dropdown-content');
+                        if (!dropdownContent) return; // Дополнительная проверка
+
+                        const allH = document.querySelectorAll(".checkbox-item-text");
+                        const arrayAllH = Array.from(allH)
+
+                        const ArrayTags = arrayAllH.map(
+                            item => { 
+                                return item.textContent.trim(); 
+                            }
+                        );
+
+                        let selectedLabels = Array.from(
+                            dropdownContent.querySelectorAll('input:checked')
+                        ).map(input => {
+                            // Пытаемся найти родительский label
+                            const label = input.closest('label');
+                            // Возвращаем или текст из label, или содержимое следующего элемента
+                            return label ? label.textContent : input.nextElementSibling?.textContent;
+                        }).filter(Boolean);
+
+                        const button = this.closest('.custom-dropdown')?.querySelector('.dropdown-toggle');
+                        if (!button) return; // Проверка на существование кнопки
+
+                        const selectedTagsElement = button.querySelector('.selected-tags');
+                        if (selectedTagsElement) {                    
+
+                            ActiveTags = selectedLabels.map(str => 
+                                str.replace(/\s+/g, ' ').trim()
+                            );                    
+                            // console.log(ActiveTags);
+
+                            selectedTagsElement.textContent = selectedLabels.join(', ') || 'Выберите теги';                       
+                        }
+                    });
+                });
+            }
+        );
+
+        function submitform(element)
+        {
+            console.log(element)
+            const form = element.closest('form');
+
+            if (form)
+            {
+                form.submit()
+            }
+
+            else{  
+                console.log("Форма не найдена")
+            } 
+        }
+
+        const filter = document.querySelector('.filter');
+
+        const filter_buttons_hide_show = document.querySelector('.filter_buttons_hide_show');
+        const showBtn = document.querySelector('.show_filter');
+        const hideBtn = document.querySelector('.hide_filter');
+
+        const container_e = document.querySelector('.container_e');
+
+        function toggleFilterLayout() {
+            const filter = document.querySelector('.filter');
+            const toggleBtn = document.querySelector('.filter_toggle_btn');
+
+            if (!filter || !toggleBtn) return;
+
+            // Жестко удаляем любые инлайновые стили display, если они застряли в памяти браузера
+            const filterForm = filter.querySelector('.filter_form');
+            if (filterForm) {
+                filterForm.style.removeProperty('display');
+            }
+
+            // Теперь ТОЛЬКО переключаем классы. Никаких .style.display = 'none'!
+            filter.classList.toggle('filter-hidden');
+            toggleBtn.classList.toggle('rotated');
+        }
+    </script>
+{% endblock %}

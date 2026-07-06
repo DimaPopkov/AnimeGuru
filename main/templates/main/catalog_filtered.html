@@ -10,7 +10,7 @@
         <div class="posts_filter">
             <h3>Все произведения по тегу: {{ tag }}</h3>
 
-            <div class="filter_blocks_grid" style="width: auto;">
+            <div class="filter_blocks_grid" style="width: auto; margin-top: 0; margin-bottom: 0;">
                 <svg onclick="ChangeGrid('block')" id='block' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="grid_buttons active">
                     <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"></path>
                 </svg>
@@ -45,15 +45,20 @@
                                 <div class="prod_element_rating">
                                     <div class="prod_element_rating_block" style="
                                         background:
-                                                {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
-                                                {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
-                                                {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
-                                            color: #ffffff;
-                                            box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
-                                    "> {{ element.rating }} </div>
-                                    <!-- <div class="prod_element_rating_block_dop_main">
-                                        <div class="prod_element_rating_block_dop"></div>
-                                    </div> -->
+                                            {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                            {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                            {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                        color: #ffffff;
+                                        "> 
+                                        <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                            <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                    fill="white" 
+                                                    stroke="white" 
+                                                    stroke-width="6" 
+                                                    stroke-linejoin="round" />
+                                        </svg>
+                                        {{ element.rating }} 
+                                    </div>
                                 </div>
                                 <div class="prod_element_info">
                                     <h5 style="padding-top: 5px"> {{ element.name }} </h5>

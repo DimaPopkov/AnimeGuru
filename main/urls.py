@@ -7,7 +7,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.main, name="main"),
+    path('', views.base, name="base"),
+    path('catalog/', views.main, name="main"),
     path('posts/', include('posts.urls'), name='posts'),
     path('admin/', admin.site.urls),
     path('about/', views.about, name="about"),
@@ -21,14 +22,14 @@ urlpatterns = [
     path('add_comments/<str:product_name>/', views.add_comments, name='add_comments'),
     path('edit_comments/<str:product_name>/', views.edit_comments, name='edit_comments'),
     path('delete_comments/<str:product_name>/<str:id>/', views.delete_comments, name='delete_comments'),
-    path('card/<str:product_name>/', views.card, name="card"),
+    path('catalog/card/<str:product_name>/', views.card, name="card"),
     path('login/', include('login.urls')),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('main')), name='logout'),
     path('profile/', views.profile, name='profile'),
     path('user/<str:id>', views.user_profile, name='user_profile'),
     path('profile/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
     path('profile/delete-avatar', views.profile_delete_avatar, name='profile_delete_avatar'),
-    path('<str:tags>/', views.catalog_filtered, name='catalog_filtered'),
+    path('catalog/<str:tags>/', views.catalog_filtered, name='catalog_filtered'),
     path('AI/chat', views.AIchat, name='AIchat'),
     path('AI/history', views.AIhistory, name='AIhistory'),
 

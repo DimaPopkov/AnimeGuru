@@ -25,22 +25,31 @@
     <script src="{% static 'main/js/filter_grid.js' %}"></script>
     <script src="{% static 'main/js/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'main/js/choices.min.js' %}"></script>
+
+    <script>
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.display = 'none';
+            }
+        });
+    </script>
 </head>
-<body id="products-list-container" class="body">
+<body id="products-list-container" class="body dark-theme">
     
-    <div id="preloader">
-        <!-- <div class="loader-content"> -->
-            <!-- <h1 id="btn_logo" class="btn_logo" href="{% url 'main' %}" style="font-family: 'Playwrite DE SAS', cursive;"> AnimeGuru </h1> -->
+    <!-- <div id="preloader">
+        <div class="loader-content">
+            <h1 id="btn_logo" class="btn_logo" href="{% url 'main' %}" style="font-family: 'Playwrite DE SAS', cursive;"> AnimeGuru </h1>
             
-            <!-- <div class="progress-container"> -->
-                <!-- <div class="progress-bar"></div> -->
-            <!-- </div> -->
-        <!-- </div> -->
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
 
         <svg class="svg-loader" viewBox="0 0 50 50">
             <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
         </svg>
-    </div>
+    </div> -->
 
     <header class = "main_items_background header">
         <div style="display:flex; align-items: center; column-gap: 10px;">
@@ -49,7 +58,11 @@
                 <input id="theme_input" type="checkbox" style="width: 12px; height: 12px; display: none;">
             </div> 
 
-            <a id="btn_logo" class="btn_logo" href="{% url 'main' %}"> AnimeGuru </a>
+            <a id="btn_logo" class="btn_logo" href="{% url 'base' %}"> AnimeGuru </a>
+
+            <div style="display:flex; align-items: center; column-gap: 10px;">
+                <a id="posts" class="btn_logo header_redirect" href="{% url 'main' %}"> Каталог </a>
+            </div>
 
             <div style="display:flex; align-items: center; column-gap: 10px;">
                 <a id="posts" class="btn_logo header_redirect" href="{% url 'posts' %}"> Публикации </a>
@@ -111,10 +124,4 @@
         light: "{% static 'favicon.ico' %}",
         dark: "{% static 'favicon2.ico' %}"
     };
-    window.addEventListener('load', function() {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.style.display = 'none';
-        }
-    });
 </script>
