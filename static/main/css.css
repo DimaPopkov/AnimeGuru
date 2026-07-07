@@ -603,7 +603,7 @@ main{
 }
 
 .prod_element.line-mode .blur_bg {
-    opacity: 1 !important;
+    opacity: 0.2 !important;
 }
 
 .prod_element.line-mode > *:not(.blur_bg) {

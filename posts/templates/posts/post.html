@@ -68,10 +68,10 @@
                                     <p class="all_comments_container_block_header_username"> 
                                         {% if element.user.profile.rank >= 3 %}
                                             <span class="animated-nickname" style="--user-color: {{ element.user.profile.color }}; margin-top: 0;">
-                                                <a id="nickname"  class = "login_status_bar_text_alt"> {{ element.user.username }} </a>
+                                                <a id="nickname" href="{% url 'user_profile' id=element.user.id %}" class = "login_status_bar_text_alt"> {{ element.user.username }} </a>
                                             </span>
                                         {% else %}
-                                            <a id="nickname" class = "login_status_bar_text_alt"> {{ element.user.username }} </a>
+                                            <a id="nickname" href="{% url 'user_profile' id=element.user.id %}" class = "login_status_bar_text_alt"> {{ element.user.username }} </a>
                                         {% endif %}
                                     </p>
                                 </div>
@@ -140,10 +140,10 @@
                                                         <p class="all_comments_container_block_header_username"> 
                                                             {% if element2.user.profile.rank >= 3 %}
                                                                 <span class="animated-nickname" style="--user-color: {{ element2.user.profile.color }}; margin-top: 0;">
-                                                                    <a id="nickname"  class = "login_status_bar_text_alt"> {{ element2.user.username }} </a>
+                                                                    <a id="nickname" href="{% url 'user_profile' id=element2.user.id %}" class = "login_status_bar_text_alt"> {{ element2.user.username }} </a>
                                                                 </span>
                                                             {% else %}
-                                                                <a id="nickname" class = "login_status_bar_text_alt"> {{ element2.user.username }} </a>
+                                                                <a id="nickname" href="{% url 'user_profile' id=element2.user.id %}" class = "login_status_bar_text_alt"> {{ element2.user.username }} </a>
                                                             {% endif %}
                                                         </p>
                                                     </div>                              
@@ -212,10 +212,10 @@
                                                                         <p class="all_comments_container_block_header_username"> 
                                                                             {% if element3.user.profile.rank >= 3 %}
                                                                                 <span class="animated-nickname" style="--user-color: {{ element3.user.profile.color }}; margin-top: 0;">
-                                                                                    <a id="nickname"  class = "login_status_bar_text_alt"> {{ element3.user.username }} </a>
+                                                                                    <a id="nickname" href="{% url 'user_profile' id=element3.user.id %}" class = "login_status_bar_text_alt"> {{ element3.user.username }} </a>
                                                                                 </span>
                                                                             {% else %}
-                                                                                <a id="nickname" class = "login_status_bar_text_alt"> {{ element3.user.username }} </a>
+                                                                                <a id="nickname" href="{% url 'user_profile' id=element3.user.id %}" class = "login_status_bar_text_alt"> {{ element3.user.username }} </a>
                                                                             {% endif %}
                                                                         </p>
                                                                     </div>                              
