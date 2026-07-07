@@ -83,11 +83,9 @@
                     <div class="filter-group year-range-group">
                         <label class="filter-label">Год выпуска:</label>
                         <div class="year-values-display">
-                            <!-- Если переменные пустые, Django выведет 1997 и 2025 -->
-                            <span id="year-min-label">{{ current_year_min|default:1997 }}</span> — <span id="year-max-label">{{ current_year_max|default:2025 }}</span>
+                            <span id="year-min-label">{{ current_year_min|default:1990 }}</span> — <span id="year-max-label">{{ current_year_max|default:2026 }}</span>
                         </div>
                         
-                        <!-- Прописываем жесткие дефолты на случай, если контекст потерялся во views.py -->
                         <div class="range-slider-container" id="slider-range-wrapper" 
                             data-db-min="{{ db_min_year|default:1997 }}" 
                             data-db-max="{{ db_max_year|default:2025 }}">
