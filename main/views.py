@@ -6,7 +6,8 @@ from django.apps import apps
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q
+from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max
+from django.db.models.functions import ExtractYear
 from django.core.files.base import ContentFile
 from django.core.cache import cache
 from PIL import Image, ImageSequence
@@ -14,6 +15,7 @@ from PIL import Image, ImageSequence
 from django.contrib.auth.models import User
 
 from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats, ProductView
+from posts.models import Posts
 from .forms import ProductForm
 
 
@@ -71,8 +73,9 @@ def base(request):
     most_popular_title_week = most_popular(7)
     most_popular_title_month = most_popular(30)
 
-    # Печатаем результат в терминал для проверки
-    print("НЕДЕЛЯ:", most_popular_title_week, "МЕСЯЦ:", most_popular_title_month)
+    popular_posts = Posts.objects.annotate( 
+        rating_score=F('like_count') - F('dislike_count')
+    ).order_by('-rating_score')[:3]
 
     data = {
         'title' : 'Главная страница',
@@ -86,6 +89,7 @@ def base(request):
         'best_for_category': best_for_category,
         'most_popular_week': most_popular_title_week,
         'most_popular_month': most_popular_title_month,
+        'popular_posts': popular_posts,
     }
         
     return render(request, 'main/main.html', data)
@@ -206,6 +210,29 @@ def filter(request):
     else:
         final_products = list(products)
 
+    all_years_in_db = [
+        p.season.year for p in products
+        if p.season is not None
+    ]
+
+    db_min_year = min(all_years_in_db) if all_years_in_db else 1995
+    db_max_year = max(all_years_in_db) if all_years_in_db else 2026
+
+    if db_min_year == db_max_year:
+        db_min_year -= 5
+        db_max_year += 1
+
+    year_min = request.GET.get('year_min', db_min_year)
+    year_max = request.GET.get('year_max', db_max_year)
+
+    try:
+        final_products = [
+            p for p in final_products 
+            if p.season is not None and int(year_min) <= p.season.year <= int(year_max)
+        ]
+    except (ValueError, TypeError):
+        pass
+
     # Фильтр по сортировке
     sort_id = request.GET.get('sort')
     if sort_id:
@@ -226,7 +253,7 @@ def filter(request):
     selected_status = status_id
     selected_sort = sort_id
 
-    new_products = sorted(products, key=lambda x: x.season, reverse=True)[:7]
+    new_products = sorted(final_products, key=lambda x: x.season, reverse=True)[:7]
 
     context = {
         'title' : 'Основная страница',
@@ -239,6 +266,10 @@ def filter(request):
         'selected_tags': selected_tags,
         'selected_status': selected_status,
         'selected_sort': selected_sort,
+        'db_min_year': db_min_year,
+        'db_max_year': db_max_year,
+        'current_year_min': year_min,
+        'current_year_max': year_max,
     }
     
     return render(request, 'main/catalog.html', context)

@@ -1,0 +1,80 @@
+.year-range-group {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.filter-label {
+    color: #b3b3b3;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.year-values-display {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Общий контейнер, где ползунки накладываются друг на друга */
+.range-slider-container {
+    position: relative;
+    width: 100%;
+    height: 6px; /* Высота дорожки */
+    margin-bottom: 15px;
+}
+
+/* Кастомная общая дорожка (JS будет красить её центр в фиолетовый) */
+.slider-track {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #292929; /* Серый цвет неактивной зоны */
+    border-radius: 3px;
+    top: 0; left: 0;
+    z-index: 1; /* Лежит под кнопками-кругляшками */
+}
+
+/* Универсальный сброс стилей инпутов для наложения */
+.range-slider-container input[type="range"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    position: absolute;
+    background: none;
+    pointer-events: none; /* Пропускает клики сквозь пустое тело инпута */
+    top: -5px; left: 0;
+    margin: 0;
+    z-index: 2; /* Кругляшки лежат поверх кастомного трека */
+}
+
+/* Стилизация круглых кнопок (Thumbs) для Chrome/Safari/Edge */
+.range-slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: #8a2be2; /* Ваш фирменный фиолетовый цвет сайта */
+    cursor: pointer;
+    pointer-events: auto; /* Возвращаем кликабельность кнопкам */
+    box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
+    transition: transform 0.1s ease;
+}
+
+.range-slider-container input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.25); /* Легкое увеличение при наведении */
+}
+
+/* Стилизация круглых кнопок для Firefox */
+.range-slider-container input[type="range"]::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border: none;
+    border-radius: 50%;
+    background-color: #8a2be2;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
+}

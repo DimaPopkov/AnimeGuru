@@ -327,7 +327,6 @@
 
 
 .hero-popular-wrapper {
-    width: 100%;
     height: auto;
     min-height: 400px;
     
@@ -463,6 +462,15 @@
 
 
 
+
+
+
+
+:root {
+    --dom-color-1: #8a2be2; /* Фиолетовый по умолчанию */
+    --dom-color-2: #ff007f; /* Малиновый по умолчанию */
+}
+
 .hero-poster-side.popular-hero-shimmer {
     position: relative !important;
     width: 220px !important; 
@@ -474,7 +482,6 @@
     background: #141414 !important;
 }
 
-/* Картинка встает поверх рамок */
 .hero-poster-side.popular-hero-shimmer img {
     width: 100% !important;
     height: 100% !important;
@@ -485,7 +492,7 @@
     z-index: 5;
 }
 
-/* СЛОЙ 1: Фирменный глубокий фиолетовый неон */
+/* СЛОЙ 1: Подстраивается под основной доминирующий цвет */
 .hero-poster-side.popular-hero-shimmer::before {
     content: '' !important;
     position: absolute !important;
@@ -494,44 +501,210 @@
     pointer-events: none !important;
     z-index: 3;
     
-    /* Изменено на насыщенный фиолетовый цвет сайта */
-    outline: 3.5px solid #8a2be2 !important; 
+    /* ИСПОЛЬЗУЕМ ДИНАМИЧЕСКИЙ ЦВЕТ 1 */
+    outline: 3.5px solid var(--dom-color-1) !important; 
     outline-offset: -2px !important;
+    box-shadow: 0 0 20px var(--dom-color-1), inset 0 0 10px var(--dom-color-1) !important;
     
-    /* Густая фиолетовая неоновая тень вокруг и внутри */
-    box-shadow: 0 0 18px rgba(138, 43, 226, 0.7), inset 0 0 10px rgba(138, 43, 226, 0.5) !important;
-    
-    /* Запускаем плавное затухание/проявление */
     animation: pulse-purple 4s ease-in-out infinite alternate !important;
 }
 
-/* СЛОЙ 2: Пурпурно-малиновый неон (для создания перелива) */
+/* СЛОЙ 2: Подстраивается под второй по значимости цвет из палитры */
 .hero-poster-side.popular-hero-shimmer::after {
     content: '' !important;
     position: absolute !important;
     top: 0; left: 0; right: 0; bottom: 0;
     border-radius: 10px !important;
     pointer-events: none !important;
-    z-index: 4; /* Лежит чуть выше фиолетового */
+    z-index: 4;
     
-    /* Изменено на яркий неоновый пурпур */
-    outline: 3.5px solid #ff007f !important; 
+    /* ИСПОЛЬЗУЕМ ДИНАМИЧЕСКИЙ ЦВЕТ 2 */
+    outline: 3.5px solid var(--dom-color-2) !important; 
     outline-offset: -2px !important;
+    box-shadow: 0 0 20px var(--dom-color-2), inset 0 0 10px var(--dom-color-2) !important;
     
-    /* Пурпурно-малиновая неоновая тень */
-    box-shadow: 0 0 18px rgba(255, 0, 127, 0.8), inset 0 0 10px rgba(255, 0, 127, 0.5) !important;
-    
-    /* Запускаем противоположное затухание/проявление */
     animation: pulse-magenta 4s ease-in-out infinite alternate !important;
 }
 
-/* АНИМАЦИИ: Фиолетовая рамка плавно исчезает, пока малиновая проявляется, и наоборот */
-@keyframes pulse-purple {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+@keyframes pulse-purple { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes pulse-magenta { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.main-popular-posts-section {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #141414;
 }
 
-@keyframes pulse-magenta {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+.main-popular-posts-section .section-title {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 24px;
 }
+
+/* Вертикальный стек для плашек */
+.posts-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Зазор между публикациями */
+    width: 100%;
+}
+
+/* Внешняя обертка плашки с фоновой картинкой под размытие */
+.post-row-wrapper {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.post-row-wrapper::before,
+.post-row-wrapper::after,
+.post-row-container::before,
+.post-row-container::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+}
+
+/* Дефолтный фон, если у поста нет медиа-файла */
+.post-row-wrapper.no-media-bg {
+    background: linear-gradient(135deg, #1f1f1f 0%, #171717 100%) !important;
+}
+
+.post-row-wrapper:hover {
+    transform: translateY(-2px);
+    border-color: rgba(138, 43, 226, 0.4) !important; /* Рамка плавно окрашивается в ваш фиолетовый */
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.12) !important; 
+}
+
+/* Внутренний контейнер с эффектом матового стекла (Netflix/Кинопоиск стиль) */
+.post-row-container {
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 20, 20, 0.4) !important; 
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center; /* Центрируем по вертикали */
+    
+    /* ИСПРАВЛЕНИЕ: Обнуляем padding СЛЕВА (0), чтобы убрать щели и полосы */
+    padding: 20px 30px 20px 0 !important; 
+    box-sizing: border-box !important;
+    gap: 30px;
+}
+/* --- ЛЕВАЯ КОЛОНКА (МИНИ-ПОСТЕР) --- */
+.post-row-poster {
+    width: 100px; 
+    height: 140px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    background-color: #262626;
+    
+    /* ИСПРАВЛЕНИЕ: Вместо padding контейнера, мы двигаем сам постер 
+       вправо на 20px с помощью margin. Это создаст идеальный ровный зазор, 
+       а пустая полоса у левого края физически исчезнет */
+    margin-left: 20px !important; 
+    position: relative;
+}
+.post-row-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Заглушка для постов без картинок */
+.post-poster-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    background: #292929;
+}
+
+/* --- ПРАВАЯ КОЛОНКА (ИНФОРМАЦИЯ) --- */
+.post-row-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.post-row-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.post-row-description {
+    color: #cccccc;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Жестко ограничиваем текст двумя строками */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Индикаторы статистики */
+.post-row-stats {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.post-stat-up, .post-stat-down {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.post-stat-up svg, .post-stat-down svg {
+    width: 15px;
+    height: 15px;
+    display: block;
+}
+
+/* Цветовое оформление стрелочек */
+.post-stat-up { color: #2ecc71; }
+.post-stat-down { color: #e74c3c; }

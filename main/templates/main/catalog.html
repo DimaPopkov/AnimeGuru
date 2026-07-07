@@ -79,6 +79,30 @@
                             {% endfor %}
                         </div>
                     </div>
+
+                    <div class="filter-group year-range-group">
+                        <label class="filter-label">Год выпуска:</label>
+                        <div class="year-values-display">
+                            <!-- Если переменные пустые, Django выведет 1997 и 2025 -->
+                            <span id="year-min-label">{{ current_year_min|default:1997 }}</span> — <span id="year-max-label">{{ current_year_max|default:2025 }}</span>
+                        </div>
+                        
+                        <!-- Прописываем жесткие дефолты на случай, если контекст потерялся во views.py -->
+                        <div class="range-slider-container" id="slider-range-wrapper" 
+                            data-db-min="{{ db_min_year|default:1997 }}" 
+                            data-db-max="{{ db_max_year|default:2025 }}">
+                            
+                            <div class="slider-track" id="slider-track"></div>
+                            
+                            <input type="range" name="year_min" id="year-min-input" 
+                                min="{{ db_min_year|default:1997 }}" max="{{ db_max_year|default:2025 }}" 
+                                value="{{ current_year_min|default:1997 }}" step="1">
+                                
+                            <input type="range" name="year_max" id="year-max-input" 
+                                min="{{ db_min_year|default:1997 }}" max="{{ db_max_year|default:2025 }}" 
+                                value="{{ current_year_max|default:2025 }}" step="1">
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -216,7 +240,7 @@
         </div>
     </div>
 
-    <script>    
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const filter = document.querySelector('.filter');
             const filterForm = document.getElementById('filter-form');
@@ -256,6 +280,70 @@
             //     renderSelectedChoices: 'always',
             //     position: 'bottom',
             // });
+
+            const wrapper = document.getElementById('slider-range-wrapper');
+            const minInput = document.getElementById('year-min-input');
+            const maxInput = document.getElementById('year-max-input');
+            const track = document.getElementById('slider-track');
+            
+            // Ищем текстовые спаны
+            const minLabel = document.getElementById('year-min-label');
+            const maxLabel = document.getElementById('year-max-label');
+
+            // Проверяем только самые важные элементы
+            if (wrapper && minInput && maxInput && track) {
+
+                const rawMin = wrapper.getAttribute('data-db-min');
+                const rawMax = wrapper.getAttribute('data-db-max');
+
+                const dbMin = isNaN(parseInt(rawMin)) ? 1997 : parseInt(rawMin);
+                const dbMax = isNaN(parseInt(rawMax)) ? 2025 : parseInt(rawMax);
+                const minGap = 1;
+
+                // Принудительно задаем границы инпутам
+                minInput.min = dbMin;
+                minInput.max = dbMax;
+                maxInput.min = dbMin;
+                maxInput.max = dbMax;
+
+                // Функция отрисовки фиолетовой линии диапазона
+                function fillTrack() {
+                    const minVal = parseInt(minInput.value);
+                    const maxVal = parseInt(maxInput.value);
+
+                    const percent1 = ((minVal - dbMin) / (dbMax - dbMin)) * 100;
+                    const percent2 = ((maxVal - dbMin) / (dbMax - dbMin)) * 100;
+
+                    track.style.background = `linear-gradient(to right, #292929 ${percent1}%, #8a2be2 ${percent1}%, #8a2be2 ${percent2}%, #292929 ${percent2}%)`;
+                }
+
+                function updateMinSlider() {
+                    if (parseInt(maxInput.value) - parseInt(minInput.value) <= minGap) {
+                        minInput.value = parseInt(maxInput.value) - minGap;
+                    }
+                    if (minLabel) minLabel.textContent = minInput.value;
+                    fillTrack();
+                }
+
+                function updateMaxSlider() {
+                    if (parseInt(maxInput.value) - parseInt(minInput.value) <= minGap) {
+                        maxInput.value = parseInt(minInput.value) + minGap;
+                    }
+                    if (maxLabel) maxLabel.textContent = maxInput.value;
+                    fillTrack();
+                }
+
+                // Навешиваем слушатели событий движения ползунков
+                minInput.addEventListener('input', updateMinSlider);
+                maxInput.addEventListener('input', updateMaxSlider);
+
+                // Инициализация при первой загрузке страницы
+                if (minLabel) minLabel.textContent = minInput.value;
+                if (maxLabel) maxLabel.textContent = maxInput.value;
+                
+                fillTrack();
+            }
+
 
             let skeletonTimer;
 
@@ -424,6 +512,8 @@
             activeTags.addEventListener('change', updateProducts);
             activeStatus.addEventListener('change', updateProducts);
             sort.addEventListener('change', updateProducts);
+            minInput.addEventListener('change', updateProducts);
+            maxInput.addEventListener('change', updateProducts);
 
             console.log('Event listeners attached.'); // <-- Логирование
         });

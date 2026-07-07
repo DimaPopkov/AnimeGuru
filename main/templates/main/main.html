@@ -148,8 +148,8 @@
     <div class="container_d">
         <div class="container_f" style="row-gap: 0;">
             <div>
-                <div class="new_products_title" style="cursor: default;">
-                    <h4 class="new_products_h4"> Новое: </h4>
+                <div class="new_products_title" style="cursor: default; padding-top: 0;">
+                    <h3 class="new_products_h4"> Новое: </h3>
                 </div>
                 <div class="new_products_list_container">
                     <div class="new_products_list">
@@ -202,12 +202,12 @@
 
             <div style="text-align: left;">
                 {% if most_popular_week and most_popular_week != most_popular_month %}
-                    <h2 class="new_products_title"> Популярно на этой неделе: </h2>
+                    <h3 class="new_products_title new_products_h4"> Популярно на этой неделе: </h3>
                     <div class="hero-popular-wrapper" style="background-image: url('{{ most_popular_week.image.url }}');">
                         <div class="hero-popular-container">
                             
                             <div class="hero-poster-side popular-hero-shimmer">
-                                <img src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
+                                <img id="hero-dynamic-img-week" src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
                             </div>
                             
                             <div class="hero-info-side">
@@ -242,13 +242,13 @@
                     </div>
 
                     {% if most_popular_month %}
-                        <h2 class="new_products_title"> Популярно в этом месяце: </h2>
+                        <h2 class="new_products_title new_products_h4"> Популярно в этом месяце: </h2>
                         <div class="hero-popular-wrapper" style="background-image: url('{{ most_popular_month.image.url }}');">
                             <!-- Внутренний контейнер с тёмным фильтром и контентом -->
                             <div class="hero-popular-container">
                                 
                                 <div class="hero-poster-side popular-hero-shimmer">
-                                    <img src="{{ most_popular_month.image.url }}" alt="{{ most_popular_month.name }}">
+                                    <img id="hero-dynamic-img-month" src="{{ most_popular_month.image.url }}" alt="{{ most_popular_month.name }}">
                                 </div>
                                 
                                 <div class="hero-info-side">
@@ -283,12 +283,12 @@
                         </div>
                     {% endif %}
                 {% else %}
-                    <h2 class="new_products_title"> Популярно на этой неделе и в этом месяце: </h2>
+                    <h2 class="new_products_title new_products_h4"> Популярно на этой неделе и в этом месяце: </h2>
                     <div class="hero-popular-wrapper" style="background-image: url('{{ most_popular_week.image.url }}');">
                         <div class="hero-popular-container">
                             
                             <div class="hero-poster-side popular-hero-shimmer">
-                                <img src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
+                                <img id="hero-dynamic-img" src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
                             </div>
                             
                             <div class="hero-info-side">
@@ -319,6 +319,51 @@
                                     Подробнее
                                 </a>
                             </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div style="text-align: left;">
+                <h2 class="new_products_title new_products_h4"> Популярные публикации </h2>
+                {% if popular_posts %}
+                    <div class="main-popular-posts-section">
+                        <div class="posts-list-vertical">
+                            {% for post in popular_posts %}
+                                <a style="text-decoration: none;" href="{% url 'post' post_id=post.id %}">
+                                    {% if post.media %}
+                                        <div class="post-row-wrapper" style="background-image: linear-gradient(to right, rgba(20, 20, 20, 0.98) 20%, rgba(20, 20, 20, 0.85) 60%, rgba(20, 20, 20, 0.4) 100%), url('{{ post.media.url }}');">
+                                    {% else %}
+                                        <div class="post-row-wrapper no-media-bg">
+                                    {% endif %}
+                                        <div class="post-row-container">
+                                            <div class="post-row-poster">
+                                                {% if post.media %}
+                                                    <img src="{{ post.media.url }}" alt="{{ post.title }}">
+                                                {% else %}
+                                                    <div class="post-poster-placeholder">📝</div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="post-row-info">
+                                                <h3 class="post-row-title">{{ post.title }}</h3>
+                                                <p class="post-row-description">{{ post.text|truncatewords:35 }}</p>
+                                                
+                                                <div class="post-row-stats">
+                                                    <div class="post-stat-up">
+                                                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+                                                        <span>{{ post.like_count }}</span>
+                                                    </div>
+                                                    <div class="post-stat-down">
+                                                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
+                                                        <span>{{ post.dislike_count }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
                         </div>
                     </div>
                 {% endif %}
@@ -373,6 +418,47 @@
                         }
                     }
                 });
+            }
+
+            if (document.getElementById('hero-dynamic-img')){
+                const img = document.getElementById('hero-dynamic-img');
+            } else if (document.getElementById('hero-dynamic-img-week') && document.getElementById('hero-dynamic-img-month')){
+                const img1 = document.getElementById('hero-dynamic-img-week');
+                const img2 = document.getElementById('hero-dynamic-img-month');
+            }
+
+            if (img || img1 || img2) {
+                // Инициализируем ColorThief
+                const colorThief = new ColorThief();
+
+                const updateDynamicBorder = () => {
+                    try {
+                        // Получаем палитру из главных цветов карточки
+                        const palette = colorThief.getPalette(img, 5);
+                        
+                        if (palette && palette.length >= 2) {
+                            // ИСПРАВЛЕНО: Четко вытаскиваем RGB-компоненты первого и второго цветов по их индексам
+                            const color1 = `rgb(${palette[0][0]}, ${palette[0][1]}, ${palette[0][2]})`;
+                            const color2 = `rgb(${palette[1][0]}, ${palette[1][1]}, ${palette[1][2]})`;
+                            
+                            // Записываем полученные динамические цвета в CSS-переменные
+                            document.documentElement.style.setProperty('--dom-color-1', color1);
+                            document.documentElement.style.setProperty('--dom-color-2', color2);
+                        }
+                    } catch (e) {
+                        console.log("Ожидаем полной загрузки картинки для анализа палитры...", e);
+                    }
+                };
+
+                // Если картинка уже была в кэше браузера и загрузилась мгновенно
+                if (img.complete) {
+                    updateDynamicBorder();
+                } else {
+                    // Если картинка еще скачивается с сервера Django
+                    img.addEventListener('load', function() {
+                        updateDynamicBorder();
+                    });
+                }
             }
         });
 
