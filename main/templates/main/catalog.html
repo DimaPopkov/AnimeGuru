@@ -180,6 +180,7 @@
                                 <input type="hidden" name="product_name" value="{{ element }}">
 
                                 <div class="prod_element" onclick="submitform(this)">
+                                    <div class="blur_bg" style="background-image: url('{{ element.image.url }}');"></div>
                                     <div class="prod_element_pic_lock">
                                         {% if element.image %}
                                             {% if element.image.url %}

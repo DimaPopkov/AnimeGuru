@@ -563,6 +563,8 @@ main{
     align-items: flex-start;
     align-items: center;
 
+    position: relative !important;
+    overflow: hidden !important; 
     /* text-align: left; */
 
     background: none;
@@ -571,6 +573,48 @@ main{
     height: 100%;
 
     cursor: pointer;
+}
+
+.prod_element .blur_bg {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px) brightness(0.35) !important;
+    transform: scale(1.2);
+    z-index: 1 !important;
+    opacity: 0 !important;
+    pointer-events: none;
+    /* transition: opacity 0.4s ease-in-out; */
+}
+
+.prod_element.line-mode .prod_element_info h5 {
+    font-size: 22px !important;
+    margin-bottom: 5px;
+}
+
+.prod_element.line-mode {
+    background-color: rgba(21, 21, 21, 0.75) !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+}
+
+.prod_element.line-mode .blur_bg {
+    opacity: 1 !important;
+}
+
+.prod_element.line-mode > *:not(.blur_bg) {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.prod_element.line-mode .prod_element_info,
+.prod_element.line-mode .prod_element_info * {
+    background: transparent !important;
+    background-color: transparent !important;
 }
 
 .prod_element_info{
