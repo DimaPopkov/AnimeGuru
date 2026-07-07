@@ -1680,12 +1680,75 @@ input[type="checkbox"]:checked::after {
     cursor: pointer;
 }
 
-.related_products_card{
+/* .related_products_card{
     display: flex;
     flex-direction: column;
 
     width: 100%;
+} */
+
+.related_products_card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+    /* Важные свойства для удержания блюра внутри */
+    position: relative !important;
+    overflow: hidden !important;
+
+    background-color: rgba(21, 21, 21, 0.75) !important; /* Темная полупрозрачная подложка */
+    /* border: 1px solid rgba(255, 255, 255, 0.08) !important; */
+    border-radius: 8px !important;
+    padding: 15px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+    
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+    cursor: pointer;
 }
+
+/* Стили для размытого фона внутри похожих карточек (он виден сразу, без переключения JS) */
+.related_products_card .blur_bg {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    
+    background-size: cover !important;
+    background-position: center !important;
+    
+    /* Умеренный блюр и яркость */
+    filter: blur(10px) brightness(0.3) !important; 
+    transform: scale(1.2); /* Скрываем белые края от размытия */
+    
+    z-index: 1 !important; /* Уводим на нижний слой внутри карточки */
+    pointer-events: none;
+}
+
+/* Приподнимание при наведении */
+.related_products_card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+}
+.related_products_card:hover .related_product_link{
+    color: var(--color-accent) !important;
+}
+
+/* Принудительно поднимаем весь контент НАД слоем блюра */
+.related_products_card > *:not(.blur_bg) {
+    position: relative !important;
+    z-index: 2 !important; /* Слой выше, чем z-index: 1 у фона */
+}
+
+.related_products_card > *:not(.blur_bg) {
+    position: relative !important;
+    z-index: 2 !important; /* Контент строго НАД блюром */
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
 
 .related_product_link{
     color: rgb(200, 200, 200);
@@ -1764,6 +1827,16 @@ input[type="checkbox"]:checked::after {
     display: flex;
 }
 
+.characters_container{
+    /* width: calc(100% + 20px*2 + 2px);
+    margin-left: -21px;
+
+    background: rgb(20, 20, 20);
+
+    padding-top: 10px;
+    padding-bottom: 40px; */
+}
+
 .main_characters_container{
     display: flex;
     flex-direction: column;
@@ -1774,21 +1847,95 @@ input[type="checkbox"]:checked::after {
     row-gap: 15px;
 }
 
-.main_characters{
+.main_characters {
     display: flex;
     flex-direction: row;
-    
     width: 100%;
     height: auto;
-
     justify-content: space-between;
+    align-items: center;
+    
+    /* Оставляем карточку строго прямоугольной и фиксированной */
+    position: relative !important;
+    overflow: hidden !important; 
+    
+    /* Чистый, монохромный темный фон для самой карточки */
+    background-color: rgb(30, 30, 30) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.02) !important; 
+    border-radius: 12px;
+    padding: 20px !important;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
 
-    border: 1px solid rgb(100, 100, 100);
-    border-radius: 10px;
+/* НОВЫЙ ЭФФЕКТ БЛЮРА: Цветное облако-свечение только слева */
+.main_characters .blur_bg {
+    position: absolute !important;
+    top: -20px !important;
+    left: -20px !important;
+    
+    /* Сужаем блок, чтобы он не шел под текст справа */
+    width: 350px !important; 
+    height: 120% !important;
+    
+    background-size: cover !important;
+    background-position: center !important;
+    
+    /* Ослабляем размытие, но делаем его ярче, чтобы получить эффект неонового дыма */
+    filter: blur(35px) brightness(0.6) saturate(1.4) !important; 
+    
+    z-index: 1 !important;
+    pointer-events: none;
+    
+    /* Плавное появление или усиление при наведении */
+    opacity: 0.7 !important; 
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
 
-    text-align: center;
+/* При наведении карточка подсвечивается ярче */
+.main_characters:hover .blur_bg {
+    opacity: 1 !important;
+    filter: blur(30px) brightness(0.7) saturate(1.6) !important;
+}
 
-    overflow: hidden;
+/* Поднимаем контент НАД облаком свечения */
+.main_characters > *:not(.blur_bg) {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Справа текст будет на чистом прозрачном фоне, под ним не будет цветной каши */
+.main_characters_block_right {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding-left: 20px;
+}
+
+/* Картинка персонажа с небольшой тенью, чтобы отделить её от светящегося фона */
+.main_characters_img_block img {
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.main_characters_block_right button, 
+.main_characters_block_right .wiki-btn { 
+    background: rgba(161, 118, 255, 0.15) !important; /* Наш фиолетовый, но полупрозрачный */
+    color: #bfa3ff !important;                        /* Неоновый светло-фиолетовый текст */
+    border: 1px solid rgba(161, 118, 255, 0.4) !important; /* Аккуратная фиолетовая рамка */
+    border-radius: 6px;
+    padding: 8px 25px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out !important; /* Плавность для ховера */
+}
+
+/* Эффект при наведении на кнопку */
+.main_characters_block_right button:hover,
+.main_characters_block_right .wiki-btn:hover {
+    background: rgba(161, 118, 255, 0.35) !important; /* Фон становится насыщеннее */
+    border-color: rgba(161, 118, 255, 0.8) !important;  /* Рамка загорается ярче */
+    color: #ffffff !important;                         /* Текст становится чисто белым */
+    box-shadow: 0 0 12px rgba(161, 118, 255, 0.3);     /* Добавляем легкое неоновое свечение */
 }
 
 .main_characters_img_block{
@@ -1799,9 +1946,12 @@ input[type="checkbox"]:checked::after {
     
     display: flex; 
     justify-content: center;
+
+
 }
 
 .main_characters_img_block_fade{
+    opacity: 0;
     width: 100px;
     height: 200px;
 

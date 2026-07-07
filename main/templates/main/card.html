@@ -209,6 +209,16 @@
             <div class="card_container_body_related_products">               
                 {% for element in related_products %}
                     <div class="related_products_card" data-product-id="{{ element.id }}">
+                        <a href="{% url 'card' element.name %}" style="position: absolute !important;
+                            width: 100%;
+                            height: 100%;
+                            top: 0;
+                            left: 0; z-index: 100 !important;"></a>
+                        {% if element.image and element.image.url %}
+                            <div class="blur_bg" style="background: url('{{ element.image.url }}');"></div>
+                        {% else %}
+                            <div class="blur_bg" style="background: url('{{ element.image }}');"></div>
+                        {% endif %}
                         <h6> 
                             <a class="related_product_link" href="{% url 'card' element.name %}" data-product-name="{{ element.name }}" id="product_name">{{ element.name }}</a>
                         </h6>
@@ -226,7 +236,7 @@
 
 
         {% if characters or main_characters %}
-            <div>
+            <div class="characters_container">
                 {% if main_characters %}
                     <br>    
                         <h3> Главные герои </h3>
@@ -236,6 +246,9 @@
                     <div class="main_characters_container">
                         {% for bro in main_characters %}
                             <div class="main_characters">
+                                {% if bro.image %}
+                                    <div class="blur_bg" style="background-image: url({{ bro.image }}) !important;"></div>
+                                {% endif %}
                                 {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
                                     {% if bro.image %}
                                         <div class="main_characters_img_block">
