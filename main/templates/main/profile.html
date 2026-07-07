@@ -144,12 +144,20 @@
                                         <div class="prod_element_rating">
                                             <div class="prod_element_rating_block" style="
                                                 background:
-                                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
-                                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
-                                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
-                                                    color: #ffffff;
-                                                    box-shadow: {% if element.rating >= 8.0 %} 0 0 12px rgba(112, 66, 244, 0.45), 0 4px 10px rgba(0,0,0,0.5) {% else %} 0 4px 10px rgba(0,0,0,0.5) {% endif %};
-                                                "> {{ element.rating }} </div>
+                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                color: #ffffff;
+                                                "> 
+                                                <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                                    <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                            fill="white" 
+                                                            stroke="white" 
+                                                            stroke-width="6" 
+                                                            stroke-linejoin="round" />
+                                                </svg>
+                                                {{ element.rating }} 
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="prod_element_info">

@@ -39,6 +39,20 @@ def base(request):
 
     new_products = sorted(Product.objects.all(), key=lambda x: x.season, reverse=True)[:10]
 
+    # best_for_category = {}
+    # for element in Tags.objects.all():
+    #     best_for_category[element.name] = Product.objects.filter(tags=element).order_by('-rating')[:7]
+
+    best_for_category = {}
+    for element in Tags.objects.all():
+        real_products = list(Product.objects.filter(tags=element).order_by('-rating')[:7])
+        
+        missing_count = 7 - len(real_products)
+        
+        padded_products = real_products + [None] * missing_count
+        
+        best_for_category[element.name] = padded_products
+
     data = {
         'title' : 'Главная страница',
         'categories' : Category.objects.all().order_by('-name'),
@@ -48,6 +62,7 @@ def base(request):
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
         'new_products': new_products,
+        'best_for_category': best_for_category,
     }
         
     return render(request, 'main/main.html', data)

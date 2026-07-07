@@ -105,7 +105,7 @@
     .prod_element_pic_lock{
         align-items: center;
     }
-    .new_products_list_product:nth-child(n+6){
+    .new_products_list_product:nth-child(n+7){
         display: none;
     }
 }
@@ -246,7 +246,7 @@
     .posts_filter{
         margin: 0 20px;
     }
-    .new_products_list_product:nth-child(n+5){
+    .new_products_list_product:nth-child(n+6){
         display: none;
     }
 }

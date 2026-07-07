@@ -6,14 +6,113 @@
 
 {% load static %}
 {% block content %}
-    <div class="items_for_category_container">
+    <div class="slider-container-wrapper">
+        <div class="main-catalog-swiper swiper">
+            <div class="swiper-wrapper">
+                {% for tag_name, category_products in best_for_category.items %}
+                    <div class="swiper-slide category-main-slide">
+                        <div class="category-images-grid">
+                            <div class="card-double-stack">
+                                <!-- Верхняя маленькая -->
+                                {% if category_products.2 %}
+                                    <form action="{% url 'card' product_name=category_products.2.name %}" method="GET" class="small-card fade-in">
+                                        <input type="hidden" name="product_name" value="{{ element }}">
+                                        <div class="small-card" onclick="submitform(this)">
+                                            <img src="{{ category_products.2.image.url }}" alt="">
+                                            <div class="card-info small"><p class="card-title">{{ category_products.2.name }}</p></div>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="small-card skeleton"></div>
+                                {% endif %}
 
+                                <!-- Нижняя маленькая -->
+                                {% if category_products.3 %}
+                                    <form action="{% url 'card' product_name=category_products.3.name %}" method="GET" class="small-card fade-in">
+                                        <input type="hidden" name="product_name" value="{{ element }}">
+                                        <div class="small-card" onclick="submitform(this)">
+                                            <img src="{{ category_products.3.image.url }}" alt="">
+                                            <div class="card-info small"><p class="card-title">{{ category_products.3.name }}</p></div>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="small-card skeleton"></div>
+                                {% endif %}
+                            </div>
+
+                            {% if category_products.0 %}
+                                <form action="{% url 'card' product_name=category_products.0.name %}" method="GET" class="card-large fade-in">
+                                    <input type="hidden" name="product_name" value="{{ element }}">
+                                    <div class="card-large" onclick="submitform(this)">
+                                        <img src="{{ category_products.0.image.url }}" alt="">
+                                        <div class="card-info small"><p class="card-title">{{ category_products.0.name }}</p></div>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <div class="card-large skeleton"></div>
+                            {% endif %}
+
+                            {% if category_products.1 %}
+                                <form action="{% url 'card' product_name=category_products.1.name %}" method="GET" class="card-large fade-in">
+                                    <input type="hidden" name="product_name" value="{{ element }}">
+                                    <div class="card-large" onclick="submitform(this)">
+                                        <img src="{{ category_products.1.image.url }}" alt="">
+                                        <div class="card-info small"><p class="card-title">{{ category_products.1.name }}</p></div>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <div class="card-large skeleton"></div>
+                            {% endif %}
+
+                            <div class="card-double-stack">
+                                <!-- Верхняя маленькая -->
+                                {% if category_products.4 %}
+                                    <form action="{% url 'card' product_name=category_products.4.name %}" method="GET" class="small-card fade-in">
+                                        <input type="hidden" name="product_name" value="{{ element }}">
+                                        <div class="small-card" onclick="submitform(this)">
+                                            <img src="{{ category_products.4.image.url }}" alt="">
+                                            <div class="card-info small"><p class="card-title">{{ category_products.4.name }}</p></div>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="small-card skeleton"></div>
+                                {% endif %}
+
+                                <!-- Нижняя маленькая -->
+                                {% if category_products.5 %}
+                                    <form action="{% url 'card' product_name=category_products.5.name %}" method="GET" class="small-card fade-in">
+                                        <input type="hidden" name="product_name" value="{{ element }}">
+                                        <div class="small-card" onclick="submitform(this)">
+                                            <img src="{{ category_products.5.image.url }}" alt="">
+                                            <div class="card-info small"><p class="card-title">{{ category_products.5.name }}</p></div>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="small-card skeleton"></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <h2 class="category-title">{{ tag_name }}</h2>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="swiper-buttons">
+                <div class="swiper-button-prev">
+                    <img src="{% static '/img/arrow.png' %}" style="rotate: 90deg;">
+                </div>
+                <div class="swiper-button-next">
+                    <img src="{% static '/img/arrow.png' %}" style="rotate: -90deg;">
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="container_d">
         <div class="container_f" style="row-gap: 0;">
             <div>
-                <div class="new_products_title">
+                <div class="new_products_title" style="cursor: default;">
                     <h4 class="new_products_h4"> Новое: </h4>
                 </div>
                 <div class="new_products_list_container">
@@ -36,11 +135,11 @@
                                         <div class="prod_element_rating">
                                             <div class="prod_element_rating_block" style="
                                                 background:
-                                                        {% if element.rating >= 8.0 %} rgba(116, 73, 210, 1)
-                                                        {% elif element.rating >= 6.0 %} rgba(78, 93, 108, 1)
-                                                        {% else %} linear-gradient(135deg, rgb(58, 58, 68), rgb(38, 38, 43)) {% endif %};
+                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
                                                 color: #ffffff;
-                                                "> 
+                                                ">
                                                 <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
                                                     <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
                                                             fill="white" 
@@ -68,6 +167,55 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainSwiperContainer = document.querySelector('.main-catalog-swiper');
+
+            if (mainSwiperContainer) {
+                new Swiper(mainSwiperContainer, {
+                    // Ровно 3 целых жанровых блока отображаются на экране
+                    slidesPerView: 'auto',
+                    spaceBetween: 0, /* Отступы между жанрами мы уже заложили через padding-left в CSS */
+                    
+                    centeredSlides: true,       /* Активный жанр всегда по центру экрана */
+                    slideToClickedSlide: true,  /* Клик по боковому жанру плавно центрирует его */
+                    
+                    observer: true,            /* Следит за изменениями DOM и пересчитывает размеры */
+                    observeParents: true,       /* Следит за родительскими контейнерами */
+                    watchSlidesProgress: true,  /* Помогает Swiper точнее определять видимость */
+                    loopAdditionalSlides: 3,    /* Увеличиваем количество дубликатов для стабильности loop */
+
+                    preloadImages: true,       /* Принудительно загружает все картинки в DOM сразу */
+                    updateOnImagesReady: true,  /* Пересчитывает слайдер, как только картинки скачались */
+
+                    // Настройки бесконечного скролла
+                    loop: true,   
+                    watchSlidesProgress: true,
+                    loopAdditionalSlides: 5, 
+
+                    touchMoveStopPropagation: true, 
+                    resistanceRatio: 0,             
+                    
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    
+                    mousewheel: {
+                        forceToAxis: true,
+                    },
+
+                    on: {
+                        init: function () {
+                        setTimeout(() => {
+                            this.update(); // Обновляет внутреннюю математику Swiper
+                            this.slideToLoop(this.realIndex, 0, false); // Жестко фиксирует фокус на активном слайде
+                        }, 100); // 100мс задержки достаточно, чтобы браузер успел применить CSS
+                        }
+                    }
+                });
+            }
+        });
+
         function submitform(element)
         {
             console.log(element)

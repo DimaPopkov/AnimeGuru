@@ -1048,7 +1048,7 @@ main{
     /* border: 1px solid #2d2d34 !important; */
     border-radius: 10px; 
     background: rgba(25, 25, 25, 1);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25  ); 
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); 
     z-index: 1000 !important;
     padding: 8px;
     margin-top: -1px; 

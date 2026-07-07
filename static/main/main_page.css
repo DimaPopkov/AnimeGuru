@@ -1,0 +1,324 @@
+.items_for_category_container{
+    display: flex;
+
+    width: 100%;
+    height: 250px;
+    
+    overflow: hidden;
+}
+
+.swiper-buttons{
+    display: flex;
+    justify-content: space-between;
+
+    position: absolute;
+
+    top: 105px;
+    left: 35%;
+    right: 35%;
+
+    cursor: pointer;
+    user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+}
+
+.main-catalog-swiper .swiper-button-next img, .main-catalog-swiper .swiper-button-prev img {
+    margin: 20px 10px;
+    height: 15px;
+}
+
+.slider-container-wrapper {
+    position: relative;
+    width: 100%;
+    background-color: #141414;
+    overflow: hidden;
+    padding-top: 10px;
+}
+
+/* Главный контейнер Swiper */
+.main-catalog-swiper .swiper {
+    width: 100%;
+    overflow: visible;
+    column-gap: 30px;
+}
+
+.main-catalog-swiper .swiper-slide {
+    width: auto !important; 
+    flex-shrink: 0 !important; 
+    
+    /* Эффект приглушения: уменьшаем прозрачность и делаем картинку темнее */
+    opacity: 0.35 !important;
+    filter: brightness(0.6); 
+    
+    /* Плавный переход при смене активного слайда */
+    transform: none !important; /* Убираем transform отсюда */
+    transition: none !important; /* Категорически запрещаем transition здесь! */
+}
+
+/* Каждый слайд — это целая категория. Задаем ей автоматическую ширину */
+.main-catalog-swiper .swiper-slide .category-main-slide {
+    width: calc((100vw / 3) - 35px) !important; 
+    flex-shrink: 0 !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    
+    /* Добавляем красивый зазор МЕЖДУ жанрами справа */
+    margin-right: 35px !important; 
+    
+    /* УДАЛИТЕ padding-left, если он остался от прошлых попыток, чтобы не смещать заголовки */
+    padding-left: 0 !important;
+}
+
+.main-catalog-swiper .swiper-slide .category-title{
+    opacity: 0 !important;
+    transition: 0.3s;
+}
+
+.main-catalog-swiper .swiper-slide.swiper-slide-active, .swiper-slide.swiper-slide-active .category-title{
+    opacity: 1 !important;
+    filter: brightness(1); /* Возвращаем оригинальные цвета */
+    transform: scale(1);    /* Карточка становится чуть крупнее остальных */
+    
+    text-align: left;
+}
+
+/* Название жанра */
+.main-catalog-swiper .category-title, .category-title.base{
+    color: rgb(200, 200, 200);
+    font-size: 16px;
+    margin-bottom: 5px;
+    
+    text-align: center;
+
+    margin: 8px;
+    margin-top: -247px;
+
+    padding: 5px 10px;
+
+    border-radius: 10px;
+
+    background: rgba(0,0,0,0.8);
+
+    width: auto;
+
+    position: absolute;
+}
+
+.category-title.base{
+    margin-left: 20px;
+    top: 60px;
+    position: absolute;
+    z-index: 20
+}
+
+/* Внутренний контейнер для картинок одной категории (выстраивает их в один ряд) */
+.main-catalog-swiper .category-images-grid {
+    display: flex;
+    gap: 5px;
+    height: 250px;
+    margin: 0 5px;
+}
+
+/* Стили больших карточек */
+.main-catalog-swiper .card-large {
+    width: 170px;
+    height: 250px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1f1f1f;
+}
+
+/* Вертикальный стек из двух маленьких карточек */
+.main-catalog-swiper .card-double-stack {
+    width: 85px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Маленькие карточки */
+.main-catalog-swiper .small-card {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #1f1f1f;
+}
+
+/* Картинки */
+.main-catalog-swiper .card-large img, 
+.main-catalog-swiper .small-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Текстовые плашки поверх картинок */
+.main-catalog-swiper .card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+    padding: 10px;
+
+    cursor: default;
+    z-index: 10;
+}
+.main-catalog-swiper .card-title {
+    color: white;
+    margin: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main-catalog-swiper .slider-container-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, #141414 20%, rgba(20, 20, 20, 0));
+}
+
+.main-catalog-swiper .slider-container-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, #141414 20%, rgba(20, 20, 20, 0));
+}
+
+/* Стрелки */
+.main-catalog-swiper .swiper-button-next,
+.main-catalog-swiper .swiper-button-prev {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    width: 35px;
+    height: 55px;
+    border-radius: 6px;
+    color: #ffffff !important;
+    z-index: 12;
+}
+
+/* Базовый стиль скелетона */
+.main-catalog-swiper .skeleton {
+    background: #1f1f1f;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+
+    opacity: 1 !important;
+    filter: brightness(1) !important;
+    
+    /* Запускаем мягкую пульсацию фона */
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+}
+
+/* Эффект бегущего блика */
+.main-catalog-swiper .skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 20%,
+        rgba(255, 255, 255, 0.07) 60%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+/* Анимация движения блика */
+@keyframes skeleton-pulse {
+    0% {
+        background-color: #1e1e1e;
+    }
+    50% {
+        background-color: #333333; /* Блок становится чуть светлее в пике */
+    }
+    100% {
+        background-color: #1e1e1e;
+    }
+}
+
+.main-catalog-swiper .swiper-slide,
+.main-catalog-swiper .card-large,
+.main-catalog-swiper .card-double-stack,
+.main-catalog-swiper .small-card {
+    pointer-events: auto !important; /* Включает клики, если они были заблокированы */
+}
+
+.main-catalog-swiper .swiper-slide::before,
+.main-catalog-swiper .swiper-slide::after,
+.main-catalog-swiper .card-large::before,
+.main-catalog-swiper .card-large::after,
+.main-catalog-swiper .small-card::before,
+.main-catalog-swiper .small-card::after {
+    display: none !important; /* Полностью скрывает псевдоэлементы с лупой */
+}
+
+.main-catalog-swiper .swiper-slide img {
+    /* 1. Возвращаем правильные размеры картинок (object-fit снова активен) */
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    
+    /* 2. Сбрасываем флексы, которые ломают позиционирование изображений */
+    display: block !important; 
+    position: static !important; /* Убираем relative, если он не нужен для внутренних плашек */
+    z-index: auto !important;
+    
+    /* 3. Разрешаем события мыши на картинках, чтобы работали клики */
+    pointer-events: auto !important; 
+    
+    /* 4. При необходимости отключаем старую анимацию transition */
+    transition: none !important;
+}
+
+.main-catalog-swiper .card-large img,
+.main-catalog-swiper .small-card img {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease !important;
+}
+
+/* 2. Эффект ПРИ НАВЕДЕНИИ НА КОНКРЕТНУЮ большую карточку */
+.main-catalog-swiper .card-large:hover img {
+    transform: scale(1.05) !important; /* Картинка плавно увеличивается на 5% */
+    filter: brightness(0.65) contrast(1.1) !important; /* Слегка притемняем и добавляем контраст */
+}
+
+/* 3. Эффект ПРИ НАВЕДЕНИИ НА КОНКРЕТНУЮ маленькую карточку */
+.main-catalog-swiper .small-card:hover img {
+    transform: scale(1.05) !important;
+    filter: brightness(0.65) contrast(1.1) !important;
+}
+
+/* 4. Возвращаем лупу, но ТОЛЬКО при наведении на конкретную карточку (если она вам нужна) */
+/* Если лупа НЕ НУЖНА, просто удалите или закомментируйте два блока ниже */
+.main-catalog-swiper .card-large:hover::after,
+.main-catalog-swiper .small-card:hover::after {
+    content: '🔍' !important; /* Сюда можно вставить иконку или символ */
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+    font-size: 24px !important;
+    opacity: 1 !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+    transition: all 0.3s ease !important;
+}
+
+/* 5. ОТКЛЮЧАЕМ глобальный ховер всего слайда, который ломал логику (строки 16 и 24 на вашем скриншоте) */
+.main-catalog-swiper .swiper-slide:hover img {
+    transform: none;
+    filter: none;
+}
+.main-catalog-swiper .swiper-slide:hover::after {
+    display: none !important;
+}
