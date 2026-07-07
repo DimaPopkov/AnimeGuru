@@ -4,14 +4,16 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models
-from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q
 from django.core.files.base import ContentFile
 from django.core.cache import cache
 from PIL import Image, ImageSequence
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats
+from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats, ProductView
 from .forms import ProductForm
 
 
@@ -23,6 +25,22 @@ def copyright(request):
     }
         
     return render(request, 'main/copyright.html', data)
+
+def most_popular(time):
+    time_threshold = timezone.now() - timedelta(days=time)
+
+    top_view = ProductView.objects.filter(
+        viewed_at__gte=time_threshold
+    ).values('product_id').annotate(
+        clicks=Count('id')
+    ).order_by('-clicks').first()
+
+    if top_view:
+        top_view = Product.objects.filter(id=top_view['product_id']).first()
+    else:
+        top_view = Product.objects.order_by('-rating').first()
+
+    return top_view
 
 def base(request):
     try:
@@ -39,10 +57,6 @@ def base(request):
 
     new_products = sorted(Product.objects.all(), key=lambda x: x.season, reverse=True)[:10]
 
-    # best_for_category = {}
-    # for element in Tags.objects.all():
-    #     best_for_category[element.name] = Product.objects.filter(tags=element).order_by('-rating')[:7]
-
     best_for_category = {}
     for element in Tags.objects.all():
         real_products = list(Product.objects.filter(tags=element).order_by('-rating')[:7])
@@ -52,6 +66,13 @@ def base(request):
         padded_products = real_products + [None] * missing_count
         
         best_for_category[element.name] = padded_products
+
+
+    most_popular_title_week = most_popular(7)
+    most_popular_title_month = most_popular(30)
+
+    # Печатаем результат в терминал для проверки
+    print("НЕДЕЛЯ:", most_popular_title_week, "МЕСЯЦ:", most_popular_title_month)
 
     data = {
         'title' : 'Главная страница',
@@ -63,6 +84,8 @@ def base(request):
         'sort': Sort.objects.all().order_by('name'),
         'new_products': new_products,
         'best_for_category': best_for_category,
+        'most_popular_week': most_popular_title_week,
+        'most_popular_month': most_popular_title_month,
     }
         
     return render(request, 'main/main.html', data)
@@ -85,6 +108,9 @@ def main(request):
     
     new_products = sorted(allProducts, key=lambda x: x.season, reverse=True)[:7]
 
+    most_popular_title_week = most_popular(7)
+    most_popular_title_month = most_popular(30)
+
     data = {
         'title' : 'Каталог',
         'categories' : Category.objects.all().order_by('-name'),
@@ -94,6 +120,8 @@ def main(request):
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
         'new_products': new_products,
+        'most_popular_week': most_popular_title_week,
+        'most_popular_month': most_popular_title_month,
     }
         
     return render(request, 'main/catalog.html', data)
@@ -294,6 +322,10 @@ def calculate_char_similarity(name1, name2):
 
 def card(request, product_name):
     products = get_object_or_404(Product, name=product_name)
+
+    user = request.user if request.user.is_authenticated else None
+    
+    ProductView.objects.create(product=products, user=user)
 
     # Использована переменная comments с аннотацией net_likes для корректной работы логики популярного комментария
     comments = Comments.objects.filter(name=product_name).annotate(

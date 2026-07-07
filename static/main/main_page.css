@@ -72,7 +72,7 @@
 
 .main-catalog-swiper .swiper-slide .category-title{
     opacity: 0 !important;
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
 .main-catalog-swiper .swiper-slide.swiper-slide-active, .swiper-slide.swiper-slide-active .category-title{
@@ -321,4 +321,217 @@
 }
 .main-catalog-swiper .swiper-slide:hover::after {
     display: none !important;
+}
+
+
+
+
+.hero-popular-wrapper {
+    width: 100%;
+    height: auto;
+    min-height: 400px;
+    
+    margin: 20px;
+
+    background-size: cover;
+    background-position: center 20%;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Главный контейнер, который группирует левую и правую колонку */
+.hero-popular-container {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    /* Затемняем фон и размываем его, чтобы контент идеально читался */
+    background: linear-gradient(to right, rgba(20, 20, 20, 0.95) 30%, rgba(20, 20, 20, 0.75) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    display: flex;
+    align-items: center; /* Центрируем постер и текст по вертикали */
+    gap: 40px; /* Отступ между постером и текстом */
+    
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* --- ЛЕВАЯ КОЛОНКА (ПОСТЕР) --- */
+.hero-poster-side {
+    width: 220px; /* Фиксированная ширина прямоугольного баннера */
+    height: 320px; /* Высота для идеальных пропорций аниме-постера */
+    flex-shrink: 0;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Объемная тень под постером */
+}
+
+.hero-poster-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Красная метка на самом постере */
+.hero-badge {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-color: rgba(255, 56, 56, 0.8);
+    color: white;
+    /* padding: 4px 8px; */
+    padding: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 3;
+}
+
+/* --- ПРАВАЯ КОЛОНКА (ИНФОРМАЦИЯ СВЕРХУ-ВНИЗ) --- */
+.hero-info-side {
+    display: flex;
+    flex-direction: column; /* Выстраивает элементы строго сверху-вниз */
+    align-items: flex-start;
+    max-width: 750px; /* Ограничиваем длину строк текста для удобства чтения */
+}
+
+.hero-title {
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+}
+
+/* Мета-данные: Рейтинг и Тип тайтла */
+.hero-meta {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.hero-rating {
+    color: #ffcc00;
+    font-size: 16px;
+    font-weight: bold;
+    background: rgb();
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.hero-type {
+    color: #b3b3b3;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Описание */
+.hero-description {
+    color: #cccccc;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+}
+
+/* Кнопка «Подробнее» */
+.hero-btn {
+    background-color: #ffffff;
+    color: #141414;
+    padding: 10px 30px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.hero-btn:hover {
+    background-color: #e6e6e6;
+    transform: scale(1.02);
+}
+
+
+
+
+
+.hero-poster-side.popular-hero-shimmer {
+    position: relative !important;
+    width: 220px !important; 
+    height: 320px !important; 
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    z-index: 1;
+    background: #141414 !important;
+}
+
+/* Картинка встает поверх рамок */
+.hero-poster-side.popular-hero-shimmer img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 10px !important;
+    position: relative;
+    z-index: 5;
+}
+
+/* СЛОЙ 1: Фирменный глубокий фиолетовый неон */
+.hero-poster-side.popular-hero-shimmer::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 10px !important;
+    pointer-events: none !important;
+    z-index: 3;
+    
+    /* Изменено на насыщенный фиолетовый цвет сайта */
+    outline: 3.5px solid #8a2be2 !important; 
+    outline-offset: -2px !important;
+    
+    /* Густая фиолетовая неоновая тень вокруг и внутри */
+    box-shadow: 0 0 18px rgba(138, 43, 226, 0.7), inset 0 0 10px rgba(138, 43, 226, 0.5) !important;
+    
+    /* Запускаем плавное затухание/проявление */
+    animation: pulse-purple 4s ease-in-out infinite alternate !important;
+}
+
+/* СЛОЙ 2: Пурпурно-малиновый неон (для создания перелива) */
+.hero-poster-side.popular-hero-shimmer::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 10px !important;
+    pointer-events: none !important;
+    z-index: 4; /* Лежит чуть выше фиолетового */
+    
+    /* Изменено на яркий неоновый пурпур */
+    outline: 3.5px solid #ff007f !important; 
+    outline-offset: -2px !important;
+    
+    /* Пурпурно-малиновая неоновая тень */
+    box-shadow: 0 0 18px rgba(255, 0, 127, 0.8), inset 0 0 10px rgba(255, 0, 127, 0.5) !important;
+    
+    /* Запускаем противоположное затухание/проявление */
+    animation: pulse-magenta 4s ease-in-out infinite alternate !important;
+}
+
+/* АНИМАЦИИ: Фиолетовая рамка плавно исчезает, пока малиновая проявляется, и наоборот */
+@keyframes pulse-purple {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes pulse-magenta {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }

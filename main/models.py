@@ -96,6 +96,21 @@ class Product(models.Model):
 
     def __str__(self):
         return str(self.name) if self.name else ""
+    
+class ProductView(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views_history')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='product_views')
+    viewed_at = models.DateTimeField(auto_now_add=True) # Время просмотра
+
+    class Meta:
+        verbose_name = "Просмотр тайтла"
+        verbose_name = "Просмотры тайтлов"
+        indexes = [
+            models.Index(fields=['viewed_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.product.name} - {self.viewed_at.strftime('%Y-%m-%d %H:%M')}"
 
 class Voice_maker(models.Model):
     first_name = models.TextField('Имя')

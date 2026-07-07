@@ -17,8 +17,14 @@
                                 {% if category_products.2 %}
                                     <form action="{% url 'card' product_name=category_products.2.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        <div class="small-card" onclick="submitform(this)">
-                                            <img src="{{ category_products.2.image.url }}" alt="">
+                                        {% if category_products.2 == most_popular_week %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.2.image.url }}" alt="">
+                                                <span class="hero-badge">Популярное</span>
+                                        {% else %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.2.image.url }}" alt="">
+                                        {% endif %}
                                             <div class="card-info small"><p class="card-title">{{ category_products.2.name }}</p></div>
                                         </div>
                                     </form>
@@ -30,8 +36,14 @@
                                 {% if category_products.3 %}
                                     <form action="{% url 'card' product_name=category_products.3.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        <div class="small-card" onclick="submitform(this)">
-                                            <img src="{{ category_products.3.image.url }}" alt="">
+                                        {% if category_products.3 == most_popular_week %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.3.image.url }}" alt="">
+                                                <span class="hero-badge">Популярное</span>
+                                        {% else %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.3.image.url }}" alt="">
+                                        {% endif %}
                                             <div class="card-info small"><p class="card-title">{{ category_products.3.name }}</p></div>
                                         </div>
                                     </form>
@@ -43,8 +55,14 @@
                             {% if category_products.0 %}
                                 <form action="{% url 'card' product_name=category_products.0.name %}" method="GET" class="card-large fade-in">
                                     <input type="hidden" name="product_name" value="{{ element }}">
-                                    <div class="card-large" onclick="submitform(this)">
-                                        <img src="{{ category_products.0.image.url }}" alt="">
+                                    {% if category_products.0 == most_popular_week %}
+                                        <div class="card-large" onclick="submitform(this)">
+                                            <img src="{{ category_products.0.image.url }}" alt="">
+                                            <span class="hero-badge">Популярное</span>
+                                    {% else %}
+                                        <div class="card-large" onclick="submitform(this)">
+                                            <img src="{{ category_products.0.image.url }}" alt="">
+                                    {% endif %}
                                         <div class="card-info small"><p class="card-title">{{ category_products.0.name }}</p></div>
                                     </div>
                                 </form>
@@ -55,8 +73,14 @@
                             {% if category_products.1 %}
                                 <form action="{% url 'card' product_name=category_products.1.name %}" method="GET" class="card-large fade-in">
                                     <input type="hidden" name="product_name" value="{{ element }}">
-                                    <div class="card-large" onclick="submitform(this)">
-                                        <img src="{{ category_products.1.image.url }}" alt="">
+                                    {% if category_products.1 == most_popular_week %}
+                                        <div class="card-large" onclick="submitform(this)">
+                                            <img src="{{ category_products.1.image.url }}" alt="">
+                                            <span class="hero-badge">Популярное</span>
+                                    {% else %}
+                                        <div class="card-large" onclick="submitform(this)">
+                                            <img src="{{ category_products.1.image.url }}" alt="">
+                                    {% endif %}
                                         <div class="card-info small"><p class="card-title">{{ category_products.1.name }}</p></div>
                                     </div>
                                 </form>
@@ -69,8 +93,14 @@
                                 {% if category_products.4 %}
                                     <form action="{% url 'card' product_name=category_products.4.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        <div class="small-card" onclick="submitform(this)">
-                                            <img src="{{ category_products.4.image.url }}" alt="">
+                                        {% if category_products.4 == most_popular_week %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.4.image.url }}" alt="">
+                                                <span class="hero-badge">Популярное</span>
+                                        {% else %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.4.image.url }}" alt="">
+                                        {% endif %}
                                             <div class="card-info small"><p class="card-title">{{ category_products.4.name }}</p></div>
                                         </div>
                                     </form>
@@ -82,8 +112,14 @@
                                 {% if category_products.5 %}
                                     <form action="{% url 'card' product_name=category_products.5.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        <div class="small-card" onclick="submitform(this)">
-                                            <img src="{{ category_products.5.image.url }}" alt="">
+                                        {% if category_products.5 == most_popular_week %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.5.image.url }}" alt="">
+                                                <span class="hero-badge">Популярное</span>
+                                        {% else %}
+                                            <div class="small-card" onclick="submitform(this)">
+                                                <img src="{{ category_products.3.image.url }}" alt="">
+                                        {% endif %}
                                             <div class="card-info small"><p class="card-title">{{ category_products.5.name }}</p></div>
                                         </div>
                                     </form>
@@ -162,6 +198,130 @@
                         {% endfor %}
                     </div>
                 </div>
+            </div>
+
+            <div style="text-align: left;">
+                {% if most_popular_week and most_popular_week != most_popular_month %}
+                    <h2 class="new_products_title"> Популярно на этой неделе: </h2>
+                    <div class="hero-popular-wrapper" style="background-image: url('{{ most_popular_week.image.url }}');">
+                        <div class="hero-popular-container">
+                            
+                            <div class="hero-poster-side popular-hero-shimmer">
+                                <img src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
+                            </div>
+                            
+                            <div class="hero-info-side">
+                                <h1 class="hero-title">{{ most_popular_week.name }}</h1>
+                                
+                                <div class="prod_element_rating_block" style="
+                                    background:
+                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                    color: #ffffff;
+                                    ">
+                                    <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                        <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                fill="white" 
+                                                stroke="white" 
+                                                stroke-width="6" 
+                                                stroke-linejoin="round" />
+                                    </svg>
+                                    {{ most_popular_week.rating }}
+                                </div>
+                                <br>
+                                {% if most_popular_week.description %}
+                                    <p class="hero-description">{{ most_popular_week.description|truncatewords:45 }}</p>
+                                {% endif %}
+                                
+                                <a href="{% url 'card' product_name=most_popular_week.name %}" class="hero-btn">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if most_popular_month %}
+                        <h2 class="new_products_title"> Популярно в этом месяце: </h2>
+                        <div class="hero-popular-wrapper" style="background-image: url('{{ most_popular_month.image.url }}');">
+                            <!-- Внутренний контейнер с тёмным фильтром и контентом -->
+                            <div class="hero-popular-container">
+                                
+                                <div class="hero-poster-side popular-hero-shimmer">
+                                    <img src="{{ most_popular_month.image.url }}" alt="{{ most_popular_month.name }}">
+                                </div>
+                                
+                                <div class="hero-info-side">
+                                    <h1 class="hero-title">{{ most_popular_month.name }}</h1>
+                                    
+                                    <div class="prod_element_rating_block" style="
+                                        background:
+                                            {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                            {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                            {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                        color: #ffffff;
+                                        ">
+                                        <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                            <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                    fill="white" 
+                                                    stroke="white" 
+                                                    stroke-width="6" 
+                                                    stroke-linejoin="round" />
+                                        </svg>
+                                        {{ most_popular_month.rating }}
+                                    </div>
+                                    <br>
+                                    {% if most_popular_month.description %}
+                                        <p class="hero-description">{{ most_popular_month.description|truncatewords:45 }}</p>
+                                    {% endif %}
+                                    
+                                    <a href="{% url 'card' product_name=most_popular_month.name %}" class="hero-btn">
+                                        Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <h2 class="new_products_title"> Популярно на этой неделе и в этом месяце: </h2>
+                    <div class="hero-popular-wrapper" style="background-image: url('{{ most_popular_week.image.url }}');">
+                        <div class="hero-popular-container">
+                            
+                            <div class="hero-poster-side popular-hero-shimmer">
+                                <img src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
+                            </div>
+                            
+                            <div class="hero-info-side">
+                                <h1 class="hero-title">{{ most_popular_week.name }}</h1>
+                                
+                                <div class="prod_element_rating_block" style="
+                                    background:
+                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                    color: #ffffff;
+                                    ">
+                                    <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                        <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                fill="white" 
+                                                stroke="white" 
+                                                stroke-width="6" 
+                                                stroke-linejoin="round" />
+                                    </svg>
+                                    {{ most_popular_week.rating }}
+                                </div>
+                                <br>
+                                {% if most_popular_week.description %}
+                                    <p class="hero-description">{{ most_popular_week.description|truncatewords:45 }}</p>
+                                {% endif %}
+                                
+                                <a href="{% url 'card' product_name=most_popular_week.name %}" class="hero-btn">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -169,13 +169,25 @@
                                             <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
                                         {% endif %}
                                         <div class="prod_element_rating">
-                                            <div class="prod_element_rating_block" style="
+                                            {% if element == most_popular_week %}
+                                                <span class="hero-badge" style="left: 0; top: 0;">Популярное</span>
+                                                <div class="prod_element_rating_block" style="
                                                 background:
                                                     {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
                                                     {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
                                                     {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
                                                 color: #ffffff;
+                                                margin-top: 25px;
                                                 "> 
+                                            {% else %}
+                                                <div class="prod_element_rating_block" style="
+                                                    background:
+                                                        {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                        {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                        {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                    color: #ffffff;
+                                                    "> 
+                                            {% endif %}
                                                 <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
                                                     <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
                                                             fill="white" 

@@ -17,7 +17,7 @@ from django.db.models.functions import TruncDay
 from datetime import timedelta
 
 from django.contrib import admin
-from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog, AiMessages, Profile, Sort, ProfileStats
+from .models import Product, Category, Tags, Pics, Album_Pics, Status, Weblinks, Voice_maker, Characters, Comments, CommentAction, UserActivityLog, AiMessages, Profile, Sort, ProfileStats, ProductView
 
 # Register your models here.
 
@@ -146,6 +146,10 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
+    pass
+
+@admin.register(ProductView)
+class ProductViewAdmin(ModelAdmin):
     pass
 
 @admin.register(Category)
