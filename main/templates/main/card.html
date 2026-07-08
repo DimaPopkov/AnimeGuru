@@ -1543,6 +1543,10 @@
             block.classList.add('is-revealed');
             
             block.style.maxHeight = "100%"; 
+
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
         }
 
         const block = document.getElementById("seasonBlock");

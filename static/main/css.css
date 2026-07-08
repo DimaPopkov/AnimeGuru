@@ -2472,7 +2472,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .season_info{
-    /* padding: 0 15px; */
+    transition: 0.4s ease-in-out;
 }
 
 /* ------ Блюр ------- */
@@ -2482,7 +2482,6 @@ input[type="checkbox"]:checked::after {
     overflow: hidden !important;
 
     max-height: 300px;
-    transition: max-height 0.8s ease-in-out;
     border-radius: 10px;
 }
 
@@ -2490,7 +2489,7 @@ input[type="checkbox"]:checked::after {
     content: "" !important;
     position: absolute !important;
     top: 0 !important;
-    left: -150% !important; /* Начинает слева за кадром */
+    left: 0 !important; /* Обнуляем, чтобы двигать через transform */
     width: 35% !important;
     height: 100% !important;
     background: linear-gradient(
@@ -2499,28 +2498,32 @@ input[type="checkbox"]:checked::after {
         rgba(255, 255, 255, 0.4) 50%, 
         rgba(255, 255, 255, 0) 100%
     ) !important;
-    transform: skewX(-25deg) !important;
+    transform: translateX(-200%) skewX(-25deg); /* Стартовая позиция блика */
+    transition: transform 0.6s ease-out !important; /* Анимируем именно transform */
     z-index: 6 !important; 
     pointer-events: none !important;
     
     /* Управляем плавностью перемещения через transition */
-    transition: left 0.6s ease-out !important;
+    /* transition: left 0.6s ease-out !important; */
 }
 
 /* При добавлении этого класса через JS блик улетает вправо */
 .blur-wrapper.active-shine::before {
-    left: 150% !important;
+    transform: translateX(300%) skewX(-25deg) !important; 
 }
 
 @keyframes loop-shine {
     0% {
-        left: -150%;
+        /* Исходная позиция слева и сохраняем скос из ваших прошлых стилей */
+        transform: translateX(-200%) skewX(-25deg);
     }
     30% {
-        left: 150%;
+        /* Конечная позиция справа */
+        transform: translateX(300%) skewX(-25deg);
     }
     100% {
-        left: 150%;
+        /* Удерживаем позицию справа до конца цикла */
+        transform: translateX(300%) skewX(-25deg);
     }
 }
 

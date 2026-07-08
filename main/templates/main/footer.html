@@ -3,7 +3,7 @@
         <div>
             <h3>Навигация</h3>
             <ul>
-                <li><a href="{% url 'main' %}">Главная</a></li>
+                <li><a href="{% url 'base' %}">Главная</a></li>
                 <li><a href="{% url 'posts' %}">Публикации</a></li>
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
