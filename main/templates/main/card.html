@@ -403,7 +403,7 @@
                         {% if your_comment == None %}
                             <form id="you_container_form" method="POST" action="{% url 'add_comments' product_name=product.name %}">
                                 {% csrf_token %}
-                                <div style="display: flex; align-content: center; padding-bottom: 2px">
+                                <div class="you_container_form_stars">
                                     <h5 style="margin-bottom: 0; padding-right: 10px"> Ваша оценка: </h5>
                                     <div class="star-rating">
                                         <span class="star" data-value="1">&#9733;</span>
@@ -426,10 +426,10 @@
                         {% else %}
                             <form id="you_container_form" method="POST" action="{% url 'edit_comments' product_name=product.name %}">
                                 {% csrf_token %}
-                                <div style="display: flex; flex-direction: column; align-content: center; padding-bottom: 2px">
+                                <div class="you_container_form_stars">
                                     <div style="display: flex;">
                                         <h5 style="margin-bottom: 0; padding-right: 10px"> Старая оценка: </h5>                
-                                        <div style="display: flex; margin-top: -12px">
+                                        <div style="display: flex;">
                                             {% for current_number in star_list %}
                                                 {% if current_number <= your_comment.user_rating %}
                                                     <span class="star-icon" style="color: #ff9900;">&#9733;</span>
@@ -473,13 +473,16 @@
                         {% if most_popular_comment != 0 and most_popular_comment.user_rating != None %}
                             <div class="you_container_dop_block">
                                 <div class="you_container_dop_block_header">
-                                    <div style="display: flex; column-gap: 15px;">
+                                    <div class="avatar_wrapper">
                                         {% if most_popular_comment.user_image and most_popular_comment.user_image != "avatars/null_avatar.png" %}
-                                            <img src={{ most_popular_comment.user_image.url }} style="width: 35px; height: 35px; border-radius: 100px;">
+                                            <img src="{{ most_popular_comment.user_image.url }}" class="comment_avatar">
                                         {% else %}
-                                            <img src={% static "/img/null_avatar.png" %} style="width: 35px; height: 35px; border-radius: 100px;">
+                                            <img src="{% static "/img/null_avatar.png" %}" class="comment_avatar">
                                         {% endif %}
-                                        <h5 style="align-content: center; padding-bottom: 5px; padding-top: 3px"> 
+                                    </div>
+
+                                    <div class="user_meta_info">
+                                        <h5> 
                                         {% if most_popular_comment.current_user.profile.rank >= 3 %}
                                             <span class="animated-nickname" style="--user-color: {{ most_popular_comment.current_user.profile.color }}; margin-top: 0;">
                                                 <a id="nickname" href="{% url 'user_profile' id=most_popular_comment.current_user.id %}" class="login_status_bar_text_alt"> {{  most_popular_comment.user_name }} </a>
@@ -488,23 +491,19 @@
                                             {{  most_popular_comment.user_name }}
                                         {% endif %}
                                         </h5>
-                                    </div>
-
-                                    <div style="display:flex; text-align: center">
-                                        <h6 style="align-content: center; padding-right: 5px">Оценка: </h6>
-
                                         <div class="star-display">
-                                            <!-- Здесь будут динамически генерироваться звезды -->
+                                            <!-- Здесь динамически генерируются звезды -->
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="you_container_dop_block_text">
                                     {{ most_popular_comment.user_comment }}
                                 </div>
                             </div>
                         {% else %}
-                            <div style="width:100%; height: 100%; align-content: center;">
-                                <h3 style="text-align: center"> Отсутствует </h3>
+                            <div class="no_comment_block">
+                                <h3> Отсутствует </h3>
                             </div>
                         {% endif %}
                     </div>
