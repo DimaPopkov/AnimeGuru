@@ -330,7 +330,12 @@
                             <div class="all_characters">
                                 {% if bro.image %}
                                     <div class="blur_bg" style="background-image: url('{{ bro.image }}');"></div>
+                                {% elif bro.image.url %}
+                                    <div class="blur_bg" style="background-image: url('{{ bro.image.url }}');"></div>
+                                {% elif bro.alter_pic %}
+                                    <div class="blur_bg" style="background-image: url('{{ bro.alter_pic.url }}');"></div>
                                 {% endif %}
+
                                 {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
                                     {% if bro.image %}
                                         <div style="width:auto; height: 100%; overflow: hidden">
@@ -372,9 +377,13 @@
         {% endif %}
 
         {% if product.season_info and product.season_info != "null" %}
+            <div>    
+                <h3> Пересказ </h3>
+                <div class="card_info_linegap"></div>
+            </div>
             <div class="season_info blur-wrapper" id="seasonBlock" onclick="revealSeason()">
                 <div class="blur-content" id="seasonContent">
-                    <p>{{ product.season_info|safe }}</p>
+                    {{ product.season_info|safe }}
                 </div>
                 <div class="blur-overlay font24" id="seasonOverlay">Показать пересказ</div>
             </div>
