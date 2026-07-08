@@ -112,9 +112,6 @@ def main(request):
     
     new_products = sorted(allProducts, key=lambda x: x.season, reverse=True)[:7]
 
-    most_popular_title_week = most_popular(7)
-    most_popular_title_month = most_popular(30)
-
     data = {
         'title' : 'Каталог',
         'categories' : Category.objects.all().order_by('-name'),
@@ -124,8 +121,8 @@ def main(request):
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
         'new_products': new_products,
-        'most_popular_week': most_popular_title_week,
-        'most_popular_month': most_popular_title_month,
+        'most_popular_week': most_popular(7),
+        'most_popular_month': most_popular(30),
     }
         
     return render(request, 'main/catalog.html', data)
@@ -270,6 +267,8 @@ def filter(request):
         'db_max_year': db_max_year,
         'current_year_min': year_min,
         'current_year_max': year_max,
+        'most_popular_week': most_popular(7),
+        'most_popular_month': most_popular(30),
     }
     
     return render(request, 'main/catalog.html', context)
