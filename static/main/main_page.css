@@ -35,6 +35,7 @@
 .slider-container-wrapper {
     position: relative;
     width: 100%;
+    height: 280px;
     background-color: #141414;
     overflow: hidden;
     padding-top: 10px;
