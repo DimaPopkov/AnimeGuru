@@ -42,7 +42,7 @@
     </div>
 
     <!-- product - вся инфа об нашем обьекте -->
-    <div class="card_container_main main_items_background"> 
+    <div class="card_container_main main_items_background alt"> 
         <div class="card_container_header">
             <div class="card_header">
                 <img src="{{ product.image.url }}" id="product_img" style="width: 100%; border-radius: 3px;">
@@ -328,6 +328,9 @@
                     <div class="all_characters_container">
                         {% for bro in characters %}
                             <div class="all_characters">
+                                {% if bro.image %}
+                                    <div class="blur_bg" style="background-image: url('{{ bro.image }}');"></div>
+                                {% endif %}
                                 {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
                                     {% if bro.image %}
                                         <div style="width:auto; height: 100%; overflow: hidden">

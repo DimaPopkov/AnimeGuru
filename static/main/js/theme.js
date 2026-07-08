@@ -399,7 +399,7 @@ function ChangeTheme(username){
 
         if (blur_overlay != null){
             for (const element of blur_overlay) {
-                element.style.setProperty('--psuedo-perescaz-overlay-color', 'rgb(255, 255, 255)');
+                element.style.setProperty('--psuedo-perescaz-overlay-color', 'rgb(220, 220, 220)');
                 element.style.color = 'rgb(40, 40, 40)';
             }
         }
@@ -676,7 +676,7 @@ function ChangeTheme(username){
 
         if (blur_overlay != null){
             for (const element of blur_overlay) {
-                element.style.setProperty('--psuedo-perescaz-overlay-color', 'rgb(30, 30, 30)');
+                element.style.setProperty('--psuedo-perescaz-overlay-color', 'rgb(20, 20, 20)');
                 element.style.color = 'rgb(255, 255, 255)';
             }
         }
