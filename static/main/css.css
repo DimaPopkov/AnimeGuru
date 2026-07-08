@@ -2483,6 +2483,7 @@ input[type="checkbox"]:checked::after {
 
     max-height: 300px;
     transition: max-height 0.8s ease-in-out;
+    border-radius: 10px;
 }
 
 .blur-wrapper::before {
@@ -2503,7 +2504,7 @@ input[type="checkbox"]:checked::after {
     pointer-events: none !important;
     
     /* Управляем плавностью перемещения через transition */
-    transition: left 0.6s ease-out !important; 
+    transition: left 0.6s ease-out !important;
 }
 
 /* При добавлении этого класса через JS блик улетает вправо */
