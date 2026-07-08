@@ -247,7 +247,11 @@
                         {% for bro in main_characters %}
                             <div class="main_characters">
                                 {% if bro.image %}
-                                    <div class="blur_bg" style="background-image: url({{ bro.image }}) !important;"></div>
+                                    <div class="blur_bg" style="background-image: url('{{ bro.image }}');"></div>
+                                {% elif bro.image.url %}
+                                    <div class="blur_bg" style="background-image: url('{{ bro.image.url }}');"></div>
+                                {% elif bro.alter_pic %}
+                                    <div class="blur_bg" style="background-image: url('{{ bro.alter_pic.url }}');"></div>
                                 {% endif %}
                                 {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
                                     {% if bro.image %}
