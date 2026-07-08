@@ -3519,6 +3519,100 @@ textarea.you_container_text_container:focus {
 
 
 
+div.all_comments_container_block {
+    display: flex !important;
+    flex-direction: column !important;
+    row-gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    
+    border-radius: 12px !important;
+    margin-bottom: 20px !important;
+}
+
+.all_comments_container_block_header,
+.all_comments_container_block_header_block,
+.star_list_block,
+.star_list_block_number {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important; 
+}
+
+.all_comments_container_block_header_block img.comment_user_image {
+    border-radius: 50% !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+    width: 50px !important; 
+    height: 50px !important;
+    object-fit: cover !important;
+}
+
+div.comments_container {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.02) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.04) !important; 
+    border-radius: 8px !important;
+    padding: 12px 18px !important; 
+    color: #e0e0e6 !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    text-align: left !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.comment_buttons,
+.comment_buttons form,
+.comment_buttons .comment_answer {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    column-gap: 8px !important;
+}
+
+.comment_buttons span,
+.comment_buttons .comment_answer button {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 6px !important;
+    padding: 5px 14px !important;
+    font-size: 13px !important;
+    cursor: pointer;
+    display: inline-block !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Фиолетовый ховер при наведении на слово "Ответить" */
+.comment_buttons .comment_answer button:hover {
+    background-color: rgba(161, 118, 255, 0.15) !important; 
+    border-color: rgba(161, 118, 255, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 8px rgba(161, 118, 255, 0.2);
+}
+
+/* Фиксация размеров для картинок-иконок лайка и дизлайка */
+img.comment_buttons_button {
+    width: 20px !important;   
+    height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    object-fit: contain !important;
+    cursor: pointer;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    transition: transform 0.2s ease !important;
+    display: inline-block !important;
+}
+img.comment_buttons_button:hover {
+    transform: scale(1.15) !important; 
+}
+
+
 
 .all_comments_container{
     display: flex;
@@ -3551,19 +3645,16 @@ textarea.you_container_text_container:focus {
     margin-top: 20px;
 }
 
+
 .answer::after {
     content: "";
     position: absolute;
-
     left: -22px;
-    top: -155px;
-
+    top: -210px;
     width: 95px;
-    height: 190px;
-
+    height: 250px;
     border-left: 3px solid var(--pseudo-comment-border-color);
     border-bottom: 3px solid var(--pseudo-comment-border-color);
-
     border-bottom-left-radius: 12px;
     pointer-events: none;
 }
