@@ -472,8 +472,8 @@
 
 
 :root {
-    --dom-color-1: #8a2be2;
-    --dom-color-2: #ff007f;
+    --dom-color-1: rgba(255, 255, 255, 0);
+    --dom-color-2: rgba(255, 255, 255, 0);
 }
 
 .hero-poster-side.popular-hero-shimmer {

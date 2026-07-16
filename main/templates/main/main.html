@@ -207,7 +207,7 @@
                         <div class="hero-popular-container">
                             
                             <div class="hero-poster-side popular-hero-shimmer">
-                                <img id="hero-dynamic-img-week" src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
+                                <img class="hero-dynamic-img-week" src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
                             </div>
                             
                             <div class="hero-info-side">
@@ -248,7 +248,7 @@
                             <div class="hero-popular-container">
                                 
                                 <div class="hero-poster-side popular-hero-shimmer">
-                                    <img id="hero-dynamic-img-month" src="{{ most_popular_month.image.url }}" alt="{{ most_popular_month.name }}">
+                                    <img class="hero-dynamic-img-month" src="{{ most_popular_month.image.url }}" alt="{{ most_popular_month.name }}">
                                 </div>
                                 
                                 <div class="hero-info-side">
@@ -288,7 +288,7 @@
                         <div class="hero-popular-container">
                             
                             <div class="hero-poster-side popular-hero-shimmer">
-                                <img id="hero-dynamic-img" src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
+                                <img class="hero-dynamic-img" src="{{ most_popular_week.image.url }}" alt="{{ most_popular_week.name }}">
                             </div>
                             
                             <div class="hero-info-side">
@@ -421,52 +421,57 @@
             }
 
             let activeImg = null;
-            // if (document.getElementById('hero-dynamic-img')){
-            //     const img = document.getElementById('hero-dynamic-img');
-            // } else if (document.getElementById('hero-dynamic-img-week') && document.getElementById('hero-dynamic-img-month')){
-            //     const img1 = document.getElementById('hero-dynamic-img-week');
-            //     const img2 = document.getElementById('hero-dynamic-img-month');
-            // }
+
             if (document.getElementById('hero-dynamic-img')) {
                 activeImg = document.getElementById('hero-dynamic-img');
             } else if (document.getElementById('hero-dynamic-img-week') && document.getElementById('hero-dynamic-img-month')) {
                 activeImg = document.getElementById('hero-dynamic-img-week') || document.getElementById('hero-dynamic-img-month');
             }
 
-            if (activeImg) {
+            // Собираем ВСЕ возможные картинки на странице (и по ID, и по классам)
+            const selectors = '#hero-dynamic-img, #hero-dynamic-img-week, #hero-dynamic-img-month, .hero-dynamic-img, .hero-dynamic-img-js';
+            const allImages = document.querySelectorAll(selectors);
+
+            function processImagePalette(imgElement) {
+                if (!imgElement) return;
+
                 const colorThief = new ColorThief();
+                const targetContainer = imgElement.closest('.hero-poster-side') || imgElement;
 
                 const updateDynamicBorder = () => {
                     try {
-                        const palette = colorThief.getPalette(activeImg, 5);
+                        // Извлекаем палитру из 5 цветов для конкретной картинки
+                        const palette = colorThief.getPalette(imgElement, 5);
                         
                         if (palette && palette.length >= 2) {
                             const color1 = `rgb(${palette[0][0]}, ${palette[0][1]}, ${palette[0][2]})`;
                             const color2 = `rgb(${palette[1][0]}, ${palette[1][1]}, ${palette[1][2]})`;
                             
-                            // Записываем полученные динамические цвета в CSS-переменные
-                            document.documentElement.style.setProperty('--dom-color-1', color1);
-                            document.documentElement.style.setProperty('--dom-color-2', color2);
+                            targetContainer.style.setProperty('--dom-color-1', color1);
+                            targetContainer.style.setProperty('--dom-color-2', color2);
                         }
                     } catch (e) {
                         console.log("Ожидаем полной загрузки картинки для анализа палитры...", e);
                     }
                 };
 
-                if (!activeImg.crossOrigin) {
-                    activeImg.crossOrigin = "Anonymous";
+                // Защита от CORS-блокировок сервера Django
+                if (!imgElement.crossOrigin) {
+                    imgElement.crossOrigin = "Anonymous";
                 }
 
-                // Если картинка уже была в кэше браузера и загрузилась мгновенно
-                if (activeImg.complete) {
+                // Проверяем статус загрузки картинки
+                if (imgElement.complete && imgElement.naturalWidth !== 0) {
                     updateDynamicBorder();
                 } else {
-                    // Если картинка еще скачивается с сервера Django
-                    activeImg.addEventListener('load', function() {
-                        updateDynamicBorder();
-                    });
+                    imgElement.addEventListener('load', updateDynamicBorder);
                 }
             }
+
+            // Запускаем расчет индивидуально для каждого найденного изображения
+            allImages.forEach(img => {
+                processImagePalette(img);
+            });
         });
 
         function submitform(element)
