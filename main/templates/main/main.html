@@ -429,7 +429,7 @@
             }
 
             // Собираем ВСЕ возможные картинки на странице (и по ID, и по классам)
-            const selectors = '#hero-dynamic-img, #hero-dynamic-img-week, #hero-dynamic-img-month, .hero-dynamic-img, .hero-dynamic-img-js';
+            const selectors = '[class*="hero-dynamic-img"], #hero-dynamic-img, #hero-dynamic-img-week, #hero-dynamic-img-month';
             const allImages = document.querySelectorAll(selectors);
 
             function processImagePalette(imgElement) {
