@@ -180,6 +180,7 @@ def create(request):
         else:
             try:
                 file_data = None
+                user = request.user
 
                 if media_raw and media_raw != 'none':
                     format, imgstr = media_raw.split(';base64,') 
@@ -187,7 +188,7 @@ def create(request):
                     file_data = ContentFile(base64.b64decode(imgstr), name=f'post_image.{ext}')
 
                 # Сохраняем пост
-                Posts.objects.create(title=title, text=text, media=file_data)
+                Posts.objects.create(title=title, user=user, text=text, media=file_data)
                 return redirect('posts')
             except Exception as e:
                 print(f"ПРОБЛЕМА ТУТ: {e}")
