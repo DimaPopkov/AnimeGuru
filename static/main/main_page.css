@@ -472,8 +472,8 @@
 
 
 :root {
-    --dom-color-1: #8a2be2; /* Фиолетовый по умолчанию */
-    --dom-color-2: #ff007f; /* Малиновый по умолчанию */
+    --dom-color-1: #8a2be2;
+    --dom-color-2: #ff007f;
 }
 
 .hero-poster-side.popular-hero-shimmer {
@@ -511,7 +511,7 @@
     outline-offset: -2px !important;
     box-shadow: 0 0 20px var(--dom-color-1), inset 0 0 10px var(--dom-color-1) !important;
     
-    animation: pulse-purple 4s ease-in-out infinite alternate !important;
+    animation: pulse 4s ease-in-out infinite alternate !important;
 }
 
 /* СЛОЙ 2: Подстраивается под второй по значимости цвет из палитры */
@@ -528,11 +528,10 @@
     outline-offset: -2px !important;
     box-shadow: 0 0 20px var(--dom-color-2), inset 0 0 10px var(--dom-color-2) !important;
     
-    animation: pulse-magenta 4s ease-in-out infinite alternate !important;
+    animation: pulse 4s ease-in-out infinite alternate !important;
 }
 
-@keyframes pulse-purple { 0% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes pulse-magenta { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes pulse { 0% { opacity: 1; } 100% { opacity: 0; } }
 
 
 

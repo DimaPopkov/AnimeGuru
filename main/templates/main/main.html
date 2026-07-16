@@ -420,24 +420,27 @@
                 });
             }
 
-            if (document.getElementById('hero-dynamic-img')){
-                const img = document.getElementById('hero-dynamic-img');
-            } else if (document.getElementById('hero-dynamic-img-week') && document.getElementById('hero-dynamic-img-month')){
-                const img1 = document.getElementById('hero-dynamic-img-week');
-                const img2 = document.getElementById('hero-dynamic-img-month');
+            let activeImg = null;
+            // if (document.getElementById('hero-dynamic-img')){
+            //     const img = document.getElementById('hero-dynamic-img');
+            // } else if (document.getElementById('hero-dynamic-img-week') && document.getElementById('hero-dynamic-img-month')){
+            //     const img1 = document.getElementById('hero-dynamic-img-week');
+            //     const img2 = document.getElementById('hero-dynamic-img-month');
+            // }
+            if (document.getElementById('hero-dynamic-img')) {
+                activeImg = document.getElementById('hero-dynamic-img');
+            } else if (document.getElementById('hero-dynamic-img-week') && document.getElementById('hero-dynamic-img-month')) {
+                activeImg = document.getElementById('hero-dynamic-img-week') || document.getElementById('hero-dynamic-img-month');
             }
 
-            if (img || img1 || img2) {
-                // Инициализируем ColorThief
+            if (activeImg) {
                 const colorThief = new ColorThief();
 
                 const updateDynamicBorder = () => {
                     try {
-                        // Получаем палитру из главных цветов карточки
-                        const palette = colorThief.getPalette(img, 5);
+                        const palette = colorThief.getPalette(activeImg, 5);
                         
                         if (palette && palette.length >= 2) {
-                            // ИСПРАВЛЕНО: Четко вытаскиваем RGB-компоненты первого и второго цветов по их индексам
                             const color1 = `rgb(${palette[0][0]}, ${palette[0][1]}, ${palette[0][2]})`;
                             const color2 = `rgb(${palette[1][0]}, ${palette[1][1]}, ${palette[1][2]})`;
                             
@@ -450,12 +453,16 @@
                     }
                 };
 
+                if (!activeImg.crossOrigin) {
+                    activeImg.crossOrigin = "Anonymous";
+                }
+
                 // Если картинка уже была в кэше браузера и загрузилась мгновенно
-                if (img.complete) {
+                if (activeImg.complete) {
                     updateDynamicBorder();
                 } else {
                     // Если картинка еще скачивается с сервера Django
-                    img.addEventListener('load', function() {
+                    activeImg.addEventListener('load', function() {
                         updateDynamicBorder();
                     });
                 }
