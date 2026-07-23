@@ -174,6 +174,74 @@
             </div>
         {% endif %}
 
+        {% if my_posts and my_posts != None %}
+            <div class="profile_container_favourites">
+                <div><h3> Ваши публикации </h3><hr></div>
+                <div class="posts_list" style="margin: 0;">
+                    {% if my_posts %}
+                        {% for element in my_posts %}
+                            <div class="new_posts_list_product fade-in" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), {% if element.media %} url('{{ element.media.url }}')  no-repeat center / cover {% endif %};">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="new_posts_element">
+                                    <a href="{% url 'post' post_id=element.id %}" class="post_a"></a>
+                                    
+                                    <h4 class="post_h2"> {{ element.title }} </h4>
+                                    <p class="post_p"> {{ element.text }} </p>
+
+                                    <div class="post_stats_container">
+                                        <span class="like-count-{{ element.id }}" style="color: green">
+                                            {{ element.like_count }} 
+                                        </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
+                                            {% if element.my_state == 2 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/like.png' %}" 
+                                                    value="{{ element.like_count }}" 
+                                                    id="like_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="like">
+                                            {% endif %}
+                                        </form>
+
+                                        <span class="dislike-count-{{ element.id }}" style="margin-left: 5px; color: red">
+                                            {{ element.dislike_count }} 
+                                        </span>
+
+                                        <form class="comment_buttons" id="post-{{ element.id }}" style="padding-left: 0;" action="{% url 'update_post_state' post_id=element.id %}" method="POST">
+                                            {% csrf_token %}
+                                            {% if element.my_state == 1 %}
+                                                <img class="comment_buttons_button" src="{% static '/img/active_dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% else %}
+                                                <img class="comment_buttons_button" src="{% static '/img/dislike.png' %}"
+                                                    value="{{ element.dislike_count }}"
+                                                    id="dislike_button_{{ element.id }}"
+                                                    data-post-id="{{ element.id }}"
+                                                    data-action="dislike">
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>   
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <h2 class="posts_h2_none"> Пока нет публикаций </h2>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
         {% if your_comments and your_comments != None %}
             <div class="profile_container_comments">
                 <h3> Ваши комментарии </h3><hr>

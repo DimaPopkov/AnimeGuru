@@ -282,7 +282,7 @@
     /* 1. Возвращаем правильные размеры картинок (object-fit снова активен) */
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
+    object-fit: fill !important;
     
     /* 2. Сбрасываем флексы, которые ломают позиционирование изображений */
     display: block !important; 
