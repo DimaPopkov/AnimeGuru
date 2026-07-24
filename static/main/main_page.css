@@ -737,7 +737,7 @@
 
 .community_container {
     display: flex;
-    gap: 40px;
+    gap: 30px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -748,7 +748,7 @@
 
 .top_users_block{
     display: grid;
-    gap: 40px;
+    gap: 30px;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -804,10 +804,10 @@
 }
 
 .user_avatar_container {
-    width: 40px;
-    height: 40px;
-    min-width: 40px; /* Чтобы флексбокс не сжимал иконку */
-    min-height: 40px;
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+    min-height: 55px;
     margin-right: 15px;
     display: flex;
     align-items: center;
@@ -820,7 +820,7 @@
     height: 100%;
     object-fit: cover; /* Картинка масштабируется без искажения пропорций */
     border-radius: 50%; /* Делает её идеально круглой */
-    border: 2px solid #8a2be2; /* Фиолетовый ободок под вашу тему */
+    border: 1px solid rgba(138, 43, 226, 0.2); /* Фиолетовый ободок под вашу тему */
     display: block;
 
     content: ""; 
@@ -872,13 +872,6 @@
     font-weight: bold;
     background: rgba(138, 43, 226, 0.1);
     padding: 4px 10px;
+    margin-left: 5px;
     border-radius: 5px;
-}
-
-/* Адаптивность для мобилок */
-@media (max-width: 768px) {
-    .community_container {
-        flex-direction: column;
-        gap: 30px;
-    }
 }

@@ -395,10 +395,10 @@
                                     <div class="user_leaderboard_item">
                                         {% if forloop.counter <= 3 %}
                                             <span class="animated-nickname" style="--user-color: {% if forloop.counter == 1 %} gold {% elif forloop.counter == 2 %} silver {% elif forloop.counter == 3 %} #cd7f32 {% endif %};">
-                                                <a id="nickname" class = "login_status_bar_text" style='padding-left: 0'> #{{forloop.counter}} </a>
+                                                <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; font-size: 26px;'> #{{forloop.counter}} </a>
                                             </span>
                                         {% else %}
-                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white;'> #{{forloop.counter}} </a>
+                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white; font-size: 26px;'> #{{forloop.counter}} </a>
                                         {% endif %}
                                         <div class="user_avatar_container">
                                             {% if user.user_image %}
@@ -410,7 +410,7 @@
                                             {% endif %}
                                         </div>
                                         <div class="user_leaderboard_info">
-                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name">{{ user.user_name }}</a>
+                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name" style='font-size: 20px'>{{ user.user_name }}</a>
                                             <span class="user_rank">
                                                 {% if forloop.counter == 1 %} Король комментариев
                                                 {% elif forloop.counter == 2 %} Писатель
@@ -432,10 +432,10 @@
                                     <div class="user_leaderboard_item">
                                         {% if forloop.counter <= 3 %}
                                             <span class="animated-nickname" style="--user-color: {% if forloop.counter == 1 %} gold {% elif forloop.counter == 2 %} silver {% elif forloop.counter == 3 %} #cd7f32 {% endif %};">
-                                                <a id="nickname" class = "login_status_bar_text" style='padding-left: 0'> #{{forloop.counter}} </a>
+                                                <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; font-size: 26px;'> #{{forloop.counter}} </a>
                                             </span>
                                         {% else %}
-                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white;'> #{{forloop.counter}} </a>
+                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white; font-size: 26px;'> #{{forloop.counter}} </a>
                                         {% endif %}
                                         <div class="user_avatar_container">
                                             {% if user.user_image %}
@@ -447,7 +447,7 @@
                                             {% endif %}
                                         </div>
                                         <div class="user_leaderboard_info">
-                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name">{{ user.user_name }}</a>
+                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name" style='font-size: 20px'>{{ user.user_name }}</a>
                                             <span class="user_rank">
                                                 {% if forloop.counter == 1 %} Любимчик сообщества
                                                 {% elif forloop.counter == 2 %} В погоне за популярностью
