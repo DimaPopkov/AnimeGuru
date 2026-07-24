@@ -87,18 +87,18 @@
                         </div>
                         
                         <div class="range-slider-container" id="slider-range-wrapper" 
-                            data-db-min="{{ db_min_year|default:1997 }}" 
-                            data-db-max="{{ db_max_year|default:2025 }}">
+                            data-db-min="{{ db_min_year|default:1990 }}" 
+                            data-db-max="{{ db_max_year|default:2100 }}">
                             
                             <div class="slider-track" id="slider-track"></div>
                             
                             <input type="range" name="year_min" id="year-min-input" 
-                                min="{{ db_min_year|default:1997 }}" max="{{ db_max_year|default:2025 }}" 
-                                value="{{ current_year_min|default:1997 }}" step="1">
+                                min="{{ db_min_year|default:1990 }}" max="{{ db_max_year|default:2100 }}" 
+                                value="{{ current_year_min|default:1990 }}" step="1">
                                 
                             <input type="range" name="year_max" id="year-max-input" 
-                                min="{{ db_min_year|default:1997 }}" max="{{ db_max_year|default:2025 }}" 
-                                value="{{ current_year_max|default:2025 }}" step="1">
+                                min="{{ db_min_year|default:1997 }}" max="{{ db_max_year|default:2100 }}" 
+                                value="{{ current_year_max|default:2100 }}" step="1">
                         </div>
                     </div>
                 </div>
@@ -348,7 +348,18 @@
 
             function renderProducts(containerSelector, products) {
                 const container = document.querySelector(containerSelector);
+                if (!container) return;
+
+                const isLineMode = (grid === 'line');
+
+                const prodElementClasses = isLineMode ? 'prod_element line-mode' : 'prod_element';
+                const prodElementStyles = isLineMode ? 'style="flex-direction: row; column-gap: 20px;"' : '';
+                const imgContainerStyles = isLineMode ? '' : 'style="width: auto; height: auto;"';
+                const imgStyles = isLineMode ? 'style="width: 175px; height: auto;"' : 'style="width: 100%;"';
+                const descClasses = isLineMode ? 'hidden_description' : 'hidden_description hidden';
+
                 let html = '';
+                container.innerHTML = '';
 
                 products.forEach(element => {
                     let ratingStyle = 'linear-gradient(135deg, #3a3a44, #26262b)';
@@ -362,14 +373,14 @@
                     }
 
                     html += `
-                        <form class="fade-in" action="/card/${encodeURIComponent(element.name)}/" method="GET">
+                        <form class="catalog_form fade-in" action="/catalog/card/${encodeURIComponent(element.name)}/" method="GET">
                             <input type="hidden" name="product_name" value="${element.name}">
-                            <div class="prod_element" onclick="submitform(this)">
-                                <div class="prod_element_pic_lock">
-                                    <img src="${element.image_url}" style="width: 100%">
+                            <div class="${prodElementClasses}" onclick="submitform(this)" ${prodElementStyles}>
+                                <div class="prod_element_pic_lock" ${imgContainerStyles}>
+                                    <img src="${element.image_url}" ${imgStyles}>
                                 </div>
                                 <div class="prod_element_rating">
-                                    <div class="prod_element_rating_block" style="background: ${ratingStyle}">
+                                    <div class="prod_element_rating_block" style="background: ${ratingStyle}; box-shadow: ${ratingShadow}">
                                         ${element.rating}
                                     </div>
                                 </div>
@@ -377,7 +388,7 @@
                                     <h5 style="padding-top: 5px">${element.name}</h5>
                                     <h8>${element.category} / ${element.year}</h8>
                                     <br><br>
-                                    <p class="hidden_description hidden">${element.description || ''}</p>
+                                    <p class="${descClasses}">${element.description || ''}</p>
                                 </div>
                             </div>
                         </form>
@@ -386,6 +397,7 @@
 
                 container.innerHTML = html;
             }
+
 
             function showSkeletons(containerSelector, count) {
                 const container = document.querySelector(containerSelector);

@@ -1,114 +1,57 @@
 let grid = 'block';
 
 function UpdateGrid(){
-    type = grid;
-
     let blockGridButton = document.getElementById('block');
     let big_blockGridButton = document.getElementById('big_block');
     let lineGridButton = document.getElementById('line');
-
     let catalog = document.getElementById('products_catalog');
-    let block_img = document.querySelectorAll('.prod_element_pic_lock');
-    let block_container = document.querySelectorAll('.prod_element');
-    let block_description = document.querySelectorAll('.hidden_description');
 
-    if(type == 'block'){
-        blockGridButton.classList.add('active');
-        big_blockGridButton.classList.remove('active');
-        lineGridButton.classList.remove('active');
+    if (!catalog) return;
 
+    // Синхронизируем активные классы на кнопках
+    blockGridButton?.classList.toggle('active', grid === 'block');
+    big_blockGridButton?.classList.toggle('active', grid === 'big_block');
+    lineGridButton?.classList.toggle('active', grid === 'line');
+
+    // Обновляем классы режимов на самом каталоге
+    catalog.classList.remove('block', 'big_block', 'line');
+    catalog.classList.add(grid);
+
+    // Управляем колонками грида в зависимости от режима
+    if (grid === 'block') {
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))';
-        for(const element of block_img){
-            element.style.width = 'auto';
-            element.style.height = 'auto';
-        }
-        for(const element of block_container){
-            element.style.flexDirection = 'column';
-        }
-        for(const element of block_description){
-            element.classList.add('hidden');
-        }
-    }
-    if(type == 'big_block'){
-        blockGridButton.classList.remove('active');
-        big_blockGridButton.classList.add('active');
-        lineGridButton.classList.remove('active');
-
+    } else if (grid === 'big_block') {
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
-        for(const element of block_img){
-            element.style.width = 'auto';
-            element.style.height = 'auto';
-        }
-        for(const element of block_container){
-            element.style.flexDirection = 'column';
-        }
-        for(const element of block_description){
-            element.classList.add('hidden');
-        }
-    }
-    if(type == 'line'){
-        blockGridButton.classList.remove('active');
-        big_blockGridButton.classList.remove('active');
-        lineGridButton.classList.add('active');
-
+    } else if (grid === 'line') {
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 700px), 1fr))';
-        for(const element of block_img){
-            element.style.width = '175px';
-            element.style.height = 'auto';
-        }
-        for(const element of block_container){
-            element.style.flexDirection = 'row';
-            element.style.columnGap = '10px';
-        }
-        for(const element of block_description){
-            element.classList.remove('hidden');
-        }
     }
+
+    // Если на странице уже есть отрендеренные продукты, обновляем их стили под новый режим
+    const block_img = catalog.querySelectorAll('.prod_element_pic_lock');
+    const block_container = catalog.querySelectorAll('.prod_element');
+    const block_description = catalog.querySelectorAll('.hidden_description');
+
+    const isLine = grid === 'line';
+
+    // Массово применяем стили ко всем текущим карточкам
+    block_img.forEach(el => {
+        el.style.width = isLine ? '175px' : 'auto';
+        el.style.height = 'auto';
+    });
+
+    block_container.forEach(el => {
+        el.style.flexDirection = isLine ? 'row' : 'column';
+        el.style.columnGap = isLine ? '20px' : '';
+        el.classList.toggle('line-mode', isLine);
+    });
+
+    block_description.forEach(el => {
+        el.classList.toggle('hidden', !isLine);
+    });
 }
 
+// Функция вызывается при клике на кнопки переключения режимов
 function ChangeGrid(type){
-    let blockGridButton = document.getElementById('block');
-    let big_blockGridButton = document.getElementById('big_block');
-    let lineGridButton = document.getElementById('line');
-
-    let catalog = document.getElementById('products_catalog');
-    let block_img = document.querySelectorAll('.prod_element_pic_lock');
-    let block_container = document.querySelectorAll('.prod_element');
-    let block_description = document.querySelectorAll('.hidden_description');
-
-    blockGridButton.classList.toggle('active', type === 'block');
-    big_blockGridButton.classList.toggle('active', type === 'big_block');
-    lineGridButton.classList.toggle('active', type === 'line');
-
-    if(type == 'block'){
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))';
-        for(const element of block_img){ element.style.width = 'auto'; element.style.height = 'auto'; }
-        for(const element of block_container){ 
-            element.style.flexDirection = 'column'; 
-            element.classList.remove('line-mode'); // Убираем режим линии
-        }
-        for(const element of block_description){ element.classList.add('hidden'); }
-    }
-    
-    if(type == 'big_block'){
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
-        for(const element of block_img){ element.style.width = 'auto'; element.style.height = 'auto'; }
-        for(const element of block_container){ 
-            element.style.flexDirection = 'column'; 
-            element.classList.remove('line-mode'); // Убираем режим линии
-        }
-        for(const element of block_description){ element.classList.add('hidden'); }
-    }
-    
-    if(type == 'line'){
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 700px), 1fr))';
-        for(const element of block_img){ element.style.width = '175px'; element.style.height = 'auto'; }
-        for(const element of block_container){ 
-            element.style.flexDirection = 'row'; 
-            element.style.columnGap = '20px'; // Расстояние от картинки до текста
-            element.classList.add('line-mode'); // ВКЛЮЧАЕМ режим линии для CSS
-        }
-        for(const element of block_description){ element.classList.remove('hidden'); }
-    }
-    grid = type;
+    grid = type; // Перезаписываем глобальный режим
+    UpdateGrid(); // Передаем всю работу по обновлению интерфейса в UpdateGrid
 }

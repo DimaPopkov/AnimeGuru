@@ -112,6 +112,21 @@ def main(request):
     
     new_products = sorted(allProducts, key=lambda x: x.season, reverse=True)[:7]
 
+    all_years_in_db = [
+        p.season.year for p in allProducts
+        if p.season is not None
+    ]
+
+    db_min_year = min(all_years_in_db) if all_years_in_db else 1995
+    db_max_year = max(all_years_in_db) if all_years_in_db else 2026
+
+    if db_min_year == db_max_year:
+        db_min_year -= 5
+        db_max_year += 1
+
+    year_min = request.GET.get('year_min', db_min_year)
+    year_max = request.GET.get('year_max', db_max_year)
+
     data = {
         'title' : 'Каталог',
         'categories' : Category.objects.all().order_by('-name'),
@@ -121,6 +136,10 @@ def main(request):
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
         'new_products': new_products,
+        'db_min_year': db_min_year,
+        'db_max_year': db_max_year,
+        'current_year_min': year_min,
+        'current_year_max': year_max,
         'most_popular_week': most_popular(7),
         'most_popular_month': most_popular(30),
     }
@@ -207,6 +226,28 @@ def filter(request):
     else:
         final_products = list(products)
 
+    # Фильтр по сортировке
+    sort_id = request.GET.get('sort')
+    if sort_id:
+        if(sort_id == '2'): # Сортировка по рейтингу
+            final_products.sort(key=lambda x: x.rating, reverse=True)
+            pass
+        if(sort_id == '4'): # Сортировка по новизне
+            final_products.sort(key=lambda x: x.season, reverse=True)
+            pass
+        if(sort_id == '3'): # Сортировка по дате добавления
+            final_products.sort(key=lambda x: x.id, reverse=True)
+            pass
+
+    filter_data = [category_id, tags_ids, status_id, sort_id]
+
+    selected_category = category_id
+    selected_tags = tags_ids
+    selected_status = status_id
+    selected_sort = sort_id
+
+    new_products = sorted(final_products, key=lambda x: x.season, reverse=True)[:7]
+
     all_years_in_db = [
         p.season.year for p in products
         if p.season is not None
@@ -229,28 +270,6 @@ def filter(request):
         ]
     except (ValueError, TypeError):
         pass
-
-    # Фильтр по сортировке
-    sort_id = request.GET.get('sort')
-    if sort_id:
-        if(sort_id == '2'): # Сортировка по рейтингу
-            final_products.sort(key=lambda x: x.rating, reverse=True)
-            pass
-        if(sort_id == '4'): # Сортировка по новизне
-            final_products.sort(key=lambda x: x.season, reverse=True)
-            pass
-        if(sort_id == '3'): # Сортировка по дате добавления
-            final_products.sort(key=lambda x: x.id, reverse=True)
-            pass
-
-    filter_data = [category_id, tags_ids, status_id, sort_id]
-
-    selected_category = category_id
-    selected_tags = tags_ids
-    selected_status = status_id
-    selected_sort = sort_id
-
-    new_products = sorted(final_products, key=lambda x: x.season, reverse=True)[:7]
 
     context = {
         'title' : 'Основная страница',

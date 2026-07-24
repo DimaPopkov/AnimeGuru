@@ -32,5 +32,4 @@ urlpatterns = [
     path('catalog/<str:tags>/', views.catalog_filtered, name='catalog_filtered'),
     path('AI/chat', views.AIchat, name='AIchat'),
     path('AI/history', views.AIhistory, name='AIhistory'),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
