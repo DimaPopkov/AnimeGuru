@@ -2899,7 +2899,7 @@ button:disabled {
     display: flex;
     flex-direction: column;
 
-    height: 100%;
+    /* height: 100%; */
     
     border-radius: 8px;
 
@@ -2918,7 +2918,7 @@ button:disabled {
     
     object-fit: cover; 
 
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     
     border-radius:100px;
     border: 2px solid rgba(30, 30, 30, 0.2)
@@ -2927,7 +2927,6 @@ button:disabled {
 .profile_container_header_block_info_flex_vis_button{
     width: 200px;
 
-    margin-top: auto;
     margin-bottom: 5px;
 
     border-radius: 5px;
@@ -2940,6 +2939,10 @@ button:disabled {
     font-size: 16px;
     color: rgb(10, 10, 10);
     transition: 0.15s;
+}
+
+.profile_container_header_block_info_flex_vis_button#changeAvatarBtn{
+    margin-top: 20px;
 }
 
 .profile_container_header_block_info_flex_vis_button:hover{
@@ -2979,8 +2982,39 @@ button:disabled {
 
     overflow-y: hidden;
     overflow-x: auto;
+    will-change: scroll-position; 
 
     user-select: none;
+
+    padding-bottom: 10px;
+}
+
+.profile_container_favourites_block:hover {
+    padding-bottom: 10.01px; 
+}
+
+/* Размеры скроллбара */
+.profile_container_favourites_block::-webkit-scrollbar {
+    height: 15px;
+}
+
+/* Исходное состояние */
+.profile_container_favourites_block::-webkit-scrollbar-track,
+.profile_container_favourites_block::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+}
+
+/* Состояние при наведении */
+.profile_container_favourites_block:hover::-webkit-scrollbar-track {
+    background: var(--scroll-track);
+}
+
+.profile_container_favourites_block:hover::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border: 3px solid var(--scroll-track);
+    background-clip: padding-box;
 }
 
 .profile_container_favourites_block:active {
@@ -3029,11 +3063,13 @@ button:disabled {
     max-width: 1000px;
     min-width: 500px;
 
+    height: auto;
+
     margin: 0 auto;
     margin-left: auto;
-    margin-right: 10px;
+    margin-right: 0px;
 
-    padding: 24px;
+    padding: 0 24px;
     border-radius: 8px;
 
     background: #1e1e1e;
@@ -3051,10 +3087,10 @@ button:disabled {
 .chart-wrapper {
     max-width: 500px;
     min-width: 200px;
-    height: 250px;
+    height: 220px;
 
     margin-left: auto;
-    padding: 24px;
+    padding: 10px 24px;
     border-radius: 8px;
 }
 
@@ -3075,8 +3111,16 @@ button:disabled {
 
     border-radius: 10px;
 
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
+}
+
+.chart-container:hover::-webkit-scrollbar-track{
+    border-radius: 10px;
+}
+
+.chart-container:hover{
+   overflow-x: scroll;
 }
 
 .chart-container-alt {
