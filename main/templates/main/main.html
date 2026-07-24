@@ -532,32 +532,6 @@
             allImages.forEach(img => {
                 processImagePalette(img);
             });
-
-            const tagLinks = document.querySelectorAll('.js-tag-link');
-            const mainContainer = document.querySelector('main'); // Находим ваш тег <main>
-
-            if (!tagLinks.length || !mainContainer) return;
-
-            tagLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const url = link.getAttribute('href'); // Получаем /pre_filter/ID
-
-                    fetch(url, {
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                    })
-                    .then(response => response.text())
-                    .then(html => {
-                        // Бесшовно меняем содержимое тега <main>
-                        mainContainer.innerHTML = html; 
-                        
-                        // Перебиваем URL в строке браузера на официальный адрес каталога с фильтром
-                        const tagId = url.split('/').pop();
-                        history.pushState(null, '', `/catalog/?tags=${tagId}`);
-                    })
-                    .catch(error => console.error('Ошибка бесшовного перехода:', error));
-                });
-            });
         });
 
         function submitform(element)

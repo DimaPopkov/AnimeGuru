@@ -68,13 +68,13 @@
                                 {% if selected_tags %}
                                     {% for tag in tags %}
                                         {% if tag.id|slugify in selected_tags %}
-                                            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                                            {{ tag.name }}
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
                                     Выберите теги
                                 {% endif %}
-                            </span>                     
+                            </span>
                             <img class="arrow" id="arrow" src="{% static '/img/arrow.png' %}" width="10px">
                         </button>
 
@@ -83,7 +83,7 @@
                             <!-- <div class="dropdown-content-linear-gr"></div> -->
                             {% for tag in tags %}
                                 <label class="checkbox-item">
-                                    <input class="checkbox-item-checkbox" type="checkbox" name="tags" value="{{ tag.id }}">
+                                    <input class="checkbox-item-checkbox" type="checkbox" name="tags" value="{{ tag.id }}"{% if tag.id|slugify in selected_tags %}checked{% endif %}>
                                     <p class="checkbox-item-text">{{ tag.name }} </p>
                                 </label>
                             {% endfor %}

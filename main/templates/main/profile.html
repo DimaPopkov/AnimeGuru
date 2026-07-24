@@ -103,7 +103,7 @@
                         <h5> Статистика по жанрам и тегам </h5>
                         <div class="chart-container">
                             {% for item in chart_data %}
-                                <a href="{% url 'catalog_filtered' tags=item.name %}" style="height: 100%; text-decoration: none; color: inherit;">
+                                <a href="{% url 'pre_filter' tag_id=item.id %}" style="height: 100%; text-decoration: none; color: inherit;">
                                     <div class="chart-column-wrapper" style="cursor: pointer;">
                                         <div class="chart-column-field">
                                             <div class="chart-bar" style="height: {{ item.height|floatformat:'0' }}%;" title="Просмотров: {{ item.views }}"></div>

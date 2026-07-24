@@ -120,7 +120,6 @@ def main(request):
     for element in allProducts:
         if element.status not in Allstatus:
             Allstatus.append(element.status)
-    print(Allstatus)
     
     new_products = Product.objects.order_by('-season')[:7]
 
@@ -195,6 +194,12 @@ def create(request):
 def filter(request):
     products = Product.objects.select_related('category', 'status').prefetch_related('tags')
 
+    Allstatus = []
+
+    for element in products:
+        if element.status not in Allstatus:
+            Allstatus.append(element.status)
+
     # Фильтр по дате
     years_range = Product.objects.aggregate(
         min_year=Min(ExtractYear('season')),
@@ -267,6 +272,8 @@ def filter(request):
     context = {
         'title' : 'Основная страница',
         'categories' : Category.objects.all(),
+        'status': Allstatus,
+        'sort': Sort.objects.all().order_by('name'),
         'products': final_products,
         'new_products': new_products,
         'tags': Tags.objects.all().order_by('name'),
@@ -282,21 +289,12 @@ def filter(request):
         'most_popular_week': most_popular(7),
         'most_popular_month': most_popular(30),
     }
-
-    if request.GET.get('ajax') == 'true' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        context['extends_template'] = 'main/spacer.html'
     
     return render(request, 'main/catalog.html', context)
 
 def pre_filter(request, tag_id):
-    # Убедитесь, что имена в reverse совпадают с name="..." из urls.py
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        # Перенаправляем AJAX-запрос на url функции filter
-        filter_url = reverse('filtered-items') # Имя path для функции filter
-        return redirect(f"{filter_url}?tags={tag_id}&ajax=true")
+    catalog_url = reverse('filtered-items') 
     
-    # Обычный клик (не AJAX) отправляем на главную страницу каталога (функция main)
-    catalog_url = reverse('main') # Имя path для функции main
     return redirect(f"{catalog_url}?tags={tag_id}")
 
 def catalog_filtered(request, tags):
