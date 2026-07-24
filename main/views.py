@@ -6,10 +6,11 @@ from django.apps import apps
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max
+from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max, Prefetch
 from django.db.models.functions import ExtractYear
 from django.core.files.base import ContentFile
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from PIL import Image, ImageSequence
 
 from django.contrib.auth.models import User
@@ -51,23 +52,24 @@ def base(request):
         theme = request.session.get('courent_theme', 'black')
         request.session['courent_theme'] = 'black'
 
-    Allstatus = []
+    Allstatus = list(Product.objects.values_list('status', flat=True).distinct())
 
-    for element in Product.objects.all():
-        if element.status not in Allstatus:
-            Allstatus.append(element.status)
-
-    new_products = sorted(Product.objects.all(), key=lambda x: x.season, reverse=True)[:10]
+    new_products = Product.objects.order_by('-season')[:10]
 
     best_for_category = {}
-    for element in Tags.objects.all():
-        real_products = list(Product.objects.filter(tags=element).order_by('-rating')[:7])
-        
+    tags_with_products = Tags.objects.prefetch_related(
+        Prefetch(
+            'products',
+            queryset=Product.objects.order_by('-rating'),
+            to_attr='top_products'
+        )
+    ).order_by('name')
+
+    for tag in tags_with_products:
+        real_products = tag.top_products[:7]
         missing_count = 7 - len(real_products)
-        
         padded_products = real_products + [None] * missing_count
-        
-        best_for_category[element.name] = padded_products
+        best_for_category[tag.name] = padded_products
 
 
     most_popular_title_week = most_popular(7)
@@ -80,7 +82,6 @@ def base(request):
     data = {
         'title' : 'Главная страница',
         'categories' : Category.objects.all().order_by('-name'),
-        'products' : Product.objects.all().order_by('-id'),
         'tags': Tags.objects.all().order_by('name'),
         'status': Allstatus,
         'theme': theme,
@@ -103,6 +104,9 @@ def main(request):
 
     # print('Текущая тема: ', request.session.get('courent_theme', 'black'))
     allProducts = Product.objects.all()
+
+    # all_products = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
+    # paginator = Paginator(all_products, 27)
     
     Allstatus = []
 

@@ -390,8 +390,15 @@
                     watchSlidesProgress: true,  /* Помогает Swiper точнее определять видимость */
                     loopAdditionalSlides: 3,    /* Увеличиваем количество дубликатов для стабильности loop */
 
-                    preloadImages: true,       /* Принудительно загружает все картинки в DOM сразу */
-                    updateOnImagesReady: true,  /* Пересчитывает слайдер, как только картинки скачались */
+                    //preloadImages: true,       /* Принудительно загружает все картинки в DOM сразу */
+                    //updateOnImagesReady: true,  /* Пересчитывает слайдер, как только картинки скачались */
+
+                    preloadImages: false, // Отключаем принудительную загрузку всех картинок [1]
+                    lazy: {
+                        loadPrevNext: true,       // Загружать соседние слайды по мере приближения
+                        loadPrevNextAmount: 1,
+                        loadOnTransitionStart: true // Начинать загрузку картинки сразу в момент скролла [1]
+                    },
 
                     // Настройки бесконечного скролла
                     loop: true,   
