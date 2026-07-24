@@ -555,7 +555,7 @@ def card(request, product_name):
         'link_name': product_link_name,
         'main_characters': MainCharacters,
         'characters': other_characters,
-        'comments': root_comments,  # <-- Передаем ТУТ исключительно КОРНЕВЫЕ комментарии!
+        'comments': root_comments,
         'your_comment': CurrentComment,
         'star_list': star_list,
         'most_popular_comment': most_popular_comment,
