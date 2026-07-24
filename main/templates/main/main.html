@@ -386,39 +386,86 @@
                     </div>
 
                     <!-- Правая колонка: Пункт 3. Активность сообщества -->
-                    <div class="top_users_block">
-                        <h2 class="section_title">Активность сообщества</h2>
-                        <div class="users_list">
-                            {% for user in top_users %}
-                                <div class="user_leaderboard_item">
-                                    <div class="user_avatar_container">
-                                        {% if user.user_image %}
-                                            <img src="/media/{{ user.user_image }}" alt="{{ user.user_name }}" class="user_avatar_img">
+                     
+                    <section class="top_users_container">
+                        <h2 class="section_title">Достижения пользователей</h2>
+                        <div class="top_users_block">
+                            <div class="users_list">
+                                {% for user in top_users_comm %}
+                                    <div class="user_leaderboard_item">
+                                        {% if forloop.counter <= 3 %}
+                                            <span class="animated-nickname" style="--user-color: {% if forloop.counter == 1 %} gold {% elif forloop.counter == 2 %} silver {% elif forloop.counter == 3 %} #cd7f32 {% endif %};">
+                                                <a id="nickname" class = "login_status_bar_text" style='padding-left: 0'> #{{forloop.counter}} </a>
+                                            </span>
                                         {% else %}
-                                            <div class="user_avatar_stub">
-                                                {{ user.user_name|slice:":1"|upper }}
-                                            </div>
+                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white;'> #{{forloop.counter}} </a>
                                         {% endif %}
-                                    </div>
-                                    <div class="user_leaderboard_info">
-                                        <span class="user_name">{{ user.user_name }}</span>
-                                        <span class="user_rank">
-                                            {% if forloop.counter == 1 %} Король комментариев
-                                            {% elif forloop.counter == 2 %} Писатель
-                                            {% else %} Активный участник
+                                        <div class="user_avatar_container">
+                                            {% if user.user_image %}
+                                                <img src="/media/{{ user.user_image }}" alt="{{ user.user_name }}" class="user_avatar_img">
+                                            {% else %}
+                                                <div class="user_avatar_stub">
+                                                    {{ user.user_name|slice:":1"|upper }}
+                                                </div>
                                             {% endif %}
-                                        </span>
+                                        </div>
+                                        <div class="user_leaderboard_info">
+                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name">{{ user.user_name }}</a>
+                                            <span class="user_rank">
+                                                {% if forloop.counter == 1 %} Король комментариев
+                                                {% elif forloop.counter == 2 %} Писатель
+                                                {% elif forloop.counter == 3 %} Любитель комментариев
+                                                {% else %} Активный участник
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="user_stat">
+                                            {{ user.comments_count }} комм.
+                                        </div>
                                     </div>
-                                    <div class="user_stat">
-                                        {{ user.comments_count }} комм.
+                                {% empty %}
+                                    <p class="empty_text">Здесь пока тихо...</p>
+                                {% endfor %}
+                            </div>
+                            <div class="users_list">
+                                {% for user in top_users_like %}
+                                    <div class="user_leaderboard_item">
+                                        {% if forloop.counter <= 3 %}
+                                            <span class="animated-nickname" style="--user-color: {% if forloop.counter == 1 %} gold {% elif forloop.counter == 2 %} silver {% elif forloop.counter == 3 %} #cd7f32 {% endif %};">
+                                                <a id="nickname" class = "login_status_bar_text" style='padding-left: 0'> #{{forloop.counter}} </a>
+                                            </span>
+                                        {% else %}
+                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white;'> #{{forloop.counter}} </a>
+                                        {% endif %}
+                                        <div class="user_avatar_container">
+                                            {% if user.user_image %}
+                                                <img src="/media/{{ user.user_image }}" alt="{{ user.user_name }}" class="user_avatar_img">
+                                            {% else %}
+                                                <div class="user_avatar_stub">
+                                                    {{ user.user_name|slice:":1"|upper }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="user_leaderboard_info">
+                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name">{{ user.user_name }}</a>
+                                            <span class="user_rank">
+                                                {% if forloop.counter == 1 %} Любимчик сообщества
+                                                {% elif forloop.counter == 2 %} В погоне за популярностью
+                                                {% elif forloop.counter == 3 %} Собиратель лайков
+                                                {% else %} Активный участник
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="user_stat">
+                                            {{ user.total_likes }} лайк.
+                                        </div>
                                     </div>
-                                </div>
-                            {% empty %}
-                                <p class="empty_text">Здесь пока тихо...</p>
-                            {% endfor %}
+                                {% empty %}
+                                    <p class="empty_text">Здесь пока тихо...</p>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-
+                    </section>
                 </div>
             </section>
         </div>

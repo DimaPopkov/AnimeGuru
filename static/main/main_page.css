@@ -742,8 +742,14 @@
     padding: 0 20px;
 }
 
-.tags_cloud_block, .top_users_block {
+.tags_cloud_block, .top_users_container {
     flex: 1; /* Обе колонки одинаковой ширины */
+}
+
+.top_users_block{
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr 1fr;
 }
 
 .section_title {
@@ -850,6 +856,9 @@
 .user_name {
     font-weight: 500;
     font-size: 15px;
+
+    color: inherit;
+    text-decoration: none;
 }
 
 .user_rank {

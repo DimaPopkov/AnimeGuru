@@ -77,12 +77,19 @@ def base(request):
 
     popular_posts = Posts.objects.annotate( 
         rating_score=F('like_count') - F('dislike_count')
-    ).order_by('-rating_score')[:3]
+    ).order_by('-rating_score')[:3] 
 
-    top_users = Comments.objects.values('user_name', 'user_image').annotate(
-        comments_count=Count('id')
-    ).filter(comments_count__gt=0).order_by('-comments_count')[:5]
-    print(top_users)
+    top_users_base = Comments.objects.values('user_name', 'user_image').annotate(
+        comments_count=Count('id'),
+        total_likes=Sum('like_count'),
+        user_id=Subquery(
+            User.objects.filter(username=OuterRef('user_name')).values('id')[:1]
+        )
+    )
+
+    top_users_comm = top_users_base.filter(comments_count__gt=0).order_by('-comments_count')[:5]
+
+    top_users_like = top_users_base.filter(total_likes__gt=0).order_by('-total_likes')[:5]
 
     data = {
         'title' : 'Главная страница',
@@ -96,7 +103,8 @@ def base(request):
         'most_popular_week': most_popular_title_week,
         'most_popular_month': most_popular_title_month,
         'popular_posts': popular_posts,
-        'top_users': top_users,
+        'top_users_comm': top_users_comm,
+        'top_users_like': top_users_like,
     }
         
     return render(request, 'main/main.html', data)
