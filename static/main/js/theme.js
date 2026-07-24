@@ -857,7 +857,7 @@ function ChangeTheme(username){
         }
 
         for (const element of no_comment_block) {
-            element.style.backgroundColor = "rgb(170, 170, 170)";
+            element.style.backgroundColor = "rgb(30, 30, 30)";
         }
 
         body.style.background = "rgb(20, 20, 20)";
