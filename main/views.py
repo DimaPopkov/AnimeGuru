@@ -104,25 +104,27 @@ def main(request):
 
     # print('Текущая тема: ', request.session.get('courent_theme', 'black'))
     allProducts = Product.objects.all()
+    allProducts_queryset = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
+    
 
     # all_products = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
     # paginator = Paginator(all_products, 27)
     
-    Allstatus = []
+    # Allstatus = []
+    Allstatus = list(Product.objects.values_list('status__name', flat=True).distinct())
 
-    for element in allProducts:
-        if element.status not in Allstatus:
-            Allstatus.append(element.status)
+    # for element in allProducts:
+    #     if element.status not in Allstatus:
+    #         Allstatus.append(element.status)
     
-    new_products = sorted(allProducts, key=lambda x: x.season, reverse=True)[:7]
+    new_products = Product.objects.order_by('-season')[:7]
 
-    all_years_in_db = [
-        p.season.year for p in allProducts
-        if p.season is not None
-    ]
-
-    db_min_year = min(all_years_in_db) if all_years_in_db else 1995
-    db_max_year = max(all_years_in_db) if all_years_in_db else 2026
+    years_range = Product.objects.aggregate(
+        min_year=Min(ExtractYear('season')),
+        max_year=Max(ExtractYear('season'))
+    )
+    db_min_year = years_range['min_year'] if years_range['min_year'] else 1995
+    db_max_year = years_range['max_year'] if years_range['max_year'] else 2026
 
     if db_min_year == db_max_year:
         db_min_year -= 5
@@ -130,6 +132,11 @@ def main(request):
 
     year_min = request.GET.get('year_min', db_min_year)
     year_max = request.GET.get('year_max', db_max_year)
+
+    # Оптимизация с загрузкой нескольких карточек, а не всех
+    paginator = Paginator(allProducts_queryset, 27)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
 
     data = {
         'title' : 'Каталог',
