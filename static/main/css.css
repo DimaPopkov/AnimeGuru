@@ -606,7 +606,7 @@ main{
 }
 
 .prod_element.line-mode {
-    background-color: rgba(21, 21, 21, 0.75) !important;
+    background-color: inherit;
     padding: 20px !important;
     border-radius: 8px !important;
 }
@@ -1729,7 +1729,7 @@ input[type="checkbox"]:checked::after {
     background-position: center !important;
     
     /* Умеренный блюр и яркость */
-    filter: blur(10px) brightness(0.3) !important; 
+    filter: blur(10px) brightness(0.3); 
     transform: scale(1.2); /* Скрываем белые края от размытия */
     
     z-index: 1 !important; /* Уводим на нижний слой внутри карточки */
@@ -1869,7 +1869,7 @@ input[type="checkbox"]:checked::after {
     overflow: hidden !important; 
     
     /* Чистый, монохромный темный фон для самой карточки */
-    background-color: rgb(30, 30, 30) !important; 
+    background-color: rgb(30, 30, 30); 
     border: 1px solid rgba(255, 255, 255, 0.02) !important; 
     border-radius: 12px;
     padding: 20px !important;
@@ -2431,12 +2431,13 @@ input[type="checkbox"]:checked::after {
     align-items: center;
 
     margin-top: -12px;
+    color: gray;
 }
 
 .star {
     cursor: pointer;
     font-size: 30px; /* Размер звезд */
-    color: gray; /* Цвет пустой звезды */
+    color: inherit; /* Цвет пустой звезды */
     transition: color 0.2s ease; /* Плавный переход цвета при наведении */
     align-content: center;
 }
@@ -2548,10 +2549,10 @@ input[type="checkbox"]:checked::after {
     align-items: center;
     justify-content: center;
 
-    --psuedo-perescaz-overlay-color: rgb(30, 30, 30);
+    --psuedo-perescaz-overlay-color: rgb(20, 20, 20);
 
     border-radius: 10px;
-    border: 1px solid rgba(100, 100, 100, 0.2);
+    /* border: 1px solid rgba(100, 100, 100, 0.2); */
 
     font-weight: 700;
     color: rgb(255, 255, 255);
@@ -2595,10 +2596,10 @@ input[type="checkbox"]:checked::after {
 
     padding: 20px;
 
-    border: 1px solid rgba(100, 100, 100, 0.2);
+    /* border: 1px solid rgba(100, 100, 100, 0.2); */
     border-radius: 10px;
 
-    background: rgb(30, 30, 30);
+    /* background: rgb(30, 30, 30); */
 }
 
 .is-revealed .blur-overlay {
@@ -3362,9 +3363,9 @@ button:disabled {
         rgba(50, 50, 60, 0.4) 0%,
         rgb(30, 30, 30) 35%,
         rgb(30, 30, 30) 100%
-    ) !important;
+    );
     
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px !important;
     padding: 20px !important;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
@@ -3387,9 +3388,9 @@ button:disabled {
         rgb(30, 30, 30) 0%,
         rgb(30, 30, 30) 35%,
         rgba(50, 50, 60, 0.4) 100%
-    ) !important;
+    );
     
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px;
     padding: 20px !important;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
@@ -3446,16 +3447,17 @@ button:disabled {
     padding: 15px !important;
     
     /* Делаем подложку текста слегка темнее и прозрачнее, чтобы текст идеально читался */
-    background-color: rgba(10, 10, 12, 0.4) !important;
+    background-color: rgba(10, 10, 10, 0.2) !important;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
 }
 
 /* Блок "Отсутствует" */
 .no_comment_block {
     width: 100%;
     padding: 40px 0;
-    background-color: rgb(30, 30, 30) !important;
+    background-color: rgb(30, 30, 30);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 6px 20px !important;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     text-align: center;
@@ -3508,7 +3510,8 @@ textarea.you_container_text_container {
     color: #e0e0e6 !important;
     
     /* Превращаем серую коробку в полупрозрачное темное стекло */
-    background-color: rgba(10, 10, 12, 0.4) !important;
+    /* background-color: rgba(10, 10, 12, 0.4) !important; */
+    background-color: rgba(10, 10, 10, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.04) !important;
     border-radius: 8px !important;
     
@@ -3523,8 +3526,11 @@ textarea.you_container_text_container:focus {
 }
 
 .you_container_button {
-    background: rgba(161, 118, 255, 0.15) !important;
+    background: rgba(161, 118, 255, 0.45) !important;
+
     color: #bfa3ff !important;
+    text-shadow: 0 0 10px rgb(22, 0, 40);
+        
     border: 1px solid rgba(161, 118, 255, 0.4) !important;
     border-radius: 6px !important;
     padding: 10px 25px !important;
@@ -3535,7 +3541,7 @@ textarea.you_container_text_container:focus {
 }
 
 .you_container_button:hover {
-    background: rgba(161, 118, 255, 0.35) !important;
+    background: rgba(161, 118, 255, 0.75) !important;
     border-color: rgba(161, 118, 255, 0.8) !important;
     color: #ffffff !important;
     box-shadow: 0 0 12px rgba(161, 118, 255, 0.3);

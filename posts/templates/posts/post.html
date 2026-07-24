@@ -24,7 +24,7 @@
         <div class="post_card_text_block">
             {% if request.user.is_authenticated %}
                 <div class="post_card_comment_block fade-in">
-                    <h6 class="dark_gray_font"> Все комментарии </h6>
+                    <!-- <h6 class="dark_gray_font"> Все комментарии </h6> -->
                     <h2> Ваш комментарий </h2>
                 </div>
 
@@ -46,6 +46,12 @@
                         </div>
                     </form>
                 {% endif %}
+
+                <br>
+                <div class="post_card_comment_block fade-in">
+                    <h2> Все комментарии </h2>
+                    <!-- <h2> Ваш комментарий </h2> -->
+                </div>
             {% else %}
                 <div class="post_card_comment_block fade-in">
                     <h2> Все комментарии </h2>

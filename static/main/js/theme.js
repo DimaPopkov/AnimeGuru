@@ -119,16 +119,6 @@ function ChangeTheme(username){
         dropdown_content_linear_gr = document.querySelectorAll('.dropdown-content-linear-gr');
     }
 
-    let you_container_dop = null;
-    if (document.querySelectorAll('.you_container_dop')){
-        you_container_dop = document.querySelectorAll('.you_container_dop');
-    }
-
-    let you_container_text_container = null;
-    if (document.querySelectorAll('.you_container_text_container')){
-        you_container_text_container = document.querySelectorAll('.you_container_text_container');
-    }
-
     let you_container_dop_block_text = null;
     if (document.querySelectorAll('.you_container_dop_block_text')){
         you_container_dop_block_text = document.querySelectorAll('.you_container_dop_block_text');
@@ -217,6 +207,56 @@ function ChangeTheme(username){
     let new_posts_h4 = null;
     if (document.querySelectorAll('.new_posts_h4')){
         new_posts_h4 = document.querySelectorAll('.new_posts_h4');
+    }
+
+    let slider_container_wrapper = null;
+    if (document.querySelectorAll('.slider-container-wrapper')){
+        slider_container_wrapper = document.querySelectorAll('.slider-container-wrapper');
+    }
+
+    let hero_popular_container = null;
+    if (document.querySelectorAll('.hero-popular-container')){
+        hero_popular_container = document.querySelectorAll('.hero-popular-container');
+    }
+
+    let skeleton = null;
+    if (document.querySelectorAll('.skeleton')){
+        skeleton = document.querySelectorAll('.skeleton');
+    }
+    
+    let post_row_container = null;
+    if (document.querySelectorAll('.post-row-container')){
+        post_row_container = document.querySelectorAll('.post-row-container');
+    }
+
+    let blur_bg = null;
+    if (document.querySelectorAll('.blur_bg')){
+        blur_bg = document.querySelectorAll('.blur_bg');
+    }
+    
+    let main_characters = null;
+    if (document.querySelectorAll('.main_characters')){
+        main_characters = document.querySelectorAll('.main_characters');
+    }
+
+    let you_container_form = null;
+    if (document.querySelectorAll('#you_container_form')){
+        you_container_form = document.querySelectorAll('#you_container_form');
+    }
+  
+    let star_rating = null;
+    if (document.querySelectorAll('.star-rating')){
+        star_rating = document.querySelectorAll('.star-rating');
+    }
+
+    let you_container_dop_block = null;
+    if (document.querySelectorAll('.you_container_dop_block')){
+        you_container_dop_block = document.querySelectorAll('.you_container_dop_block');
+    }
+
+    let no_comment_block = null;
+    if (document.querySelectorAll('.no_comment_block')){
+        no_comment_block = document.querySelectorAll('.no_comment_block');
     }
 
     if (input.checked != true){ 
@@ -308,21 +348,6 @@ function ChangeTheme(username){
             }
         }
 
-        if (you_container_dop != null){
-            for (const element of you_container_dop) {
-                element.style.background = 'rgb(240, 240, 240)';
-                element.style.border = '1px solid rgb(180, 180, 180)';
-            }
-        }
-
-        if (you_container_text_container != null){
-            for (const element of you_container_text_container) {
-                element.style.background = 'rgb(200, 200, 200)';
-                element.style.border = '1px solid rgb(180, 180, 180)';
-                element.style.color = 'rgb(30, 30, 30)';
-            }
-        }
-
         if (you_container_dop_block_text != null){
             for (const element of you_container_dop_block_text) {
                 element.style.background = 'rgb(200, 200, 200)';
@@ -340,7 +365,8 @@ function ChangeTheme(username){
         }
 
         for (const element of related_product_link) {
-            element.style.color = 'rgb(50, 50, 50)';
+            element.style.color = 'rgb(20, 20, 20)';
+            element.style.textShadow = '0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.9)';
         }
 
         if (main_characters_img_block_fade != null){
@@ -490,6 +516,46 @@ function ChangeTheme(username){
             element.style.color = "rgb(50, 50, 50)";
         }
 
+        for (const element of slider_container_wrapper) {
+            element.style.background = "inherit";
+        }
+
+        for (const element of hero_popular_container) {
+            element.style.background = "linear-gradient(to right, rgba(135, 135, 135, 0.75) 30%, rgba(135, 135, 135, 0.55) 100%)";
+        }
+        
+        for (const element of skeleton) {
+            element.style.background = "rgb(200, 200, 200)";
+        }
+
+        for (const element of post_row_container) {
+            element.style.background = "linear-gradient(to right, rgba(120, 120, 120, 0.65) 20%, rgba(120, 120, 120, 0.45) 60%, rgba(120, 120, 120, 0.2) 100%)";
+        }
+
+        for (const element of blur_bg) {
+            element.style.filter = "blur(10px) brightness(0.75)";
+        }
+
+        for (const element of main_characters) {
+            element.style.background = "rgb(255, 255, 255)";
+        }
+
+        for (const element of you_container_form) {
+            element.style.background = "linear-gradient(90deg, rgba(50, 50, 60, 0.2) 0%, rgba(50, 50, 50, 0.2) 35%, rgba(170, 170, 170) 100%)";
+        }
+
+        for (const element of star_rating) {
+            element.style.color = "rgb(135,135,135)";
+        }
+
+        for (const element of you_container_dop_block) {
+            element.style.background = "linear-gradient(90deg, rgb(170, 170, 170) 0%, rgba(50, 50, 50, 0.2) 65%, rgba(50, 50, 60, 0.2) 100%)";
+        }
+
+        for (const element of no_comment_block) {
+            element.style.backgroundColor = "rgb(170, 170, 170)";
+        }
+
         body.style.background = "rgb(220, 220, 220)";
 
         input.checked = true;
@@ -585,21 +651,6 @@ function ChangeTheme(username){
             }
         }
 
-        if (you_container_dop != null){
-            for (const element of you_container_dop) {
-                element.style.background = 'rgb(50, 50, 50)';
-                element.style.border = '1px solid rgb(80, 80, 80)';
-            }
-        }
-
-        if (you_container_text_container != null){
-            for (const element of you_container_text_container) {
-                element.style.background = 'rgb(80, 80, 80)';
-                element.style.border = '1px solid rgb(80, 80, 80)';
-                element.style.color = 'rgb(200, 200, 200)';
-            }
-        }
-
         if (you_container_dop_block_text != null){
             for (const element of you_container_dop_block_text) {
                 element.style.background = 'rgb(80, 80, 80)';
@@ -618,6 +669,7 @@ function ChangeTheme(username){
 
         for (const element of related_product_link) {
             element.style.color = 'rgb(200, 200, 200)';
+            element.style.textShadow = 'none';
         }
 
         if (main_characters_img_block_fade != null){
@@ -765,6 +817,47 @@ function ChangeTheme(username){
 
         for (const element of new_posts_h4) {
             element.style.color = "inherit";
+        }
+
+        for (const element of slider_container_wrapper) {
+            element.style.background = "#141414";
+        }
+
+        for (const element of hero_popular_container) {
+            element.style.background = "linear-gradient(to right, rgba(20, 20, 20, 0.95) 30%, rgba(20, 20, 20, 0.75) 100%)";
+        }
+
+        for (const element of skeleton) {
+            element.style.background = "rgb(31, 31, 31)";
+        }
+
+        for (const element of post_row_container) {
+            element.style.background = "linear-gradient(to right, rgba(20, 20, 20, 0.98) 20%, rgba(20, 20, 20, 0.85) 60%, rgba(20, 20, 20, 0.4) 100%)";
+            element.style.color = '#ffffff';
+        }
+
+        for (const element of blur_bg) {
+            element.style.filter = "blur(10px) brightness(0.3)";
+        }
+
+        for (const element of main_characters) {
+            element.style.background = "rgb(30, 30, 30)";
+        }
+
+        for (const element of you_container_form) {
+            element.style.background = "linear-gradient(90deg, rgba(50, 50, 60, 0.4) 0%, rgb(30, 30, 30) 35%, rgb(30, 30, 30) 100%)";
+        }
+
+        for (const element of star_rating) {
+            element.style.color = "gray";
+        }
+
+        for (const element of you_container_dop_block) {
+            element.style.background = "linear-gradient(90deg, rgb(30, 30, 30) 0%, rgb(30, 30, 30) 35%, rgba(50, 50, 60, 0.4) 100%)";
+        }
+
+        for (const element of no_comment_block) {
+            element.style.backgroundColor = "rgb(170, 170, 170)";
         }
 
         body.style.background = "rgb(20, 20, 20)";

@@ -332,11 +332,12 @@
                             {% for post in popular_posts %}
                                 <a style="text-decoration: none;" href="{% url 'post' post_id=post.id %}">
                                     {% if post.media %}
-                                        <div class="post-row-wrapper" style="background-image: linear-gradient(to right, rgba(20, 20, 20, 0.98) 20%, rgba(20, 20, 20, 0.85) 60%, rgba(20, 20, 20, 0.4) 100%), url('{{ post.media.url }}');">
+                                        <div class="post-row-wrapper" style="background-image: url('{{ post.media.url }}') !important;">
+                                            <div class="post-row-container" style="background: linear-gradient(to right, rgba(20, 20, 20, 0.98) 20%, rgba(20, 20, 20, 0.85) 60%, rgba(20, 20, 20, 0.4) 100%) !important;">
                                     {% else %}
                                         <div class="post-row-wrapper no-media-bg">
+                                            <div class="post-row-container">
                                     {% endif %}
-                                        <div class="post-row-container">
                                             <div class="post-row-poster">
                                                 {% if post.media %}
                                                     <img src="{{ post.media.url }}" alt="{{ post.title }}">

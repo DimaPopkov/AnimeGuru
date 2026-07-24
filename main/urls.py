@@ -24,7 +24,7 @@ urlpatterns = [
     path('delete_comments/<str:product_name>/<str:id>/', views.delete_comments, name='delete_comments'),
     path('catalog/card/<str:product_name>/', views.card, name="card"),
     path('login/', include('login.urls')),
-    path('logout/', LogoutView.as_view(next_page=reverse_lazy('main')), name='logout'),
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('base')), name='logout'),
     path('profile/', views.profile, name='profile'),
     path('user/<str:id>', views.user_profile, name='user_profile'),
     path('profile/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
