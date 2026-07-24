@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% extends extends_template|default:'main/base.html' %}
 
 {% block title %}
     {{ title }}
@@ -64,7 +64,17 @@
                     <div class="custom-dropdown">
                         <!-- Кнопка для открытия/закрытия списка -->
                         <button class="dropdown-toggle main_items_background" type="button">
-                            <span class="selected-tags">Выберите теги</span>                     
+                            <span class="selected-tags">
+                                {% if selected_tags %}
+                                    {% for tag in tags %}
+                                        {% if tag.id|slugify in selected_tags %}
+                                            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    Выберите теги
+                                {% endif %}
+                            </span>                     
                             <img class="arrow" id="arrow" src="{% static '/img/arrow.png' %}" width="10px">
                         </button>
 

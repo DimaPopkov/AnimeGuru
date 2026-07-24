@@ -369,6 +369,58 @@
                     </div>
                 {% endif %}
             </div>
+
+            <section class="community_section">
+                <div class="community_container">
+                    
+                    <!-- Левая колонка: Пункт 4. Быстрый переход по жанрам -->
+                    <div class="tags_cloud_block">
+                        <h2 class="section_title">Популярные жанры</h2>
+                        <div class="tags_cloud_flex">
+                            {% for tag in tags %}
+                                <a href="/pre_filter/{{ tag.id }}/" class="js-tag-link">
+                                    {{ tag.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Правая колонка: Пункт 3. Активность сообщества -->
+                    <div class="top_users_block">
+                        <h2 class="section_title">Активность сообщества</h2>
+                        <div class="users_list">
+                            {% for user in top_users %}
+                                <div class="user_leaderboard_item">
+                                    <div class="user_avatar_container">
+                                        {% if user.user_image %}
+                                            <img src="/media/{{ user.user_image }}" alt="{{ user.user_name }}" class="user_avatar_img">
+                                        {% else %}
+                                            <div class="user_avatar_stub">
+                                                {{ user.user_name|slice:":1"|upper }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="user_leaderboard_info">
+                                        <span class="user_name">{{ user.user_name }}</span>
+                                        <span class="user_rank">
+                                            {% if forloop.counter == 1 %} Король комментариев
+                                            {% elif forloop.counter == 2 %} Писатель
+                                            {% else %} Активный участник
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="user_stat">
+                                        {{ user.comments_count }} комм.
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p class="empty_text">Здесь пока тихо...</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </section>
         </div>
     </div>
 
@@ -479,6 +531,32 @@
             // Запускаем расчет индивидуально для каждого найденного изображения
             allImages.forEach(img => {
                 processImagePalette(img);
+            });
+
+            const tagLinks = document.querySelectorAll('.js-tag-link');
+            const mainContainer = document.querySelector('main'); // Находим ваш тег <main>
+
+            if (!tagLinks.length || !mainContainer) return;
+
+            tagLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href'); // Получаем /pre_filter/ID
+
+                    fetch(url, {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        // Бесшовно меняем содержимое тега <main>
+                        mainContainer.innerHTML = html; 
+                        
+                        // Перебиваем URL в строке браузера на официальный адрес каталога с фильтром
+                        const tagId = url.split('/').pop();
+                        history.pushState(null, '', `/catalog/?tags=${tagId}`);
+                    })
+                    .catch(error => console.error('Ошибка бесшовного перехода:', error));
+                });
             });
         });
 

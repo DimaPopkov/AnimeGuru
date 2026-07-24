@@ -7,7 +7,7 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max, Prefetch
-from django.db.models.functions import ExtractYear
+from django.db.models.functions import ExtractYear, Lower
 from django.core.files.base import ContentFile
 from django.core.cache import cache
 from django.core.paginator import Paginator
@@ -79,6 +79,11 @@ def base(request):
         rating_score=F('like_count') - F('dislike_count')
     ).order_by('-rating_score')[:3]
 
+    top_users = Comments.objects.values('user_name', 'user_image').annotate(
+        comments_count=Count('id')
+    ).filter(comments_count__gt=0).order_by('-comments_count')[:5]
+    print(top_users)
+
     data = {
         'title' : 'Главная страница',
         'categories' : Category.objects.all().order_by('-name'),
@@ -91,6 +96,7 @@ def base(request):
         'most_popular_week': most_popular_title_week,
         'most_popular_month': most_popular_title_month,
         'popular_posts': popular_posts,
+        'top_users': top_users,
     }
         
     return render(request, 'main/main.html', data)
@@ -109,12 +115,12 @@ def main(request):
     # all_products = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
     # paginator = Paginator(all_products, 27)
     
-    # Allstatus = []
-    Allstatus = list(Product.objects.values_list('status__name', flat=True).distinct())
+    Allstatus = []
 
-    # for element in allProducts:
-    #     if element.status not in Allstatus:
-    #         Allstatus.append(element.status)
+    for element in allProducts:
+        if element.status not in Allstatus:
+            Allstatus.append(element.status)
+    print(Allstatus)
     
     new_products = Product.objects.order_by('-season')[:7]
 
@@ -188,7 +194,6 @@ def create(request):
 
 def filter(request):
     products = Product.objects.select_related('category', 'status').prefetch_related('tags')
-    finalTags = Tags.objects.all().order_by('name')
 
     # Фильтр по дате
     years_range = Product.objects.aggregate(
@@ -264,7 +269,7 @@ def filter(request):
         'categories' : Category.objects.all(),
         'products': final_products,
         'new_products': new_products,
-        'tags': finalTags,
+        'tags': Tags.objects.all().order_by('name'),
         'filter_data': filter_data,
         'selected_category': selected_category,
         'selected_tags': selected_tags,
@@ -277,8 +282,22 @@ def filter(request):
         'most_popular_week': most_popular(7),
         'most_popular_month': most_popular(30),
     }
+
+    if request.GET.get('ajax') == 'true' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        context['extends_template'] = 'main/spacer.html'
     
     return render(request, 'main/catalog.html', context)
+
+def pre_filter(request, tag_id):
+    # Убедитесь, что имена в reverse совпадают с name="..." из urls.py
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # Перенаправляем AJAX-запрос на url функции filter
+        filter_url = reverse('filtered-items') # Имя path для функции filter
+        return redirect(f"{filter_url}?tags={tag_id}&ajax=true")
+    
+    # Обычный клик (не AJAX) отправляем на главную страницу каталога (функция main)
+    catalog_url = reverse('main') # Имя path для функции main
+    return redirect(f"{catalog_url}?tags={tag_id}")
 
 def catalog_filtered(request, tags):
     tags_name = Tags.objects.filter(name=f'{tags}')

@@ -17,6 +17,7 @@ urlpatterns = [
     path('theme/set/', views.save_theme),
     path('create/', views.create, name="create_product"),
     path('filtered-items/', views.filter, name='filtered-items'),
+    path('pre_filter/<str:tag_id>/', views.pre_filter, name='pre_filter'),
     path('card/<str:product_name>/favourites_add/', views.favourites_add, name='favourites_add'),
     path('comment/<int:comment_id>/state/', views.update_comment_state, name='comment'),
     path('add_comments/<str:product_name>/', views.add_comments, name='add_comments'),
