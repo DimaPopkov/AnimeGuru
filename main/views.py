@@ -103,10 +103,9 @@ def main(request):
     #     request.session['courent_theme'] = 'black'
 
     # print('Текущая тема: ', request.session.get('courent_theme', 'black'))
-    allProducts = Product.objects.all()
-    allProducts_queryset = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
+    # allProducts = Product.objects.all()
+    allProducts = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
     
-
     # all_products = Product.objects.select_related('category', 'status').prefetch_related('tags').order_by('-id')
     # paginator = Paginator(all_products, 27)
     
@@ -134,7 +133,7 @@ def main(request):
     year_max = request.GET.get('year_max', db_max_year)
 
     # Оптимизация с загрузкой нескольких карточек, а не всех
-    paginator = Paginator(allProducts_queryset, 27)
+    paginator = Paginator(allProducts, 27)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
@@ -188,9 +187,28 @@ def create(request):
     return render(request, 'main/create.html', data)
 
 def filter(request):
-    final_products = []
-    products = Product.objects.all()
+    products = Product.objects.select_related('category', 'status').prefetch_related('tags')
     finalTags = Tags.objects.all().order_by('name')
+
+    # Фильтр по дате
+    years_range = Product.objects.aggregate(
+        min_year=Min(ExtractYear('season')),
+        max_year=Max(ExtractYear('season'))
+    )
+    db_min_year = years_range['min_year'] if years_range['min_year'] else 1995
+    db_max_year = years_range['max_year'] if years_range['max_year'] else 2026
+
+    if db_min_year == db_max_year:
+        db_min_year -= 5
+        db_max_year += 1
+
+    year_min = request.GET.get('year_min') or db_min_year
+    year_max = request.GET.get('year_max') or db_max_year
+
+    try:
+        products = products.filter(season__year__gte=int(year_min), season__year__lte=int(year_max))
+    except (ValueError, TypeError):
+        pass
 
     # Фильтр по категории
     category_id = request.GET.get('category')
@@ -211,45 +229,25 @@ def filter(request):
 
     # Фильтр по названию
     titlename = request.GET.get('titlename')
-    similarity_threshold_char = 0.3
-    similarity_threshold = 0.3
 
     if titlename:
-        # for product in products:
-        #     array = product.name.split(" ")
-        #     if array.__len__() == 1:
-        #         similarity_threshold_final = calculate_char_similarity(product.name, titlename)
-        #         if similarity_threshold_final >= similarity_threshold_char:
-        #             final_products.append(product)
-
-        #     else:
-        #         similarity_threshold_final = calculate_similarity(product.name, titlename)
-        #         if similarity_threshold_final >= similarity_threshold:
-        #             final_products.append(product)
-
         words = titlename.strip().split()
-    
-        query = products
         for word in words:
-            query = query.filter(name__icontains=word)
-
-        final_products = list(query)
-    else:
-        final_products = list(products)
+            products = products.filter(name__icontains=word)
 
     # Фильтр по сортировке
     sort_id = request.GET.get('sort')
     if sort_id:
-        if(sort_id == '2'): # Сортировка по рейтингу
-            final_products.sort(key=lambda x: x.rating, reverse=True)
-            pass
-        if(sort_id == '4'): # Сортировка по новизне
-            final_products.sort(key=lambda x: x.season, reverse=True)
-            pass
-        if(sort_id == '3'): # Сортировка по дате добавления
-            final_products.sort(key=lambda x: x.id, reverse=True)
-            pass
+        if sort_id == '2':    # Сортировка по рейтингу
+            products = products.order_by('-rating', '-id')
+        elif sort_id == '4':  # Сортировка по новизне
+            products = products.order_by('-season', '-id')
+        elif sort_id == '3':  # Сортировка по дате добавления
+            products = products.order_by('-id')
+    else:
+        products = products.order_by('-id')
 
+    # Контекст
     filter_data = [category_id, tags_ids, status_id, sort_id]
 
     selected_category = category_id
@@ -257,30 +255,9 @@ def filter(request):
     selected_status = status_id
     selected_sort = sort_id
 
-    new_products = sorted(final_products, key=lambda x: x.season, reverse=True)[:7]
 
-    all_years_in_db = [
-        p.season.year for p in products
-        if p.season is not None
-    ]
-
-    db_min_year = min(all_years_in_db) if all_years_in_db else 1995
-    db_max_year = max(all_years_in_db) if all_years_in_db else 2026
-
-    if db_min_year == db_max_year:
-        db_min_year -= 5
-        db_max_year += 1
-
-    year_min = request.GET.get('year_min', db_min_year)
-    year_max = request.GET.get('year_max', db_max_year)
-
-    try:
-        final_products = [
-            p for p in final_products 
-            if p.season is not None and int(year_min) <= p.season.year <= int(year_max)
-        ]
-    except (ValueError, TypeError):
-        pass
+    final_products = list(products)
+    new_products = list(Product.objects.order_by('-season')[:7])
 
     context = {
         'title' : 'Основная страница',
