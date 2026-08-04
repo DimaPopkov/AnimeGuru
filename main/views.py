@@ -66,11 +66,10 @@ def base(request):
     ).order_by('name')
 
     for tag in tags_with_products:
-        real_products = tag.top_products[:7]
-        missing_count = 7 - len(real_products)
+        real_products = tag.top_products[:6]
+        missing_count = 6 - len(real_products)
         padded_products = real_products + [None] * missing_count
         best_for_category[tag.name] = padded_products
-
 
     most_popular_title_week = most_popular(7)
     most_popular_title_month = most_popular(30)

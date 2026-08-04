@@ -118,7 +118,7 @@
                                                 <span class="hero-badge">Популярное</span>
                                         {% else %}
                                             <div class="small-card" onclick="submitform(this)">
-                                                <img src="{{ category_products.3.image.url }}" alt="">
+                                                <img src="{{ category_products.5.image.url }}" alt="">
                                         {% endif %}
                                             <div class="card-info small"><p class="card-title">{{ category_products.5.name }}</p></div>
                                         </div>
@@ -435,7 +435,7 @@
                                                 <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; font-size: 26px;'> #{{forloop.counter}} </a>
                                             </span>
                                         {% else %}
-                                            <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white; font-size: 26px;'> #{{forloop.counter}} </a>
+                                            <a id="nickname" class = "login_status_bar_text"> #{{forloop.counter}} </a>
                                         {% endif %}
                                         <div class="user_avatar_container">
                                             {% if user.user_image %}
@@ -479,7 +479,7 @@
                 new Swiper(mainSwiperContainer, {
                     // Ровно 3 целых жанровых блока отображаются на экране
                     slidesPerView: 'auto',
-                    spaceBetween: 0, /* Отступы между жанрами мы уже заложили через padding-left в CSS */
+                    spaceBetween: 0,
                     
                     centeredSlides: true,       /* Активный жанр всегда по центру экрана */
                     slideToClickedSlide: true,  /* Клик по боковому жанру плавно центрирует его */

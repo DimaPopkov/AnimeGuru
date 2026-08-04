@@ -11,6 +11,16 @@
     .show_filter{
         margin-right: -25px;
     }
+    .chart-wrapper{
+        padding: 10px 10px;
+    }
+    .top_users_block, .community_container{
+        gap: 15px;
+    }
+    .user_avatar_container{
+        margin-right: 5px;
+    }
+    .user_leaderboard_item
 }
 
 @media screen and (max-width: 1400px){
@@ -48,6 +58,23 @@
     }
     .new_products_list_product:nth-child(n+8){
         display: none;
+    }
+    .profile-stats-wrapper{
+        flex-direction: column;
+    }
+    .chart-wrapper{
+        margin-left: 0;
+    }
+    .profile-stats-wrapper-container{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .profile-stats-wrapper-container h3{
+        display: none;
+    }
+    .community_container{
+        flex-direction: column;
+        gap: 30px;
     }
 }
 
@@ -109,6 +136,55 @@
         display: none;
     }
 }
+
+@media screen and (max-width: 1000px){
+    .profile_container_header{
+        flex-direction: column;
+        row-gap: 15px;
+    }
+    .profile_container_header_block_info_flex_vis{
+        width: 100%;
+        align-items: center;
+    }
+    .profile-stats-wrapper-container{
+        width: 100%;
+    }
+    .chart-wrapper{
+        max-width: 900px;
+    }
+    .profile_container_favourites_block{
+        grid-auto-columns: minmax(120px, 1fr);
+    }
+    .profile_container_favourites_block .prod_element_pic_lock, .profile_container_favourites_block .prod_element_pic_lock2{
+        min-width: 120px;
+    }
+    .prod_element_info h5{
+        font-size: 0.9rem;
+    }
+    .hero-popular-wrapper{
+        height: 350px;
+    }
+    .hero-popular-container{
+        padding: 35px;
+        gap: 20px;
+    }
+    .hero-poster-side.popular-hero-shimmer{
+        width: 180px !important;
+        height: 261px !important;
+    }
+    .hero-title{
+        font-size: 30px;
+    }
+    .hero-description{
+        margin-bottom: 15px;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
 
 @media screen and (max-width: 900px){
     .filter{
@@ -288,8 +364,8 @@
     .container_e{
         margin-top: 45px;
     }
-    .container_f{
-        margin-top: 70px;
+    .slider-container-wrapper{
+        margin-top: 50px;
     }
     .find_by_name2 {
         width: 100%;
@@ -382,12 +458,27 @@
     h1{
         font-size: calc(1rem + 1.5vw);;
     }
-    .profile_container_header_block_info_flex_vis img{
-        width: 150px;
-        height: 150px;
-    }
-    .new_products_list_product:nth-child(n+4){
+    .new_products_list_product:nth-child(n+5){
         display: none;
+    }
+    .animated-nickname .login_status_bar_text{
+        font-size: 22px !important;
+    }
+    .user_avatar_container{
+        min-width: 40px;
+        min-height: 40px;
+        width: 40px;
+        height: 40px;
+    }
+    .user_rank{
+        font-size: 10px;
+    }
+    .hero-popular-container{
+        padding: 25px;
+        gap: 15px;
+    }
+    .community_section{
+        padding-top: 20px;    
     }
 }
 @media screen and (max-width: 650px){
@@ -436,6 +527,30 @@
     }
     .prod_element_pic_lock{
         min-width: 100px;
+    }
+    .top_users_block{
+        gap: 10px;    
+    }
+    .user_leaderboard_item{
+        padding: 5px 10px;
+    }
+    .main-catalog-swiper .card-double-stack{
+        width: 75px;
+        height: 225px;
+    }
+    .main-catalog-swiper .card-large{
+        width: 160px;
+        height: 225px;
+    }
+    .swiper-buttons{
+        top: -167px;
+        column-gap: 470px
+    }
+    .slider-container-wrapper{
+        height: 225px;
+    }
+    .new_products_list_product:nth-child(n+4){
+        display: none;
     }
 }
 
@@ -507,6 +622,38 @@
         font-size: 18px;
         padding: 0 1px 1px 0;
     }
+    .user_stat{
+        display: none;
+    }
+    .main-catalog-swiper .card-double-stack{
+        width: 65px;
+        height: 200px;
+    }
+    .main-catalog-swiper .card-large{
+        width: 140px;
+        height: 200px;
+    }
+    .swiper-buttons{
+        top: -177px;
+        column-gap: 415px
+    }
+    .slider-container-wrapper{
+        height: 200px;
+    }
+    .hero-popular-wrapper{
+        height: 300px;
+    }
+    .hero-poster-side.popular-hero-shimmer{
+        width: 140px !important;
+        height: 203px !important;
+    }
+    .hero-description{
+        -webkit-line-clamp: 2;
+    }
+    .js-tag-link{
+        font-size: 12px;
+        padding: 6px 12px;
+    }
 }
 
 @media screen and (max-width: 500px){
@@ -553,12 +700,6 @@
         /* padding: 20px 10px 10px 10px; */
         column-gap: 10px;
     }
-    .new_products_list_product:nth-child(n+4){
-        display: none;
-    }
-    .new_products_h4{
-        padding: 15px 10px 0 10px;
-    }
     .find_by_name2{
         width: 100%;
         margin-right: 0;
@@ -589,6 +730,32 @@
     .profile_container_header{
         padding: 10px;
     }
+    .profile-stats-wrapper-container{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .chart-column-wrapper{
+        margin: 0;
+    }
+    .chart-container-alt{
+        padding: 0 10px;
+    }
+    .card-double-stack{
+        display: none !important;
+    }
+    .swiper-buttons{
+        top: -180px;
+        column-gap: 300px
+    }
+    .container_f{
+        margin-top: 10px;
+    }
+    .hero-title{
+        font-size: 24px;
+    }
+    .hero-btn{
+        padding: 7px 20px;
+    }
 }
 
 @media screen and (max-width: 450px){
@@ -596,8 +763,8 @@
         padding: 5px;
     }
     .profile_container_header_block_info_flex_vis img{
-        width: 120px;
-        height: 120px;
+        width: 150px;
+        height: 150px;
     }
     .profile_container_header_block_info_flex_vis_button{
         width: 120px;
@@ -614,6 +781,16 @@
     .comments_container{
         padding: 2px;
         font-size: 16px;
+    }
+    .new_products_list_product:nth-child(n+3){
+        display: none;
+    }
+    .post-row-container{
+        gap: 20px;
+    }
+    .post-row-poster{
+        width: 80px;
+        height: 112px;
     }
 }
 
@@ -779,12 +956,6 @@
     h8{
         font-size: 0.9rem;
     }
-    .new_products_list_product:nth-child(n+3){
-        display: none;
-    }
-    .new_products_h4{
-        padding-left: 0;
-    }
     .find_by_name2_container{
         top: 10px;
     }
@@ -800,8 +971,8 @@
     .header {
         padding-left: 5px;
     }
-    .container_f{
-        margin-top: 40px;
+    .slider-container-wrapper{
+        margin-top: 20px;
     }
     .profile_container{
         margin-top: 20px;
@@ -827,5 +998,20 @@
     }
     .profile_comment_title{
         font-size: 20px;
+    }
+    .hero-popular-container{
+        padding: 15px;
+    }
+    .hero-description{
+        margin-bottom: 10px;
+    }
+    .animated-nickname .login_status_bar_text{
+        font-size: 18px !important;
+    }
+    .user_leaderboard_info .user_name{
+        font-size: 16px !important;
+    }
+    .user_leaderboard_info .user_rank{
+        font-size: 8px !important;
     }
 }

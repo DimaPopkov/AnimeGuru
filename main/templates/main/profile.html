@@ -62,7 +62,7 @@
                         {% endif %}
                     </div>
                     <div class="profile_container_header_block_info_flex_alt_block" style="--rank-color: {{ user.profile.color }}">
-                        <p class="profile_p_level_title"> Уровень аккаунта: </p>
+                        <p class="profile_p_level_title"> Уровень: </p>
                         <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
                 </div>
@@ -163,8 +163,10 @@
                                     <div class="prod_element_info">
                                         <h5 style="padding-top: 5px"> {{ element.name }} </h5>
                                         <h8> {{ element.category }} / {{ element.season.year }}</h8>
-                                        <br><br>
-                                        <p class="hidden_description hidden"> {{ element.description|safe }} </p>
+                                        <p class="hidden_description hidden"> 
+                                            <br><br>
+                                            {{ element.description|safe }}
+                                        </p>
                                     </div>
                                 </div>
                             </form>

@@ -279,14 +279,12 @@
 }
 
 .main-catalog-swiper .swiper-slide img {
-    /* 1. Возвращаем правильные размеры картинок (object-fit снова активен) */
     width: 100% !important;
     height: 100% !important;
     object-fit: fill !important;
-    
-    /* 2. Сбрасываем флексы, которые ломают позиционирование изображений */
-    display: block !important; 
-    position: static !important; /* Убираем relative, если он не нужен для внутренних плашек */
+
+    display: block !important;
+    position: static !important;
     z-index: auto !important;
     
     /* 3. Разрешаем события мыши на картинках, чтобы работали клики */
@@ -343,7 +341,7 @@
 
 .hero-popular-wrapper {
     height: auto;
-    min-height: 400px;
+    /* min-height: 400px; */
     
     margin: 20px;
 
@@ -358,7 +356,7 @@
 .hero-popular-container {
     width: 100%;
     height: 100%;
-    min-height: 400px;
+    /* min-height: 400px; */
     /* Затемняем фон и размываем его, чтобы контент идеально читался */
     background: linear-gradient(to right, rgba(20, 20, 20, 0.95) 30%, rgba(20, 20, 20, 0.75) 100%);
     backdrop-filter: blur(12px);
@@ -795,6 +793,7 @@
 }
 
 .user_leaderboard_item {
+    height: 80px;
     display: flex;
     align-items: center;
     background: #1a1a1a;
@@ -874,4 +873,5 @@
     padding: 4px 10px;
     margin-left: 5px;
     border-radius: 5px;
+    white-space: nowrap;
 }
