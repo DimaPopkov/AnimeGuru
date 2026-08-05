@@ -434,7 +434,7 @@ def card(request, product_name):
     FinalAlbumPics = Album_Pics.objects.all().order_by('name')
 
     try:
-        All_Albums_pic = FinalAlbumPics.get(name=products)
+        All_Albums_pic = FinalAlbumPics.get(name=products.name)
 
         if All_Albums_pic == None:
             All_Albums_pic = FinalAlbumPics.get(product=products)
@@ -442,7 +442,6 @@ def card(request, product_name):
         all_pics = All_Albums_pic.image.all()
     except:
         all_pics = "none"
-        print(FinalAlbumPics.get(name=products))
     
     product_tags = selected_product.tags.all()
     product_links = selected_product.links.all()
