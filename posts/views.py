@@ -49,27 +49,78 @@ def posts(request):
 
 def card(request, post_id):
     post = Posts.objects.get(id=post_id)
-    allComments = PostComments.objects.filter(post=post)
-
+    allComments = list(PostComments.objects.filter(post=post))
+    
     allComments_state = []
     if request.user.is_authenticated:
-        allComments_state = PostCommentsAction.objects.filter(user=request.user)
+        allComments_state = list(PostCommentsAction.objects.filter(user=request.user))
 
+    # Вычисляем лайки и состояния
     for comment in allComments:
         comment.net_likes = comment.like_count - comment.dislike_count
         comment.my_state = 0
-
+    
         for action in allComments_state:
-            if action.comment_id == comment.id:
+            if action.comment_id == comment.id: 
                 if action.action_type == "like":
                     comment.my_state = 2
                 elif action.action_type == "dislike":
                     comment.my_state = 1
                 break
 
+    # Привязываем пользователей
+    author_names = {c.user.username for c in allComments if c.user.username}
+    users = User.objects.filter(username__in=author_names).select_related('profile')
+    users_dict = {u.username: u for u in users}
+    all_comments_dict = {c.id: c for c in allComments}
+
+    for item in allComments:
+        if item.user.username in users_dict:
+            item.current_user = users_dict[item.user.username]
+        else:
+            item.current_user = None
+
+        if item.parentId and item.parentId in all_comments_dict:
+            parent_comment = all_comments_dict[item.parentId]
+            if parent_comment.user.username in users_dict:
+                item.parent_user = users_dict[parent_comment.user.username]
+        else:
+            item.parent_user = None
+
+    # --- ИСПРАВЛЕНИЕ ДУБЛИРОВАНИЯ: СТРУКТУРИРОВАНИЕ ДЕРЕВА КОММЕНТАРИЕВ ---
+    root_comments = []
+    replies_dict = {}
+
+    # Выделяем только корневые комментарии
+    for c in allComments:
+        if c.locateZ == 0:
+            root_comments.append(c)
+            replies_dict[c.id] = []
+
+    # Распределяем вложенные ответы по их корневым веткам
+    for c in allComments:
+        if c.locateZ != 0:
+            current = c
+            loop_guard = 0
+            # Поднимаемся по цепочке parentId до самого верха ветки
+            while current.parentId and current.parentId in all_comments_dict and loop_guard < 12:
+                current = all_comments_dict[current.parentId]
+                loop_guard += 1
+            
+            # Добавляем ответ в список соответствующего корня
+            if current.id in replies_dict:
+                replies_dict[current.id].append(c)
+
+    # Сортируем ответы по порядку (по ID) и упаковываем внутрь корня
+    for root in root_comments:
+        root.sub_comments = sorted(replies_dict[root.id], key=lambda x: x.id)
+
     CurrentComment = None
-    if request.user.is_authenticated:
-        CurrentComment = allComments.filter(user=request.user, locateZ=0).first()
+
+    for comment in allComments:
+        if comment.user == request.user:
+            if comment.locateZ == 0:
+                CurrentComment = comment
 
     comments_dict = {c.id: c.user for c in allComments}
 
@@ -82,7 +133,7 @@ def card(request, post_id):
     data = {
         'title': post.title,
         'post': post,
-        'comments': allComments,
+        'comments': root_comments,
         'your_comment': CurrentComment,
     }
 
