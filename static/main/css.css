@@ -4176,7 +4176,7 @@ img.comment_buttons_button:hover {
 
     grid-auto-rows: 0;
     grid-template-rows: auto;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
 
     /* padding: 30px 20px 20px 20px; */
     margin: 20px;
