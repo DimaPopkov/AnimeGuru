@@ -480,7 +480,7 @@ main{
 
     row-gap: 15px;
     column-gap: 15px;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
 
     padding: 20px;
     /* padding: 20px 20px 0 20px; */
