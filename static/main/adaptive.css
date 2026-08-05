@@ -768,6 +768,9 @@
     .prod_element.line-mode .prod_element_info h5{
         font-size: 20px !important;
     }
+    .posts_container_main{
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 450px){
