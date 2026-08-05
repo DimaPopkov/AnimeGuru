@@ -93,7 +93,7 @@ class Pics(models.Model):
     
 class Album_Pics(models.Model):
     name = models.TextField('Название Альбома (для какого тайтла)', null=True)
-    product = models.ForeignKey(Product, related_name='product', blank=True, null=True, on_delete=models.SET_NULL)
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.SET_NULL)
     image = models.ManyToManyField(Pics, related_name='pics')
     def __str__(self):
         return self.name
