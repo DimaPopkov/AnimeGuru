@@ -339,33 +339,32 @@
                                     <div class="blur_bg" style="background-image: url('{{ bro.alter_pic.url }}');"></div>
                                 {% endif %}
 
+                                
                                 {% if bro.second_name and bro.second_name != "null" and bro.first_name and bro.first_name != "null" %}                
-                                    {% if bro.image %}
-                                        <div style="width:auto; height: 100%; overflow: hidden">
-                                            <img class="all_characters_card_img" src="{{ bro.image }}">       
-                                        </div>
-                                    {% elif bro.alter_pic %}
-                                        <div style="width:auto; height: 100%; overflow: hidden">
-                                            <img class="all_characters_card_img" src="{{ bro.alter_pic.url }}">       
-                                        </div>              
-                                    {% endif %}
                                     
+                                    <div style="width:auto; height: 100%; overflow: hidden; display: flex; justify-content: center;">    
+                                        {% if bro.image %}
+                                            <img class="all_characters_card_img" src="{{ bro.image }}">
+                                        {% elif bro.alter_pic %}
+                                            <img class="all_characters_card_img" src="{{ bro.alter_pic.url }}">
+                                        {% endif %}
+                                    </div>
+
                                     <p class="p_character"> {{ bro.second_name }} {{ bro.first_name }} </p>          
                                     
                                     {% if bro.link_to_wiki %}
                                         <a class="wiki_button other_character_wiki_button" href="{{ bro.link_to_wiki }}"> Wiki </a>
                                     {% endif %}
-                                {% else %}
-                                    {% if bro.image %}
-                                        <div style="width:100%; height: 150px; overflow: hidden">
-                                            <img class="all_characters_card_img" src="{{ bro.image }}">      
-                                        </div>
-                                    {% elif bro.alter_pic %}
-                                        <div style="width:auto; height: 100%; overflow: hidden">
-                                            <img class="all_characters_card_img" src="{{ bro.alter_pic.url }}">       
-                                        </div>     
-                                    {% endif %}
                                     
+                                {% else %}
+                                    <div style="width:100%; height: 150px; overflow: hidden; display: flex; justify-content: center;">
+                                        {% if bro.image %}
+                                                <img class="all_characters_card_img" src="{{ bro.image }}">
+                                        {% elif bro.alter_pic %}
+                                                <img class="all_characters_card_img" src="{{ bro.alter_pic.url }}">
+                                        {% endif %}
+                                    </div>
+
                                     <p class="p_character"> {{ bro.first_name }} </p>
 
                                     {% if bro.link_to_wiki %}
