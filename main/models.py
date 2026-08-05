@@ -33,17 +33,6 @@ class AiMessages(models.Model):
     def __str__(self):
         return self.user.username
 
-class Pics(models.Model):
-    image = models.ImageField('Изображение', upload_to='img/pics/', null=True)
-    def __str__(self):
-        return self.image.name
-    
-class Album_Pics(models.Model):
-    name = models.TextField('Название Альбома (для какого тайтла)', null=True)
-    image = models.ManyToManyField(Pics, related_name='pics')
-    def __str__(self):
-        return self.name
-
 class Category(models.Model):
     name = models.CharField('Название', max_length=100)
 
@@ -96,6 +85,18 @@ class Product(models.Model):
 
     def __str__(self):
         return str(self.name) if self.name else ""
+
+class Pics(models.Model):
+    image = models.ImageField('Изображение', upload_to='img/pics/', null=True)
+    def __str__(self):
+        return self.image.name
+    
+class Album_Pics(models.Model):
+    name = models.TextField('Название Альбома (для какого тайтла)', null=True)
+    product = models.ForeignKey(Product, related_name='product', blank=True, null=True, on_delete=models.SET_NULL)
+    image = models.ManyToManyField(Pics, related_name='pics')
+    def __str__(self):
+        return self.name
     
 class ProductView(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views_history')
