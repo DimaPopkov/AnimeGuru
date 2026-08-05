@@ -3912,7 +3912,6 @@ img.comment_buttons_button:hover {
     gap: 8px; /* Аккуратный отступ между кнопками */
     position: relative; /* Убран absolute, ломавший верстку на скриншоте */
     width: 100%;
-    padding: 0 0 16px 0;
     margin-top: 20px;
     margin-bottom: 16px;
     border: none !important;

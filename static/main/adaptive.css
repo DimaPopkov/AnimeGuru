@@ -421,6 +421,9 @@
     .new_posts .posts_list {
         margin: 10px 0 0 0;
     }
+    .posts_filter{
+        margin-top: 40px;
+    }
 }
 
 @media screen and (max-width: 730px){
@@ -718,7 +721,6 @@
     }
     .filter_blocks_grid{
         position: relative;
-        margin: 0 auto;
     }
     .login_container{
         min-width: 250px;
@@ -803,6 +805,9 @@
     }
     .posts_container_main{
         width: 100%;
+    }
+    .posts_filter{
+        margin-top: 55px;
     }
 }
 
@@ -980,7 +985,9 @@
     }
     .prod_element_pic_lock{
         max-height: 500px;
-        min-width: 80px;
+        min-width: 80px !important;
+
+        
     }
     .all_comments_dop_line{
         margin: 0 20px 0 15px;
@@ -1121,8 +1128,5 @@
     }
     .prod_element.line-mode .prod_element_info h5{
         font-size: 16px !important;
-    }
-    .prod_element_pic_lock{
-        width: 95px !important;
     }
 }

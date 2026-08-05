@@ -35,7 +35,7 @@ function UpdateGrid(){
 
     // Массово применяем стили ко всем текущим карточкам
     block_img.forEach(el => {
-        el.style.width = isLine ? '175px' : 'auto';
+        el.style.maxWidth = isLine ? '100px' : 'none';
         el.style.height = 'auto';
     });
 
