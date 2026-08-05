@@ -382,6 +382,12 @@
         width: 100%;
         padding: 10px 15px;
     }
+    .you_container_dop_block_text{
+        max-width: none;
+    }
+    .main_items_background.alt{
+        margin-top: 50px;
+    }
 }
 
 @media screen and (max-width: 730px){
@@ -480,6 +486,9 @@
     .community_section{
         padding-top: 20px;    
     }
+    .footer-container{
+        width: 80%;
+    }
 }
 @media screen and (max-width: 650px){
     .login_button{
@@ -573,10 +582,6 @@
     .you_container_dop_block_header{
         flex-direction: column;
     }
-    .all_comments_container_block_header {
-        flex-direction: column;
-        column-gap: 10px;
-    }
     .all_comments_container_block_header_block{
         column-gap: 10px;
     }
@@ -584,7 +589,7 @@
         min-width: auto;
     }
     .card_container_header {
-        grid-template-columns: auto;
+        grid-template-columns: 100px auto;
     }
     .card_header {
         width: 100%;
@@ -704,9 +709,6 @@
         width: 100%;
         margin-right: 0;
     }
-    .find_by_name2_container{
-        top: 40px;
-    }
     .filter.filter-hidden {
         margin-top: 0 !important;
         top: 50px;
@@ -756,6 +758,9 @@
     .hero-btn{
         padding: 7px 20px;
     }
+    .footer-container{
+        width: 90%;
+    }
 }
 
 @media screen and (max-width: 450px){
@@ -791,6 +796,12 @@
     .post-row-poster{
         width: 80px;
         height: 112px;
+    }
+    .star_list_block_number{
+        display: block !important;
+    }
+    .star_list_block{
+        display: none !important;
     }
 }
 
@@ -947,17 +958,13 @@
     .swiper-slide img:hover {
         height: 115px;
     }
-    .star_list_block_number{
-        display: block !important;
-    }
-    .star_list_block{
-        display: none !important;
-    }
     h8{
         font-size: 0.9rem;
     }
     .find_by_name2_container{
-        top: 10px;
+        margin-top: 15px;
+        top: 30px;
+        padding: 10px;
     }
     .filter_buttons_hide_show{
         margin-top: -25px;
@@ -1013,5 +1020,57 @@
     }
     .user_leaderboard_info .user_rank{
         font-size: 8px !important;
+    }
+    .hero-poster-side.popular-hero-shimmer{
+        width: 130px !important;
+        height: 188.5px !important;
+    }
+    .hero-popular-wrapper{
+        height: auto;
+    }
+    .hero-popular-container{
+        flex-direction: column;
+        height: auto;
+    }
+    .swiper-buttons{
+        column-gap: 280px;
+    }
+    .main_items_background.alt{
+        margin-top: 20px;
+    }
+    .card_info_title h4{
+        display: none;
+    }
+    .favorites_add_button_container.like-button{
+        margin-top: -10px;
+    }
+    .favorites_add_button{
+        width: 30px;
+        height: 30px;
+    }
+    .you_container_dop_block{
+        padding: 10px !important
+    }
+    .you_container_button_delete, .you_container_button{
+        padding: 8px 18px !important;
+    }
+    .all_comments_container{
+        row-gap: 0;
+    }
+    .all_comments_container_block{
+        padding-left: 10px;
+    }
+    div.all_comments_container_block{
+        row-gap: 0 !important;
+    }
+    .comment_buttons{
+        margin-top: 10px;
+        padding-left: 0;
+    }
+    .answer::after{
+        left: -12px;
+    }
+    footer{
+        height: 170px;
     }
 }

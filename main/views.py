@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
-from django.db import models
+from django.db import models, connection
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max, Prefetch
+from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max, Prefetch, Func
 from django.db.models.functions import ExtractYear, Lower
 from django.core.files.base import ContentFile
 from django.core.cache import cache
@@ -248,9 +248,15 @@ def filter(request):
     titlename = request.GET.get('titlename')
 
     if titlename:
-        words = titlename.strip().split()
+        words = titlename.strip().lower().split()
+
+        with connection.cursor() as cursor:
+            cursor.cursor.connection.create_function("py_lower", 1, lambda x: x.lower() if x else "")
+
+        products = products.annotate(name_lowercase=Func('name', function='py_lower'))
+
         for word in words:
-            products = products.filter(name__icontains=word)
+            products = products.filter(name_lowercase__contains=word)
 
     # Фильтр по сортировке
     sort_id = request.GET.get('sort')
