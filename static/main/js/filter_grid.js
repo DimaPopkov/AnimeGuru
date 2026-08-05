@@ -19,7 +19,7 @@ function UpdateGrid(){
 
     // Управляем колонками грида в зависимости от режима
     if (grid === 'block') {
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 100px), 1fr))';
     } else if (grid === 'big_block') {
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))';
     } else if (grid === 'line') {
