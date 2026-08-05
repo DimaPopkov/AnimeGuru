@@ -48,6 +48,11 @@ function ChangeTheme(username){
         filter = document.querySelector('.filter');
     }
 
+    let year_values_display = null;
+    if (document.querySelector('.year-values-display')){
+        year_values_display = document.querySelector('.year-values-display');
+    }
+
     let btn_logo = document.querySelectorAll('.btn_logo');
     if (username){
         let nickname = document.getElementById('nickname');
@@ -276,8 +281,12 @@ function ChangeTheme(username){
         }
         
         if (filter != null){
-            filter.style.background = "none";
+            filter.style.background = "rgb(220, 220, 220)";
             filter.style.border = "none";
+        }
+
+        if (year_values_display != null){
+            year_values_display.style.color = "rgb(0, 0, 0)";
         }
 
         if (find_by_name != null){
@@ -601,8 +610,12 @@ function ChangeTheme(username){
             element.style.setProperty('--pseudo-bg-checked-color', 'rgb(200, 200, 200)');
         }
         if (filter != null){
-            filter.style.background = "none";
+            filter.style.background = "rgb(20, 20, 20)";
             filter.style.border = "none";
+        }
+
+        if (year_values_display != null){
+            year_values_display.style.color = "rgb(255, 255, 255)";
         }
 
         if (find_by_name != null){
