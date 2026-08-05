@@ -78,17 +78,18 @@ def base(request):
         rating_score=F('like_count') - F('dislike_count')
     ).order_by('-rating_score')[:3] 
 
-    top_users_base = Comments.objects.values('user_name', 'user_image').annotate(
-        comments_count=Count('id'),
-        total_likes=Sum('like_count'),
-        user_id=Subquery(
-            User.objects.filter(username=OuterRef('user_name')).values('id')[:1]
-        )
+    users_with_stats = User.objects.select_related('profile').annotate(
+        comments_count=Count('comments'),        
+        total_likes=Sum('comments__like_count')
     )
 
-    top_users_comm = top_users_base.filter(comments_count__gt=0).order_by('-comments_count')[:5]
+    top_users_comm = users_with_stats.filter(
+        comments_count__gt=0
+    ).order_by('-comments_count')[:3]
 
-    top_users_like = top_users_base.filter(total_likes__gt=0).order_by('-total_likes')[:5]
+    top_users_like = users_with_stats.filter(
+        total_likes__gt=0
+    ).order_by('-total_likes')[:3]
 
     data = {
         'title' : 'Главная страница',
@@ -403,7 +404,7 @@ def card(request, product_name):
     CurrentComment = None
 
     for comment in comments:
-        if comment.user_name == CurrentUserName:
+        if comment.user.username == CurrentUserName:
             if comment.locateZ == 0:
                 CurrentComment = comment
 
@@ -503,21 +504,21 @@ def card(request, product_name):
                 break
 
     # Привязываем пользователей
-    author_names = {c.user_name for c in allComments if c.user_name}
+    author_names = {c.user.username for c in allComments if c.user.username}
     users = User.objects.filter(username__in=author_names).select_related('profile')
     users_dict = {u.username: u for u in users}
     all_comments_dict = {c.id: c for c in allComments}
 
     for item in allComments:
-        if item.user_name in users_dict:
-            item.current_user = users_dict[item.user_name]
+        if item.user.username in users_dict:
+            item.current_user = users_dict[item.user.username]
         else:
             item.current_user = None
 
         if item.parentId and item.parentId in all_comments_dict:
             parent_comment = all_comments_dict[item.parentId]
-            if parent_comment.user_name in users_dict:
-                item.parent_user = users_dict[parent_comment.user_name]
+            if parent_comment.user.username in users_dict:
+                item.parent_user = users_dict[parent_comment.user.username]
         else:
             item.parent_user = None
 
@@ -821,8 +822,6 @@ def check_url(url):
         print(f"Ошибка подключения: {e}")
 
 def profile(request):
-    username = request.user.username
-
     product_image_subquery = Subquery(
         Product.objects.filter(name=OuterRef('name')).values('image')
     )
@@ -839,7 +838,7 @@ def profile(request):
         Product.objects.filter(name=OuterRef('name')).values('season')
     )
 
-    allComents = Comments.objects.filter(user_name=username).annotate(
+    allComents = Comments.objects.filter(user=request.user).annotate(
         product_image = product_image_subquery,
         product_category = product_category_subquery,
         product_rating = product_rating_subquery,
@@ -868,7 +867,7 @@ def profile(request):
             'height': height_percent
         })
 
-    activity = Comments.objects.filter(user_name=request.user.username).aggregate(
+    activity = Comments.objects.filter(user=request.user).aggregate(
         total_comments=Count('id'),                 # Считаем количество написанных комментариев
         total_likes=Sum('like_count'),              # Суммируем все лайки, которые получили его комменты
         total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
@@ -907,7 +906,7 @@ def user_profile(request, id):
         Product.objects.filter(name=OuterRef('name')).values('season')
     )
 
-    allComents = Comments.objects.filter(user_name=user.username).annotate(
+    allComents = Comments.objects.filter(user=user).annotate(
         product_image = product_image_subquery,
         product_category = product_category_subquery,
         product_rating = product_rating_subquery,
@@ -935,7 +934,7 @@ def user_profile(request, id):
             'height': height_percent
         })
 
-    activity = Comments.objects.filter(user_name=user.username).aggregate(
+    activity = Comments.objects.filter(user=user).aggregate(
         total_comments=Count('id'),                 # Считаем количество написанных комментариев
         total_likes=Sum('like_count'),              # Суммируем все лайки, которые получили его комменты
         total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
@@ -983,7 +982,7 @@ def profile_change_avatar(request):
             buffer = io.BytesIO()
             file_name = f"avatar_{username}.webp"
 
-            if img.format == 'GIF':
+            if getattr(img, 'is_animated', False):
                 frames = []
                 durations = []
 
@@ -992,6 +991,10 @@ def profile_change_avatar(request):
                     
                     # Обрезаем конкретный кадр по координатам кропера
                     cropped_frame = frame.crop(crop_box)
+
+                    if cropped_frame.mode != 'RGBA':
+                        cropped_frame = cropped_frame.convert('RGBA')
+
                     frames.append(cropped_frame.copy())
 
                 frames[0].save(
@@ -1006,7 +1009,6 @@ def profile_change_avatar(request):
                     minimize_size=True,
                     disposal=2
                 )
-
             else:
                 if img.mode in ('RGBA', 'LA') or (img.format == 'PNG' and 'transparency' in img.info):
                     img = img.convert('RGBA')
@@ -1086,8 +1088,7 @@ def add_comments(request, product_name):
 
     new_comment = Comments(
         name = product,
-        user_image = user_image,
-        user_name = user_name,
+        user = request.user,
         user_rating = User_rating,
         user_comment = User_comment,
         like_count = 0,
@@ -1104,11 +1105,8 @@ def add_comments(request, product_name):
     return redirect(f"{url_to_redirect_to}#comment-{new_comment.id}")
 
 def edit_comments(request, product_name):
-
-    user_name = request.user.username
-
     try:
-        existing_comment = Comments.objects.get(name=product_name, user_name=user_name)
+        existing_comment = Comments.objects.get(name=product_name, user=request.user)
     except Comments.DoesNotExist:
         url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
         return redirect(url_to_redirect_to)
@@ -1133,10 +1131,8 @@ def edit_comments(request, product_name):
     return redirect(url_with_anchor)
 
 def delete_comments(request, product_name, id):
-    user_name = request.user.username
-
     try:
-        existing_comment = Comments.objects.get(id=id, name=product_name, user_name=user_name)
+        existing_comment = Comments.objects.get(id=id, name=product_name, user=request.user)
     except Comments.DoesNotExist:
         url_to_redirect_to = reverse('card', kwargs={'product_name': product_name})
         return redirect(url_to_redirect_to)

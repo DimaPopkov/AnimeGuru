@@ -476,8 +476,8 @@
                             <div class="you_container_dop_block">
                                 <div class="you_container_dop_block_header">
                                     <div class="avatar_wrapper">
-                                        {% if most_popular_comment.user_image and most_popular_comment.user_image != "avatars/null_avatar.png" %}
-                                            <img src="{{ most_popular_comment.user_image.url }}" class="comment_avatar">
+                                        {% if most_popular_comment.user.profile.image and most_popular_comment.user.profile.image != "avatars/null_avatar.png" %}
+                                            <img src="{{ most_popular_comment.user.profile.image.url }}" class="comment_avatar">
                                         {% else %}
                                             <img src="{% static "/img/null_avatar.png" %}" class="comment_avatar">
                                         {% endif %}
@@ -487,10 +487,10 @@
                                         <h5> 
                                         {% if most_popular_comment.current_user.profile.rank >= 3 %}
                                             <span class="animated-nickname" style="--user-color: {{ most_popular_comment.current_user.profile.color }}; margin-top: 0;">
-                                                <a id="nickname" href="{% url 'user_profile' id=most_popular_comment.current_user.id %}" class="login_status_bar_text_alt"> {{  most_popular_comment.user_name }} </a>
+                                                <a id="nickname" href="{% url 'user_profile' id=most_popular_comment.current_user.id %}" class="login_status_bar_text_alt"> {{  most_popular_comment.user.username }} </a>
                                             </span>
                                         {% else %}
-                                            {{  most_popular_comment.user_name }}
+                                            {{  most_popular_comment.user.username }}
                                         {% endif %}
                                         </h5>
                                         <div class="star-display">
@@ -527,8 +527,8 @@
                         <!-- Шапка главного комментария (Аватарка, Рейтинг, Звезды) -->
                         <div class="all_comments_container_block_header">
                             <div class="all_comments_container_block_header_block">
-                                {% if element.user_image and element.user_image != 'avatars/null_avatar.png' %}
-                                    <img src="{{ element.user_image.url }}" class="comment_user_image">
+                                {% if element.user.profile.image and element.user.profile.image != 'avatars/null_avatar.png' %}
+                                    <img src="{{ element.user.profile.image.url }}" class="comment_user_image">
                                 {% else %}
                                     <img src="{% static '/img/null_avatar.png' %}" class="comment_user_image">
                                 {% endif %}
@@ -537,10 +537,10 @@
                                 <p class="all_comments_container_block_header_username"> 
                                     {% if element.current_user.profile.rank >= 3 %}
                                         <span class="animated-nickname" style="--user-color: {{ element.current_user.profile.color }}; margin-top: 0;">
-                                            <a id="nickname" href="{% url 'user_profile' id=element.current_user.id %}" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
+                                            <a id="nickname" href="{% url 'user_profile' id=element.current_user.id %}" class="login_status_bar_text_alt"> {{ element.user.username }} </a>
                                         </span>
                                     {% else %}
-                                        <a id="nickname" href="{% url 'user_profile' id=element.current_user.id %}" class="login_status_bar_text_alt"> {{ element.user_name }} </a>
+                                        <a id="nickname" href="{% url 'user_profile' id=element.current_user.id %}" class="login_status_bar_text_alt"> {{ element.user.username }} </a>
                                     {% endif %}
                                 </p>
                                 
@@ -621,18 +621,18 @@
                                     <!-- Шапка ответа (element3) -->
                                     <div class="all_comments_container_block_header">
                                         <div class="all_comments_container_block_header_block">
-                                            {% if element3.current_user.profile.image %}
-                                                <img src="{{ element3.current_user.profile.image.url }}" class="comment_user_image" style="width: 40px; height: 40px;">
+                                            {% if element3.user.profile.image and element3.user.profile.image != 'avatars/null_avatar.png' %}
+                                                <img src="{{ element3.user.profile.image.url }}" class="comment_user_image">
                                             {% else %}
-                                                <img src="{% static '/img/null_avatar.png' %}" class="comment_user_image" style="width: 40px; height: 40px;">
-                                            {% endif %}    
+                                                <img src="{% static '/img/null_avatar.png' %}" class="comment_user_image">
+                                            {% endif %}  
                                             <p class="all_comments_container_block_header_username">
                                                 {% if element3.current_user.profile.rank >= 3 %}
                                                     <span class="animated-nickname" style="--user-color: {{ element3.current_user.profile.color }}; margin-top: 0;">
-                                                        <a id="nickname" href="{% url 'user_profile' id=element3.current_user.id %}" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
+                                                        <a id="nickname" href="{% url 'user_profile' id=element3.current_user.id %}" class="login_status_bar_text_alt"> {{ element3.user.username }} </a>
                                                     </span>
                                                 {% else %}
-                                                    <a id="nickname" href="{% url 'user_profile' id=element3.current_user.id %}" class="login_status_bar_text_alt"> {{ element3.user_name }} </a>
+                                                    <a id="nickname" href="{% url 'user_profile' id=element3.current_user.id %}" class="login_status_bar_text_alt"> {{ element3.user.username }} </a>
                                                 {% endif %}
                                             </p>
                                         </div>                              

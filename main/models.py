@@ -137,8 +137,7 @@ class Characters(models.Model):
     
 class Comments(models.Model):
     name = models.TextField('Имя тайтла', null=True, blank=True)
-    user_image = models.ImageField('Image:', null=True, blank=True)
-    user_name = models.TextField('Логин пользователя:')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_rating = models.IntegerField('Оценка пользователя:', null=True, blank=True)
     user_comment = models.TextField('Комментарий пользователя:', null=True, blank=True)
     like_count = models.IntegerField('Кол-во лайков под постом')

@@ -401,16 +401,16 @@
                                             <a id="nickname" class = "login_status_bar_text" style='padding-left: 0; color: white; font-size: 26px;'> #{{forloop.counter}} </a>
                                         {% endif %}
                                         <div class="user_avatar_container">
-                                            {% if user.user_image %}
-                                                <img src="/media/{{ user.user_image }}" alt="{{ user.user_name }}" class="user_avatar_img">
+                                            {% if user.profile.image %}
+                                                <img src="/media/{{ user.profile.image }}" alt="{{ user.username }}" class="user_avatar_img">
                                             {% else %}
                                                 <div class="user_avatar_stub">
-                                                    {{ user.user_name|slice:":1"|upper }}
+                                                    {{ user.username|slice:":1"|upper }}
                                                 </div>
                                             {% endif %}
                                         </div>
                                         <div class="user_leaderboard_info">
-                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name" style='font-size: 20px'>{{ user.user_name }}</a>
+                                            <a href="{% url 'user_profile' id=user.id  %}" class="user_name" style='font-size: 20px'>{{ user.username }}</a>
                                             <span class="user_rank">
                                                 {% if forloop.counter == 1 %} Король комментариев
                                                 {% elif forloop.counter == 2 %} Писатель
@@ -438,16 +438,16 @@
                                             <a id="nickname" class = "login_status_bar_text"> #{{forloop.counter}} </a>
                                         {% endif %}
                                         <div class="user_avatar_container">
-                                            {% if user.user_image %}
-                                                <img src="/media/{{ user.user_image }}" alt="{{ user.user_name }}" class="user_avatar_img">
+                                            {% if user.profile.image %}
+                                                <img src="/media/{{ user.profile.image }}" alt="{{ user.username }}" class="user_avatar_img">
                                             {% else %}
                                                 <div class="user_avatar_stub">
-                                                    {{ user.user_name|slice:":1"|upper }}
+                                                    {{ user.username|slice:":1"|upper }}
                                                 </div>
                                             {% endif %}
                                         </div>
                                         <div class="user_leaderboard_info">
-                                            <a href="{% url 'user_profile' id=user.user_id  %}" class="user_name" style='font-size: 20px'>{{ user.user_name }}</a>
+                                            <a href="{% url 'user_profile' id=user.id  %}" class="user_name" style='font-size: 20px'>{{ user.username }}</a>
                                             <span class="user_rank">
                                                 {% if forloop.counter == 1 %} Любимчик сообщества
                                                 {% elif forloop.counter == 2 %} В погоне за популярностью
