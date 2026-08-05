@@ -733,7 +733,7 @@ main{
 
 .prod_element_pic_lock, 
 .prod_element_pic_lock2 {
-    min-width: 130px;
+    min-width: 100px;
 
     /* height: 245px; */
     /* min-height: 90px; */

@@ -21,7 +21,7 @@ function UpdateGrid(){
     if (grid === 'block') {
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))';
     } else if (grid === 'big_block') {
-        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))';
+        catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))';
     } else if (grid === 'line') {
         catalog.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 700px), 1fr))';
     }

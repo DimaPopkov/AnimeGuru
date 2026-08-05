@@ -809,6 +809,9 @@
     .posts_filter{
         margin-top: 55px;
     }
+    .prod_element_info{
+        text-align: center;
+    }
 }
 
 @media screen and (max-width: 450px){
@@ -873,7 +876,14 @@
         /* grid-template-columns: 110px 110px !important; */
         width: 100%;
         row-gap: 15px;
-        padding: 5px 1% 5px 1%;
+        /* padding: 5px 1% 5px 1%; */
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+    }
+    .prod_element_info h5{
+        font-size: 0.8rem;
+    }
+    .prod_element_info h8{
+        font-size: 0.65rem;
     }
     .header {
         width: 100%;
@@ -985,9 +995,7 @@
     }
     .prod_element_pic_lock{
         max-height: 500px;
-        min-width: 80px !important;
-
-        
+        /* max-width: 80px !important; */
     }
     .all_comments_dop_line{
         margin: 0 20px 0 15px;
