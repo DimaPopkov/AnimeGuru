@@ -3,7 +3,7 @@
 *.sqlite3
 *.media
 
-__pycache__/
+*__pycache__/
 *.pyc
 *.pyo
 *.pyd
