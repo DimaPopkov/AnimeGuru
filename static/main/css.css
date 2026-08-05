@@ -3115,16 +3115,12 @@ button:disabled {
 
     border-radius: 10px;
 
-    overflow-x: hidden;
+    overflow-x: scroll;
     overflow-y: hidden;
 }
 
-.chart-container:hover::-webkit-scrollbar-track{
+.chart-container::-webkit-scrollbar-track{
     border-radius: 10px;
-}
-
-.chart-container:hover{
-   overflow-x: scroll;
 }
 
 .chart-container-alt {
