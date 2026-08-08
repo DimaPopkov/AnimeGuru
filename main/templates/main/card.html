@@ -226,7 +226,12 @@
                             <img src="{{ element.image.url }}" style="width: 80px; border-radius: 5px;">
                             <div class="related_products_card_img_block_right">
                                 <p> {{ element.category }} / {{ element.season.year }} </p>
-                                <p> {{ element.episods }} эпизодов </p>
+                                {% if element.episods == 'null' %}
+                                {% elif element.episods == '1' %}
+                                    <p> {{ element.episods }} эпизод </p>
+                                {% else %}
+                                    <p> {{ element.episods }} эпизодов </p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
