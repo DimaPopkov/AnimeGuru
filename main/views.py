@@ -55,6 +55,7 @@ def base(request):
     Allstatus = list(Product.objects.values_list('status', flat=True).distinct())
 
     new_products = Product.objects.order_by('-season')[:10]
+    new_products_in_cite = Product.objects.order_by('-id')[:10]
 
     best_for_category = {}
     tags_with_products = Tags.objects.prefetch_related(
@@ -99,6 +100,7 @@ def base(request):
         'theme': theme,
         'sort': Sort.objects.all().order_by('name'),
         'new_products': new_products,
+        'new_products_in_cite': new_products_in_cite,
         'best_for_category': best_for_category,
         'most_popular_week': most_popular_title_week,
         'most_popular_month': most_popular_title_month,

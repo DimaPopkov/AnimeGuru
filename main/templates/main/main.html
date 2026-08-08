@@ -324,6 +324,59 @@
                 {% endif %}
             </div>
 
+            <div><br>
+                <div class="new_products_title" style="cursor: default; padding-top: 0;">
+                    <h3 class="new_products_h4"> Новое на сайте: </h3>
+                </div>
+                <div class="new_products_list_container">
+                    <div class="new_products_list">
+                        {% for element in new_products_in_cite %}
+                            <form action="{% url 'card' product_name=element.name %}" method="GET" class="new_products_list_product fade-in">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="prod_element2" onclick="submitform(this)">
+                                    <div class="prod_element_pic_lock2">
+                                        {% if element.image %}
+                                            {% if element.image.url %}
+                                                <img src="{{ element.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.alter_pic.url }}" style="width: 100%"></div>
+                                        {% endif %}
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                    {% if element.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                    {% elif element.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                color: #ffffff;
+                                                ">
+                                                <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                                    <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                            fill="white" 
+                                                            stroke="white" 
+                                                            stroke-width="6" 
+                                                            stroke-linejoin="round" />
+                                                </svg>
+                                                {{ element.rating }} 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.name }} </h5>
+                                        <h8> {{ element.category }} / {{ element.season.year }}</h8>
+                                        <br><br>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
             <div style="text-align: left;">
                 <h2 class="new_products_title new_products_h4"> Популярные публикации </h2>
                 {% if popular_posts %}
