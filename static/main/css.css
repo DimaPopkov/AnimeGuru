@@ -2043,6 +2043,7 @@ input[type="checkbox"]:checked::after {
 
 .all_characters_card_img{
     height: 100%;
+    border-radius: 6px;
 }
 
 .p_character{
