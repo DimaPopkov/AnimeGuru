@@ -130,11 +130,19 @@
         <h2>Соединение с Discord</h2>
         <p>Вы собираетесь безопасно подключить ваш профиль Discord к игровому аккаунту <strong>AnimeGuru</strong>.</p>
 
-        <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_connections' %}">
+        <form method="post" action="{% url 'socialaccount_connections' %}">
             {% csrf_token %}
             
+            {% if form.accounts %}
+                {% for radio in form.accounts %}
+                    <label style="display: none;">
+                        {{ radio.tag }}
+                    </label>
+                {% endfor %}
+            {% endif %}
+
             <button class="btn-confirm" type="submit">
-                <i class="fa-brands fa-discord"></i> Привязать этот аккаунт
+                <i class="fa-brands fa-discord"></i> Продолжить
             </button>
             <a href="/profile/" class="btn-cancel">Отмена</a>
         </form>

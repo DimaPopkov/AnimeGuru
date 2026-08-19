@@ -71,6 +71,10 @@
             display: block; transition: all 0.2s ease;
         }
         .btn-cancel:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--text-main); }
+
+        form p {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -88,10 +92,11 @@
         <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
             {% csrf_token %}
             
+            <!-- КРИТИЧЕСКИ ВАЖНО: Выводим скрытые поля, чтобы проскочить этот экран -->
             {{ form.as_p }}
             
             <button class="btn-confirm" type="submit">
-                <i class="fa-brands fa-discord"></i> Привязать этот аккаунт
+                Привязать этот аккаунт
             </button>
             <a href="/profile/" class="btn-cancel">Отмена</a>
         </form>
