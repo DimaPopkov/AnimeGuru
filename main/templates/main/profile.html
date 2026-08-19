@@ -66,10 +66,46 @@
                         <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
                     {% load socialaccount %}
-                    <a href="{% provider_login_url 'discord' process='connect' %}" class="btn-confirm">
-                        <i class="fa-brands fa-discord"></i> Продолжить
-                        <!-- Или используйте вашу оформленную кнопку -->
-                    </a>
+                        {% if user.socialaccount_set.all %}
+                            {% for account in user.socialaccount_set.all %}
+                                {% if account.provider == 'discord' %}
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        
+                                        <!-- Отображение аватарки Discord -->
+                                        {% if account.extra_data.avatar %}
+                                            <img src="https://discordapp.com{{ account.uid }}/{{ account.extra_data.avatar }}.png?size=128" 
+                                                alt="Аватарка Discord" 
+                                                style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);">
+                                        {% else %}
+                                            <!-- Дефолтная картинка, если у пользователя нет аватара -->
+                                            <img src="https://discordapp.com" 
+                                                alt="Стандартный аватар" 
+                                                style="width: 64px; height: 64px; border-radius: 50%;">
+                                        {% endif %}
+                                        
+                                        <!-- Отображение имени пользователя Discord -->
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 700; letter-spacing: -0.3px;">
+                                                {{ account.extra_data.global_name|default:account.extra_data.username }}
+                                            </div>
+                                            <div style="font-size: 13px; color: #5865F2; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                                Discord привязан
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <!-- Если Discord еще не привязан, показываем кнопку для подключения -->
+                            <div style="text-align: center; padding: 10px 0;">
+                                <p style="color: #9ca3af; font-size: 14px; margin-bottom: 16px;">Ваш игровой профиль еще не связан с Discord</p>
+                                <a href="/accounts/discord/login/?process=connect" style="display: inline-block; background: #5865F2; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#4752C4'" onmouseout="this.style.background='#5865F2'">
+                                    🔗 Привязать Discord
+                                </a>
+                            </div>
+                        {% endif %}
                 </div>
             </div>
 
