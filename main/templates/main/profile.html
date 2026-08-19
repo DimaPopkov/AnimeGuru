@@ -72,16 +72,7 @@
                                     <div style="display: flex; align-items: center; gap: 16px;">
                                         
                                         <!-- Отображение аватарки Discord -->
-                                        {% if account.extra_data.avatar %}
-                                            <img src="https://discordapp.com{{ account.uid }}/{{ account.extra_data.avatar }}.png?size=128" 
-                                                alt="Аватарка Discord" 
-                                                style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);">
-                                        {% else %}
-                                            <!-- Дефолтная картинка, если у пользователя нет аватара -->
-                                            <img src="https://discordapp.com" 
-                                                alt="Стандартный аватар" 
-                                                style="width: 64px; height: 64px; border-radius: 50%;">
-                                        {% endif %}
+                                        <img src="{{ account.get_avatar_url }}" alt="Аватарка" style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3); object-fit: cover;">
                                         
                                         <!-- Отображение имени пользователя Discord -->
                                         <div>
