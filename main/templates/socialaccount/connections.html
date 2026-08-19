@@ -117,6 +117,10 @@
             background-color: rgba(255, 255, 255, 0.03);
             color: var(--text-main);
         }
+
+        form label, .form-check, input[type="radio"] {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -159,4 +163,15 @@
 </div>
 
 </body>
+
+<script>
+    // Автоматически выбираем первую радиокнопку, чтобы пользователю не нужно было кликать
+    document.addEventListener("DOMContentLoaded", function() {
+        const radio = document.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+        }
+    });
+</script>
+
 </html>
