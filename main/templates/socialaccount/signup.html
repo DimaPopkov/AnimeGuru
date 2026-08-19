@@ -51,9 +51,6 @@
 
         h2 { font-size: 24px; font-weight: 700; margin: 0 0 12px 0; letter-spacing: -0.5px; }
         p { color: var(--text-muted); font-size: 15px; line-height: 1.5; margin: 0 0 28px 0; }
-        
-        /* Скрываем уродливые стандартные поля Django, оставляя только кнопку */
-        form p { display: none; }
 
         .btn-confirm {
             background-color: var(--discord-color);
@@ -91,7 +88,7 @@
         <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
             {% csrf_token %}
             
-            {{ form.as_hidden }}
+            {{ form.as_p }}
             
             <button class="btn-confirm" type="submit">
                 <i class="fa-brands fa-discord"></i> Привязать этот аккаунт
