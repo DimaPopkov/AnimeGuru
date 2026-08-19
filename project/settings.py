@@ -20,7 +20,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['brake.eu.pythonanywhere.com', 'localhost', '127.0.0.1']
 
-# Application definition
+
+# ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# STATIC_ROOT = BASE_DIR / "static_root"
+
 
 INSTALLED_APPS = [
     'unfold',
@@ -308,7 +313,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-# STATIC_ROOT = BASE_DIR / "static_root"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
