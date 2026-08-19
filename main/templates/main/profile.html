@@ -65,7 +65,9 @@
                         <p class="profile_p_level_title"> Уровень: </p>
                         <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
+                    
                     {% load socialaccount %}
+                    <div class="profile_container_header_block_info_flex_alt_block" style="--rank-color: {{ user.profile.color }}">
                         {% if user.socialaccount_set.all %}
                             {% for account in user.socialaccount_set.all %}
                                 {% if account.provider == 'discord' %}
@@ -97,6 +99,7 @@
                                 </a>
                             </div>
                         {% endif %}
+                    </div>
                 </div>
             </div>
 
