@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'login',
     'posts',
 
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
