@@ -168,7 +168,16 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='avatars/', default="avatars/null_avatar.png", blank=True)
     rank = models.IntegerField('Ранг пользователя', default=0)
     color = models.TextField('Цвет пользователя', default='white')
+    active_seconds = models.IntegerField('Время активности', default=0)
     favourites = models.ManyToManyField(Product, blank=True)
+
+    @property
+    def active_hours(self):
+        hours = self.active_seconds // 3600
+        minutes = (self.active_seconds % 3600) // 60
+        if hours > 0:
+            return f"{hours} ч. {minutes} мин."
+        return f"{minutes} мин."
     
     def __str__(self):
         return self.user.username

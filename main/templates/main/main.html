@@ -521,6 +521,80 @@
                     </section>
                 </div>
             </section>
+
+            <section class="community_section" style="padding: 20px 0 40px 0;">
+                <div class="community_container" style="flex-direction: column;">
+                    <h3 class="section_title" style="margin-bottom: 5px;"> Активные пользователи на сайте </h3>
+
+                    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 15px; margin-bottom: 30px;">
+                        {% with user=top_active_users|slice:"3:4"|first %}
+                        {% if user %}
+                        <div style="display: flex; flex-direction: column; align-items: center; background: rgb(30, 30, 30); padding: 15px; border-radius: 12px; width: 130px; border: 2px solid rgb(50, 50, 50);">
+                            <div style="position: relative;">
+                                <img src="{{ user.image.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div style="font-size: 13px; font-weight: 600; color: #f3f4f6; margin-top: 8px; text-overflow: ellipsis; overflow: hidden; width: 100%; text-align: center;">{{ user.user.username }}</div>
+                            <div style="font-size: 11px; color: #9ca3af; margin-top: 2px;">{{ user.active_hours }}</div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- 🥈 2 МЕСТО: СЕРЕБРО (Выводим 2-го пользователя в списке) -->
+                        {% with user=top_active_users|slice:"1:2"|first %}
+                        {% if user %}
+                        <div style="display: flex; flex-direction: column; align-items: center; background: #2f2f2f; padding: 15px; border-radius: 12px; width: 160px; border: 2px solid #a0a0a0; box-shadow: 0 0 10px rgba(160, 160, 160, 0.1); transform: translateY(-10px);">
+                            <div style="position: relative;">
+                                <img src="{{ user.image.url }}" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
+                                <span style="position: absolute; bottom: -5px; right: -5px; background: #a0a0a0; color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; justify-content: center; align-items: center; font-weight: bold;">2</span>
+                            </div>
+                            <div style="font-size: 20px; font-weight: 600; color: #f3f4f6; margin-top: 15px; text-overflow: ellipsis; overflow: hidden; width: 100%; text-align: center;">{{ user.user.username }}</div>
+                            <div style="font-size: 11px; color: #9ca3af;">{{ user.active_hours }}</div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- 🥇 1 МЕСТО: ЗОЛОТО (Выводим самого 1-го пользователя, он в желтой/золотой рамке) -->
+                        {% with user=top_active_users|slice:"0:1"|first %}
+                        {% if user %}
+                        <div style="display: flex; flex-direction: column; align-items: center; background: rgb(59, 49, 0); padding: 20px; border-radius: 14px; width: 200px; border: 3px solid #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); transform: translateY(-15px);">
+                            <div style="position: relative;">
+                                <img src="{{ user.image.url }}" style="width: 75px; height: 75px; border-radius: 50%; object-fit: cover;">
+                                <span style="position: absolute; bottom: -5px; right: -5px; background: #ffd700; color: #000; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; display: flex; justify-content: center; align-items: center; font-weight: bold;">1</span>
+                            </div>
+                            <div style="font-size: 24px; font-weight: 700; color: #fff; margin-top: 20px; text-overflow: ellipsis; overflow: hidden; width: 100%; text-align: center;">{{ user.user.username }}</div>
+                            <div style="font-size: 12px; color: #ffd700; font-weight: 600;">{{ user.active_hours }}</div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- 🥉 3 МЕСТО: БРОНЗА (Выводим 3-го пользователя в списке) -->
+                        {% with user=top_active_users|slice:"2:3"|first %}
+                        {% if user %}
+                        <div style="display: flex; flex-direction: column; align-items: center; background: #301e0c; padding: 15px; border-radius: 12px; width: 160px; border: 2px solid #cd7f32; box-shadow: 0 0 10px rgba(205, 127, 50, 0.1); transform: translateY(-10px);">
+                            <div style="position: relative;">
+                                <img src="{{ user.image.url }}" style="width: 55px; height: 55px; border-radius: 50%; object-fit: cover;">
+                                <span style="position: absolute; bottom: -5px; right: -5px; background: #cd7f32; color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; justify-content: center; align-items: center; font-weight: bold;">3</span>
+                            </div>
+                            <div style="font-size: auto; font-weight: 600; color: #f3f4f6; margin-top: 15px; text-overflow: ellipsis; overflow: hidden; width: 100%; text-align: center;">{{ user.user.username }}</div>
+                            <div style="font-size: 11px; color: #9ca3af;">{{ user.active_hours }}</div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        {% with user=top_active_users|slice:"4:5"|first %}
+                        {% if user %}
+                        <div style="display: flex; flex-direction: column; align-items: center; background: rgb(30, 30, 30); padding: 15px; border-radius: 12px; width: 130px; border: 2px solid rgb(50, 50, 50);">
+                            <div style="position: relative;">
+                                <img src="{{ user.image.url }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div style="font-size: 13px; font-weight: 600; color: #f3f4f6; margin-top: 8px; text-overflow: ellipsis; overflow: hidden; width: 100%; text-align: center;">{{ user.user.username }}</div>
+                            <div style="font-size: 11px; color: #9ca3af; margin-top: 2px;">{{ user.active_hours }}</div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 

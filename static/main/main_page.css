@@ -875,3 +875,10 @@
     border-radius: 5px;
     white-space: nowrap;
 }
+
+.active_users {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}

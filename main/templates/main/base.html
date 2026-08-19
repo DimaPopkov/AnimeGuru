@@ -39,7 +39,51 @@
     </script>
 </head>
 <body id="products-list-container" class="body dark-theme">
-    
+    {% if user.is_authenticated %}
+        <script>
+            let spentSeconds = 0;
+            const sendInterval = 30; // Отправляем данные на бэкенд каждые 60 секунд
+
+            // Запускаем ежесекундный счётчик
+            setInterval(() => {
+                spentSeconds++;
+                
+                // Каждую минуту сбрасываем счётчик и шлём данные в Django
+                if (spentSeconds >= sendInterval) {
+                    sendTimeToServer(spentSeconds);
+                    spentSeconds = 0;
+                }
+            }, 1000);
+
+            // Функция фоновой отправки времени
+            function sendTimeToServer(seconds) {
+                if (seconds <= 0) return;
+
+                fetch("{% url 'update_active_time' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        // Извлекаем CSRF-токен из куки монолита Django
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({ seconds: seconds })
+                })
+                .then(response => response.json())
+                .then(data => console.log("Время синхронизировано:", data.total_time))
+                .catch(err => console.error("Ошибка таймера:", err));
+            }
+
+            // Бонус: пробуем отправить накопленный остаток, если пользователь закрывает вкладку
+            window.addEventListener('beforeunload', () => {
+                if (spentSeconds > 5) {
+                    sendTimeToServer(spentSeconds);
+                }
+            });
+        </script>
+
+        <!-- Невидимый элемент для работы CSRF-токена в JS -->
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        {% endif %}
     <!-- <div id="preloader">
         <div class="loader-content">
             <h1 id="btn_logo" class="btn_logo" href="{% url 'main' %}" style="font-family: 'Playwrite DE SAS', cursive;"> AnimeGuru </h1>

@@ -15,7 +15,7 @@ from PIL import Image, ImageSequence
 
 from django.contrib.auth.models import User
 
-from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats, ProductView
+from .models import Tags, Category, Product, Status, Album_Pics, Characters, Comments, CommentAction, AiMessages, Sort, RecentView, ProfileStats, ProductView, Profile
 from posts.models import Posts
 from .forms import ProductForm
 
@@ -107,6 +107,7 @@ def base(request):
         'popular_posts': popular_posts,
         'top_users_comm': top_users_comm,
         'top_users_like': top_users_like,
+        'top_active_users': Profile.objects.select_related('user').order_by('-active_seconds')[:5],
     }
         
     return render(request, 'main/main.html', data)
@@ -1311,3 +1312,23 @@ def favourites_add(request, product_name):
         user.favourites.add(product)
         
     return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+def update_active_time(request):
+    if request.method == 'POST':
+        try:
+            # Читаем JSON, пришедший от JavaScript
+            data = json.loads(request.body)
+            seconds_to_add = int(data.get('seconds', 0))
+            
+            # Защита от накрутки: за один запрос разрешаем добавить не более 90 секунд
+            if 0 < seconds_to_add <= 90:
+                # Находим профиль или создаем его на лету, если его ещё не было
+                profile, created = Profile.objects.get_or_create(user=request.user)
+                profile.active_seconds += seconds_to_add
+                profile.save()
+                
+                return JsonResponse({'status': 'success', 'total_time': profile.active_hours})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+            
+    return JsonResponse({'status': 'invalid_method'}, status=405)
