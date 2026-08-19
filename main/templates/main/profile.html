@@ -65,7 +65,7 @@
                         <p class="profile_p_level_title"> Уровень: </p>
                         <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
-                    
+
                     {% load socialaccount %}
                     <div class="profile_container_header_block_info_flex_alt_block" style="--rank-color: {{ user.profile.color }}">
                         {% if user.socialaccount_set.all %}
@@ -74,7 +74,7 @@
                                     <div style="display: flex; align-items: center; gap: 16px;">
                                         
                                         <!-- Отображение аватарки Discord -->
-                                        <img src="{{ account.get_avatar_url }}" alt="Аватарка" style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3); object-fit: cover;">
+                                        <img src="{{ account.get_avatar_url }}" alt="Аватарка" style="height: 90%; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3); object-fit: cover;">
                                         
                                         <!-- Отображение имени пользователя Discord -->
                                         <div>
