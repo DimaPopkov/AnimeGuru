@@ -65,6 +65,10 @@
                         <p class="profile_p_level_title"> Уровень: </p>
                         <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
+                    {% load socialaccount %}
+                    <a href="{% provider_login_url 'discord' process='connect' %}" class="btn-discord">
+                        Привязать мой Discord аккаунт
+                    </a>
                 </div>
             </div>
 

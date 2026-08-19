@@ -17,6 +17,9 @@ Levenshtein:
 Pillow:
 ```pip install Pillow```
 
+Django-allauth
+```pip install django-allauth```
+
 # Доступные методы
 
 Доступен метод ```python manage.py load_anime``` для добавления новых тайтлов в каталог 
