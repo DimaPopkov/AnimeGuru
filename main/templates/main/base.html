@@ -42,7 +42,7 @@
     {% if user.is_authenticated %}
         <script>
             let spentSeconds = 0;
-            const sendInterval = 30; // Отправляем данные на бэкенд каждые 60 секунд
+            const sendInterval = 60;
 
             // Запускаем ежесекундный счётчик
             setInterval(() => {
@@ -83,7 +83,8 @@
 
         <!-- Невидимый элемент для работы CSRF-токена в JS -->
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        {% endif %}
+    {% endif %}
+
     <!-- <div id="preloader">
         <div class="loader-content">
             <h1 id="btn_logo" class="btn_logo" href="{% url 'main' %}" style="font-family: 'Playwrite DE SAS', cursive;"> AnimeGuru </h1>
