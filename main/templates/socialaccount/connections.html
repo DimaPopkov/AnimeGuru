@@ -130,22 +130,31 @@
         <h2>Соединение с Discord</h2>
         <p>Вы собираетесь безопасно подключить ваш профиль Discord к игровому аккаунту <strong>AnimeGuru</strong>.</p>
 
-        <form method="post" action="{% url 'socialaccount_connections' %}">
-            {% csrf_token %}
-            
-            {% if form.accounts %}
-                {% for radio in form.accounts %}
-                    <label style="display: none;">
-                        {{ radio.tag }}
-                    </label>
-                {% endfor %}
-            {% endif %}
-
-            <button class="btn-confirm" type="submit">
-                <i class="fa-brands fa-discord"></i> Продолжить
-            </button>
-            <a href="/profile/" class="btn-cancel">Отмена</a>
-        </form>
+        {% if '3rdparty' in request.path %}
+            <!-- Если мы застряли на странице 3rdparty, отправляем запрос на signup -->
+            <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn-confirm" type="submit">
+                    <i class="fa-brands fa-discord"></i> Привязать этот аккаунт
+                </button>
+                <a href="/profile/" class="btn-cancel">Отмена</a>
+            </form>
+        {% else %}
+            <!-- Если мы на обычной странице подключений -->
+            <form method="post" action="{% url 'socialaccount_connections' %}">
+                {% csrf_token %}
+                {% if form.accounts %}
+                    {% for radio in form.accounts %}
+                        <label style="display: none;">{{ radio.tag }}</label>
+                    {% endfor %}
+                {% endif %}
+                <button class="btn-confirm" type="submit">
+                    <i class="fa-brands fa-discord"></i> Продолжить
+                </button>
+                <a href="/profile/" class="btn-cancel">Отмена</a>
+            </form>
+        {% endif %}
     </div>
 </div>
 
