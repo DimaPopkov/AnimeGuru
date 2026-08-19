@@ -66,8 +66,9 @@
                         <p class="profile_p_level"> {{ user.profile.rank }} </p>
                     </div>
                     {% load socialaccount %}
-                    <a href="{% provider_login_url 'discord' process='connect' %}" class="btn-discord">
-                        Привязать мой Discord аккаунт
+                    <a href="{% provider_login_url 'discord' process='connect' %}" class="btn-confirm">
+                        <i class="fa-brands fa-discord"></i> Продолжить
+                        <!-- Или используйте вашу оформленную кнопку -->
                     </a>
                 </div>
             </div>
