@@ -834,10 +834,13 @@ def check_url(url):
 
 def profile(request):
     try:
+        print(f"--- Старт обновления. Пользователь: {request.user}")
+
         social_account = SocialAccount.objects.get(user=request.user, provider='discord')
         discord_id = social_account.uid
 
-        # ТЕПЕРЬ МЫ БЕРЕМ ТОКЕН ИЗ НАСТРОЕК DJANGO
+        print(f"--- Найден Discord ID: {discord_id}")
+        
         BOT_TOKEN = settings.DISCORD_BOT_TOKEN
         
         # Небольшая проверка безопасности
@@ -847,9 +850,8 @@ def profile(request):
         headers = {
             "Authorization": f"Bot {BOT_TOKEN}"
         }
-
-        # Исправленный URL (про который мы говорили в первом сообщении)
-        url = f"https://discord.com{discord_id}"
+        
+        url = f"https://discord.com/api/v10/users/{discord_id}"
         response = requests.get(url, headers=headers, timeout=4)
         
         if response.status_code == 200:
