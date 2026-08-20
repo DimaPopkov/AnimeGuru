@@ -14,7 +14,7 @@ from django.core.paginator import Paginator
 from datetime import timedelta
 from PIL import Image, ImageSequence
 
-from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.models import SocialToken, SocialAccount
 
 from django.contrib.auth.models import User
 
@@ -832,6 +832,53 @@ def check_url(url):
         print(f"Ошибка подключения: {e}")
 
 def profile(request):
+    try:
+        social_account = SocialAccount.objects.get(user=request.user, provider='discord')
+        social_token = SocialToken.objects.get(account=social_account)
+        
+        # 2. Делаем быстрый запрос в Discord, используя токен самого пользователя
+        headers = {
+            "Authorization": f"Bearer {social_token.token}"
+        }
+        
+        # Запрашиваем информацию о текущем пользователе (@me)
+        response = requests.get("https://discord.com", headers=headers, timeout=3)
+        
+        if response.status_code == 200:
+            discord_data = response.json()
+            
+            # Извлекаем свежие данные из Discord
+            new_avatar = discord_data.get('avatar')
+            new_username = discord_data.get('username')
+            new_global_name = discord_data.get('global_name')
+            
+            # Проверяем, изменилось ли что-то по сравнению с базой данных
+            extra_data = social_account.extra_data
+            has_changes = False
+            
+            if extra_data.get('avatar') != new_avatar:
+                extra_data['avatar'] = new_avatar
+                has_changes = True
+                
+            if extra_data.get('username') != new_username:
+                extra_data['username'] = new_username
+                has_changes = True
+                
+            if extra_data.get('global_name') != new_global_name:
+                extra_data['global_name'] = new_global_name
+                has_changes = True
+                
+            # Если данные обновились — сохраняем их в базу сайта
+            if has_changes:
+                social_account.extra_data = extra_data
+                social_account.save(update_fields=['extra_data'])
+                    
+    except (SocialAccount.DoesNotExist, SocialToken.DoesNotExist):
+        pass
+    except Exception as e:
+        print(f"Ошибка обновления Discord: {e}")
+
+
     product_image_subquery = Subquery(
         Product.objects.filter(name=OuterRef('name')).values('image')
     )
