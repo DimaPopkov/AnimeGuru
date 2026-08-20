@@ -71,20 +71,30 @@
                         {% if user.socialaccount_set.all %}
                             {% for account in user.socialaccount_set.all %}
                                 {% if account.provider == 'discord' %}
-                                    <div style="display: flex; align-items: center; gap: 16px;">
-                                        <!-- Отображение аватарки Discord -->
-                                        <img src="{{ account.get_avatar_url }}" alt="Аватарка" style="height: 50px; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3); object-fit: cover;">
-                                        
-                                        <!-- Отображение имени пользователя Discord -->
-                                        <div>
-                                            <div style="font-size: 18px; font-weight: 700; letter-spacing: -0.3px;">
-                                                {{ account.extra_data.global_name|default:account.extra_data.username }}
-                                            </div>
-                                            <div style="font-size: 13px; color: #5865F2; display: flex; align-items: center; gap: 4px;">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                                Discord привязан
+                                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%;">
+                                        <div style="display: flex; align-items: center; gap: 16px;">
+                                            <!-- Отображение аватарки Discord -->
+                                            <img src="{{ account.get_avatar_url }}" alt="Аватарка" style="height: 50px; border-radius: 50%; border: 2px solid #5865F2; box-shadow: 0 0 10px rgba(88, 101, 242, 0.3); object-fit: cover;">
+                                            
+                                            <!-- Отображение имени пользователя Discord -->
+                                            <div>
+                                                <div style="font-size: 18px; font-weight: 700; letter-spacing: -0.3px;">
+                                                    {{ account.extra_data.global_name|default:account.extra_data.username }}
+                                                </div>
+                                                <div style="font-size: 13px; color: #5865F2; display: flex; align-items: center; gap: 4px;">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                                    Discord привязан
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <!-- КНОПКА ОТВЯЗКИ ДИСКОРДА -->
+                                        <form method="post" action="{% url 'disconnect_discord' %}" style="margin: 0;">
+                                            {% csrf_token %}
+                                            <button type="submit" style="background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#ef4444'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#ef4444'">
+                                                Отвязать
+                                            </button>
+                                        </form>
                                     </div>
                                 {% endif %}
                             {% endfor %}

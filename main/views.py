@@ -5,13 +5,16 @@ from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models, connection
 from django.utils import timezone
-from datetime import timedelta
+from django.contrib import messages
 from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max, Prefetch, Func
 from django.db.models.functions import ExtractYear, Lower
 from django.core.files.base import ContentFile
 from django.core.cache import cache
 from django.core.paginator import Paginator
+from datetime import timedelta
 from PIL import Image, ImageSequence
+
+from allauth.socialaccount.models import SocialAccount
 
 from django.contrib.auth.models import User
 
@@ -1332,3 +1335,16 @@ def update_active_time(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
             
     return JsonResponse({'status': 'invalid_method'}, status=405)
+
+def disconnect_discord(request):
+    if request.method == 'POST':
+        # Ищем привязанный Discord текущего пользователя
+        discord_account = SocialAccount.objects.filter(user=request.user, provider='discord').first()
+        
+        if discord_account:
+            discord_account.delete()
+            messages.success(request, "Аккаунт Discord успешно отвязан!")
+        else:
+            messages.error(request, "У вас нет привязанного аккаунта Discord.")
+            
+    return redirect('profile')

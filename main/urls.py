@@ -32,6 +32,7 @@ urlpatterns = [
     path('user/<str:id>', views.user_profile, name='user_profile'),
     path('profile/change-avatar', views.profile_change_avatar, name='profile_change_avatar'),
     path('profile/delete-avatar', views.profile_delete_avatar, name='profile_delete_avatar'),
+    path('profile/disconnect-discord', views.disconnect_discord, name='disconnect_discord'),
     path('catalog/<str:tags>/', views.catalog_filtered, name='catalog_filtered'),
     path('AI/chat', views.AIchat, name='AIchat'),
     path('AI/history', views.AIhistory, name='AIhistory'),
