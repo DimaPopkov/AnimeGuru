@@ -144,7 +144,6 @@
             <!-- Если мы застряли на странице 3rdparty, отправляем запрос на signup -->
             <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
                 {% csrf_token %}
-                {{ form.as_p }}
                 <button class="btn-confirm" type="submit">
                     <i class="fa-brands fa-discord"></i> Привязать этот аккаунт
                 </button>
