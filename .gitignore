@@ -8,5 +8,3 @@
 *.pyo
 *.pyd
 *media
-
-**/local_settings.py
