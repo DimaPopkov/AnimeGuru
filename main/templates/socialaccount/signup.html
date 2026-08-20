@@ -97,10 +97,7 @@
         <!-- Рабочая форма со скрытыми полями токенов -->
         <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
             {% csrf_token %}
-            
-            <!-- КРИТИЧЕСКИ ВАЖНО: Выводим скрытые поля, чтобы проскочить этот экран -->
-            {{ form.as_p }}
-            
+
             <button class="btn-confirm" type="submit">
                 Привязать этот аккаунт
             </button>
