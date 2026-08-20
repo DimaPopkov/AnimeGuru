@@ -333,3 +333,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DISCORD_BOT_TOKEN = "PLACEHOLDER_TOKEN"
+
+# Подключаем наш новый скрытый файл
+try:
+    from .local_settings import *
+except ImportError:
+    pass

@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 from django.db import models, connection
+from django.conf import settings
 from django.utils import timezone
 from django.contrib import messages
 from django.db.models import OuterRef, Subquery, FileField, F, Sum, Count, Q, Min, Max, Prefetch, Func
@@ -14,7 +15,7 @@ from django.core.paginator import Paginator
 from datetime import timedelta
 from PIL import Image, ImageSequence
 
-from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.models import SocialToken, SocialAccount
 
 from django.contrib.auth.models import User
 
@@ -832,6 +833,60 @@ def check_url(url):
         print(f"Ошибка подключения: {e}")
 
 def profile(request):
+    try:
+        social_account = SocialAccount.objects.get(user=request.user, provider='discord')
+        discord_id = social_account.uid
+
+        # ТЕПЕРЬ МЫ БЕРЕМ ТОКЕН ИЗ НАСТРОЕК DJANGO
+        BOT_TOKEN = settings.DISCORD_BOT_TOKEN
+        
+        # Небольшая проверка безопасности
+        if BOT_TOKEN == "PLACEHOLDER_TOKEN":
+            print("Ошибка: Вы забыли прописать реальный токен в local_settings.py!")
+        
+        headers = {
+            "Authorization": f"Bot {BOT_TOKEN}"
+        }
+
+        # Исправленный URL (про который мы говорили в первом сообщении)
+        url = f"https://discord.com{discord_id}"
+        response = requests.get(url, headers=headers, timeout=4)
+        
+        if response.status_code == 200:
+            discord_data = response.json()
+            
+            # Извлекаем свежие данные из Discord
+            new_avatar = discord_data.get('avatar')
+            new_username = discord_data.get('username')
+            new_global_name = discord_data.get('global_name')
+            
+            # Проверяем, изменилось ли что-то по сравнению с базой данных
+            extra_data = social_account.extra_data
+            has_changes = False
+            
+            if extra_data.get('avatar') != new_avatar:
+                extra_data['avatar'] = new_avatar
+                has_changes = True
+                
+            if extra_data.get('username') != new_username:
+                extra_data['username'] = new_username
+                has_changes = True
+                
+            if extra_data.get('global_name') != new_global_name:
+                extra_data['global_name'] = new_global_name
+                has_changes = True
+                
+            # Если данные обновились — сохраняем их в базу сайта
+            if has_changes:
+                social_account.extra_data = extra_data
+                social_account.save(update_fields=['extra_data'])
+                    
+    except (SocialAccount.DoesNotExist, SocialToken.DoesNotExist):
+        pass
+    except Exception as e:
+        print(f"Ошибка обновления Discord: {e}")
+
+
     product_image_subquery = Subquery(
         Product.objects.filter(name=OuterRef('name')).values('image')
     )
