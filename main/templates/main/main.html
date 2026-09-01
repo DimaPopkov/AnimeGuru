@@ -529,7 +529,7 @@
                     <div style="display: flex; justify-content: center; align-items: flex-end; gap: 15px; margin-bottom: 30px;">
                         {% with user=top_active_users|slice:"3:4"|first %}
                         {% if user %}
-                        <div style="display: flex; flex-direction: column; align-items: center; padding: 15px; border-radius: 12px; width: 130px;">
+                        <div class='active_users_user' id="active_users_other" style="padding: 15px; border-radius: 12px; width: 130px;">
                             <div style="position: relative;">
                                 <img src="{{ user.image.url }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
                             </div>
@@ -542,7 +542,7 @@
                         <!-- 🥈 2 МЕСТО: СЕРЕБРО (Выводим 2-го пользователя в списке) -->
                         {% with user=top_active_users|slice:"1:2"|first %}
                         {% if user %}
-                        <div style="display: flex; flex-direction: column; align-items: center; padding: 15px; border-radius: 12px; width: 160px;">
+                        <div class='active_users_user' id="active_users_silver" style="padding: 15px; border-radius: 12px; width: 160px;">
                             <div style="position: relative;">
                                 <img src="{{ user.image.url }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #a0a0a0; box-shadow: 0 0 10px rgba(160, 160, 160, 0.1);">
                                 <span style="position: absolute; bottom: -5px; right: -5px; background: #a0a0a0; color: #fff; border-radius: 50%; width: 25px; height: 25px; font-size: 20px; display: flex; justify-content: center; align-items: center; font-weight: 600;">2</span>
@@ -556,7 +556,7 @@
                         <!-- 🥇 1 МЕСТО: ЗОЛОТО (Выводим самого 1-го пользователя, он в желтой/золотой рамке) -->
                         {% with user=top_active_users|slice:"0:1"|first %}
                         {% if user %}
-                        <div style="display: flex; flex-direction: column; align-items: center; padding: 20px; border-radius: 14px; width: 200px;">
+                        <div class='active_users_user' id="active_users_gold" style="padding: 20px; border-radius: 14px; width: 200px;">
                             <div style="position: relative;">
                                 <img src="{{ user.image.url }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
                                 <span style="position: absolute; bottom: -5px; right: -5px; background: #ffd700; color: #000; border-radius: 50%; width: 35px; height: 35px; font-size: 24px; display: flex; justify-content: center; align-items: center; font-weight: 700;">1</span>
@@ -570,7 +570,7 @@
                         <!-- 🥉 3 МЕСТО: БРОНЗА (Выводим 3-го пользователя в списке) -->
                         {% with user=top_active_users|slice:"2:3"|first %}
                         {% if user %}
-                        <div style="display: flex; flex-direction: column; align-items: center; padding: 15px; border-radius: 12px; width: 160px;">
+                        <div class='active_users_user' id="active_users_bronze" style="padding: 15px; border-radius: 12px; width: 160px;">
                             <div style="position: relative;">
                                 <img src="{{ user.image.url }}" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #cd7f32; box-shadow: 0 0 10px rgba(205, 127, 50, 0.1);">
                                 <span style="position: absolute; bottom: -5px; right: -5px; background: #cd7f32; color: #fff; border-radius: 50%; width: 25px; height: 25px; font-size: 20px; display: flex; justify-content: center; align-items: center; font-weight: 600;">3</span>
@@ -583,7 +583,7 @@
 
                         {% with user=top_active_users|slice:"4:5"|first %}
                         {% if user %}
-                        <div style="display: flex; flex-direction: column; align-items: center; padding: 15px; border-radius: 12px; width: 130px;">
+                        <div class='active_users_user' id="active_users_other" style="padding: 15px; border-radius: 12px; width: 130px;">
                             <div style="position: relative;">
                                 <img src="{{ user.image.url }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
                             </div>

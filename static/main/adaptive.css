@@ -197,6 +197,38 @@
     .new_posts_element .post_p{
         font-size: 14px;
     }
+    .active_users_user img{
+        max-width: 120px !important;
+        max-height: 120px !important;
+    }
+    .active_users_user#active_users_gold img{
+        width: 120px !important;
+        height: 120px !important;
+    }
+    .active_users_user#active_users_gold {
+        width: 200px !important;
+    }
+    .active_users_user#active_users_silver img{
+        width: 100px !important;
+        height: 100px !important;
+    }
+    .active_users_user#active_users_silver {
+        width: 180px !important;
+    }
+    .active_users_user#active_users_bronze img{
+        width: 80px !important;
+        height: 80px !important;
+    }
+    .active_users_user#active_users_bronze{
+        width: 150px !important;
+    }
+    .active_users_user img{
+        width: 50px !important;
+        height: 50px !important;
+    }
+    .active_users_user{
+        width: 120px !important;
+    }
 }
 
 
@@ -525,6 +557,9 @@
     .footer-container{
         width: 80%;
     }
+    #active_users_other{
+        display: none;
+    }
 }
 @media screen and (max-width: 650px){
     .login_button{
@@ -691,6 +726,9 @@
     .js-tag-link{
         font-size: 12px;
         padding: 6px 12px;
+    }
+    .community_container div{
+        gap: 0 !important;
     }
 }
 
