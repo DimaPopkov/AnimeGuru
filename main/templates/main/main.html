@@ -17,7 +17,7 @@
                                 {% if category_products.2 %}
                                     <form action="{% url 'card' product_name=category_products.2.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        {% if category_products.2 == most_popular_week %}
+                                        {% if category_products.2 == most_popular_week or category_products.2 == most_popular_month %}
                                             <div class="small-card" onclick="submitform(this)">
                                                 <img src="{{ category_products.2.image.url }}" alt="">
                                                 <span class="hero-badge">Популярное</span>
@@ -36,7 +36,7 @@
                                 {% if category_products.3 %}
                                     <form action="{% url 'card' product_name=category_products.3.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        {% if category_products.3 == most_popular_week %}
+                                        {% if category_products.3 == most_popular_week or category_products.3 == most_popular_month %}
                                             <div class="small-card" onclick="submitform(this)">
                                                 <img src="{{ category_products.3.image.url }}" alt="">
                                                 <span class="hero-badge">Популярное</span>
@@ -55,7 +55,7 @@
                             {% if category_products.0 %}
                                 <form action="{% url 'card' product_name=category_products.0.name %}" method="GET" class="card-large fade-in">
                                     <input type="hidden" name="product_name" value="{{ element }}">
-                                    {% if category_products.0 == most_popular_week %}
+                                    {% if category_products.0 == most_popular_week or category_products.0 == most_popular_month %}
                                         <div class="card-large" onclick="submitform(this)">
                                             <img src="{{ category_products.0.image.url }}" alt="">
                                             <span class="hero-badge">Популярное</span>
@@ -73,7 +73,7 @@
                             {% if category_products.1 %}
                                 <form action="{% url 'card' product_name=category_products.1.name %}" method="GET" class="card-large fade-in">
                                     <input type="hidden" name="product_name" value="{{ element }}">
-                                    {% if category_products.1 == most_popular_week %}
+                                    {% if category_products.1 == most_popular_week or category_products.1 == most_popular_month %}
                                         <div class="card-large" onclick="submitform(this)">
                                             <img src="{{ category_products.1.image.url }}" alt="">
                                             <span class="hero-badge">Популярное</span>
@@ -93,7 +93,7 @@
                                 {% if category_products.4 %}
                                     <form action="{% url 'card' product_name=category_products.4.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        {% if category_products.4 == most_popular_week %}
+                                        {% if category_products.4 == most_popular_week or category_products.4 == most_popular_month %}
                                             <div class="small-card" onclick="submitform(this)">
                                                 <img src="{{ category_products.4.image.url }}" alt="">
                                                 <span class="hero-badge">Популярное</span>
@@ -112,7 +112,7 @@
                                 {% if category_products.5 %}
                                     <form action="{% url 'card' product_name=category_products.5.name %}" method="GET" class="small-card fade-in">
                                         <input type="hidden" name="product_name" value="{{ element }}">
-                                        {% if category_products.5 == most_popular_week %}
+                                        {% if category_products.5 == most_popular_week or category_products.5 == most_popular_month %}
                                             <div class="small-card" onclick="submitform(this)">
                                                 <img src="{{ category_products.5.image.url }}" alt="">
                                                 <span class="hero-badge">Популярное</span>
@@ -539,7 +539,7 @@
                         {% endif %}
                         {% endwith %}
 
-                        <!-- 🥈 2 МЕСТО: СЕРЕБРО (Выводим 2-го пользователя в списке) -->
+                        <!-- 2 МЕСТО: СЕРЕБРО -->
                         {% with user=top_active_users|slice:"1:2"|first %}
                         {% if user %}
                         <div class='active_users_user' id="active_users_silver" style="padding: 15px; border-radius: 12px; width: 160px;">
@@ -553,7 +553,7 @@
                         {% endif %}
                         {% endwith %}
 
-                        <!-- 🥇 1 МЕСТО: ЗОЛОТО (Выводим самого 1-го пользователя, он в желтой/золотой рамке) -->
+                        <!-- 1 МЕСТО: ЗОЛОТО -->
                         {% with user=top_active_users|slice:"0:1"|first %}
                         {% if user %}
                         <div class='active_users_user' id="active_users_gold" style="padding: 20px; border-radius: 14px; width: 200px;">
@@ -567,7 +567,7 @@
                         {% endif %}
                         {% endwith %}
 
-                        <!-- 🥉 3 МЕСТО: БРОНЗА (Выводим 3-го пользователя в списке) -->
+                        <!-- 3 МЕСТО: БРОНЗА -->
                         {% with user=top_active_users|slice:"2:3"|first %}
                         {% if user %}
                         <div class='active_users_user' id="active_users_bronze" style="padding: 15px; border-radius: 12px; width: 160px;">
