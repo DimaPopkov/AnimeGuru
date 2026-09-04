@@ -560,6 +560,15 @@
     #active_users_other{
         display: none;
     }
+    .active_users_user#active_users_gold p{
+        font-size: 28px !important;
+    }
+    .active_users_user#active_users_silver p{
+        font-size: 20px !important;
+    }
+    .active_users_user#active_users_bronze p{
+        font-size: 18px !important;
+    }
 }
 @media screen and (max-width: 650px){
     .login_button{
@@ -728,7 +737,7 @@
         padding: 6px 12px;
     }
     .community_container div{
-        gap: 0 !important;
+        gap: 5px !important;
     }
 }
 
@@ -849,6 +858,81 @@
     }
     .prod_element_info{
         text-align: center;
+    }
+    .community_container{
+        padding: 0 10px;
+    }
+    .active_users_user img{
+        max-width: 100px !important;
+        max-height: 100px !important;
+    }
+    .active_users_user#active_users_gold img{
+        width: 80px !important;
+        height: 80px !important;
+    }
+    .active_users_user#active_users_silver img{
+        width: 80px !important;
+        height: 80px !important;
+    }
+    .active_users_user#active_users_bronze img{
+        width: 80px !important;
+        height: 80px !important;
+    }
+    .active_users_user img{
+        width: 20px !important;
+        height: 20px !important;
+    }
+    .active_users_user{
+        flex-direction: row;
+        padding: 0 !important;
+        margin: 10px 0 !important;
+    }
+    .active_users_user#active_users_gold{
+        width: 100% !important;
+    }
+    .active_users_user#active_users_silver{
+        width: 100% !important;
+    }
+    .active_users_user#active_users_bronze{
+        width: 100% !important;
+    }
+    .active_users_user#active_users_gold p, active-time{
+        font-size: 24px !important;
+        margin: auto 0 !important;
+    }
+    .active_users_user#active_users_silver p, active-time{
+        font-size: 24px !important;
+        margin: auto 0 !important;
+    }
+    .active_users_user#active_users_bronze p, active-time{
+        font-size: 24px !important;
+        margin: auto 0 !important;
+    }
+    .active_users_user#active_users_gold active-time{
+        font-size: 14px !important;
+    }
+    .active_users_user#active_users_silver active-time{
+        font-size: 12px !important;
+    }
+    .active_users_user#active_users_bronze active-time{
+        font-size: 12px !important;
+    }
+    active-users{
+        margin: 0 10px !important;
+    }
+    active-users div{
+        flex-direction: column;
+        align-items: start !important;
+        margin-bottom: 0 !important;
+    }
+    active-users div #active_users_gold{
+        order: 1;
+    }
+    active-users div #active_users_silver{
+        order: 2;
+    }
+    active-users div #active_users_bronze{
+        order: 3;
     }
 }
 
