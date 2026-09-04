@@ -375,13 +375,6 @@
 }
 
 @media screen and (max-width: 830px){
-    .header{
-        /* flex-direction: column; */
-        /* height: 100px; */
-
-        align-items: start;
-        /* padding-left: 20px; */
-    }
     .header div{
         padding-left: 10px;
     }
