@@ -193,7 +193,7 @@ main{
 
     justify-content: space-around;
 
-    align-items: center;
+    /* align-items: center; */
 
     border: none;
     border-radius: 0;
