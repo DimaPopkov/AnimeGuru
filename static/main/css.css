@@ -2712,7 +2712,7 @@ input[type="checkbox"]:checked::after {
 }
 
 burger-menu-block{
-    position: absolute;
+    position: fixed; 
     
     display: none;
     margin-left: 200%;
