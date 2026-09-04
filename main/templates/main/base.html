@@ -119,64 +119,72 @@
             </div>
         </div>
         
+        <div class="login_status_bar">
         {% if request.user.is_authenticated %}
-            <div class="login_status_bar">
-                <div style="display: flex;" class="login_status_bar_block">
-                    {% if request.user.profile.image != "avatars/null_avatar.png" and request.user.profile.image %}
-                        <img src="{{ request.user.profile.image.url }}" style="width: 35px; height: 35px; border-radius: 100px;">
-                    {% else %}
-                        <img src="{% static 'img/null_avatar.png' %}" style="width: 35px; height: 35px; border-radius: 100px;">
-                    {% endif %}
+            <div style="display: flex;" class="login_status_bar_block">
+                {% if request.user.profile.image != "avatars/null_avatar.png" and request.user.profile.image %}
+                    <img src="{{ request.user.profile.image.url }}" style="width: 35px; height: 35px; border-radius: 100px;">
+                {% else %}
+                    <img src="{% static 'img/null_avatar.png' %}" style="width: 35px; height: 35px; border-radius: 100px;">
+                {% endif %}
 
-                    {% if request.user.profile.rank >= 3 %}
-                        <span class="animated-nickname" style="--user-color: {{ request.user.profile.color }};">
-                            <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
-                        </span>
-                    {% else %}
+                {% if request.user.profile.rank >= 3 %}
+                    <span class="animated-nickname" style="--user-color: {{ request.user.profile.color }};">
                         <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
-                    {% endif %}
-                </div>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-secondary logout_btn">Выйти</button>
-                </form>
-
-                {% if request.user.is_superuser or request.user.is_staff %}
-                    <!-- <a class="btn btn-info btn-auto logout_btn" href="{% url 'create_product' %}"> Добавить </a> -->
-                    <a class="btn btn-danger btn-auto logout_btn" href="/admin"> Админка </a>
+                    </span>
+                {% else %}
+                    <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
                 {% endif %}
             </div>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary logout_btn">Выйти</button>
+            </form>
 
-            <burger-menu-button class="login_status_bar_burger" onclick="OpenBurger()">
-                <svg xmlns="http://w3.org" viewBox="0 0 200 200" width="45px" height="45px">
-                    <rect x="20" y="30"  width="160" height="30" rx="8" fill="#777777" />
-                    <rect x="20" y="85"  width="160" height="30" rx="8" fill="#777777" />
-                    <rect x="20" y="140" width="160" height="30" rx="8" fill="#777777" />
+            {% if request.user.is_superuser or request.user.is_staff %}
+                <!-- <a class="btn btn-info btn-auto logout_btn" href="{% url 'create_product' %}"> Добавить </a> -->
+                <a class="btn btn-danger btn-auto logout_btn" href="/admin"> Админка </a>
+            {% endif %}
+        {% else %}
+            <a class="login_button" href="{% url 'Login' %}">
+                <img id="login_pic" style="height: 50%" src="{% static "img/png-clipart-computer-icons-login-symbol-login-interface-miscellaneous-text.png" %}">
+                <p class="font" style="margin-block-start: 0; margin-block-end: 0;"> Войти </p>
+            </a> 
+        {% endif %}
+        </div>
+
+        <burger-menu-button class="login_status_bar_burger" onclick="OpenBurger()">
+            <svg xmlns="http://w3.org" viewBox="0 0 200 200" width="45px" height="45px">
+                <rect x="20" y="30"  width="160" height="30" rx="8" fill="#777777" />
+                <rect x="20" y="85"  width="160" height="30" rx="8" fill="#777777" />
+                <rect x="20" y="140" width="160" height="30" rx="8" fill="#777777" />
+            </svg>
+        </burger-menu-button>
+
+        <burger-menu-block id='burger-menu-block'>
+            <section style='display: flex; justify-content: space-between;'>
+                <svg xmlns="http://w3.org" viewBox="0 0 200 200" width="45px" height="45px" onclick="OpenBurger()" style="padding: 5px;">
+                    <rect x="20" y="85" width="160" height="30" rx="8" fill="#777777" transform="rotate(45 100 100)" />
+                    <rect x="20" y="85" width="160" height="30" rx="8" fill="#777777" transform="rotate(-45 100 100)" />
                 </svg>
-            </burger-menu-button>
 
-            <burger-menu-block id='burger-menu-block'>
-                <section style='display: flex; justify-content: space-between;'>
-                    <svg xmlns="http://w3.org" viewBox="0 0 200 200" width="45px" height="45px" onclick="OpenBurger()" style="padding: 5px;">
-                        <rect x="20" y="85" width="160" height="30" rx="8" fill="#777777" transform="rotate(45 100 100)" />
-                        <rect x="20" y="85" width="160" height="30" rx="8" fill="#777777" transform="rotate(-45 100 100)" />
-                    </svg>
+                <div style="display: flex; padding: 5px 20px; gap: 5px">
+                    {% if request.user.is_authenticated %}
+                        <div style="display: flex;" class="login_status_bar_block">
+                            {% if request.user.profile.image != "avatars/null_avatar.png" and request.user.profile.image %}
+                                <img src="{{ request.user.profile.image.url }}" style="width: 35px; height: 35px; border-radius: 100px;">
+                            {% else %}
+                                <img src="{% static 'img/null_avatar.png' %}" style="width: 35px; height: 35px; border-radius: 100px;">
+                            {% endif %}
 
-                    <div>
-                        {% if request.user.profile.image != "avatars/null_avatar.png" and request.user.profile.image %}
-                            <img src="{{ request.user.profile.image.url }}" style="width: 35px; height: 35px; border-radius: 100px;">
-                        {% else %}
-                            <img src="{% static 'img/null_avatar.png' %}" style="width: 35px; height: 35px; border-radius: 100px;">
-                        {% endif %}
-
-                        {% if request.user.profile.rank >= 3 %}
-                            <span class="animated-nickname" style="--user-color: {{ request.user.profile.color }};">
+                            {% if request.user.profile.rank >= 3 %}
+                                <span class="animated-nickname" style="--user-color: {{ request.user.profile.color }};">
+                                    <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
+                                </span>
+                            {% else %}
                                 <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
-                            </span>
-                        {% else %}
-                            <a id="nickname" href="{% url 'profile' %}" class = "login_status_bar_text"> {{ request.user.username }} </a>
-                        {% endif %}
-
+                            {% endif %}
+                        </div>
                         <form action="{% url 'logout' %}" method="post" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary logout_btn">Выйти</button>
@@ -186,30 +194,30 @@
                             <!-- <a class="btn btn-info btn-auto logout_btn" href="{% url 'create_product' %}"> Добавить </a> -->
                             <a class="btn btn-danger btn-auto logout_btn" href="/admin"> Админка </a>
                         {% endif %}
-                    </div>
-                </section>
-
-                <section class="header_burger_navigation_buttons">
-                    <div style="display:flex; align-items: center; column-gap: 10px;">
-                        <a id="posts" class="btn_logo header_redirect" href="{% url 'main' %}"> Каталог </a>
-                    </div>
-
-                    <div style="display:flex; align-items: center; column-gap: 10px;">
-                        <a id="posts" class="btn_logo header_redirect" href="{% url 'posts' %}"> Публикации </a>
-                    </div>
-                </section>
-
-                <div style="display: flex;" class="login_status_bar_block">
-                    
+                    {% else %}
+                        <a class="login_button" href="{% url 'Login' %}">
+                            <img id="login_pic" style="height: 50%" src="{% static "img/png-clipart-computer-icons-login-symbol-login-interface-miscellaneous-text.png" %}">
+                            <p class="font" style="margin-block-start: 0; margin-block-end: 0;"> Войти </p>
+                        </a> 
+                    {% endif %}
                 </div>
+            </section>
+
+            <section class="header_burger_navigation_buttons">
+                <div style="display:flex; align-items: center; column-gap: 10px;">
+                    <a id="posts" class="btn_logo header_redirect" href="{% url 'main' %}"> Каталог </a>
+                </div>
+
+                <div style="display:flex; align-items: center; column-gap: 10px;">
+                    <a id="posts" class="btn_logo header_redirect" href="{% url 'posts' %}"> Публикации </a>
+                </div>
+            </section>
+
+            <div style="display: flex;" class="login_status_bar_block">
                 
-            </burger-menu-block>
-        {% else %}
-            <a class="login_button" href="{% url 'Login' %}">
-                <img id="login_pic" style="height: 50%" src="{% static "img/png-clipart-computer-icons-login-symbol-login-interface-miscellaneous-text.png" %}">
-                <p class="font" style="margin-block-start: 0; margin-block-end: 0;"> Войти </p>
-            </a> 
-        {% endif %}
+            </div>
+            
+        </burger-menu-block>
     </header>
 
     <main>
