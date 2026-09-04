@@ -14,8 +14,8 @@ function ChangeTheme(username){
     let text_fix = document.getElementsByClassName('text_fix');
 
     let login_pic = null;
-    if(document.getElementById('login_pic')){
-       login_pic = document.getElementById('login_pic');;
+    if(document.querySelector('login_pic')){
+       login_pic = document.querySelector('login_pic');;
     }
 
     let find_by_name = null;
@@ -268,8 +268,8 @@ function ChangeTheme(username){
         // Светлая тема
         img.src = img.dataset.sun;
         
-        if (login_pic != null){
-            login_pic.style.filter = 'invert(0)';
+        for (const element of login_pic) {
+            element.style.filter = 'invert(0)';
         }
 
         document.body.classList.remove('dark-theme');
@@ -576,8 +576,8 @@ function ChangeTheme(username){
         // Тёмная тема
         img.src = img.dataset.moon;
 
-        if (login_pic != null){
-            login_pic.style.filter = 'invert(1)';
+        for (const element of login_pic) {
+            element.style.filter = 'invert(1)';
         }
 
         document.body.classList.add('dark-theme');
