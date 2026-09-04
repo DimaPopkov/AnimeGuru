@@ -888,3 +888,7 @@
     flex-direction: column;
     align-items: center;
 }
+
+active-time{
+    white-space: nowrap;
+}
