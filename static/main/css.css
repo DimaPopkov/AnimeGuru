@@ -2715,7 +2715,7 @@ burger-menu-block{
     position: fixed; 
     
     display: none;
-    margin-left: 100vw;
+    transform: translateX(100%);
 
     transition: 0.6s;
 

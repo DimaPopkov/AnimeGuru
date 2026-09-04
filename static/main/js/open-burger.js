@@ -1,9 +1,9 @@
 function OpenBurger() {
     let menu = document.getElementById('burger-menu-block');
 
-    if (menu.style.marginLeft == '0px') {
-        menu.style.marginLeft = '100vw';
+    if (menu.style.transform  == 'translateX(0px)') {
+        menu.style.transform = 'translateX(100%)';
     } else {
-        menu.style.marginLeft = '0px';
+        menu.style.transform = 'translateX(0px)';
     }
 }
