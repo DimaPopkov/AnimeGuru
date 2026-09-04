@@ -237,7 +237,7 @@
         height: auto;
         position: fixed;
 
-        z-index: 9002;
+        z-index: 1002;
         background: rgb(20, 20, 20);
         /* margin: 0 auto; */
         /* margin-top: 65px; */
@@ -345,6 +345,7 @@
     .find_by_name2_container{
         width: 100%;
         padding: 20px;
+        top: 2px;
     }
     .filter_buttons_hide_show{
         --hide-deg: 0deg;
@@ -375,27 +376,41 @@
 
 @media screen and (max-width: 830px){
     .header{
-        flex-direction: column;
-        height: 100px;
+        /* flex-direction: column; */
+        /* height: 100px; */
 
         align-items: start;
-        padding-left: 20px;
+        /* padding-left: 20px; */
     }
     .header div{
         padding-left: 10px;
     }
+    .container_f{
+        margin-top: 0;
+    }
+    .login_status_bar{
+        display: none;
+    }
+    .login_status_bar_burger{
+        display: flex;
+        flex-direction: column;
+    }
+    burger-menu-block{
+        display: flex;
+        flex-direction: column;
+    }
     .filter{
-        top: 100px;
+        /* top: 100px; */
         align-items: center;
     }
-    .filter.filter-hidden{
+    /* .filter.filter-hidden{
         top: 50px;
-    }
+    } */
     .hide_filter{
-        z-index: 9999;
+        z-index: 9003;
     }
     .show_filter{
-        z-index: 9999;
+        z-index: 9003;
     }
     .filter_buttons_hide_show{
         margin-top: -25px;
@@ -407,19 +422,19 @@
     .btn_logo {
         width: auto;
     }
-    .container_e{
+    /* .container_e{
         margin-top: 45px;
-    }
-    .slider-container-wrapper{
+    } */
+    /* .slider-container-wrapper{
         margin-top: 50px;
-    }
-    .find_by_name2 {
+    } */
+    /* .find_by_name2 {
         width: 100%;
         margin-right: 0;
-    }
-    .find_by_name2_container{
+    } */
+    /* .find_by_name2_container{
         top: 52px;
-    }
+    } */
     .login_button{
         height: 50px;
     }
@@ -673,9 +688,11 @@
         margin-bottom: 10px;
     }
     .header{
-        flex-direction: column;
-        justify-content: center;
+        justify-content: space-around;
         row-gap: 5px;
+    }
+    #catalog_page_button, #posts_page_button{
+        display: none !important;
     }
     .filter_buttons_hide_show{
         margin-top: -20px;
@@ -744,13 +761,13 @@
 
         padding-bottom: 10px;
     }
-    .header {
+    /* .header {
         flex-direction: column;
         justify-content: center;
     }
     .header div {
         padding-left: 0;
-    }
+    } */
     /* .products_catalog {
         grid-template-columns: 150px 150px !important;
     } */
@@ -781,14 +798,14 @@
         padding: 5px;
         column-gap: 10px;
     }
-    .find_by_name2{
+    /* .find_by_name2{
         width: 100%;
         margin-right: 0;
-    }
-    .filter.filter-hidden {
+    } */
+    /* .filter.filter-hidden {
         margin-top: 0 !important;
         top: 50px;
-    }
+    } */
     /* .sort-wrapper .choices__inner{
         width: 250px !important;
     } */
@@ -1022,25 +1039,25 @@
     .prod_element_info h8{
         font-size: 0.65rem;
     }
-    .header {
+    /* .header {
         width: 100%;
         height: 70px;
-    }
+    } */
     .container_e {
         margin-top: 0;
     }
     .login_button {
         height: 30px;
     }
-    .header div{
+    /* .header div{
         column-gap: 5px;
-    }
-    .btn_logo {
+    } */
+    /* .btn_logo {
         font-size: 100%;
-    }
-    .header div {
+    } */
+    /* .header div {
         padding: 0;
-    }
+    } */
     .login_status_bar_block img{
         width: 25px !important;
         height: 25px !important;
@@ -1098,17 +1115,17 @@
     }
     .filter {
         /* margin-top: 30px; */
-        top: 70px;
+        /* top: 70px; */
         align-items: center;
     }
-    .filter.filter-hidden {
+    /* .filter.filter-hidden {
         margin-top: -30px !important;
         top: 20px;
 
         width: 20px !important;
         min-width: 20px !important;
         max-width: 20px !important;
-    }
+    } */
     .filter_toggle_btn {
         width: 30px;
         height: 30px;
@@ -1156,11 +1173,11 @@
     h8{
         font-size: 0.9rem;
     }
-    .find_by_name2_container{
+    /* .find_by_name2_container{
         margin-top: 15px;
         top: 30px;
         padding: 10px;
-    }
+    } */
     .filter_buttons_hide_show{
         margin-top: -25px;
     }
@@ -1170,12 +1187,12 @@
     .show_filter{
         width: 25px;
     }
-    .header {
+    /* .header {
         padding-left: 5px;
-    }
-    .slider-container-wrapper{
+    } */
+    /* .slider-container-wrapper{
         margin-top: 20px;
-    }
+    } */
     .profile_container{
         margin-top: 20px;
     }
