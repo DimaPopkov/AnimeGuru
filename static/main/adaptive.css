@@ -878,6 +878,10 @@
         width: 80px !important;
         height: 80px !important;
     }
+    .active_users_user#active_users_other img{
+        width: 80px !important;
+        height: 80px !important;
+    }
     .active_users_user img{
         width: 20px !important;
         height: 20px !important;
@@ -896,6 +900,9 @@
     .active_users_user#active_users_bronze{
         width: 100% !important;
     }
+    .active_users_user#active_users_other{
+        width: 100% !important;
+    }
     .active_users_user#active_users_gold p, active-time{
         font-size: 24px !important;
         margin: auto 0 !important;
@@ -908,6 +915,10 @@
         font-size: 24px !important;
         margin: auto 0 !important;
     }
+    .active_users_user#active_users_other p, active-time{
+        font-size: 24px !important;
+        margin: auto 0 !important;
+    }
     .active_users_user#active_users_gold active-time{
         font-size: 14px !important;
     }
@@ -916,6 +927,13 @@
     }
     .active_users_user#active_users_bronze active-time{
         font-size: 12px !important;
+    }
+    .active_users_user#active_users_other active-time{
+        font-size: 12px !important;
+    }
+    #active_users_other{
+        display: flex;
+        order: 4;
     }
     active-users{
         margin: 0 10px !important;
