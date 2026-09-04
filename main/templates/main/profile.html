@@ -15,18 +15,18 @@
                             <img class="profile_container_header_block_info_flex_vis_img" src="{{ user.profile.image.url }}" id="avatar" alt="User Avatar">
 
                             {% if request.user == user %}
-                                <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Изменить аватар</button>
+                                <button class="profile_container_header_block_info_flex_vis_button auth_button font" id="changeAvatarBtn">Изменить аватар</button>
 
                                 <form id="deleteAvatarBtn" method="POST" action="{% url 'profile_delete_avatar' %}">
                                     {% csrf_token %}
-                                    <button class="profile_container_header_block_info_flex_vis_button" type="submit"> Удалить аватар </button>
+                                    <button class="profile_container_header_block_info_flex_vis_button auth_button font" type="submit"> Удалить аватар </button>
                                 </form>
                             {% endif %}
                         {% else %}
                             <img class="profile_container_header_block_info_flex_vis_img" src="{% static 'img/null_avatar.png' %}" id="avatar" alt="Default Avatar">
 
                             {% if request.user == user %}
-                                <button class="profile_container_header_block_info_flex_vis_button" id="changeAvatarBtn">Добавить аватар</button>
+                                <button class="profile_container_header_block_info_flex_vis_button auth_button font" id="changeAvatarBtn"> Добавить аватар </button>
                             {% endif %}
                         {% endif %}
                     </div>
