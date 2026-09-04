@@ -14,8 +14,8 @@ function ChangeTheme(username){
     let text_fix = document.getElementsByClassName('text_fix');
 
     let login_pic = null;
-    if(document.querySelector('#login_pic')){
-       login_pic = document.querySelector('#login_pic');
+    if(document.querySelectorAll('.login_pic')){
+       login_pic = document.querySelectorAll('.login_pic');
     }
 
     let find_by_name = null;
@@ -919,8 +919,8 @@ document.addEventListener('DOMContentLoaded', function() {
     username = window.username;
 
     let login_pic = null;
-    if(document.querySelector('#login_pic')){
-       login_pic = document.querySelector('#login_pic');
+    if(document.querySelectorAll('.login_pic')){
+       login_pic = document.querySelectorAll('.login_pic');
     }
 
     // console.log(username);
