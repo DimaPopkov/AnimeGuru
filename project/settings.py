@@ -20,9 +20,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['brake.eu.pythonanywhere.com', 'localhost', '127.0.0.1']
 
-
 SOCIALACCOUNT_STORE_TOKENS = True
-SOCIALACCOUNT_ADAPTER = 'main.adapters.CustomSocialAccountAdapter'
 
 ACCOUNT_EMAIL_REQUIRED = False
 SOCIALACCOUNT_EMAIL_REQUIRED = False
