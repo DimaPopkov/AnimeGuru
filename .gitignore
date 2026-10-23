@@ -8,3 +8,4 @@
 *.pyo
 *.pyd
 *media
+*adapters.py
