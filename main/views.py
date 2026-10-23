@@ -884,16 +884,16 @@ def profile(request):
         total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
     )
     
-    recent_tags = Tags.objects.filter(
-        products__recentview__user=request.user
-    ).distinct()
+    latest_product_ids  = RecentView.objects.filter(user=request.user)\
+        .order_by('-viewed_at')[:10]\
+        .values_list('product_id', flat=True)
 
     context = {
         'title' : 'Личный кабинет',
         'your_comments': allComents,
         'star_list': star_list,
-        'recent_view': RecentView.objects.filter(user=request.user),
-        'recent_tags': recent_tags,
+        'recent_view': RecentView.objects.filter(user=request.user).order_by('-viewed_at')[:10],
+        'recent_tags': Tags.objects.filter(products__id__in=latest_product_ids).distinct(),
         'my_posts': Posts.objects.filter(user=request.user),
         'favourites': request.user.profile.favourites.all(),
         'chart_data': chart_data,
