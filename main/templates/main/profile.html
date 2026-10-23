@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="profile-stats-wrapper-container">   
+            <section class="profile-stats-wrapper-container">   
                 <h3> Статистика по аккаунту</h3>
                 <div class="profile-stats-wrapper">
                     <div class="chart-wrapper">
@@ -163,11 +163,74 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
 
+        {% if recent_view and recent_view != None %}
+            <section class="profile_container_recentView">
+                <h3> Недавние </h3><br>
+
+                <div class="tags_cloud_flex">
+                    {% for tag in recent_tags %}
+                        <a href="/pre_filter/{{ tag.id }}/" class="js-tag-link">
+                            {{ tag.name }}
+                        </a>
+                    {% endfor %}
+                </div> <br>
+                <div class="profile_container_recentView_block">
+                    {% if recent_view %}
+                        {% for element in recent_view %}                 
+                            <form action="{% url 'card' product_name=element.product.name %}" method="GET" class="catalog_form fade-in">
+                                <input type="hidden" name="product_name" value="{{ element }}">
+
+                                <div class="prod_element" onclick="submitform(this)">
+                                    <div class="prod_element_pic_lock">
+                                        {% if element.product.image %}
+                                            {% if element.product.image.url %}
+                                                <img src="{{ element.product.image.url }}" style="width: 100%">
+                                            {% else %}
+                                                <img src="{{ element.product.image }}" style="width: 100%">
+                                            {% endif %}
+                                        {% elif element.product.alter_pic %}
+                                            <div class="prod_element_pic_lock2"><img src="{{ element.product.alter_pic.url }}" style="width: 100%"></div>
+                                        {% endif %}
+                                        <div class="prod_element_rating">
+                                            <div class="prod_element_rating_block" style="
+                                                background:
+                                                    {% if element.product.rating >= 8.0 %} linear-gradient(135deg, #a176ff, #6225ff)
+                                                    {% elif element.product.rating >= 6.0 %} linear-gradient(135deg, #bdc3c7, #4e5d6c)
+                                                    {% else %} linear-gradient(135deg, #3a3a44, #26262b) {% endif %};
+                                                color: #ffffff;
+                                                "> 
+                                                <svg xmlns="http://w3.org" viewBox="0 0 100 100" width="14px" height="14px">
+                                                    <polygon points="50,8 62.5,38 95,38 68.5,57 78,87 50,68 22,87 31.5,57 5,38 37.5,38" 
+                                                            fill="white" 
+                                                            stroke="white" 
+                                                            stroke-width="6" 
+                                                            stroke-linejoin="round" />
+                                                </svg>
+                                                {{ element.product.rating }} 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="prod_element_info">
+                                        <h5 style="padding-top: 5px"> {{ element.product.name }} </h5>
+                                        <h8> {{ element.product.category }} / {{ element.product.season.year }}</h8>
+                                        <p class="hidden_description hidden"> 
+                                            <br><br>
+                                            {{ element.product.description|safe }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </section>
+        {% endif %}
+
         {% if favourites and favourites != None %}
-            <div class="profile_container_favourites">
+            <section class="profile_container_favourites">
                 <h3> Избранное </h3><hr>
                 <div class="profile_container_favourites_block">
                     {% if favourites %}
@@ -218,11 +281,11 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-            </div>
+            </section>
         {% endif %}
 
         {% if my_posts and my_posts != None %}
-            <div class="profile_container_favourites">
+            <section class="profile_container_favourites">
                 <div><h3> Ваши публикации </h3><hr></div>
                 <div class="posts_list" style="margin: 0;">
                     {% if my_posts %}
@@ -286,11 +349,11 @@
                         <h2 class="posts_h2_none"> Пока нет публикаций </h2>
                     {% endif %}
                 </div>
-            </div>
+            </section>
         {% endif %}
 
         {% if your_comments and your_comments != None %}
-            <div class="profile_container_comments">
+            <section class="profile_container_comments">
                 <h3> Ваши комментарии </h3><hr>
                 <div class="profile_container_comments_block">
                     {% for element in your_comments %}                 
@@ -351,7 +414,7 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>
+            </section>
         {% endif %}
     </div>
 

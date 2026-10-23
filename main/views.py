@@ -49,11 +49,12 @@ def most_popular(time):
     return top_view
 
 def base(request):
-    try:
-        theme = request.session['courent_theme']
-    except:
-        theme = request.session.get('courent_theme', 'black')
-        request.session['courent_theme'] = 'black'
+    theme = request.session.setdefault('courent_theme', 'black')
+    # try:
+    #     theme = request.session['courent_theme']
+    # except:
+    #     theme = request.session.get('courent_theme', 'black')
+    #     request.session['courent_theme'] = 'black'
 
     Allstatus = list(Product.objects.values_list('status', flat=True).distinct())
 
@@ -882,11 +883,17 @@ def profile(request):
         total_likes=Sum('like_count'),              # Суммируем все лайки, которые получили его комменты
         total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
     )
+    
+    recent_tags = Tags.objects.filter(
+        products__recentview__user=request.user
+    ).distinct()
 
     context = {
         'title' : 'Личный кабинет',
         'your_comments': allComents,
         'star_list': star_list,
+        'recent_view': RecentView.objects.filter(user=request.user),
+        'recent_tags': recent_tags,
         'my_posts': Posts.objects.filter(user=request.user),
         'favourites': request.user.profile.favourites.all(),
         'chart_data': chart_data,
@@ -949,7 +956,6 @@ def user_profile(request, id):
         total_likes=Sum('like_count'),              # Суммируем все лайки, которые получили его комменты
         total_dislikes=Sum('dislike_count')         # Суммируем все дизлайки под его комментами
     )
-
 
     context = {
         'title' : 'Личный кабинет',
